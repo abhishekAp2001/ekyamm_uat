@@ -94,7 +94,9 @@ const CP_type = () => {
   // Fetch channel partner types based on search
   const channelPartnerList = async (searchTerm) => {
     try {
-      const response = await axios.get(`v2/cp/channelPartner/types?search=${searchTerm}`);
+      const response = await axios.get(
+        `v2/cp/channelPartner/types?search=${searchTerm}`
+      );
       if (response?.data?.success === true) {
         setCp_List(response?.data?.data);
       }
@@ -103,7 +105,9 @@ const CP_type = () => {
       if (error.forceLogout) {
         router.push("/login");
       } else {
-        showErrorToast(error?.response?.data?.error?.message || "Something Went Wrong");
+        showErrorToast(
+          error?.response?.data?.error?.message || "Something Went Wrong"
+        );
       }
     }
   };
@@ -111,7 +115,9 @@ const CP_type = () => {
   // Add new channel partner type
   const addChannelPartner = async (newType) => {
     try {
-      const response = await axios.post("v2/cp/channelPartner/types", { type: newType });
+      const response = await axios.post("v2/cp/channelPartner/types", {
+        type: newType,
+      });
       if (response?.data?.success === true) {
         showSuccessToast("Channel Partner Type Added");
         await channelPartnerList(search);
@@ -121,7 +127,10 @@ const CP_type = () => {
       if (error.forceLogout) {
         router.push("/login");
       } else {
-        showErrorToast(error?.response?.data?.error?.message || "Failed to add new channel partner type");
+        showErrorToast(
+          error?.response?.data?.error?.message ||
+            "Failed to add new channel partner type"
+        );
         throw error;
       }
     }
@@ -131,7 +140,9 @@ const CP_type = () => {
   const checkUserNameAvailability = async (userName) => {
     try {
       setIsCheckingUserName(true);
-      const response = await axios.post(`v2/cp/channelPartner/check`, { username: userName });
+      const response = await axios.post(`v2/cp/channelPartner/check`, {
+        username: userName,
+      });
       if (response?.data?.success) {
         setIsUserNameAvailable(response?.data?.data?.available);
       }
@@ -168,7 +179,9 @@ const CP_type = () => {
       if (error.forceLogout) {
         router.push("/login");
       } else {
-        showErrorToast(error?.response?.data?.error?.message || "Something Went Wrong");
+        showErrorToast(
+          error?.response?.data?.error?.message || "Something Went Wrong"
+        );
       }
     }
   };
@@ -181,7 +194,10 @@ const CP_type = () => {
   // Check username availability with debounce
   useEffect(() => {
     if (formData.userName && touched.userName) {
-      const timer = setTimeout(() => checkUserNameAvailability(formData.userName), 500);
+      const timer = setTimeout(
+        () => checkUserNameAvailability(formData.userName),
+        500
+      );
       return () => clearTimeout(timer);
     }
   }, [formData.userName, touched.userName]);
@@ -209,13 +225,15 @@ const CP_type = () => {
   }));
 
   // Country options for Select
-  const countryOptions = useMemo(() =>
-    countryList.map((country) => ({
-      value: `${country.flag} ${country.code}`,
-      label: `${country.flag} ${country.code}`,
-      name: country.name,
-    })), [countryList]);
-   
+  const countryOptions = useMemo(
+    () =>
+      countryList.map((country) => ({
+        value: `${country.flag} ${country.code}`,
+        label: `${country.flag} ${country.code}`,
+        name: country.name,
+      })),
+    [countryList]
+  );
 
   return (
     <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col">
@@ -230,9 +248,16 @@ const CP_type = () => {
               control: (base) => ({ ...base, borderRadius: "7.26px" }),
             }}
             options={options}
-            value={formData.type ? { value: formData.type, label: formData.type } : null}
+            value={
+              formData.type
+                ? { value: formData.type, label: formData.type }
+                : null
+            }
             onChange={(selectedOption) =>
-              setFormData({ ...formData, type: selectedOption ? selectedOption.value : "" })
+              setFormData({
+                ...formData,
+                type: selectedOption ? selectedOption.value : "",
+              })
             }
             onInputChange={(inputValue) => setSearch(inputValue)}
             onBlur={() => handleBlur("type")}
@@ -251,14 +276,23 @@ const CP_type = () => {
             className="text-[15px] rounded-[12px] font-semibold border-none outline-none"
           />
           {touched.type && !formData.type && (
-            <span className="text-red-500 text-sm mt-1 block">Type is required</span>
+            <span className="text-red-500 text-sm mt-1 block">
+              Type is required
+            </span>
           )}
 
           {/* Clinic Details */}
           <div className="mt-5 bg-[#FFFFFF80] rounded-[12px] p-4">
-            <strong className="text-[15px] text-black font-semibold">Clinic Details</strong>
+            <strong className="text-[15px] text-black font-semibold">
+              Clinic Details
+            </strong>
             <div>
-              <Label htmlFor="clinicName" className={`text-[15px] mb-2 mt-5 ${formData.type ? "text-gray-500" : "text-[#00000040]"}`}>
+              <Label
+                htmlFor="clinicName"
+                className={`text-[15px] mb-2 mt-5 ${
+                  formData.type ? "text-gray-500" : "text-[#00000040]"
+                }`}
+              >
                 Clinic Name *
               </Label>
               <Input
@@ -266,17 +300,30 @@ const CP_type = () => {
                 type="text"
                 placeholder="Enter clinic name"
                 value={formData.clinicName}
-                onChange={(e) => setFormData({ ...formData, clinicName: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, clinicName: e.target.value })
+                }
                 onBlur={() => handleBlur("clinicName")}
                 disabled={!formData.type}
-                className={`rounded-[7.26px] font-semibold py-3 px-4 h-[39px] ${formData.type ? "bg-white placeholder:text-[15px] placeholder:text-gray-500" : "bg-[#ffffff10]"}`}
+                className={`rounded-[7.26px] font-semibold py-3 px-4 h-[39px] ${
+                  formData.type
+                    ? "bg-white placeholder:text-[15px] placeholder:text-gray-500"
+                    : "bg-[#ffffff10]"
+                }`}
               />
               {touched.clinicName && !formData.clinicName && (
-                <span className="text-red-500 text-sm mt-1 block">Clinic name is required</span>
+                <span className="text-red-500 text-sm mt-1 block">
+                  Clinic name is required
+                </span>
               )}
             </div>
             <div>
-              <Label htmlFor="userName" className={`text-[15px] mb-2 mt-[22px] ${formData.clinicName ? "text-gray-500" : "text-[#00000040]"}`}>
+              <Label
+                htmlFor="userName"
+                className={`text-[15px] mb-2 mt-[22px] ${
+                  formData.clinicName ? "text-gray-500" : "text-[#00000040]"
+                }`}
+              >
                 Unique URL *
               </Label>
               <div className="flex gap-[10px] items-center">
@@ -356,7 +403,9 @@ const CP_type = () => {
                 type="text"
                 placeholder="Enter your email"
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value.toLowerCase(), })
+                }
                 onBlur={() => handleBlur("email")}
                 disabled={!formData.userName || isUserNameAvailable !== true}
                 className={`rounded-[7.26px] font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
@@ -365,6 +414,7 @@ const CP_type = () => {
                     : "bg-[#ffffff10] placeholder:text-[#00000040]"
                 }`}
               />
+
               {touched.email &&
                 formData.email &&
                 !isEmailValid(formData.email) && (
@@ -408,7 +458,7 @@ const CP_type = () => {
                     }));
                   }}
                   isDisabled={!isEmailValid(formData.email)}
-                  className="w-[100px]"
+                  className="w-[100px] border-none shadow-none"
                   styles={{
                     control: (base) => ({
                       ...base,
@@ -417,7 +467,9 @@ const CP_type = () => {
                       height: "39px",
                       minHeight: "39px",
                       width: "max-content",
-                      backgroundColor:isEmailValid(formData.email) ?"#fff" : "#f6f5fd"
+                      backgroundColor: isEmailValid(formData.email)
+                        ? "#fff"
+                        : "#f6f5fd",
                     }),
                     menu: (base) => ({ ...base, width: "200px" }),
                   }}
@@ -432,7 +484,7 @@ const CP_type = () => {
                   id="primaryMobileNumber"
                   inputMode="numeric"
                   pattern="[0-9]*"
-                  type="number"
+                  type="text"
                   placeholder="Enter primary mobile no."
                   value={formData.primaryMobileNumber}
                   onChange={(e) => handleInputChange(e, "primaryMobileNumber")}
@@ -464,8 +516,8 @@ const CP_type = () => {
                   htmlFor="whatsappNumber"
                   className={`text-[15px] w-[55%] mb-2 ${
                     isMobileValid(formData.primaryMobileNumber)
-                      ? "text-gray-500"
-                      : "text-[#00000040]"
+                      ? "text-gray-500 border-0 shadow-none"
+                      : "text-[#00000040] border-0 shadow-none"
                   }`}
                 >
                   Clinic Whatsapp Number *
@@ -493,7 +545,7 @@ const CP_type = () => {
                   <label
                     className={`text-[12px] ${
                       isMobileValid(formData.primaryMobileNumber)
-                        ? "text-gray-500"
+                        ? "text-gray-500 "
                         : "text-[#00000040]"
                     }`}
                   >
@@ -518,7 +570,7 @@ const CP_type = () => {
                   isDisabled={
                     sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
                   }
-                  className="w-[100px]"
+                  className="w-[100px] border-none shadow-none "
                   styles={{
                     control: (base) => ({
                       ...base,
@@ -527,7 +579,11 @@ const CP_type = () => {
                       height: "39px",
                       minHeight: "39px",
                       width: "max-content",
-                      backgroundColor:sameAsMobile || isMobileValid(formData.primaryMobileNumber) ?"#fff" : "#f6f5fd"
+                      backgroundColor:
+                        sameAsMobile ||
+                        isMobileValid(formData.primaryMobileNumber)
+                          ? "#fff"
+                          : "#f6f5fd",
                     }),
                     menu: (base) => ({ ...base, width: "200px" }),
                   }}
@@ -540,7 +596,7 @@ const CP_type = () => {
                 />
                 <Input
                   id="whatsappNumber"
-                  type="number"
+                  type="text"
                   inputMode="numeric"
                   pattern="[0-9]*"
                   placeholder="Enter whatsapp no."
@@ -550,10 +606,10 @@ const CP_type = () => {
                   disabled={
                     sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
                   }
-                  className={`border rounded-[7.26px] font-semibold rounded-l-none border-l-0 placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
+                  className={`rounded-[7.26px] border-0 font-semibold rounded-l-none placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                     sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
-                      ? "bg-[#ffffff10] placeholder:text-[#00000040]"
-                      : "bg-white placeholder:text-gray-500"
+                      ? "bg-[#ffffff10] placeholder:text-[#00000040] border-0 shadow-none"
+                      : "bg-white placeholder:text-gray-500 border-0 shadow-none"
                   }`}
                 />
               </div>
@@ -596,7 +652,7 @@ const CP_type = () => {
                     })
                   }
                   isDisabled={!isMobileValid(formData.whatsappNumber)}
-                  className="w-[100px]"
+                  className="w-[100px] border-none shadow-none"
                   styles={{
                     control: (base) => ({
                       ...base,
@@ -605,7 +661,9 @@ const CP_type = () => {
                       height: "39px",
                       minHeight: "39px",
                       width: "max-content",
-                      backgroundColor:isMobileValid(formData.whatsappNumber) ?"#fff" : "#f6f5fd"
+                      backgroundColor: isMobileValid(formData.whatsappNumber)
+                        ? "#fff"
+                        : "#f6f5fd",
                     }),
                     menu: (base) => ({ ...base, width: "200px" }),
                   }}
@@ -626,10 +684,10 @@ const CP_type = () => {
                   onChange={(e) => handleInputChange(e, "emergencyNumber")}
                   onBlur={() => handleBlur("emergencyNumber")}
                   disabled={!isMobileValid(formData.whatsappNumber)}
-                  className={`border rounded-[7.26px] font-semibold rounded-l-none border-l-0 placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
+                  className={`border rounded-[7.26px] font-semibold rounded-l-none shadow border-l-0 placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                     isMobileValid(formData.whatsappNumber)
-                      ? "bg-white placeholder:text-gray-500"
-                      : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                      ? "bg-white placeholder:text-gray-500 border-0 shadow-none"
+                      : "bg-[#ffffff10] placeholder:text-[#00000040] border-0 shadow-none"
                   }`}
                 />
               </div>

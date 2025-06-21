@@ -9,7 +9,7 @@ export const CustomToast = ({
   const isSuccess = type === "success";
 
   return (
-    <div className="flex items-start gap-3 w-full max-w-[90vw] sm:max-w-[360px]">
+    <div className="flex items-center gap-3 w-full max-w-[90vw] sm:max-w-[360px] rounded-[6px]">
       {isSuccess ? (
         <Image
           src="/images/check_circle.svg"

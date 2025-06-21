@@ -86,7 +86,7 @@ const Login = () => {
               </strong>
 
               <div className="pt-6">
-                <Input
+                {/* <Input
                   type="text"
                   placeholder="Enter mobile number or email address"
                   className="bg-white rounded-[7.26px] placeholder:text-[12px] placeholder:text-gray-400 pt-3 pb-3.5 px-4 h-[39px]"
@@ -94,7 +94,19 @@ const Login = () => {
                   onChange={(e) => {
                     setUserName(e.target.value);
                   }}
+                /> */}
+
+                <Input
+                  type="text"
+                  placeholder="Enter mobile number or email address"
+                  className="bg-white rounded-[7.26px] placeholder:text-[12px] placeholder:text-gray-400 pt-3 pb-3.5 px-4 h-[39px]"
+                  value={userName}
+                  onChange={(e) => {
+                    const inputValue = e.target.value;
+                    setUserName(inputValue.toLowerCase()); // Convert to lowercase
+                  }}
                 />
+
                 <div className="relative">
                   <Input
                     type={showPassword ? "text" : "password"}
@@ -106,13 +118,19 @@ const Login = () => {
                     }}
                   />
                   {showPassword ? (
-                      <Eye className="w-[14.67px] absolute top-2 right-[14.83px]"  onClick={() => {
+                    <Eye
+                      className="w-[14.67px] absolute top-2 right-[14.83px]"
+                      onClick={() => {
                         setShowPassword(!showPassword);
-                      }}/>
+                      }}
+                    />
                   ) : (
-                    <EyeOff  className="w-[14.67px] absolute top-2 right-[14.83px]"  onClick={() => {
+                    <EyeOff
+                      className="w-[14.67px] absolute top-2 right-[14.83px]"
+                      onClick={() => {
                         setShowPassword(!showPassword);
-                      }}/>
+                      }}
+                    />
                   )}
                 </div>
                 <div className="flex justify-between mt-[11.72px]">
@@ -146,37 +164,36 @@ const Login = () => {
               </div>
             </div>
           </div>
-            </div>
-          {/* footer */}
-          <div className="flex flex-col justify-center items-center gap-[4.75px] fixed bottom-0 pb-[26px] left-0 right-0 max-w-[574px] mx-auto">
-            <div className="flex gap-1 items-center">
-              <span className="text-[10px] text-gray-500 font-medium">
-                Copyright © {new Date().getFullYear()}
-              </span>
+        </div>
+        {/* footer */}
+        <div className="flex flex-col justify-center items-center gap-[4.75px] fixed bottom-0 pb-[26px] left-0 right-0 max-w-[574px] mx-auto">
+          <div className="flex gap-1 items-center">
+            <span className="text-[10px] text-gray-500 font-medium">
+              Copyright © {new Date().getFullYear()}
+            </span>
+            <Image
+              src="/images/ekyamm.png"
+              width={100}
+              height={49}
+              className="w-[106px] mix-blend-multiply"
+              alt="ekyamm"
+            />
+          </div>
+          <div className="flex gap-2 items-center">
+            <span className="text-[10px] text-gray-500 font-medium">
+              Any technical support
+            </span>
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
               <Image
-                src="/images/ekyamm.png"
-                width={100}
+                src="/images/chat_icon.png"
+                width={54}
                 height={49}
-                className="w-[106px] mix-blend-multiply"
+                className="w-[54px]"
                 alt="ekyamm"
               />
-            </div>
-            <div className="flex gap-2 items-center">
-              <span className="text-[10px] text-gray-500 font-medium">
-                Any technical support
-              </span>
-              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-                <Image
-                  src="/images/chat_icon.png"
-                  width={54}
-                  height={49}
-                  className="w-[54px]"
-                  alt="ekyamm"
-                />
-              </a>
-            </div>
+            </a>
           </div>
-      
+        </div>
       </div>
     </>
   );

@@ -381,10 +381,9 @@ const Cloudnine_Hospital = ({ type }) => {
                   }
                   menuPlacement="top"
                 />
-
                 <Input
                   type="text"
-                  value={patientPreviousData.primaryMobileNumber}
+                  value={patientPreviousData?.primaryMobileNumber}
                   disabled={true}
                   placeholder="Enter Mobile Number"
                   className="bg-white border border-gray-300 rounded-[7.26px] placeholder:text-[15px] placeholder:text-gray-500 font-semibold py-2 px-4 h-[38px] w-full"

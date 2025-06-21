@@ -102,19 +102,19 @@ const PaymentConfirmation = ({ type }) => {
           <div className=" px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] flex flex-col justify-between  ">
             <div className="mb-3 bg-[#FFFFFF] rounded-[9px] flex flex-col p-2 justify-center">
               <div className=" flex  justify-between">
-                <span className="text-[14px] font-[400] text-[#000000] ml-1">
+                <span className="text-[15px] font-[400] text-[#000000] ml-1">
                   Payment Status:
                 </span>
-                <span className="text-[14px] font-[400] text-black mr-1">
+                <span className="text-[15px] font-[400] text-black mr-1">
                   Transaction ID:
                 </span>
               </div>
 
               <div className=" flex justify-between ">
-                <span className="text-[14px] font-[600] text-[#000000] ml-1">
+                <span className="text-[15px] font-[600] text-[#000000] ml-1">
                   Paid
                 </span>
-                <span className="text-[14px] font-[600] text-black mr-1">
+                <span className="text-[15px] font-[600] text-black mr-1">
                   8163619319
                 </span>
               </div>
@@ -127,10 +127,10 @@ const PaymentConfirmation = ({ type }) => {
 
               <div className="mb-3 bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[8px] p-2">
                 <div className="flex flex-col tracking-normal">
-                  <span className="text-[14px] font-[400] text-[#000000] ml-1">
+                  <span className="text-[15px] font-[400] text-[#000000] ml-1">
                     Patient Name:
                   </span>
-                  <span className="text-[14px] font-[600] text-black ml-1">
+                  <span className="text-[15px] font-[600] text-black ml-1">
                     {invitePatientInfo?.firstName} {invitePatientInfo?.lastName}
                   </span>
                 </div>
@@ -138,36 +138,36 @@ const PaymentConfirmation = ({ type }) => {
 
               <div className="mb-3 bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[8px] p-2">
                 <div className=" flex  justify-between  ">
-                  <span className="text-[14px] font-[400] text-[#000000] ml-1 ">
+                  <span className="text-[15px] font-[400] text-[#000000] ml-1 ">
                     Number of Sessions:
                   </span>
-                  <span className="text-[14px] font-[600] text-black mr-1">
+                  <span className="text-[15px] font-[600] text-black mr-1">
                     {sessions_selection?.sessionCreditCount}
                   </span>
                 </div>
 
                 <div className=" flex justify-between ">
-                  <span className="text-[14px] font-[400] text-[#000000] ml-1">
+                  <span className="text-[15px] font-[400] text-[#000000] ml-1">
                     Session Fee (Hourly):
                   </span>
-                  <span className="text-[14px] font-[700] text-black mr-1">
+                  <span className="text-[15px] font-[700] text-black mr-1">
                     {formatAmount(sessions_selection?.sessionPrice || 0)}
                   </span>
                 </div>
               </div>
 
               <div className="mb-3  flex justify-between mt-2   bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[8px] p-2">
-                <span className="text-[14px] font-[700] text-black ml-1">
+                <span className="text-[15px] font-[700] text-black ml-1">
                   Total:
                 </span>
-                <span className="text-[14px] font-[700] text-black mr-1">
+                <span className="text-[15px] font-[700] text-black mr-1">
                   {totalPayable}
                 </span>
               </div>
 
               <div className=" mt-3">
                 <Link href="#">
-                  <Button className="bg-[#776EA5] text-[17px] font-[700] text-white rounded-[8px] flex items-center justify-center w-full h-[45px]">
+                  <Button className="bg-[#776EA5] text-[15px] font-[700] text-white rounded-[8px] flex items-center justify-center w-full h-[45px]">
                     Download Receipt
                   </Button>
                 </Link>
@@ -178,7 +178,7 @@ const PaymentConfirmation = ({ type }) => {
             </div>
           </div>
           <div className="flex justify-center items-center mt-6 mb-[20px]">
-            <div className="bg-gradient-to-t from-[#fce8e5] to-[#fce8e5] flex flex-col justify-between items-center gap-3 mt-[20.35px] fixed bottom-0 pb-[23px] left-0 right-0 px-4">
+            <div className="bg-gradient-to-t from-[#fce8e5] to-[#fce8e5] flex flex-col justify-between items-center gap-3 mt-[20.35px] fixed bottom-0 pb-[23px] left-0 right-0 px-4 max-w-[576px] mx-auto">
               <Footer_bar />
             </div>
           </div>

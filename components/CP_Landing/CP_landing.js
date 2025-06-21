@@ -60,7 +60,7 @@ const CP_landing = ({ type }) => {
               </span>
             </div>
           </div>
-          <div className="max-[431px]:my-[40px] min-[567px]:my-[50px] lg:my-4 flex flex-col items-center gap-[23px]">
+          <div className="max-[431px]:my-[40px] min-[567px]:my-[50px] lg:my-4 flex flex-col items-center gap-[30px]">
             <div className="flex flex-col text-center">
               <div className="">
                 <strong className="text-[36px] text-[#776EA5] font-bold leading-[34px]">
@@ -85,14 +85,15 @@ const CP_landing = ({ type }) => {
                 </strong>
               </div>
             </div>
-            <Button className=" bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white py-[14.5px] h-[45px]  rounded-[8px] flex items-center justify-center w-[198px]">
               <Link
                 href={`/channel-partner/${type}/otp_send`}
                 className="text-[15px] text-white"
               >
+            <Button className=" bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white py-[14.5px] h-[45px]  rounded-[8px] flex items-center justify-center w-[198px]">
+            
                 Add Patient
-              </Link>
             </Button>
+              </Link>
             <div className="flex gap-1 items-center">
               <span className="text-[10px] text-gray-500 font-medium">
                 Powered by
@@ -106,7 +107,7 @@ const CP_landing = ({ type }) => {
               />
             </div>
           </div>
-          <div className="bg-[url(/images/relaxed-feminine-woman.png)] bg-contain sm:bg-cover md:bg-cover lg:bg-auto bg-bottom bg-no-repeat w-full h-full"></div>
+          <div className="bg-[url(/images/relaxed-feminine-woman.png)] bg-contain sm:bg-cover md:bg-cover lg:bg-contain bg-bottom bg-no-repeat w-full h-full"></div>
         </div>
       </div>
     </>

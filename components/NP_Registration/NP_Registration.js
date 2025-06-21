@@ -40,7 +40,7 @@ const NP_Registration = () => {
             </div>
           </div>
           <div className="bg-[#FFFFFF] rounded-[9px] p-5 relative">
-            <strong className=" flex text-[16px] font-[600] text-black items-center justify-center mb-4">
+            <strong className=" flex text-[20px] font-[600] text-black items-center justify-center mb-4">
               Package Credit Confirmation
             </strong>
             <div className="mb-3 bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[12px] p-2">

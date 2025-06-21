@@ -15,7 +15,7 @@ const Forgot_password = () => {
   return (
     <>
       <div className=" bg-gradient-to-b  from-[#DFDAFB] to-[#F9CCC5] h-full flex flex-col justify-center items-center px-3">
-        <div className="border-2 bg-[#FFFFFF80] border-[#FFFFFF4D] rounded-4xl py-[47.28px] px-6  mx-4 text-center w-full">
+        <div className="border-2 bg-[#FFFFFF80] border-[#FFFFFF4D] rounded-4xl py-6 px-6  mx-4 text-center w-full">
           <strong className="text-[16px] text-black font-[600] text-center">
             Forgot Password?
           </strong>

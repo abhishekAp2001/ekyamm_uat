@@ -140,7 +140,7 @@ const Patient_Registration = ({ type }) => {
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col">
         <PR_Header />
-        <div className="h-full overflow-auto px-[16px]">
+        <div className="h-full pt-[15%] lg:pt-[10%] pb-[20%] lg:pb-[12%]  overflow-auto px-[16px]">
           <div className="w-full h-[25px] text-[#776EA5] font-semibold text-[20px] leading-[25px] mb-2 text-center">
             {channelPartnerData?.clinicName || "Greetings Hospital"}
           </div>
@@ -204,7 +204,7 @@ const Patient_Registration = ({ type }) => {
                 disabled={!formData.lastName}
                 value={formData.email}
                 onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
+                  setFormData({ ...formData, email: e.target.value.toLowerCase() })
                 }
                 onBlur={() => handleBlur("email")}
                 type="text"
@@ -238,7 +238,7 @@ const Patient_Registration = ({ type }) => {
                     }));
                   }}
                   isDisabled={!formData.lastName}
-                  className="w-[100px] border-none focus:border-none hover:border-none hover:outline-none"
+                  className="w-[100px] border-none focus:border-none hover:border-none hover:outline-none shadow-none"
                   styles={{
                     control: (base) => ({
                       ...base,
@@ -260,7 +260,7 @@ const Patient_Registration = ({ type }) => {
                 />
 
                 <Input
-                  type="number"
+                  type="text"
                   inputMode="numeric"
                   pattern="[0-9]*"
                   value={formData.primaryMobileNumber}
@@ -293,19 +293,19 @@ const Patient_Registration = ({ type }) => {
           </div>
 
           <div className="flex justify-center items-center gap-[18px] mt-[25px] px-1 ml-[31px] mr-[31px]">
-            <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px] rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
-              <Link
+             <Link
                 disabled={loading}
                 href={`/channel-partner/${type}/existing-patient`}
                 className="text-[15px] "
               >
+            <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px] rounded-[8px] flex items-center justify-center w-[141px] h-[45px]">
                 Existing Patient
-              </Link>
             </Button>
+              </Link>
             <Button
               disabled={!isFormValid() || loading}
               type="button"
-              className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px] rounded-[8px] flex items-center justify-center w-[48%] h-[45px] "
+              className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px] rounded-[8px] flex items-center justify-center w-[141px] h-[45px] "
               onClick={handlePatientHistoryClick}
             >
               {/* <Link

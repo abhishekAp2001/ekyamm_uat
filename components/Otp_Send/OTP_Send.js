@@ -15,7 +15,7 @@ import { formatTime } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { getCookie } from "cookies-next";
 import axiosInstance from "@/lib/axiosInstance";
-import { Eye, EyeOff, Loader2Icon } from "lucide-react";
+import { Eye, EyeOff, Loader2Icon, MapPin } from "lucide-react";
 import axios from "axios";
 import { whatsappUrl } from "@/lib/constants";
 import OTPInput from "react-otp-input";
@@ -34,6 +34,8 @@ const OTP_Send = ({ type }) => {
 
   const sendOtp = async () => {
     if (isLoading) return;
+
+    
     setLoading(true);
     try {
       if (selectedMethod === "mobile") {
@@ -112,7 +114,7 @@ const OTP_Send = ({ type }) => {
       const response = await customAxios.post(`v2/cp/email/otpGenerate`, {
         email: channelPartnerData?.email,
         verificationToken: channelPartnerData?.verificationToken,
-        type: "firstTimeSignupOTP",
+        type: "cpLoginOTP",
       });
 
       if (response?.data?.success === true) {
@@ -162,10 +164,21 @@ const OTP_Send = ({ type }) => {
         entityid: "1701171698144140417",
         tempid: "1707171767456458609",
       };
-      const result = await axios.get(apiUrl, { params });
-
-      if (result.data.result === "success") {
-        return true;
+      // const result = await axios.get(apiUrl, { params });
+      const response = await customAxios.post(`v2/cp/mobile/otpGenerate`,{
+        mobile:mobileNumber,
+        type:"cpLoginOTP",
+        verificationToken:channelPartnerData?.verificationToken
+      })
+      // if (result.data.result === "success") 
+      if(response?.data?.success)
+        {
+          if(response?.data?.data?.message=="OTP bypassed."){
+            router.push(`/channel-partner/${type}/verified_successfully`)
+          }
+          else{
+            return true;
+          }
       } else {
         showErrorToast(`Failed to generate OTP`);
       }
@@ -205,8 +218,14 @@ const OTP_Send = ({ type }) => {
         otp: otp,
       };
 
-      const result = await axios.get(apiUrl, { params });
-      if (result.data.result === "success") {
+      // const result = await axios.get(apiUrl, { params });
+      const response = await customAxios.post(``,{
+        mobile:mobileNumber,
+        otp:otp
+      })
+      // if (result.data.result === "success")
+      if(response?.data?.success)
+         {
         return true;
       } else {
         // console.log(result);
@@ -273,6 +292,7 @@ const OTP_Send = ({ type }) => {
       setChannelPartnerData(null);
       router.push(`/channel-partner/${type}`);
     }
+    // showSuccessToast(`OTP sent to your verified mobile number.`);
   }, [type]);
 
   return (
@@ -287,6 +307,14 @@ const OTP_Send = ({ type }) => {
             <strong className="text-[20px] text-[#776EA5] font-semibold">
               {channelPartnerData?.clinicName || "Greetings Hospital"}
             </strong>
+             <div className="flex items-center justify-center gap-1">
+            <div className="bg-[#776EA5] rounded-full w-[16.78px] h-[16.78px] flex justify-center items-center">
+              <MapPin color="white" className="w-[12.15px] h-[12.15px]" />
+            </div>
+            <span className="text-sm text-[#776EA5] font-medium">
+              {channelPartnerData?.area}
+            </span>
+          </div>
             <div className="border-2 bg-[#FFFFFF80] border-[#FFFFFF4D] rounded-4xl py-[17px] text-center w-full my-[64px]  px-5">
               <strong className="text-[15px] text-black font-[600] text-center">
                 Send OTP to
@@ -371,7 +399,7 @@ const OTP_Send = ({ type }) => {
                           />
                         </InputOTPGroup>
                       </InputOTP> */}
-                      <div className="relative flex items-center w-[90%]">
+                      <div className="relative flex items-center">
                         <OTPInput
                           value={otp}
                           onChange={setOtp}
@@ -381,22 +409,22 @@ const OTP_Send = ({ type }) => {
                             <input
                               {...props}
                               type={showOtp ? "text" : "password"}
-                              className="border-[1.54px] border-[#776EA5] rounded-[9.23px] text-[16px]  text-gray-500 text-center focus:outline-none focus:ring-2 focus:ring-[#776EA5] otp-input"
+                              className="border-[1.54px] border-[#776EA5] rounded-[9.23px] text-[16px] text-[#776EA5] text-center focus:outline-none focus:ring-2 focus:ring-[#776EA5] otp-input "
                             />
                           )}
-                          containerStyle="flex justify-between gap-[2px] items-center w-full"
+                          containerStyle="flex justify-between gap-[2px] items-center w-[90%]"
                         />
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="absolute right-[-37px] top-1/2 transform -translate-y-1/2"
+                          className="absolute right-0 top-1/2 transform -translate-y-1/2"
                           onClick={() => setShowOtp(!showOtp)}
                           aria-label={showOtp ? "Hide OTP" : "Show OTP"}
                         >
                           {showOtp ? (
-                            <EyeOff className="h-4 w-4 text-gray-500" />
+                            <EyeOff width={20} height={20} className="h-4 w-4 text-[#776EA5]" />
                           ) : (
-                            <Eye className="h-4 w-4 text-gray-500" />
+                            <Eye width={20} height={20} className="h-4 w-4 text-[#776EA5]" />
                           )}
                         </Button>
                       </div>

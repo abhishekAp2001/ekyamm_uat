@@ -229,7 +229,7 @@ const EP_registration = ({ type }) => {
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col">
       <EP_Header />
-      <div className="h-full pb-[28%] overflow-auto px-[17px]">
+      <div className="h-full pb-[28%] lg:pb-[14%] overflow-auto px-[17px]">
         <div className="w-full h-[25px] text-[#776EA5] font-semibold text-[20px] leading-[25px] mb-2 text-center">
           {channelPartnerData?.clinicName || "Greetings Hospital"}
         </div>
@@ -247,7 +247,7 @@ const EP_registration = ({ type }) => {
             <Label className="text-[15px] text-gray-500 font-medium mb-[7.59px]">
               Primary Mobile Number <span className="text-red-500">*</span>
             </Label>
-            <div className="flex items-center gap-2 relative">
+            <div className="flex items-center relative">
               <Select
                 options={countryOptions}
                 value={countryOptions.find(
@@ -266,7 +266,7 @@ const EP_registration = ({ type }) => {
                     countryCode_primary: true,
                   }));
                 }}
-                className="w-[100px]"
+                className="w-[100px] border-none shadow-none"
                 styles={{
                   control: (base) => ({
                     ...base,
@@ -293,7 +293,7 @@ const EP_registration = ({ type }) => {
                 onChange={handleMobileNumberChange}
                 onBlur={() => handleBlur("primaryMobileNumber")}
                 placeholder="Enter Mobile Number"
-                className="bg-white border border-gray-300 rounded-[7.26px] placeholder:text-[15px] placeholder:text-gray-500 placeholder:font-medium font-semibold py-2 px-4 h-[38px] w-full"
+                className="bg-white border border-gray-300 rounded-l-none rounded-r-[7.26px] placeholder:text-[15px] placeholder:text-gray-500 placeholder:font-medium font-semibold py-2 px-4 h-[39px] w-full"
                 disabled={loading} // Disable input during search
               />
             </div>
@@ -346,7 +346,7 @@ const EP_registration = ({ type }) => {
             </Label>
             <Input
               type="text"
-              value={formData.email}
+              value={formData.email.toLocaleLowerCase()}
               disabled={true}
               placeholder="Enter Email Address"
               className="bg-white rounded-[7.26px] placeholder:text-[15px] placeholder:text-gray-500 placeholder:font-medium font-semibold py-3 px-4 h-[39px]"
@@ -355,7 +355,7 @@ const EP_registration = ({ type }) => {
 
           {/* Profile Section */}
           {searchUsers.length > 0 && (
-            <div className="absolute top-[26%] left-1/2 transform -translate-x-1/2 w-full h-[226px] rounded-[16px] bg-gradient-to-br from-[#DFDAFB] to-[#F9CCC5] backdrop-blur-[20px] shadow-[0_5px_20px_0_rgba(0,0,0,0.2)] px-4 py-[14px]">
+            <div className="absolute top-[26%] left-1/2 transform -translate-x-1/2 w-full h-[226px] rounded-[16px] bg-gradient-to-br from-[#DFDAFB] to-[#F9CCC5] backdrop-blur-[20px] shadow-[0_5px_20px_0_rgba(0,0,0,0.2)] px-4 py-[14px] overflow-auto">
               <div className="w-full h-[198px] flex flex-col gap-[12px]">
                 {searchUsers.map((profile, index) => (
                   <div
@@ -399,15 +399,15 @@ const EP_registration = ({ type }) => {
 
         {/* Buttons */}
         <div className="flex justify-center items-center gap-[18px] mt-[25px] px-1 ml-[31px] mr-[31px]">
+           <Link href={`/channel-partner/${type}/patient-registration`}>
           <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px] rounded-[8px] flex items-center justify-center w-[141px] h-[45px]">
-            <Link href={`/channel-partner/${type}/patient-registration`}>
               New Patient
-            </Link>
           </Button>
+            </Link>
           <Button
             disabled={!isFormValid() || loading}
             type="button"
-            className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px] rounded-[8px] flex items-center justify-center w-[48%] h-[45px] "
+            className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px] rounded-[8px] flex items-center justify-center w-[141px] h-[45px] "
             onClick={handlePatientHistoryClick}
           >
             {loading ? (

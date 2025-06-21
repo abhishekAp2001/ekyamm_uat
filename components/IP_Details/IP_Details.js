@@ -158,6 +158,7 @@ const IP_Details = () => {
       try {
         const base64 = await fileToBase64(file);
         setFormData((prev) => ({ ...prev, profileImageBase64: base64 }));
+        handleCloseDrawer()
       } catch (error) {
         console.error("Error converting file to base64:", error);
         showErrorToast("Failed to upload profile image");
@@ -168,6 +169,7 @@ const IP_Details = () => {
   // Handle photo deletion
   const handlePhotoDelete = () => {
     setFormData((prev) => ({ ...prev, profileImageBase64: "" }));
+    handleCloseDrawer()
   };
 
   // Trigger camera input
@@ -199,9 +201,15 @@ const IP_Details = () => {
   };
 
   // Handle text input change for firstName, lastName, and email
-  const handleTextInputChange = (e, field) => {
-    setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-    handleBlur(field);
+   const handleTextInputChange = (e, field) => {
+    if (field === "email") {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: e.target.value.toLowerCase(),
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+    }
   };
 
   // Handle title change
@@ -255,6 +263,10 @@ const IP_Details = () => {
       })),
     [countryList]
   );
+  const [drawerOpen,setDrawerOpen] =useState(false)
+  const handleCloseDrawer =()=>{
+    setDrawerOpen(false)
+  }
 
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
@@ -268,7 +280,7 @@ const IP_Details = () => {
             className="w-full h-fit object-cover"
             alt="Profile"
           />
-          <Drawer>
+          <Drawer open={drawerOpen} onClose={handleCloseDrawer} >
             <DrawerTrigger>
               <Image
                 src="/images/camera.png"
@@ -276,6 +288,7 @@ const IP_Details = () => {
                 height={31}
                 className="w-[31px] h-fit absolute bottom-[-10px] right-[-10px]"
                 alt="Camera"
+                onClick={()=>setDrawerOpen(true)}
               />
             </DrawerTrigger>
             <DrawerTitle></DrawerTitle>
@@ -485,7 +498,7 @@ const IP_Details = () => {
                   }));
                 }}
                 isDisabled={!isEmailValid(formData.email)}
-                className="w-[100px] border-none focus:border-none hover:border-none hover:outline-none"
+                className="w-[100px] border-none focus:border-none hover:border-none hover:outline-none shadow-none"
                 styles={{
                   control: (base) => ({
                     ...base,
@@ -507,7 +520,7 @@ const IP_Details = () => {
               />
               <Input
                 id="primaryMobileNumber"
-                type="number"
+                type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
                 placeholder="Enter primary mobile no."
@@ -515,10 +528,10 @@ const IP_Details = () => {
                 onChange={(e) => handleInputChange(e, "primaryMobileNumber")}
                 onBlur={() => handleBlur("primaryMobileNumber")}
                 disabled={!isEmailValid(formData.email)}
-                className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px]text-black font-semibold placeholder:text-[15px]py-3 px-4 w-full h-[39px] ${
+                className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                   isEmailValid(formData.email)
-                    ? "bg-white placeholder:text-gray-500"
-                    : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                    ? "bg-white placeholder:text-gray-500 border-0 shadow-none"
+                    : "bg-[#ffffff10] placeholder:text-[#00000040] border-0 shadow-none"
                 }`}
                 maxLength={10}                
               />
@@ -596,7 +609,7 @@ const IP_Details = () => {
                 isDisabled={
                   sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
                 }
-                className="w-[100px] border-none focus:border-none"
+                className="w-[100px] border-none focus:border-none shadow-none"
                 styles={{
                   control: (base) => ({
                     ...base,
@@ -618,7 +631,7 @@ const IP_Details = () => {
               />
               <Input
                 id="whatsappNumber"
-                type="number"
+                type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
                 placeholder="Enter whatsapp no."
@@ -628,7 +641,7 @@ const IP_Details = () => {
                 disabled={
                   sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
                 }
-                className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px]text-black font-semibold placeholder:text-[15px]py-3 px-4 w-full h-[39px] ${
+                className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                   sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
                     ? "bg-[#ffffff10] placeholder:text-[#00000040]"
                     : "bg-white placeholder:text-gray-500"
@@ -675,7 +688,7 @@ const IP_Details = () => {
                   })
                 }
                 isDisabled={!isMobileValid(formData.whatsappNumber)}
-                className="w-[100px] border-none focus:border-none"
+                className="w-[100px] border-none focus:border-none shadow-none"
                 styles={{
                   control: (base) => ({
                     ...base,
@@ -697,13 +710,13 @@ const IP_Details = () => {
               />
               <Input
                 id="emergencyNumber"
-                type="number"
+                type="text"
                 placeholder="Enter emergency no."
                 value={formData.emergencyNumber}
                 onChange={(e) => handleInputChange(e, "emergencyNumber")}
                 onBlur={() => handleBlur("emergencyNumber")}
                 disabled={!isMobileValid(formData.whatsappNumber)}
-                className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px]text-black font-semibold placeholder:text-[15px]py-3 px-4 w-full h-[39px] ${
+                className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                   isMobileValid(formData.whatsappNumber)
                     ? "bg-white placeholder:text-gray-500"
                     : "bg-[#ffffff10] placeholder:text-[#00000040]"

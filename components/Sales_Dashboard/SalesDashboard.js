@@ -19,6 +19,7 @@ import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const SalesDashboard = () => {
+  const greeting = new Date().getHours() < 12 ? "Morning" : (new Date().getHours() < 16 || (new Date().getHours() === 16 && new Date().getMinutes() === 0)) ? "Afternoon" : "Evening";
   return (
     <>
       <div className="bg-gradient-to-r  from-[#B0A4F5] to-[#EDA197] rounded-bl-3xl rounded-br-3xl px-3 py-5 mb-0 fixed top-0 left-0 right-0 max-w-[576px] mx-auto">
@@ -40,7 +41,7 @@ const SalesDashboard = () => {
       <div className="px-3 h-full  overflow-auto pt-[20%] lg:pt-[15%]">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <span className="text-[12px] text-gray-500">Good morning,</span>
+            <span className="text-[12px] text-gray-500">Good {greeting},</span>
             <strong className="text-[14px] text-black font-[600] ps-[2px]">
               Chinten Shah
             </strong>

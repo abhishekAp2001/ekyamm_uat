@@ -193,7 +193,7 @@ const Patient_History = ({ type }) => {
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col">
         <PR_Header />
-        <div className="h-full pb-[40%] overflow-auto px-[16px] bg-gradient-to-t  from-[#fce8e5]  to-[#eeecfb]">
+        <div className="h-full pb-[30%] lg:pb-0 overflow-auto px-[16px] bg-gradient-to-t  from-[#fce8e5]  to-[#eeecfb]">
           <div className="w-full h-[25px] text-[#776EA5] font-semibold text-[20px] leading-[25px] mb-2 text-center">
             {channelPartnerData?.clinicName || "Greetings Hospital"}
           </div>
@@ -205,7 +205,7 @@ const Patient_History = ({ type }) => {
                         </span>
                         </div>
           {/* Patient Number and Mobile */}
-          <div className="bg-[#ffffff66] rounded-[12px] p-5 mt-[25px] relative">
+          <div className="bg-[#ffffff66] rounded-[12px] p-5 relative">
             {/* Patient Name Input */}
             <div>
               <Label className="text-[15px] text-gray-500 mb-[7.59px]">
@@ -234,7 +234,7 @@ const Patient_History = ({ type }) => {
                       (patientPreviousData?.countryCode_primary || "🇮🇳 +91")
                   )}
                   isDisabled={true}
-                  className="w-[100px]"
+                  className="w-[100px] border-none shadow-none"
                   styles={{
                     control: (base) => ({
                       ...base,

@@ -3,6 +3,7 @@
 @import "tw-animate-css";
 @custom-variant dark (&:is(.dark *));
 
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -88,14 +89,32 @@
 .css-yhk0vb-control:hover{
   border-color: transparent !important;
   outline: none !important;
+  box-shadow: none !important;
 }
 .css-yhk0vb-control:focus{
   border-color: transparent !important;
   outline: none !important;
+  box-shadow: none !important;
 }
 .css-yhk0vb-control{
   border:none !important;
   outline: none !important;
+  box-shadow: none !important;
+}
+.css-9ev93i-control{
+  border: none !important;
+  box-shadow: none;
+  border-color: transparent;
+}
+.css-ojxynx-control{
+  box-shadow: none !important;
+}
+.css-11porr2-control{
+  border: none !important;
+}
+.css-1holsrm-control{
+  border: none !important;
+  box-shadow: none !important;
 }
  
 
@@ -107,9 +126,13 @@ body[data-scroll-locked] {
   overflow: hidden !important;
   position: relative !important;
   max-width: 100% !important;
+  /* touch-action: manipulation !important; */
 }
 
+
 :root {
+  --touch-action: pan-x pan-y;
+  --height: 100% 
   --radius: 0.625rem;
   /* --background: oklch(1 0 0); */
   --foreground: oklch(0.145 0 0);
@@ -143,6 +166,7 @@ body[data-scroll-locked] {
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 }
+
 
 .dark {
   --background: oklch(0.145 0 0);
@@ -194,16 +218,30 @@ body {
 }
 
 .Toastify__toast {
+  width: fit-content;
   --toastify-toast-width: 95%;
+  bottom: 24px;
+  min-height: 20px;
+  background-color: #f5eaf187 !important;
+  border: 1px solid #FFFFFF4D !important;
+
+}
+.Toastify__toast p{
+  font-size: 12px !important;
 }
 
 .otp-input {
   width: 38px !important;
   height: 42px !important;
 }
+.\[\&_svg\:not\(\[class\*\=\'size-\'\]\)\]\:size-4 svg:not([class*="size-"]){
+  width: 20px;
+  height: 20px;
+  color: #776ea5 !important;
+}
 
-@media only screen and (max-width: 480px) {
+/* @media only screen and (max-width: 480px) {
   .Toastify__toast {
     --toastify-toast-width: 95%;
   }
-}
+} */

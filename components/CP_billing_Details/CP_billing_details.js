@@ -215,9 +215,9 @@ const CP_billing_details = () => {
   };
 
   return (
-    <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col">
+    <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col max-w-[576px] mx-auto">
       <CP_Header />
-      <div className="h-full pt-[9%] pb-[4%] overflow-auto px-[17px] mt-3 bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5]">
+      <div className="h-full pt-[9%] pb-[21%] lg:pb-[12%] overflow-auto px-[17px] mt-3 bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5]">
         <div className="mt-3 lg:mt-0 bg-[#FFFFFF80] rounded-[12px] p-4">
           <strong className="text-[15px] text-black font-semibold">
             Billing Details
@@ -358,7 +358,7 @@ const CP_billing_details = () => {
             >
               GST No. *
             </Label>
-            <div className="flex items-center bg-white rounded-[7.26px] overflow-hidden h-[39px]">
+            <div className="flex items-center bg-white rounded-l-[7.26px] overflow-hidden h-[39px]">
               <Select
                 value={formData.gstStateCode}
                 onValueChange={handleGstStateCodeChange}
@@ -366,7 +366,7 @@ const CP_billing_details = () => {
                 disabled={!isPanCardValid(formData.panCard)}
               >
                 <SelectTrigger
-                  className={`w-[60px] rounded-l-[7.26px] text-[15px] font-semibold h-[39px] px-2 ${
+                  className={`w-[60px] rounded-l-[7.26px] rounded-r-none  text-[15px] font-semibold h-[39px] px-2 ${
                     isPanCardValid(formData.panCard)
                       ? "bg-white text-gray-500"
                       : "bg-[#ffffff10] text-[#00000040]"

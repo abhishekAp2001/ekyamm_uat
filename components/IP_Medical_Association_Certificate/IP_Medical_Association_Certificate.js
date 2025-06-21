@@ -110,9 +110,10 @@ const IP_Medical_Association_Certificate = () => {
         </div>
       </div>
       <div className="bg-gradient-to-b from-[#fce8e5] to-[#fce8e5] flex justify-center items-center gap-3 mt-[20.35px] fixed bottom-0 pb-[23px] left-0 right-0 px-[16px] max-w-[576px] mx-auto">
+         <Link href="/sales/ip_single_session_fees" className="w-full">
         <Button className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] rounded-[8px] flex items-center justify-center w-full h-[45px]">
-          <Link href="/sales/ip_single_session_fees">Continue</Link>
-        </Button>
+         Continue
+        </Button></Link>
       </div>
     </div>
   );

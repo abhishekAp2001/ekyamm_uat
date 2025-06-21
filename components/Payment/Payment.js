@@ -57,16 +57,8 @@ const Payment = ({ type }) => {
         <Link href={`/channel-partner/${type}/pay-for-sessions`}>
           <Pay_Header />
         </Link>
-        {/* <BackNav
-          title="Payment"
-          to={`/channel-partner/${type}/payment`}
-        /> */}
-        {/* <div className="flex justify-center h-fit mx-auto relative mt-4 mb-4">
-          <span className="text-[#776EA5] font-[600] text-[20px]">
-            Cloudnine Hospital
-          </span>
-        </div> */}
-        <div className="flex flex-col h-fit mx-auto relative mt-4 mb-4">
+         <div className="h-full flex flex-col overflow-auto  bg-gradient-to-b from-[#DFDAFB] to-[#F9CCC5]">
+        <div className="flex flex-col h-fit mx-auto relative mt-4 mb-4 ">
           <div className="w-full text-[#776EA5] font-semibold text-[20px] leading-[25px] text-center">
             {channelPartnerData?.clinicName}
           </div>
@@ -79,9 +71,9 @@ const Payment = ({ type }) => {
             </span>
           </div>
         </div>
-        <div className="h-full px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] flex flex-col justify-between ">
+        <div className="h-full px-[17px] flex flex-col justify-between ">
           <div className="bg-[#FFFFFF] rounded-[9px] p-5">
-            <strong className=" flex text-[30px] font-[700] text-[#776EA5] items-center justify-center mb-4 ">
+            <strong className=" flex text-[30px] font-[700] text-[#776EA5] items-center justify-center mb-4">
               Pay {totalPayable}
             </strong>
 
@@ -100,19 +92,20 @@ const Payment = ({ type }) => {
                 />
               </div>
             </Link>
-            <div className="flex justify-center mt-4">
+            <div className="flex justify-center mt-5">
               <Link href={`/channel-partner/${type}/pay-for-sessions`}>
-                <Button className="bg-[#776EA5] text-[17px] font-[700] text-white py-[14.5px]   rounded-[8px] flex items-center justify-center w-[304px] h-[45px]">
+                <Button className="bg-[#776EA5] text-[15px] font-[700] text-white py-[14.5px]   rounded-[8px] flex items-center justify-center w-[304px] h-[45px]">
                   Back
                 </Button>
               </Link>
             </div>
           </div>
 
-          <div className="bg-gradient-to-t from-[#fce8e5] to-[#fce8e5] flex flex-col justify-between items-center gap-3 mt-[20.35px] fixed bottom-0 pb-[23px] left-0 right-0 px-4">
+          {/* <div className="bg-gradient-to-t from-[#fce8e5] to-[#fce8e5] flex flex-col justify-between items-center gap-3 mt-[20.35px] fixed bottom-0 pb-[23px] left-0 right-0 px-4">
             <Footer_bar />
-          </div>
+          </div> */}
         </div>
+      </div>
       </div>
     </>
   );

@@ -1,10 +1,10 @@
-import CP_List from '@/components/CP_List/CP_List'
+import Family_Details from '@/components/Family_Details/Family_Details'
 import React from 'react'
 
 const page = () => {
   return (
     <>
-      <CP_List/>
+      <Family_Details/>
     </>
   )
 }

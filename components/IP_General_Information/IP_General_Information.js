@@ -157,7 +157,7 @@ const IP_General_Information = () => {
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col">
       <IP_Header text="Add Individual Practitioner Details" />
-      <div className="h-full pb-[26%] overflow-auto px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb]">
+      <div className="h-full pb-[26%] lg:pb-[16%] overflow-auto px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb]">
         {/* General Information */}
         <div className="bg-[#FFFFFF80] rounded-[12px] p-4">
           <strong className="text-[15px] text-black font-semibold">
@@ -174,7 +174,7 @@ const IP_General_Information = () => {
                 type="number"
                 inputMode="numeric"
                 pattern="[0-9]*"
-                placeholder="10"
+                placeholder="Exp."
                 className="bg-white rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] placeholder:text-gray-500 py-3 px-3 w-[46px] h-[38px]"
                 value={formData.yearsOfExperience}
                 onChange={(e) => handleInputChange(e, "yearsOfExperience")}
@@ -375,7 +375,7 @@ const IP_General_Information = () => {
               <div className="relative">
                 <Input
                   type="text"
-                  placeholder="Telugu"
+                  placeholder="Language"
                   className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-3 h-[38px] ${
                     isWhatToExpectValid()
                       ? "bg-white placeholder:text-gray-500"

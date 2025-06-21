@@ -139,7 +139,14 @@ const CP_doctor_details = () => {
 
   // Handle text input change for firstName and lastName
   const handleTextInputChange = (e, field) => {
-    setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+    if (field === "email") {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: e.target.value.toLowerCase(),
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+    }
   };
 
   // Handle title change
@@ -152,6 +159,7 @@ const CP_doctor_details = () => {
   const handleBlur = (field) => {
     setTouched((prev) => ({ ...prev, [field]: true }));
   };
+  
 
   // Handle save and continue
   const handleSave = () => {
@@ -342,7 +350,7 @@ const CP_doctor_details = () => {
                   }));
                 }}
                 isDisabled={!isEmailValid(formData.email)}
-                className="w-[100px] " 
+                className="w-[100px] border-none shadow-none" 
                 styles={{
                   control: (base) => ({
                     ...base,
@@ -362,7 +370,7 @@ const CP_doctor_details = () => {
               />
               <Input
                 id="primaryMobileNumber"
-                type="number"
+                type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
                 placeholder="Enter primary mobile no."
@@ -443,7 +451,7 @@ const CP_doctor_details = () => {
                   })
                 }
                 isDisabled={sameAsMobile || !isMobileValid(formData.primaryMobileNumber)}
-                className="w-[100px]"
+                className="w-[100px] border-none shadow-none"
                 styles={{
                   control: (base) => ({
                     ...base,
@@ -463,7 +471,7 @@ const CP_doctor_details = () => {
               />
               <Input
                 id="whatsappNumber"
-                type="number"
+                type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
                 placeholder="Enter whatsapp no."
@@ -514,7 +522,7 @@ const CP_doctor_details = () => {
                   })
                 }
                 isDisabled={!isMobileValid(formData.whatsappNumber)}
-                className="w-[100px]"
+                className="w-[100px] border-none shadow-none"
                 styles={{
                   control: (base) => ({
                     ...base,
@@ -534,7 +542,7 @@ const CP_doctor_details = () => {
               />
               <Input
                 id="emergencyNumber"
-                type="number"
+                type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
                 placeholder="Enter emergency no."

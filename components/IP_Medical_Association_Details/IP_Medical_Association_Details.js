@@ -42,6 +42,7 @@ const IP_Medical_Association_Details = () => {
     medicalAssociationNumber: false,
     certificates: false,
   });
+  const [drawerOpen,setDrawerOpen] = useState(false)
 
   const cameraInputRef = useRef(null);
   const galleryInputRef = useRef(null);
@@ -121,6 +122,7 @@ const IP_Medical_Association_Details = () => {
           certificates: [...prev.certificates, { name: file.name, base64, url: fileUrl }],
         }));
         setTouched((prev) => ({ ...prev, certificates: true }));
+        handleCloseDrawer()
       } catch (error) {
         console.error("Error converting file to base64:", error);
         showErrorToast("Failed to upload certificate");
@@ -177,6 +179,10 @@ const IP_Medical_Association_Details = () => {
       showErrorToast("Please fill all required fields and upload at least one certificate");
     }
   };
+  
+  const handleCloseDrawer = () =>{
+    setDrawerOpen(false)
+  }
 
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto ">
@@ -234,11 +240,12 @@ const IP_Medical_Association_Details = () => {
               Upload Certificate *
             </span>
             <div className="">
-            <Drawer>
+            <Drawer open={drawerOpen} onClose={handleCloseDrawer} >
               <DrawerTrigger>
                 <Button
                   className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] rounded-[8px] flex items-center justify-center w-[87px] h-[32px]"
                   disabled={!isMedicalAssociationNumberValid()}
+                  onClick={()=>setDrawerOpen(true)}
                 >
                   + Add
                 </Button>

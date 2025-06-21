@@ -51,8 +51,8 @@ const PayForSessions = ({ type }) => {
           title="Pay for Sessions Package"
           to={`/channel-partner/${type}/sessions-selection`}
         />        
-        <div className="h-full flex flex-col justify-between overflow-auto px-[13px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb]">
-          <div className="flex flex-col">
+        <div className="h-full flex flex-col overflow-auto px-[13px]  bg-gradient-to-b from-[#DFDAFB] to-[#F9CCC5]">
+          <div className="flex flex-col py-[22px]">
             <div className="w-full text-[#776EA5] font-semibold text-[20px] leading-[25px] text-center">
               {channelPartnerData?.clinicName}
             </div>
@@ -66,7 +66,7 @@ const PayForSessions = ({ type }) => {
             </div>
           </div>
           <div className="bg-[#FFFFFF] rounded-[9px] p-5 relative">
-            <strong className=" flex text-[16px] font-[600] text-black items-center justify-center mb-4">
+            <strong className=" flex text-[20px] font-[600] text-black items-center justify-center mb-4">
               Package Credit Confirmation
             </strong>
             <div className="mb-3 bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[12px] p-2">
@@ -98,7 +98,7 @@ const PayForSessions = ({ type }) => {
                 </span>
               </div>
             </div>
-            <div className="flex justify-between mt-2  pt-2 bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[12px] p-2">
+            <div className="flex mb-3 justify-between mt-2  pt-2 bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[12px] p-2">
               <span className="text-[15px] font-[400] text-black ml-1">
                 Total:
               </span>
@@ -109,7 +109,7 @@ const PayForSessions = ({ type }) => {
                 {total}
               </span>
             </div>
-            <div className="flex justify-between mt-2  pt-2 bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[12px] p-2">
+            <div className="flex mb-3 justify-between mt-2  pt-2 bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[12px] p-2">
               <span className="text-[15px] font-[400] text-black ml-1">
                 Clinic Share ({clinicSharePercent}%):
               </span>
@@ -118,7 +118,7 @@ const PayForSessions = ({ type }) => {
               </span>
             </div>
 
-            <div className="flex justify-between mt-2  pt-2 bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[12px] p-2">
+            <div className="flex mb-3 justify-between mt-2  pt-2 bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[12px] p-2">
               <span className="text-[15px] font-[400] text-black ml-1">
                 Total Payable:
               </span>
@@ -127,14 +127,14 @@ const PayForSessions = ({ type }) => {
               </span>
             </div>
             <Link href={`/channel-partner/${type}/payment`}>
-              <Button className="mt-2 w-full bg-[#776EA5]">
+              <Button className="w-full bg-[#776EA5]">
                 Pay {totalPayable}
               </Button>
             </Link>
           </div>
-          <div className="bg-gradient-to-b from-[#fce8e5] to-[#fce8e5] flex flex-col items-center gap-3  py-[23px] px-[17px] left-0 right-0 ">
+          {/* <div className="bg-gradient-to-b from-[#fce8e5] to-[#fce8e5] flex flex-col items-center gap-3  py-[23px] px-[17px] left-0 right-0 ">
             <Footer_bar />
-          </div>
+          </div> */}
         </div>
       </div>
     </>

@@ -161,7 +161,7 @@ const IP_Single_Session_Fees = () => {
   };
 
   return (
-    <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col">
+    <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
       <IP_Header text="Add Individual Practitioner Details" />
       <div className="h-full pb-[22%] overflow-auto px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb]">
         {/* Single Session Fees */}
@@ -176,6 +176,8 @@ const IP_Single_Session_Fees = () => {
             >
               Session Fee (Hourly) *
             </Label>
+            <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#808080ba] text-[15px] font-semibold">₹</span>
             <Input
               id="singleSession"
               type="text"
@@ -183,8 +185,9 @@ const IP_Single_Session_Fees = () => {
               value={formData.singleSession}
               onChange={handleSingleSessionChange}
               onBlur={() => handleBlur("singleSession")}
-              className="bg-white rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] placeholder:text-[#00000066] py-3 px-4 h-[39px]"
+              className="bg-white rounded-[7.26px] text-[15px] ps-6 text-black font-semibold placeholder:text-[15px] placeholder:text-[#00000066] py-3 px-4 h-[39px]"
             />
+            </div>
             {touched.singleSession && !formData.singleSession && (
               <span className="text-red-500 text-sm mt-1 block">
                 Session fee is required
@@ -221,9 +224,11 @@ const IP_Single_Session_Fees = () => {
                   </label>
                 </div>
                 <div>
+                  <div className="relative">
+                  <span className="absolute left-[-12px] top-1/2 -translate-y-1/2 text-[#80808070] text-[15px] font-semibold">₹</span>
                   <Input
                     type="text"
-                    placeholder={`₹ ${1200 - index * 200}/-`}
+                    placeholder={` ${1200 - index * 200}/-`}
                     value={pkg.rate}
                     onChange={(e) =>
                       handlePackageChange(index, "rate", e.target.value)
@@ -235,6 +240,7 @@ const IP_Single_Session_Fees = () => {
                         : ""
                     }`}
                   />
+                  </div>
                 </div>
               </div>
             ))}
@@ -257,7 +263,7 @@ const IP_Single_Session_Fees = () => {
             <Input
               id="panCard"
               type="text"
-              placeholder="ABCDE1234F"
+              placeholder="AAAAA1111A"
               value={formData.panCard}
               onChange={handlePanChange}
               onBlur={() => handleBlur("panCard")}
@@ -330,7 +336,7 @@ const IP_Single_Session_Fees = () => {
                 onChange={handleGstSuffixChange}
                 onBlur={() => handleBlur("gstNumber")}
                 disabled={!isPanValid(formData.panCard)}
-                placeholder="Z5G"
+                placeholder="AAA"
                 className={`text-[15px] font-semibold px-2 text-black outline-none w-[70px] ${
                   isPanValid(formData.panCard)
                     ? "bg-white placeholder:text-gray-500"

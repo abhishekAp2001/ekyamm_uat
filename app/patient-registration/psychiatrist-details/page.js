@@ -1,10 +1,11 @@
-import IP_List from '@/components/IP_List/IP_List'
+
+import PP_name from '@/components/PP_name/PP_name'
 import React from 'react'
 
 const page = () => {
   return (
     <>
-      <IP_List/>
+   <PP_name/>
     </>
   )
 }
