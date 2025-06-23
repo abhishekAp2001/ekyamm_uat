@@ -21,7 +21,7 @@ import { whatsappUrl } from "@/lib/constants";
 import OTPInput from "react-otp-input";
 
 const OTP_Send = ({ type }) => {
-  const [selectedMethod, setSelectedMethod] = useState("email");
+  const [selectedMethod, setSelectedMethod] = useState("");
   const [otp, setOtp] = useState("");
   const [showOtp, setShowOtp] = useState(false);
   const [otpSendStatus, setOtpSendStatus] = useState(false);
@@ -173,12 +173,7 @@ const OTP_Send = ({ type }) => {
       // if (result.data.result === "success") 
       if(response?.data?.success)
         {
-          if(response?.data?.data?.message=="OTP bypassed."){
-            router.push(`/channel-partner/${type}/verified_successfully`)
-          }
-          else{
-            return true;
-          }
+          return true;
       } else {
         showErrorToast(`Failed to generate OTP`);
       }
@@ -219,7 +214,7 @@ const OTP_Send = ({ type }) => {
       };
 
       // const result = await axios.get(apiUrl, { params });
-      const response = await customAxios.post(``,{
+      const response = await customAxios.post(`v2/cp/mobile/otpValidate`,{
         mobile:mobileNumber,
         otp:otp
       })
@@ -364,9 +359,6 @@ const OTP_Send = ({ type }) => {
                 {otpSendStatus ? (
                   <>
                     <div className="my-[15px]">
-                      <div className="text-[12px] text-gray-500 font-medium text-left mb-1 relative ">
-                        {otp === "" ? <>Enter OTP</> : <>You entered: {otp}</>}
-                      </div>
                       {/* <InputOTP
                         maxLength={6}
                         value={otp}
@@ -436,7 +428,7 @@ const OTP_Send = ({ type }) => {
                 <Button
                   onClick={otpSendStatus ? verifyOtp : sendOtp}
                   disabled={
-                    isLoading || (otpSendStatus && isResendDisabled && !otp)
+                    isLoading|| !selectedMethod || (otpSendStatus && isResendDisabled && !otp)
                   }
                   className="cursor-pointer bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white border py-[14.5px] rounded-[8px] flex items-center justify-center w-full h-[45px] mt-[15px]"
                 >
