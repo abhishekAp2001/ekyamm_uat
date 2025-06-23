@@ -3,12 +3,22 @@ import { ChevronLeft } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 
-const Family_Header = ({ type }) => {
+const Emergency_Header = () => {
   const pathname = usePathname();
   const router = useRouter();
 
   const handleBack = () => {
-    router.push(`/patient/${type}/details`);
+    if (pathname === "/sales/cp_type") {
+      router.push("/sales");
+    } else if (pathname === "/sales/cp_clinic_details") {
+      router.push("/sales/cp_type");
+    } else if (pathname === "/sales/cp_doctor_details") {
+      router.push("/sales/cp_clinic_details");
+    } else if (pathname === "/sales/cp_billing_details") {
+      router.push("/sales/cp_doctor_details");
+    } else if (pathname === "/sales/cp_bank_details") {
+      router.push("/sales/cp_billing_details");
+    }
   };
   return (
     <>
@@ -22,7 +32,7 @@ const Family_Header = ({ type }) => {
             }}
           />
           <div className="flex-1 text-[16px] font-semibold text-gray-800">
-            Add Family Details
+            Add Emergency Contact Details
           </div>
           <div className="h-6 w-6" /> {/* Space */}
         </div>
@@ -31,4 +41,4 @@ const Family_Header = ({ type }) => {
   );
 };
 
-export default Family_Header;
+export default Emergency_Header;
