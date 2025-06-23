@@ -174,9 +174,7 @@ const Family_Details = ({ type }) => {
       const response = await axios.post(
         Baseurl + "/v2/cp/patient/familyMember",
         payload,
-        {
-          headers: { accesstoken: token },
-        }
+        {headers: { accesstoken: token },}
       );
       if (response.data.success) {
         showSuccessToast("Family member added successfully");
