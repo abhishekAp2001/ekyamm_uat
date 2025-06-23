@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -16,11 +16,60 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { Plus, X } from "lucide-react";
 import PP_Header from "../PP_Header/PP_Header";
-import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
-const PP_Details = () => {
+import { getCookie, setCookie } from "cookies-next";
+import { showErrorToast } from "@/lib/toast";
+import { sanitizeInput } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import axiosInstance from "@/lib/axiosInstance";
+import { Baseurl } from "@/lib/constants";
+import Select from "react-select";
+import { Checkbox } from "@/components/ui/checkbox";
+import axios from "axios";
+import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
+polyfillCountryFlagEmojis();
+
+const PP_Details = ({ type }) => {
+  const router = useRouter();
+  const customAxios = axiosInstance();
+  const [patientData, setPatientData] = useState(null);
+  const [user, setUser] = useState(null);
+  const [channelPartnerData, setChannelPartnerData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [countryList, setCountryList] = useState([]);
+  const [sameAsMobile, setSameAsMobile] = useState(false);
+
+  const [formData, setFormData] = useState({
+    mobileNumber: "",
+    password: "",
+    confirmPassword: "",
+    verificationToken: "",
+  });
+  const [formErrors, setFormErrors] = useState({
+    mobileNumber: "",
+    password: "",
+    confirmPassword: "",
+    verificationToken: "",
+  });
+
+  const [touched, setTouched] = useState({
+    type: false,
+    clinicName: false,
+    userName: false,
+    email: false,
+    primaryMobileNumber: false,
+    whatsappNumber: false,
+    emergencyNumber: false,
+  });
+  const countryOptions = useMemo(
+    () =>
+      countryList.map((country) => ({
+        value: `${country.flag} ${country.code}`,
+        label: `${country.flag} ${country.code}`,
+        name: country.name,
+      })),
+    [countryList]
+  );
   const [mobile, setMobile1] = useState("");
-  const [whatsapp_mobile, setMobile2] = useState("");
-  const [emergency_mobile, setMobile3] = useState("");
   const [selected, setSelected] = useState({
     code: "+91",
     name: "India",
@@ -28,21 +77,118 @@ const PP_Details = () => {
   });
   const [open, setOpen] = useState(false);
 
-  const countries = [
-    { code: "+91", name: "India", flag: "/images/india.png" },
-    { code: "+1", name: "USA", flag: "/images/usa.png" },
-    { code: "+44", name: "UK", flag: "/images/uk.png" },
-    { code: "+61", name: "Australia", flag: "/images/aus.png" },
-  ];
+  const isEmailValid = (email) => /\S+@\S+\.\S+/.test(email);
+  const isMobileValid = (mobile) => /^\d{10}$/.test(mobile);
+  const isFormValid = () => {
+    return (
+      formData.type &&
+      formData.clinicName &&
+      formData.userName &&
+      isUserNameAvailable === true &&
+      isEmailValid(formData.email) &&
+      isMobileValid(formData.primaryMobileNumber) &&
+      isMobileValid(formData.whatsappNumber) &&
+      isMobileValid(formData.emergencyNumber)
+    );
+  };
 
   const isDisabled = true;
 
-  const handleInputChange = (e, setter) => {
-    const digitsOnly = e.target.value.replace(/\D/g, "");
-    if (digitsOnly.length <= 10) {
-      setter(digitsOnly);
+  useEffect(() => {
+    const userCookie = getCookie("userData");
+    if (!userCookie) {
+      router.push(`/patient/${type}/create/password`);
+      return;
+    }
+    const patientData = JSON.parse(userCookie);
+    setPatientData(patientData);
+
+    const verifyChannelPartner = async (username) => {
+      setLoading(true);
+      try {
+        const response = await customAxios.post(`v2/cp/channelPartner/verify`, {
+          username: type,
+        });
+
+        if (response?.data?.success === true) {
+          setCookie("channelPartnerData", JSON.stringify(response.data.data));
+          setChannelPartnerData(response.data.data);
+          setFormData((prev) => ({
+            ...prev,
+            verificationToken: sanitizeInput(
+              response.data.data?.verificationToken
+            ),
+          }));
+        } else {
+          showErrorToast(
+            response?.data?.error?.message || "Verification failed"
+          );
+        }
+      } catch (err) {
+        showErrorToast(
+          err?.response?.data?.error?.message ||
+            "An error occurred while verifying"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const getPatient = async (patientId, entityId) => {
+      try {
+        const token  ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjQ4YzhhYTlkYWU2YTZjN2U4ZDk3N2MiLCJlbWFpbCI6ImNoaW50ZW5AZWt5YW1tLmNvbSIsInVzZXJUeXBlIjoic3VwZXJBZG1pbiIsImlhdCI6MTcxNzA1NDE3NiwiZXhwIjoxNzE3MDk3Mzc2fQ.ZKsjdo6PaDKj-3MdQ6Hg4uYvwG657O-3c0Flb_R3Np0";
+        const response = await axios.get(Baseurl + "/v2/patient/" + patientId, {
+          params: {
+            type: "patient",
+          },
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "application/json",
+          },
+          data: {
+            entityId: entityId,
+          },
+        });
+        if (response?.data?.success) {
+          setUser(response?.data?.data);
+        }
+      } catch (err) {
+        console.log('err',err);
+        
+        showErrorToast(
+          err?.response?.data?.error?.message || "Error during sign-in"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    verifyChannelPartner(type);
+    const patientId = "66a10a19c8ca863d98b3ee01";
+    const entityId = "66cb61aaf3252d4ff3e9badd";
+    getPatient(patientId, entityId);
+  }, [type]);
+
+  const getCountryList = async () => {
+    try {
+      const response = await customAxios.get(`v2/country?search=${""}`);
+      if (response?.data?.success === true) {
+        setCountryList(response?.data?.data);
+      }
+    } catch (error) {
+      console.log("11error", error);
+      if (error.forceLogout) {
+        router.push("/login");
+      } else {
+        showErrorToast(
+          error?.response?.data?.error?.message || "Something Went Wrong"
+        );
+      }
     }
   };
+  useEffect(() => {
+    getCountryList();
+  }, []);
 
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
@@ -113,91 +259,158 @@ const PP_Details = () => {
             className="w-full bg-white rounded-[7.26px] text-[15px] font-semibold h-[39px]"
           />
 
-          {/* Primary Mobile */}
-          <Label className="text-[15px] text-gray-500 font-medium mb-[7.59px] mt-[22px]">
-            Primary Mobile Number <span className="text-red-500">*</span>
-          </Label>
-          <div className="flex items-center gap-2 relative">
-            <div className="relative w-[82px]">
-              <div
-                onClick={() => {
-                  if (!isDisabled) setOpen(!open);
+          <div className="mt-[22px]">
+            <Label className="text-[15px] text-gray-500 font-medium mb-[7.59px] mt-[22px]">
+              Primary Mobile Number <span className="text-red-500">*</span>
+            </Label>
+            <div className="flex items-center h-[39px]">
+              <Select
+                options={countryOptions}
+                value={countryOptions.find(
+                  (option) => option.value === formData.countryCode_primary
+                )}
+                onChange={(selectedOption) => {
+                  const newCountryCode = selectedOption
+                    ? selectedOption.value
+                    : "🇮🇳 +91";
+                  setFormData((prev) => ({
+                    ...prev,
+                    countryCode_primary: newCountryCode,
+                    ...(sameAsMobile && {
+                      countryCode_whatsapp: newCountryCode,
+                    }),
+                  }));
                 }}
-                className={`flex items-center gap-1 pl-2 pr-4 py-2 bg-white border border-gray-300 rounded-[7.26px] h-[38px] ${
-                  isDisabled
-                    ? "cursor-not-allowed opacity-50"
-                    : "cursor-pointer"
-                }`}
-              >
-                <Image
-                  src={selected.flag}
-                  alt={selected.name}
-                  width={16}
-                  height={16}
-                />
-                <span className="ml-1 font-semibold text-[16px]">
-                  {selected.code}
-                </span>
-                <Image
-                  src="/images/arrow.png"
-                  alt="dropdown"
-                  width={13}
-                  height={10}
-                  className="rotate-90 ml-[7px]"
-                />
-              </div>
+                disabled={false}
+                className="w-[100px] border-none shadow-none"
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    width: "max-content",
+                  }),
+                  menu: (base) => ({ ...base, width: "200px" }),
+                }}
+                formatOptionLabel={(option, { context }) =>
+                  context === "menu"
+                    ? `${option.label} - ${option.name}`
+                    : option.label
+                }
+                menuPlacement="top"
+              />
+              <Input
+                id="primaryMobileNumber"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                type="text"
+                placeholder="Enter primary mobile no."
+                value={formData.primaryMobileNumber}
+                onChange={(e) => handleInputChange(e, "primaryMobileNumber")}
+                onBlur={() => handleBlur("primaryMobileNumber")}
+                disabled={false}
+                className="bg-white border border-gray-300 rounded-[7.26px] placeholder:text-gray-500 font-semibold py-2 px-4 h-[38px] w-full"
+              />
             </div>
-            <Input
-              type="text"
-              value={mobile}
-              onChange={(e) => handleInputChange(e, setMobile1)}
-              placeholder="Enter Mobile Number"
-              className="bg-white border border-gray-300 rounded-[7.26px] placeholder:text-gray-500 font-semibold py-2 px-4 h-[39px] w-full opacity-50 cursor-not-allowed"
-              disabled
-            />
+            {touched.primaryMobileNumber &&
+              formData.primaryMobileNumber &&
+              !isMobileValid(formData.primaryMobileNumber) && (
+                <span className="text-red-500 text-sm mt-1 block">
+                  Must be 10 digits
+                </span>
+              )}
+            {touched.primaryMobileNumber && !formData.primaryMobileNumber && (
+              <span className="text-red-500 text-sm mt-1 block">
+                Mobile number is required
+              </span>
+            )}
           </div>
-
-          {/* WhatsApp Number */}
-          <Label className="text-[15px] text-gray-500 font-medium mb-[7.59px] mt-[22px]">
-            Whatsapp Number
-          </Label>
-          <div className="flex items-center gap-2 relative">
-            <div className="relative w-[82px]">
-              <div
-                onClick={() => {
-                  if (!isDisabled) setOpen(!open);
-                }}
-                className="flex items-center gap-1 pl-2 pr-4 py-2 bg-white border border-gray-300 rounded-[7.26px] h-[38px] cursor-pointer"
-              >
-                <Image
-                  src={selected.flag}
-                  alt={selected.name}
-                  width={16}
-                  height={16}
+          <div className="mt-[22px]">
+            <div className="flex items-center">
+              <Label className="text-[15px] text-gray-500 font-medium mb-[7.59px] mt-[22px]">
+                Whatsapp Number
+              </Label>
+              <div className="flex gap-[6px] items-center w-[45%]">
+                <Checkbox
+                  checked={sameAsMobile}
+                  onCheckedChange={(checked) => {
+                    setSameAsMobile(checked);
+                    if (checked) {
+                      setFormData((prev) => ({
+                        ...prev,
+                        whatsappNumber: prev.primaryMobileNumber,
+                        countryCode_whatsapp: prev.countryCode_primary,
+                      }));
+                      setTouched((prev) => ({
+                        ...prev,
+                        whatsappNumber: true,
+                      }));
+                    }
+                  }}
+                  className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"
                 />
-                <span className="ml-1 font-semibold text-[16px]">
-                  {selected.code}
-                </span>
-                <Image
-                  src="/images/arrow.png"
-                  alt="dropdown"
-                  width={13}
-                  height={10}
-                  className="rotate-90 ml-[7px]"
-                />
+                <label
+                  className={`text-[12px] ${
+                    isMobileValid(formData.primaryMobileNumber)
+                      ? "text-gray-500 "
+                      : "text-[#00000040]"
+                  }`}
+                >
+                  Same as Mobile Number
+                </label>
               </div>
             </div>
-
-            <Input
-              type="text"
-              value={mobile}
-              onChange={(e) => handleInputChange(e, setMobile1)}
-              placeholder="Enter Mobile Number"
-              className="bg-white border border-gray-300 rounded-[7.26px] placeholder:text-gray-500 font-semibold py-2 px-4 h-[38px] w-full"
-              maxLength={10}
-              inputMode="numeric"
-              pattern="\d*"
-            />
+            <div className="flex items-center h-[39px]">
+              <Select
+                options={countryOptions}
+                value={countryOptions.find(
+                  (option) => option.value === formData.countryCode_whatsapp
+                )}
+                onChange={(selectedOption) =>
+                  setFormData({
+                    ...formData,
+                    countryCode_whatsapp: selectedOption
+                      ? selectedOption.value
+                      : "🇮🇳 +91",
+                  })
+                }
+                className="w-[100px] border-none shadow-none bg-white"
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    width: "max-content",
+                  }),
+                  menu: (base) => ({ ...base, width: "200px" }),
+                }}
+                formatOptionLabel={(option, { context }) =>
+                  context === "menu"
+                    ? `${option.label} - ${option.name}`
+                    : option.label
+                }
+                menuPlacement="top"
+              />
+              <Input
+                id="whatsappNumber"
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                placeholder="Enter whatsapp no."
+                value={formData.whatsappNumber}
+                onChange={(e) => handleInputChange(e, "whatsappNumber")}
+                onBlur={() => handleBlur("whatsappNumber")}
+                className="bg-white border border-gray-300 rounded-[7.26px] placeholder:text-gray-500 font-semibold py-2 px-4 h-[38px] w-full"
+              />
+            </div>
+            {touched.whatsappNumber &&
+              formData.whatsappNumber &&
+              !isMobileValid(formData.whatsappNumber) && (
+                <span className="text-red-500 text-sm mt-1 block">
+                  Must be 10 digits
+                </span>
+              )}
+            {touched.whatsappNumber && !formData.whatsappNumber && (
+              <span className="text-red-500 text-sm mt-1 block">
+                WhatsApp number is required
+              </span>
+            )}
           </div>
 
           {/* Gender */}
@@ -270,10 +483,13 @@ const PP_Details = () => {
           <Button className="border border-[#CC627B] bg-transparent text-[#CC627B] text-[15px] font-[600] w-[48%] h-[45px] rounded-[8px]">
             Cancel
           </Button>
-          <Link href={'/patient-registration/family-details'} className="w-[48%]">
-          <Button className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[15px] font-[600] w-full h-[45px] rounded-[8px]">
-            Save & Continue
-          </Button>
+          <Link
+            href={"/patient-registration/family-details"}
+            className="w-[48%]"
+          >
+            <Button className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[15px] font-[600] w-full h-[45px] rounded-[8px]">
+              Save & Continue
+            </Button>
           </Link>
         </div>
       </div>
