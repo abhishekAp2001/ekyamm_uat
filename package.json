@@ -27,6 +27,7 @@
     "cookies-next": "^6.0.0",
     "country-flag-emoji-polyfill": "^0.1.8",
     "crypto-js": "^4.2.0",
+    "date-fns": "^4.1.0",
     "i": "^0.3.7",
     "input-otp": "^1.4.2",
     "lucide": "^0.511.0",

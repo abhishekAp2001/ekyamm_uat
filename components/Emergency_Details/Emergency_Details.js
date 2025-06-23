@@ -21,9 +21,10 @@ import { useRouter } from "next/navigation";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { showErrorToast } from "@/lib/toast";
 import Family_Header from "../Family_Header/Family_Header";
+import { ChevronLeft } from "lucide-react";
 polyfillCountryFlagEmojis();
 
-const Family_Details = () => {
+const Emergency_Details = () => {
   const router = useRouter();
   const axios = axiosInstance();
 
@@ -197,11 +198,22 @@ const Family_Details = () => {
 
   return (
     <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col max-w-[576px] mx-auto">
-      <Family_Header/>
+       <div className="fixed left-0 right-0 z-10 bg-[#e8e6f7] max-w-[576px] m-auto">
+        <div className="flex items-center p-4 gap-[9px]">
+          <ChevronLeft
+            size={24}
+            className=" text-black-700"
+          />
+          <div className="flex-1 text-[16px] font-semibold text-gray-800">
+            Add Emergency Contact Details
+          </div>
+          <div className="h-6 w-6" /> {/* Space */}
+        </div>
+      </div>
       <div className="min-h-screen pt-[10%] pb-[20%] lg:pb-[14%] overflow-auto px-[17px] bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5]">
         <div className="mt-3 lg:mt-0 bg-[#FFFFFF80] rounded-[12px] p-4">
           <strong className="text-[15px] text-black font-semibold">
-            Family Member
+            Emergency Contact Details
           </strong>
           <div>
             <Label
@@ -503,18 +515,6 @@ const Family_Details = () => {
                 </span>
               )}
           </div>
-              <div className="flex gap-[6px] items-center mt-[22px]">
-            <Checkbox
-              checked={formData.doNotDisplay}
-              onCheckedChange={(checked) =>
-                setFormData((prev) => ({ ...prev, doNotDisplay: checked }))
-              }
-              className="w-4 h-4 border border-[#776EA5] rounded-[2px] ms-1"
-            />
-            <label className="text-[14px] text-[#776EA5] font-bold">
-             Make this as an Emergency Contact
-            </label>
-          </div>
         
         </div>
         <CP_buttons
@@ -527,4 +527,4 @@ const Family_Details = () => {
   );
 };
 
-export default Family_Details;
+export default Emergency_Details;

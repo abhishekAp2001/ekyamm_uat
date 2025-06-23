@@ -235,10 +235,15 @@ body {
   height: 42px !important;
 }
 .\[\&_svg\:not\(\[class\*\=\'size-\'\]\)\]\:size-4 svg:not([class*="size-"]){
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   color: #776ea5 !important;
 }
+.bottom-drawer{
+  border-top-left-radius: 12px !important;
+  border-top-right-radius: 12px !important;
+}
+
 
 /* @media only screen and (max-width: 480px) {
   .Toastify__toast {

@@ -9,7 +9,8 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
+}
+ from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Menu, Plus, X } from "lucide-react";
@@ -38,7 +39,7 @@ const SalesDashboard = () => {
           </Avatar>
         </div>
       </div>
-      <div className="px-3 h-full  overflow-auto pt-[20%] lg:pt-[15%]">
+      <div className="px-3 h-full  overflow-auto pt-[26%] lg:pt-[17%]">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <span className="text-[12px] text-gray-500">Good {greeting},</span>
@@ -46,7 +47,7 @@ const SalesDashboard = () => {
               Chinten Shah
             </strong>
           </div>
-          <div className="rounded-full  w-[76px] h-6 inline-block bg-gradient-to-r  from-[#B0A4F5] to-[#EDA197] p-[1px]">
+          bg-gradient-to-r  from-[#DFDAFB] to-[#DFDAFB] text-[11px] text-gray-700 rounded-full w-full h-full flex items-center justify-center gap-1
             <Button
               className={
                 "bg-gradient-to-r  from-[#DFDAFB] to-[#DFDAFB] text-[11px] text-gray-700 rounded-full w-full h-full flex items-center justify-center gap-1"
@@ -128,7 +129,7 @@ const SalesDashboard = () => {
             <DrawerTrigger className="mt-[10.8px] bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] h-[45px]  rounded-[8px] flex items-center justify-center w-full">
               Add User
             </DrawerTrigger>
-            <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea]">
+            <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
               <DrawerHeader>
                 <DrawerTitle className="text-[16px] font-[600] text-center">
                   Add User

@@ -74,7 +74,7 @@ const P_Mobile_Verification = () => {
               <div className="relative">
                 <Input
                   type="text"
-                  placeholder="Enter Registered Mobile Number"
+                  placeholder="Enter Registered Mobile Number/Email Address"
                   className="bg-white rounded-[7.26px] placeholder:text-[12px] placeholder:text-gray-400 pt-3 pb-3.5 px-4 h-[39px]"
                 />
                 <Image
