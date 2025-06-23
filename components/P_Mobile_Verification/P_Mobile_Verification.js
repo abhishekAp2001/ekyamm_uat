@@ -195,6 +195,10 @@ const P_Mobile_Verification = ({ type }) => {
 
       if (response?.data?.success) {
         setIsMobileVerified(true);
+        setFormData((prev) => ({
+          ...prev,
+          mobileVerified: true,
+        }));
         setCookie("verifiedUserData", JSON.stringify(response?.data?.data));
         return true;
       } else {
@@ -260,7 +264,7 @@ const P_Mobile_Verification = ({ type }) => {
           username: type,
         });
 
-        if (response?.data?.success === true) {
+        if (response?.data?.success == true) {
           setCookie("channelPartnerData", JSON.stringify(response.data.data));
           setChannelPartnerData(response.data.data);
         } else {

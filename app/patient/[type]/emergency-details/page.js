@@ -1,11 +1,11 @@
-import Family_Details from "@/components/Family_Details/Family_Details";
+import Emergency_Details from "@/components/Emergency_Details/Emergency_Details";
 import React from "react";
 
 const page = async ({ params }) => {
   const { type } = await params;
   return (
     <>
-      <Family_Details type={type} />
+      <Emergency_Details type={type} />
     </>
   );
 };

@@ -19,14 +19,14 @@ import { getCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
-import Family_Header from "../Family_Header/Family_Header";
+import Emergency_Header from "../Emergency_Header/Emergency_Header";
 import { Button } from "../ui/button";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { Baseurl } from "@/lib/constants";
 polyfillCountryFlagEmojis();
 
-const Family_Details = ({ type }) => {
+const Emergency_Details = ({ type }) => {
   const router = useRouter();
   const customAxios = axiosInstance();
   const [channelPartnerData, setChannelPartnerData] = useState(null);
@@ -170,25 +170,26 @@ const Family_Details = ({ type }) => {
       },
     };
 
+    router.push(`/patient/${type}/dashboard`);
     try {
-      const response = await axios.post(
-        Baseurl + "/v2/cp/patient/familyMember",
-        payload,
-        {
-          headers: { accesstoken: token },
-        }
-      );
-      if (response.data.success) {
-        showSuccessToast("Family member added successfully");
-        setCookie("completeUserData", response.data.data);
-        if (formData.emergencyContact) {
-          router.push(`/patient/${type}/dashboard`);
-        } else {
-          router.push(`/patient/${type}/emergency-details`);
-        }
-      } else {
-        showErrorToast(response.data.message || "Failed to add family member");
-      }
+      // const response = await axios.post(
+      //   Baseurl + "/v2/cp/patient/familyMember",
+      //   payload,
+      //   {
+      //     headers: { accesstoken: token },
+      //   }
+      // );
+      // if (response.data.success) {
+      //   showSuccessToast("Emergency member added successfully");
+      //   setCookie("completeUserData", response.data.data);
+      //   if (formData.emergencyContact) {
+      //     router.push(`/patient/${type}/family-details`);
+      //   } else {
+      //     router.push(`/patient/${type}/emergency-details`);
+      //   }
+      // } else {
+      //   showErrorToast(response.data.message || "Failed to add family member");
+      // }
     } catch (error) {
       showErrorToast(err.response?.data?.error?.message || "Submission failed");
     } finally {
@@ -239,11 +240,11 @@ const Family_Details = ({ type }) => {
 
   return (
     <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col max-w-[576px] mx-auto">
-      <Family_Header type={type}/>
+      <Emergency_Header />
       <div className="min-h-screen pt-[10%] pb-[20%] lg:pb-[14%] overflow-auto px-[17px]">
         <div className="mt-3 lg:mt-0 bg-[#FFFFFF80] rounded-[12px] p-4 px-3">
           <strong className="text-[15px] text-black font-semibold">
-            Family Member
+            Emergency Contact Details
           </strong>
 
           {/* Relation */}
@@ -533,7 +534,7 @@ const Family_Details = ({ type }) => {
           </div>
 
           {/* Emergency Contact */}
-          <div className="flex gap-[6px] items-center mt-[22px]">
+          {/* <div className="flex gap-[6px] items-center mt-[22px]">
             <Checkbox
               checked={formData.emergencyContact === true}
               disabled={!isFormValid()}
@@ -548,13 +549,13 @@ const Family_Details = ({ type }) => {
             <label className="text-[14px] text-[#776EA5] font-bold">
               Make this as an Emergency Contact
             </label>
-          </div>
+          </div> */}
         </div>
         <div className="bg-[#e8e6f7] flex justify-between items-center gap-3 fixed bottom-0 px-[17px] pb-[18px] left-0 right-0 max-w-[576px] m-auto">
           <Button
             className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
             onClick={() => {
-              router.push(`/patient/${type}/details`);
+              router.push(`/patient/${type}/family-details`);
             }}
           >
             Cancel
@@ -566,10 +567,8 @@ const Family_Details = ({ type }) => {
           >
             {loading ? (
               <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
-            ) : formData.emergencyContact === true ? (
-              "Select Counsellor"
             ) : (
-              "Add Emergency Contact"
+              "Select Counsellor"
             )}
           </Button>
         </div>
@@ -578,4 +577,4 @@ const Family_Details = ({ type }) => {
   );
 };
 
-export default Family_Details;
+export default Emergency_Details;

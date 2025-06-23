@@ -8,7 +8,7 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Link from "next/link";
 import axiosInstance from "@/lib/axiosInstance";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
-import { showErrorToast } from "@/lib/toast";
+import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { useRouter } from "next/navigation";
 import { sanitizeInput } from "@/lib/utils";
 
@@ -22,6 +22,8 @@ const P_Create_Account = ({ type }) => {
   const [channelPartnerData, setChannelPartnerData] = useState(null);
   const [patientData, setPatientData] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [verifiedUser, setVerifiedUser] = useState({});
+
   const [formData, setFormData] = useState({
     mobileNumber: "",
     password: "",
@@ -82,7 +84,7 @@ one symbol, and no spaces.`;
       isValid = false;
       console.log("in4");
     }
-
+// console.log("verifiedUser",verifiedUser?.verificationToken  );
     console.log("formData", formData);
 
     setFormErrors(newErrors);
@@ -105,9 +107,8 @@ one symbol, and no spaces.`;
 
       setFormLoader(true);
       try {
-        const verifiedUserData = hasCookie("verifiedUserData") ? JSON.parse(getCookie("verifiedUserData")) : null;
         const response = await customAxios.post(`v2/cp/user/signin`, {
-          verificationToken: verifiedUserData.verificationToken,
+          verificationToken: verifiedUser?.verificationToken,
           password: formData.password,
           mobileNumber: formData.mobileNumber,
           countryCode: "🇮🇳 +91",
@@ -126,7 +127,7 @@ one symbol, and no spaces.`;
           showErrorToast(response?.data?.error?.message || "Sign-in failed");
         }
       } catch (err) {
-        console.log(err)
+        console.log(err);
         setCookie("userData", JSON.stringify({}));
         showErrorToast(
           err?.response?.data?.error?.message || "Error during sign-in"
@@ -139,6 +140,14 @@ one symbol, and no spaces.`;
   );
 
   useEffect(() => {
+    const verifiedUserCookie = getCookie("verifiedUserData");
+    if (!verifiedUserCookie) {
+      router.push(`/patient/${type}/create`);
+      return;
+    }
+    const verifiedUserData = JSON.parse(verifiedUserCookie);    
+    setVerifiedUser(verifiedUserData);
+
     const patientCookie = getCookie("patientLoginDetail");
     if (!patientCookie) {
       router.push(`/patient/${type}/create`);
