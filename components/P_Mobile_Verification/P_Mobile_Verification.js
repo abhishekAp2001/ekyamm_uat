@@ -47,7 +47,7 @@ const P_Mobile_Verification = ({ type }) => {
   ];
 
   const handleMobileNumberChange = (e) => {
-    const value = e.target.value;
+    const value = e.target.value.replace(/\D/g, "").slice(0, 10);
     setFormData((prev) => ({
       ...prev,
       primaryMobileNumber: value,
@@ -341,7 +341,7 @@ const P_Mobile_Verification = ({ type }) => {
             <div className="pt-6">
               <div className="relative">
                 <Input
-                  type="number"
+                  type="text"
                   inputMode="numeric"
                   pattern="[0-9]*"
                   value={formData.primaryMobileNumber}

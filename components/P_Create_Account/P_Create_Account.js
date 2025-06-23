@@ -7,7 +7,7 @@ import { whatsappUrl } from "@/lib/constants";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Link from "next/link";
 import axiosInstance from "@/lib/axiosInstance";
-import { getCookie, setCookie } from "cookies-next";
+import { getCookie, hasCookie, setCookie } from "cookies-next";
 import { showErrorToast } from "@/lib/toast";
 import { useRouter } from "next/navigation";
 import { sanitizeInput } from "@/lib/utils";
@@ -105,8 +105,9 @@ one symbol, and no spaces.`;
 
       setFormLoader(true);
       try {
+        const verifiedUserData = hasCookie("verifiedUserData") ? JSON.parse(getCookie("verifiedUserData")) : null;
         const response = await customAxios.post(`v2/cp/user/signin`, {
-          verificationToken: formData.verificationToken,
+          verificationToken: verifiedUserData.verificationToken,
           password: formData.password,
           mobileNumber: formData.mobileNumber,
           countryCode: "🇮🇳 +91",
@@ -125,8 +126,8 @@ one symbol, and no spaces.`;
           showErrorToast(response?.data?.error?.message || "Sign-in failed");
         }
       } catch (err) {
+        console.log(err)
         setCookie("userData", JSON.stringify({}));
-        router.push(`/patient/${type}/details`);
         showErrorToast(
           err?.response?.data?.error?.message || "Error during sign-in"
         );
