@@ -106,6 +106,23 @@ const CP_buttons = ({ disabled, onSave, buttonText = "Save & Continue" }) => {
         >
           {buttonText}
         </Button>
+        <div className="hidden">
+        <Button
+          disabled={disabled}
+          onClick={() => {onSave()}}
+          className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px] "
+        >
+          Select Counsellor
+        </Button>
+         <Button
+          disabled={disabled}
+          onClick={() => {onSave()}}
+          className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px] "
+        >
+          Add
+   Emergency Contact
+        </Button>
+        </div>
       </div>
     </>
   );

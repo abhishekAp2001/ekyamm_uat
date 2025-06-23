@@ -292,7 +292,7 @@ const IP_Details = () => {
               />
             </DrawerTrigger>
             <DrawerTitle></DrawerTitle>
-            <DrawerContent className="bg-gradient-to-b from-[#e7e4f8] via-[#f0e1df] via-70% to-[#feedea]">
+            <DrawerContent className="bg-gradient-to-b from-[#e7e4f8] via-[#f0e1df] via-70% to-[#feedea] bottom-drawer">
               <DrawerHeader>
                 <DrawerDescription className="flex flex-col gap-3">
                   {isMobile && (
