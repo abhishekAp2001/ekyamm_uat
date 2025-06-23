@@ -180,7 +180,7 @@ const Family_Details = ({ type }) => {
         showSuccessToast("Family member added successfully");
         setCookie("completeUserData", response.data.data);
         if (formData.emergencyContact) {
-          router.push(`/patient/${type}/dashboard`);
+          router.push(`/patient/dashboard`);
         } else {
           router.push(`/patient/${type}/emergency-details`);
         }

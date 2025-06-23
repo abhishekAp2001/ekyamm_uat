@@ -170,7 +170,7 @@ const Emergency_Details = ({ type }) => {
       },
     };
 
-    router.push(`/patient/${type}/dashboard`);
+    router.push(`/patient/dashboard`);
     try {
       // const response = await axios.post(
       //   Baseurl + "/v2/cp/patient/familyMember",

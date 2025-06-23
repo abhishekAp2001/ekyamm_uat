@@ -18,7 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Dashboard_card from "../Dashboard_card/Dashboard_card";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
+ 
 const SalesDashboard = () => {
   const greeting = new Date().getHours() < 12 ? "Morning" : (new Date().getHours() < 16 || (new Date().getHours() === 16 && new Date().getMinutes() === 0)) ? "Afternoon" : "Evening";
   return (
@@ -47,7 +47,7 @@ const SalesDashboard = () => {
               Chinten Shah
             </strong>
           </div>
-          bg-gradient-to-r  from-[#DFDAFB] to-[#DFDAFB] text-[11px] text-gray-700 rounded-full w-full h-full flex items-center justify-center gap-1
+          <div className="rounded-full  w-[76px] h-6 inline-block bg-gradient-to-r  from-[#B0A4F5] to-[#EDA197] p-[1px]">
             <Button
               className={
                 "bg-gradient-to-r  from-[#DFDAFB] to-[#DFDAFB] text-[11px] text-gray-700 rounded-full w-full h-full flex items-center justify-center gap-1"
@@ -60,7 +60,7 @@ const SalesDashboard = () => {
         <div className="flex justify-between items-center gap-3">
           <Dashboard_card />
         </div>
-
+ 
         {/* Channel Partner */}
         <div className="mt-[12.35px] pt-[8.21px] pb-3.5 border=[1.47px] border-[#FFFFFF4D] rounded-2xl">
           <div className="flex justify-between items-center ps-2 pe-[16.93px]"></div>
@@ -84,7 +84,7 @@ const SalesDashboard = () => {
                   View All
                 </Link>
               </div>
-
+ 
               <div className="bg-[#FFFFFF80] text-black text-[16px] font-[600] py-[17px] p-[8px] flex  justify-between items-center w-full h-[44px] rounded-[8.62px]">
                 <div className="flex items-center gap-[7px]">
                   <Image
@@ -186,7 +186,7 @@ const SalesDashboard = () => {
           </Drawer>
         </div>
       </div>
-
+ 
       {/* footer */}
       <div className="footer_bar bg-[#FFFFFFB2] max-w-[576px] h-[58px] fixed bottom-0 left-0 right-0 flex items-center m-auto">
       {/* <div className="footer_bar bg-[#FFFFFFB2] h-[58px] absolute bottom-0 left-0 right-0 flex items-center"> */}
@@ -234,7 +234,9 @@ const SalesDashboard = () => {
     </>
   );
 };
-
+ 
 export default SalesDashboard;
+ 
+ 
  
  
