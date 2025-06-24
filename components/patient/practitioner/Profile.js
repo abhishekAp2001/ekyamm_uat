@@ -2,9 +2,10 @@
 import React from "react";
 import { ChevronLeft } from "lucide-react";
 import Image from "next/image";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
-const PP_profile = () => {
+
+const Profile = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] relative max-w-[576px] mx-auto">
       {/* Fixed Header */}
@@ -82,4 +83,4 @@ const PP_profile = () => {
   );
 };
 
-export default PP_profile;
+export default Profile;

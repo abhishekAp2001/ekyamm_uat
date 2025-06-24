@@ -1,6 +1,6 @@
 
 
-import Client_Testimonial from '@/components/Client_Testimonials/Client_Testimonial'
+import Client_Testimonial from '@/components/patient/Client_Testimonials/Client_Testimonial'
 import React from 'react'
 
 const page = () => {

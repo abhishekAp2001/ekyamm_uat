@@ -118,7 +118,7 @@ one symbol, and no spaces.`;
         if (response?.data?.success) {
           const { userId, token, userType, status } = response.data.data;
           setCookie(
-            "userData",
+            "patientSessionData",
             JSON.stringify({ userId, token, userType, status })
           );
           showSuccessToast("Account created successfully!");
@@ -128,7 +128,7 @@ one symbol, and no spaces.`;
         }
       } catch (err) {
         console.log(err);
-        setCookie("userData", JSON.stringify({}));
+        setCookie("patientSessionData", JSON.stringify({}));
         showErrorToast(
           err?.response?.data?.error?.message || "Error during sign-in"
         );

@@ -122,7 +122,7 @@ const PP_Details = ({ type }) => {
 
   // Fetch patient data and verify channel partner
   useEffect(() => {
-    const userCookie = getCookie("userData");
+    const userCookie = getCookie("patientSessionData");
     if (!userCookie) {
       router.push(`/patient/${type}/create/password`);
       return;
@@ -157,7 +157,7 @@ const PP_Details = ({ type }) => {
 
     const getPatient = async () => {
       try {
-        const userData = JSON.parse(getCookie("userData"));
+        const userData = JSON.parse(getCookie("patientSessionData"));
         const token = userData?.token;
         const response = await axios.get(`${Baseurl}/v2/cp/patient/`, {
           headers: {
@@ -398,7 +398,7 @@ const PP_Details = ({ type }) => {
   };
 
   useEffect(()=>{
-    const userDataCookie = getCookie("userData");
+    const userDataCookie = getCookie("patientSessionData");
           let token;
           if (userDataCookie) {
             try {
