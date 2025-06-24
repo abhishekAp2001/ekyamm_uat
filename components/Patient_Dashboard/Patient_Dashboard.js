@@ -34,7 +34,6 @@ import Profile from "../patient/practitioner/Profile";
 
 const Patient_Dashboard = () => {
   const [patient, setPatient] = useState(null);
-
   const [counsellors, setCounsellors] = useState([]);
   const [selectedCounsellors, setSelectedCounsellors] = useState({});
   const [loading, setLoading] = useState(true);
