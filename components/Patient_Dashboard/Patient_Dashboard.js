@@ -1,100 +1,99 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Funnel, MapPin, Menu, Plus } from "lucide-react";
 import { Accordion } from "../ui/accordion";
 import DoctorCard from "../DoctorCard";
 import SessionDrawer from "../SessionDrawer";
-import { doctors } from "@/lib/utils";
-import Sidebar from "../Sidebar/Sidebar";
+import {
+  doctors,
+  // currentPatientId as getCurrentPatientId,
+  patientSessionToken as getPatientSessionToken,
+} from "@/lib/utils";
+import Header from "./Header";
+import { Baseurl } from "@/lib/constants";
+import axios from "axios";
+import { showErrorToast } from "@/lib/toast";
+import { setCookie } from "cookies-next";
+import AvailableSession from "./AvailableSession";
 
 const Patient_Dashboard = () => {
+  const [patient, setPatient] = useState(null);
+  const [counsellors, setCounsellors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
-  const [showSidebar, setShowSidebar] = useState(false);
 
-  const greeting =
-    new Date().getHours() < 12
-      ? "Morning"
-      : new Date().getHours() < 16 ||
-        (new Date().getHours() === 16 && new Date().getMinutes() === 0)
-      ? "Afternoon"
-      : "Evening";
+  const patientSessionToken = getPatientSessionToken();
+  // const currentPatientId = getCurrentPatientId();
+
+  useEffect(() => {
+    const getPatient = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${Baseurl}/v2/cp/patient/`, {
+          headers: {
+            accesstoken: patientSessionToken,
+            "Content-Type": "application/json",
+          },
+        });
+        if (response?.data?.success) {
+          setCookie("PatientInfo", JSON.stringify(response?.data?.data));
+          setPatient(response?.data?.data);
+        }
+      } catch (err) {
+        console.log("err", err);
+        showErrorToast(
+          err?.response?.data?.error?.message || "Error fetching patient data"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const getCounsellors = async () => {
+      try {
+        setLoading(true);
+
+        const response = await axios.get(`${Baseurl}/v2/cp/counsellors`, {
+          params: {},
+          headers: {
+            accesstoken: patientSessionToken,
+            "Content-Type": "application/json",
+          },
+        });
+        if (response?.data?.success) {
+          console.log(response?.data?.data);
+          setCounsellors(response?.data?.data);
+        } else {
+          setCounsellors([]);
+          showErrorToast(res.data.error?.message || "Fetch failed");
+        }
+      } catch (err) {
+        console.log("err", err);
+        showErrorToast(
+          err?.response?.data?.error?.message || "Error fetching patient data"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+    getCounsellors();
+    getPatient();
+  }, []);
 
   return (
     <div className="relative h-screen max-w-[576px]  flex flex-col">
       {/* Fixed Header */}
       <div className="fixed top-0 left-0 right-0 z-50 flex flex-col gap-8 bg-[#e7d6ec] max-w-[576px] mx-auto">
         {/* Gradient Header */}
-        <div className="bg-gradient-to-r from-[#B0A4F5] to-[#EDA197] rounded-bl-3xl rounded-br-3xl px-3 py-5 h-[128px]">
-          <div className="flex flex-col">
-            <div className="flex flex-col justify-center items-center">
-              <h1 className="text-[18px] text-white font-semibold">
-                Cloudnine Hospital
-              </h1>
-              <div className="flex items-center gap-[2px]">
-                <div className="bg-[#FFFFFF80] rounded-full w-[12px] h-[12px] flex items-center justify-center">
-                  <MapPin className="w-2 h-2 text-[#9f99bebd]" />
-                </div>
-                <span className="text-xs text-[#FFFFFF80] font-medium">
-                  CMS
-                </span>
-              </div>
-            </div>
-
-            {showSidebar && (
-              <div className="absolute inset-0 z-50">
-                <Sidebar onClose={() => setShowSidebar(false)} />
-              </div>
-            )}
-            <div className="flex justify-between items-center mt-2 relative">
-              <div className="flex items-center gap-2">
-                <Image
-                  src="/images/user.png"
-                  width={34}
-                  height={34}
-                  className="pt-1.5 mix-blend-multiply"
-                  alt="User"
-                />
-                <div className="flex flex-col">
-                  <span className="text-sm text-white">Good {greeting},</span>
-                  <strong className="text-lg text-white">Chinten Shah</strong>
-                </div>
-              </div>
-              <Menu
-                color="white"
-                className="w-5 h-5 "
-                onClick={() => setShowSidebar(true)}
-              />
-            </div>
-          </div>
-        </div>
+        <Header loading={loading} patient={patient} />
 
         {/* Available Session Section */}
-        <div className="bg-[#FFFFFF80] px-3 py-2 border border-[#FFFFFF33] rounded-[10px] mx-3 -mt-5 z-20 relative">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Image
-                src="/images/history_2.png"
-                width={23}
-                height={23}
-                className="w-[23px] mix-blend-multiply"
-                alt="History"
-              />
-              <span className="text-2xl font-semibold text-black">04/04</span>
-              <span className="max-[376px]:text-[10px] text-xs font-medium text-[#6D6A5D]">
-                Available Sessions
-              </span>
-            </div>
-            <div className="rounded-full bg-gradient-to-r from-[#B0A4F5] to-[#EDA197] p-[1px] h-6">
-              <Button className="bg-[#f2ecf9] text-[11px] text-black rounded-full h-full flex items-center gap-1 px-2 py-1">
-                <Plus className="w-[10px] text-[#776EA5]" />
-                Book Session
-              </Button>
-            </div>
-          </div>
-        </div>
+        <AvailableSession loading={loading} patient={patient} />
       </div>
 
       {/* Scrollable Body */}
@@ -112,10 +111,10 @@ const Patient_Dashboard = () => {
 
         {/* Doctor List */}
         <Accordion type="multiple" className="space-y-3">
-          {doctors.map((doc) => (
+          {counsellors.map((counsellor,_x) => (
             <DoctorCard
-              key={doc.id}
-              doc={doc}
+              key={_x}
+              doc={counsellor}
               onBookClick={() => setIsDrawerOpen(true)}
             />
           ))}

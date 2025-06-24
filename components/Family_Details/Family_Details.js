@@ -140,13 +140,13 @@ const Family_Details = ({ type }) => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    const userDataCookie = getCookie("userData");
+    const userDataCookie = getCookie("patientSessionData");
     let token;
     if (userDataCookie) {
       try {
         token = JSON.parse(userDataCookie).token;
       } catch (error) {
-        console.error("Error parsing userData cookie:", error);
+        console.error("Error parsing patientSessionData cookie:", error);
       }
     }
 
