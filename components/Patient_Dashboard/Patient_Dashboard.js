@@ -17,12 +17,30 @@ import axios from "axios";
 import { showErrorToast } from "@/lib/toast";
 import { setCookie } from "cookies-next";
 import AvailableSession from "./AvailableSession";
+import Profile from "@/components/patient/Practitioner/Profile";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "../ui/drawer";
+import Certifications from "../patient/Certifications/Certifications";
+import Client_Testimonial from "../patient/Client_Testimonials/Client_Testimonial";
 
 const Patient_Dashboard = () => {
   const [patient, setPatient] = useState(null);
+
   const [counsellors, setCounsellors] = useState([]);
+  const [selectedCounsellors, setSelectedCounsellors] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showCounsellorProfile, setShowCounsellorProfile] = useState(false);
+  const [showCertifications, setShowCertifications] = useState(false);
+  const [showClientTestimonials, setShowClientTestimonials] = useState(false);
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
@@ -59,7 +77,11 @@ const Patient_Dashboard = () => {
         setLoading(true);
 
         const response = await axios.get(`${Baseurl}/v2/cp/counsellors`, {
-          params: {},
+          params: {
+            gender: "",
+            language: "",
+            language: "",
+          },
           headers: {
             accesstoken: patientSessionToken,
             "Content-Type": "application/json",
@@ -87,49 +109,89 @@ const Patient_Dashboard = () => {
 
   return (
     <>
-      <div className="relative h-screen max-w-[576px]  flex flex-col">
-        {/* Fixed Header */}
-        <div className="fixed top-0 left-0 right-0 z-50 flex flex-col gap-8 bg-[#e7d6ec] max-w-[576px] mx-auto">
-          {/* Gradient Header */}
-          <Header loading={loading} patient={patient} />
+      <div className="flex flex-col min-h-screen bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5]  relative max-w-[576px] m-auto overflow-y-auto">
+        <div className="relative h-screen max-w-[576px]  flex flex-col">
+          {/* Fixed Header */}
+          <div className="fixed top-0 left-0 right-0 z-50 flex flex-col gap-8 bg-[#e7d6ec] max-w-[576px] mx-auto">
+            {/* Gradient Header */}
+            <Header loading={loading} patient={patient} />
 
-          {/* Available Session Section */}
-          <AvailableSession loading={loading} patient={patient} />
-        </div>
-
-        {/* Scrollable Body */}
-        <div className="mt-[192px] flex-1 overflow-y-auto px-3 pb-5">
-          {/* Filter Row */}
-          <div className="flex justify-between items-center my-2">
-            <strong className="text-sm text-black font-semibold">
-              Available Counsellors
-            </strong>
-            <Button className="text-sm text-[#776EA5] rounded-full h-6 flex items-center gap-1 bg-transparent shadow-none px-2">
-              <Funnel className="w-[13px] text-[#776EA5]" />
-              Filter
-            </Button>
+            {/* Available Session Section */}
+            <AvailableSession loading={loading} patient={patient} />
           </div>
 
-          {/* Doctor List */}
-          <Accordion type="multiple" className="space-y-3">
-            {counsellors.map((counsellor, _x) => (
-              <DoctorCard
-                key={_x}
-                doc={counsellor}
-                onBookClick={() => setIsDrawerOpen(true)}
-              />
-            ))}
-          </Accordion>
-        </div>
+          {/* Scrollable Body */}
+          <div className="mt-[192px] flex-1 overflow-y-auto px-3 pb-5">
+            {/* Filter Row */}
+            <div className="flex justify-between items-center my-2">
+              <strong className="text-sm text-black font-semibold">
+                Available Counsellors
+              </strong>
+              <Button className="text-sm text-[#776EA5] rounded-full h-6 flex items-center gap-1 bg-transparent shadow-none px-2">
+                <Funnel className="w-[13px] text-[#776EA5]" />
+                Filter
+              </Button>
+            </div>
 
-        {/* Session Booking Drawer */}
-        <SessionDrawer
-          isOpen={isDrawerOpen}
-          onOpenChange={setIsDrawerOpen}
-          selectedTime={selectedTime}
-          setSelectedTime={setSelectedTime}
-        />
+            {/* Doctor List */}
+            <Accordion type="multiple" className="space-y-3">
+              {counsellors.map((counsellor, _x) => (
+                <DoctorCard
+                  key={_x}
+                  doc={counsellor}
+                  onBookClick={() => {
+                    setIsDrawerOpen(true);
+                  }}
+                  setShowCounsellorProfile={setShowCounsellorProfile}
+                  setSelectedCounsellors={setSelectedCounsellors}
+                />
+              ))}
+            </Accordion>
+          </div>
+
+          {/* Session Booking Drawer */}
+          <SessionDrawer
+            isOpen={isDrawerOpen}
+            onOpenChange={setIsDrawerOpen}
+            selectedTime={selectedTime}
+            setSelectedTime={setSelectedTime}
+          />
+        </div>
       </div>
+      {showCounsellorProfile ? (
+        <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90">
+          <div className="relative h-screen overflow-y-auto">
+            <Profile
+              setShowCounsellorProfile={setShowCounsellorProfile}
+              setShowCertifications={setShowCertifications}
+              setShowClientTestimonials={setShowClientTestimonials}
+              doc={selectedCounsellors}
+            />
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
+
+      {showCertifications ? (
+        <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90">
+          <div className="relative h-screen overflow-y-auto">
+            <Certifications setShowCertifications={setShowCertifications} doc={selectedCounsellors}/>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
+
+      {showClientTestimonials ? (
+        <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90">
+          <div className="relative h-screen overflow-y-auto">
+            <Client_Testimonial setShowClientTestimonials={setShowClientTestimonials}/>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
     </>
   );
 };

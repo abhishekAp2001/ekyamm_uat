@@ -5,8 +5,14 @@ import {
 } from "@/components/ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { formatAmount } from "@/lib/utils";
 
-const DoctorCard = ({ doc, onBookClick }) => (
+const DoctorCard = ({
+  doc,
+  onBookClick,
+  setShowCounsellorProfile,
+  setSelectedCounsellors,
+}) => (
   <AccordionItem
     value={`item-${doc?.loginId}`}
     className="rounded-[12px] overflow-hidden bg-white opacity-80 relative"
@@ -28,17 +34,45 @@ const DoctorCard = ({ doc, onBookClick }) => (
         </Avatar>
         <div>
           <div className="flex items-center gap-[8.9px]">
-            <h2 className="text-sm font-semibold text-black">{`${doc?.generalInformation?.firstName} ${doc?.generalInformation?.lastName}`}</h2>
-            <div className="w-[59px] h-[16px] bg-[#F9CCC5] rounded-[8px] flex items-center justify-center">
-              <span className="text-[8px] font-medium">10+ Years Exp</span>
-            </div>
+            <h2
+              className="text-sm font-semibold text-black"
+              onClick={() => {
+                setSelectedCounsellors(doc);
+                setShowCounsellorProfile(true);
+              }}
+            >{`${doc?.generalInformation?.firstName} ${doc?.generalInformation?.lastName}`}</h2>
+            {doc?.practiceDetails?.yearsOfExperience ? (
+              <div className="w-[59px] h-[16px] bg-[#F9CCC5] rounded-[8px] flex items-center justify-center">
+                <span className="text-[8px] font-medium">
+                  {doc?.practiceDetails?.yearsOfExperience}+ Years Exp
+                </span>
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
           <p className="text-xs font-medium text-[#6D6A5D] py-[2px]">
             {doc?.generalInformation?.city}, {doc?.generalInformation?.state}
           </p>
           <p className="text-xs font-medium text-[#6D6A5D]">
-            <span className="font-[700] text-[#776EA5]">Telugu</span> Marathi,
-            Konkani, Tamil, Odia, Spanish, Hindi, English, French
+            {typeof doc?.practiceDetails?.languageProficiency === "string" ? (
+              doc.practiceDetails.languageProficiency
+                ?.split(",")
+                ?.map((lang, _lx) => (
+                  <span
+                    key={_lx}
+                    className={`${
+                        _lx == 0 ? "text-sm text-[#776EA5] font-black" : ""
+                      }`}
+                  >
+                    {lang?.trim() || ""}{" "}
+                  </span>
+                ))
+            ) : (
+              <span>N/A</span>
+            )}
+            {/* <span className="font-[700] text-[#776EA5]">Telugu</span> Marathi,
+            Konkani, Tamil, Odia, Spanish, Hindi, English, French */}
           </p>
         </div>
       </div>
@@ -50,11 +84,25 @@ const DoctorCard = ({ doc, onBookClick }) => (
       <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm mt-3 p-4 pt-0">
         <div className="flex flex-col">
           <p className="text-sm font-semibold text-black">Expertise</p>
-          <p className="text-xs font-medium text-[#6D6A5D]">Psychologists</p>
+          <p className="text-xs font-medium text-[#6D6A5D]">{typeof doc?.practiceDetails?.languageProficiency === "string" ? (
+              doc.practiceDetails.specialization
+                ?.split(",")
+                ?.map((lang, _lx) => (
+                  <span
+                    key={_lx}
+                  >
+                    {lang?.trim() || ""}{" "}
+                  </span>
+                ))
+            ) : (
+              <span>N/A</span>
+            )}</p>
         </div>
         <div className="flex flex-col items-end text-right">
           <p className="text-sm font-semibold text-black">Gender</p>
-          <p className="text-xs font-medium text-black">{doc.generalInformation?.gender || "Male"}</p>
+          <p className="text-xs font-medium text-black">
+            {doc.generalInformation?.gender || ""}
+          </p>
         </div>
         <div className="flex flex-col">
           <p className="text-sm font-semibold text-black">Session Mode</p>
@@ -64,7 +112,7 @@ const DoctorCard = ({ doc, onBookClick }) => (
         </div>
         <div className="flex flex-col items-end text-right">
           <p className="text-sm font-semibold text-black">Session Fee</p>
-          <p className="text-xs font-medium text-[#6D6A5D]">1500/-</p>
+          <p className="text-xs font-medium text-[#6D6A5D]">{formatAmount(doc?.practiceDetails?.fees?.singleSession)}</p>
         </div>
       </div>
 
