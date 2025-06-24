@@ -95,8 +95,7 @@ const Certifications = ({ setShowCertifications, doc }) => {
                           src="/images/preview.png"
                           alt="preview"
                           width={20}
-                          height={20}
-                          className="object-cover rounded-[9px]"
+                          height={20} className="object-cover rounded-[9px]"
                         />
                       </div>
                     </div>
