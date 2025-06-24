@@ -17,7 +17,7 @@ import axios from "axios";
 import { showErrorToast } from "@/lib/toast";
 import { setCookie } from "cookies-next";
 import AvailableSession from "./AvailableSession";
-import Profile from "@/components/patient/Practitioner/Profile";
+import Profile from "./patient/Practitioner/Profile";
 import {
   Drawer,
   DrawerClose,
