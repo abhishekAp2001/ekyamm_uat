@@ -236,7 +236,7 @@ const CP_billing_details = () => {
                 <RadioGroupItem
                   value="monthly"
                   id="r1"
-                  className="w-[16px] h-[16px] flex items-center justify-center"
+                  className=" "
                 />
                 <Label htmlFor="r1" className="text-[15px] font-semibold">
                   Monthly Billing
@@ -246,7 +246,7 @@ const CP_billing_details = () => {
                 <RadioGroupItem
                   value="onSpot"
                   id="r2"
-                  className="w-[16px] h-[16px] flex items-center justify-center"
+                  className=" "
                 />
                 <Label htmlFor="r2" className="text-[15px] font-semibold">
                   On-Spot Payment
@@ -256,7 +256,7 @@ const CP_billing_details = () => {
                 <RadioGroupItem
                   value="patientPays"
                   id="r3"
-                  className="w-[16px] h-[16px] flex items-center justify-center"
+                  className=""
                 />
                 <Label htmlFor="r3" className="text-[15px] font-semibold">
                   Patient Pays
