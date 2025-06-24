@@ -140,13 +140,13 @@ const Emergency_Details = ({ type }) => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    const userDataCookie = getCookie("userData");
+    const userDataCookie = getCookie("patientSessionData");
     let token;
     if (userDataCookie) {
       try {
         token = JSON.parse(userDataCookie).token;
       } catch (error) {
-        console.error("Error parsing userData cookie:", error);
+        console.error("Error parsing patientSessionData cookie:", error);
       }
     }
 
@@ -158,7 +158,7 @@ const Emergency_Details = ({ type }) => {
 
     const payload = {
       familyMember: {
-        emergencyContact: formData.emergencyContact,
+        emergencyContact: true,
         relation: formData.relation,
         firstName: formData.firstName,
         lastName: formData.lastName,
@@ -170,26 +170,22 @@ const Emergency_Details = ({ type }) => {
       },
     };
 
-    router.push(`/patient/dashboard`);
+    // router.push(`/patient/dashboard`);
     try {
-      // const response = await axios.post(
-      //   Baseurl + "/v2/cp/patient/familyMember",
-      //   payload,
-      //   {
-      //     headers: { accesstoken: token },
-      //   }
-      // );
-      // if (response.data.success) {
-      //   showSuccessToast("Emergency member added successfully");
-      //   setCookie("completeUserData", response.data.data);
-      //   if (formData.emergencyContact) {
-      //     router.push(`/patient/${type}/family-details`);
-      //   } else {
-      //     router.push(`/patient/${type}/emergency-details`);
-      //   }
-      // } else {
-      //   showErrorToast(response.data.message || "Failed to add family member");
-      // }
+      const response = await axios.post(
+        Baseurl + "/v2/cp/patient/familyMember",
+        payload,
+        {
+          headers: { accesstoken: token },
+        }
+      );
+      if (response.data.success) {
+        showSuccessToast("Emergency detail added successfully");
+        setCookie("completeUserData", response.data.data);
+        router.push(`/patient/dashboard`);
+      } else {
+        showErrorToast(response.data.message || "Failed to add emergency detail");
+      }
     } catch (error) {
       showErrorToast(err.response?.data?.error?.message || "Submission failed");
     } finally {
