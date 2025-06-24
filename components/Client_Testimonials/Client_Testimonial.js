@@ -1,157 +1,55 @@
 import React from "react";
 import Client_Header from "../Client_Header/Client_Header";
-import Image from "next/image";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const Client_Testimonial = () => {
   return (
-    <div
-      className="bg-gradient-to-t from-[#fce8e5]  to-[#eeecfb]  h-full flex flex-col items-center"
-      style={{ minHeight: "100vh" }}
-    >
+    <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] min-h-screen w-full px-4">
       <Client_Header />
-
-      {/* Outer container */}
-      <div className="w-full max-w-[360px] px-2.5 mx-auto flex flex-col  mt-4 h-full">
-        {/* First Card */}
-        <div className=" w-full h-[120px] bg-white rounded-[12px] mt-4 flex justify-between px-4 py-2 ">
-          {/* Left side: Priya Kapoor + Verified + paragraph */}
-          <div className="flex flex-col" style={{ width: "88%" }}>
-            <div className="flex items-center mt-[12px] gap-2">
-              <span
-                style={{
-                  height: "16px",
-                  fontFamily: "'Quicksand', sans-serif",
-                  fontWeight: 600,
-                  lineHeight: "16px",
-                }}
-              >
-                Priya Kapoor
-              </span>
-
-              <span
-                style={{
-                  fontSize: "8px",
-                  height: "16px",
-                  borderRadius: "8px",
-                  padding: "0 4px",
-                  backgroundColor: "#F9CCC5",
-                  fontFamily: "'Quicksand', sans-serif",
-                  fontWeight: 600,
-                  lineHeight: "16px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  whiteSpace: "nowrap",
-                  minWidth: "38px",
-                }}
-              >
-                Verified
-              </span>
+      <div className="pt-[16%] lg:pt-[10%]">
+      <Accordion type="single" collapsible className="w-full flex flex-col gap-3">
+        <AccordionItem value="item-1" className="rounded-[12px] bg-white px-4 py-3">
+          <AccordionTrigger className="flex items-start justify-between gap-2 [&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-muted-foreground">
+            <div className="flex flex-col items-start">
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-semibold text-black">Priya Kapoor</p>
+                <span className="text-[10px] font-medium bg-[#fce8e5] text-black px-2 py-[2px] rounded-[8px]">
+                  Verified
+                </span>
+              </div>
+             
             </div>
+          </AccordionTrigger>
+          <AccordionContent className='pb-0' >
+           <p className="text-sm text-black text-left mt-2 leading-snug font-normal">
+                Lorem Ipsum whatsa asjuda Lorem Ipsum whatsa asjudaLorem Ipsum whatsa asjudaLorem Ipsum whatsa asjudaLorem Ipsum whatsa asjuda
+              </p>
+          </AccordionContent>
+        </AccordionItem>
 
-            <p
-              style={{
-                fontFamily: "'Quicksand', sans-serif",
-                fontSize: "12px",
-                lineHeight: "14px",
-                marginTop: "6px",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-
-                WebkitLineClamp: 3,
-                WebkitBoxOrient: "vertical",
-              }}
-            >
-              Lorem Ipusum whatsa asjuda Lorem Ipusum whatsa asjudaLorem Ipusum
-              whatsa asjudaLorem Ipusum whatsa asjudaLorem Ipusum whatsa
-              asjudaLorem Ipusum whatsa asjuda
-            </p>
-          </div>
-
-          {/* Right side: Arrow icon (rotated) */}
-          <div className="flex items-start">
-            <Image
-              src="/images/arrow.png" // make sure this image exists in /public/images/
-              alt="Arrow"
-              width={16}
-              height={16}
-              style={{
-                transform: "rotate(90deg)",
-                marginTop: "12px",
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Second Card */}
-        <div className="h-[120px] w-full  bg-white rounded-[12px] mt-4 flex justify-between px-4 py-2">
-          <div className="flex flex-col flex-1">
-            <div className="flex items-center mt-[12px] gap-2">
-              <span
-                style={{
-                  height: "16px",
-                  fontFamily: "'Quicksand', sans-serif",
-                  fontWeight: 600,
-                  lineHeight: "16px",
-                }}
-              >
-                Nexus Dsliva
-              </span>
-
-              <span
-                style={{
-                  fontSize: "8px",
-                  height: "16px",
-                  borderRadius: "8px",
-                  padding: "0 4px",
-                  backgroundColor: "#F9CCC5",
-                  fontFamily: "'Quicksand', sans-serif",
-                  fontWeight: 600,
-                  lineHeight: "16px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  whiteSpace: "nowrap",
-                  minWidth: "38px",
-                }}
-              >
-                Verified
-              </span>
+        <AccordionItem value="item-2" className="rounded-[16px] bg-white px-4 py-3">
+          <AccordionTrigger className="flex items-start justify-between gap-2 [&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-muted-foreground">
+             <div className="flex flex-col items-start">
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-semibold text-black">Nexus Dsliva</p>
+                <span className="text-[10px] font-medium bg-[#fce8e5] text-black px-2 py-[2px] rounded-[8px]">
+                  Verified
+                </span>
+              </div>
             </div>
-
-            <p
-              style={{
-                fontFamily: "'Quicksand', sans-serif",
-                fontSize: "12px",
-                lineHeight: "14px",
-                marginTop: "6px",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-
-                WebkitLineClamp: 3,
-                WebkitBoxOrient: "vertical",
-              }}
-            >
-              Lorem Ipusum whatsa asjuda Lorem Ipusum whatsa asjudaLorem Ipusum
-              whatsa asjudaLorem Ipusum whatsa asjudaLorem Ipusum whatsa
-              asjudaLorem Ipusum whatsa asjuda
-            </p>
-          </div>
-
-          {/* Right side: Arrow icon (rotated) */}
-          <div className="flex items-start">
-            <Image
-              src="/images/arrow.png" // make sure this image exists in /public/images/
-              alt="Arrow"
-              width={16}
-              height={16}
-              style={{
-                transform: "rotate(90deg)",
-                marginTop: "12px",
-              }}
-            />
-          </div>
-        </div>
+          </AccordionTrigger>
+          <AccordionContent >
+           <p className="text-sm text-black text-left mt-2 leading-snug font-normal">
+                Lorem Ipsum whatsa asjuda Lorem Ipsum whatsa asjudaLorem Ipsum whatsa asjudaLorem Ipsum whatsa asjudaLorem Ipsum whatsa asjuda
+              </p>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
       </div>
     </div>
   );

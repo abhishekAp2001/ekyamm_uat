@@ -246,7 +246,7 @@ const PP_Details = ({ type }) => {
             First Name *
           </Label>
           <Input
-            placeholder="Shubham"
+            placeholder="Enter first name"
             className="bg-white rounded-[7.26px] text-[15px] font-semibold  w-full h-[38px]"
           />
 
@@ -255,7 +255,7 @@ const PP_Details = ({ type }) => {
             Last Name
           </Label>
           <Input
-            placeholder="Thakur"
+            placeholder="Enter last name"
             className="w-full bg-white rounded-[7.26px] text-[15px] font-semibold h-[39px]"
           />
 
@@ -263,7 +263,7 @@ const PP_Details = ({ type }) => {
             <Label className="text-[15px] text-gray-500 font-medium mb-[7.59px] mt-[22px]">
               Primary Mobile Number <span className="text-red-500">*</span>
             </Label>
-            <div className="flex items-center h-[39px]">
+            <div className="flex items-center gap-2 h-[39px]">
               <Select
                 options={countryOptions}
                 value={countryOptions.find(
@@ -282,7 +282,7 @@ const PP_Details = ({ type }) => {
                   }));
                 }}
                 disabled={false}
-                className="w-[100px] border-none shadow-none"
+                className="w-fit border-none shadow-none"
                 styles={{
                   control: (base) => ({
                     ...base,
@@ -324,8 +324,8 @@ const PP_Details = ({ type }) => {
             )}
           </div>
           <div className="mt-[22px]">
-            <div className="flex items-center">
-              <Label className="text-[15px] text-gray-500 font-medium mb-[7.59px] mt-[22px]">
+            <div className="flex items-center justify-between">
+              <Label className="text-[15px] text-gray-500 font-medium mb-[7.59px] mt-[8px]">
                 Whatsapp Number
               </Label>
               <div className="flex gap-[6px] items-center w-[45%]">
@@ -358,7 +358,7 @@ const PP_Details = ({ type }) => {
                 </label>
               </div>
             </div>
-            <div className="flex items-center h-[39px]">
+            <div className="flex items-center gap-2 h-[39px]">
               <Select
                 options={countryOptions}
                 value={countryOptions.find(
@@ -372,7 +372,7 @@ const PP_Details = ({ type }) => {
                       : "🇮🇳 +91",
                   })
                 }
-                className="w-[100px] border-none shadow-none bg-white"
+                className="w-fit border-none shadow-none bg-white"
                 styles={{
                   control: (base) => ({
                     ...base,

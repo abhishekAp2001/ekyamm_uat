@@ -27,35 +27,35 @@ const PP_profile = () => {
               height={112}
               className="w-28 h-28 rounded-full object-fill"
             />
-            <span className="mt-3 text-black text-[20px] font-semibold leading-[1]">Savio Dias</span>
+            <span className="mt-4 text-black text-[20px] font-semibold leading-[1]">Savio Dias</span>
             <span className="text-[#6D6A5D] text-[12px] font-medium">Bandra, Mumbai</span>
           </div>
 
           {/* Info Card 1 */}
-          <div className="mt-4 w-full h-[56px] rounded-[8px] bg-gradient-to-r from-[#eeecfb] to-[#fce8e5] px-4 flex flex-col justify-center">
+          <div className="mt-5 w-full h-[56px] rounded-[8px] bg-gradient-to-r from-[#eeecfb] to-[#fce8e5] px-4 flex flex-col justify-center">
             <span className="text-black text-sm font-semibold">Experience:</span>
-            <p className="text-black text-sm font-medium">10+ Years</p>
+            <p className="text-black text-sm font-normal">10+ Years</p>
           </div>
 
           {/* Info Card 2 */}
-          <div className="mt-4 w-full h-[74px] rounded-[8px] bg-gradient-to-r from-[#eeecfb] to-[#fce8e5] px-4 flex flex-col justify-center">
+          <div className="mt-3 w-full h-[74px] rounded-[8px] bg-gradient-to-r from-[#eeecfb] to-[#fce8e5] px-4 flex flex-col justify-center">
             <span className="text-black text-sm font-semibold">Language:</span>
-            <p className="text-black text-sm font-medium">
+            <p className="text-black text-sm font-normal">
               <strong className="text-sm text-[#776EA5] font-black">Telugu,</strong>
                Marathi, Konkani, Tamil, Odia, Spanish, Hindi, English, French
             </p>
           </div>
 
           {/* Info Card 3 */}
-          <div className="mt-4 w-full h-[56px] rounded-[8px] bg-gradient-to-r from-[#eeecfb] to-[#fce8e5] px-4 flex flex-col justify-center">
+          <div className="mt-3 w-full h-[56px] rounded-[8px] bg-gradient-to-r from-[#eeecfb] to-[#fce8e5] px-4 flex flex-col justify-center">
             <span className="text-black text-sm font-semibold">Does not treat:</span>
-            <p className="text-black text-sm font-medium">Gambling, Drug Addiction</p>
+            <p className="text-black text-sm font-normal">Gambling, Drug Addiction</p>
           </div>
 
           {/* Info Card 4 */}
-          <div className="mt-4 w-full h-[128px] rounded-[8px] bg-gradient-to-r from-[#eeecfb] to-[#fce8e5] px-4 flex flex-col justify-center">
+          <div className="mt-3 w-full h-[128px] rounded-[8px] bg-gradient-to-r from-[#eeecfb] to-[#fce8e5] px-4 flex flex-col justify-center">
             <span className="text-black text-sm font-semibold">Want to expect in the session:</span>
-            <p className="text-black text-sm font-medium">
+            <p className="text-black text-sm font-normal">
               Lorem Ipsum whatsa asjuda Lorem Ipsum whatsa asjuda Lorem Ipsum whatsa asjuda Lorem Ipsum whatsa asjuda
             </p>
           </div>
@@ -73,8 +73,8 @@ const PP_profile = () => {
       </div>
 
       {/* Fixed Bottom CTA Button */}
-      <div className="fixed bottom-0 left-0 right-0 bg-[#fce8e5] flex justify-center py-4 max-w-[576px] mx-auto px-4">
-        <Button className="w-full h-[45px] bg-gradient-to-r from-[#E7A1A0] to-[#BBA3E4] text-white text-[14px] font-semibold rounded-[8px]">
+      <div className="fixed bottom-0 left-0 right-0 bg-[#fce8e5] flex justify-center py-4 max-w-[576px] mx-auto px-6">
+        <Button className="w-full h-[45px] bg-gradient-to-r from-[#E7A1A0] to-[#BBA3E4] text-white text-[15px] font-semibold rounded-[8px]">
           Book Now at ₹1,500/- per session
         </Button>
       </div>

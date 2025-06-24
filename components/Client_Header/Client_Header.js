@@ -3,10 +3,10 @@ import React from "react";
 
 const Client_Header = () => {
   return (
-    <div className="w-full px-4 pt-4">
-      <div className="flex items-center gap-[9px]">
+    <div className="w-full fixed top left-0 right-0 z-10 max-w-[576px] mx-auto bg-[#f0ecf9]">
+      <div className="flex items-center gap-[9px] p-4">
         <ChevronLeft size={24} className="text-black-700" />
-        <span className="text-[14px] font-semibold text-gray-800">
+        <span className="text-[16px] font-semibold text-gray-800">
           Client Testimonials
         </span>
       </div>

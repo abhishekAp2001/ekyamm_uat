@@ -197,13 +197,14 @@ const Patient_History = ({ type }) => {
           <div className="w-full h-[25px] text-[#776EA5] font-semibold text-[20px] leading-[25px] mb-2 text-center">
             {channelPartnerData?.clinicName || "Greetings Hospital"}
           </div>
-            <div className="flex items-center justify-center gap-1">
-                     <div className="bg-[#776EA5] rounded-full w-[16.78px] h-[16.78px] flex justify-center items-center">
-                        <MapPin color="white" className="w-[12.15px] h-[12.15px]"/></div>
-                        <span className="text-sm text-[#776EA5] font-medium">
-                          {channelPartnerData?.area}
-                        </span>
-                        </div>
+          <div className="flex items-center justify-center gap-1">
+            <div className="bg-[#776EA5] rounded-full w-[16.78px] h-[16.78px] flex justify-center items-center">
+              <MapPin color="white" className="w-[12.15px] h-[12.15px]" />
+            </div>
+            <span className="text-sm text-[#776EA5] font-medium">
+              {channelPartnerData?.area}
+            </span>
+          </div>
           {/* Patient Number and Mobile */}
           <div className="bg-[#ffffff66] rounded-[12px] p-5 relative">
             {/* Patient Name Input */}
@@ -243,7 +244,7 @@ const Patient_History = ({ type }) => {
                       height: "39px",
                       minHeight: "39px",
                       width: "max-content",
-                       backgroundColor:formData.lastName ?"#fff" : "#fcf9fb"
+                      backgroundColor: formData.lastName ? "#fff" : "#fcf9fb",
                     }),
                     menu: (base) => ({ ...base, width: "200px" }),
                   }}

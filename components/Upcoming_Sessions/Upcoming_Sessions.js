@@ -2,17 +2,33 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { Funnel, MapPin, Menu, Plus } from "lucide-react";
+import { Eye, EyeOff, Funnel, Link2, MapPin, Menu, Phone, Plus } from "lucide-react";
 import { Accordion } from "../ui/accordion";
 import DoctorCard from "../DoctorCard";
 import SessionDrawer from "../SessionDrawer";
 import { doctors, pastSessions, upcomingSession } from "@/lib/utils";
 import Sidebar from "../Sidebar/Sidebar";
+import UpcomingSession from "../UpcomingSession";
+import PastSessions from "../PastSessions";
+import { AccordionContent } from "@radix-ui/react-accordion";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-const Patient_Dashboard = () => {
+const Upcoming_Sessions = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [showAllUpcoming, setShowAllUpcoming] = useState(false);
+  const extraSession = {
+    time: "12:00 PM",
+    location: "Andheri",
+    duration: "00:45 HR",
+    mode: "Offline",
+    previousSession: "Tuesday, April 2, 2024",
+    doctor: {
+      name: "Dr. Rahul Rao",
+      profilePic: "/images/rahul.png",
+    },
+  };
 
   const greeting =
     new Date().getHours() < 12
@@ -23,7 +39,7 @@ const Patient_Dashboard = () => {
       : "Evening";
 
   return (
-    <div className="relative h-screen max-w-[576px]  flex flex-col">
+    <div className="relative h-screen max-w-[576px]  flex flex-col  bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5] ">
       {/* Fixed Header */}
       <div className="fixed top-0 left-0 right-0 z-50 flex flex-col gap-8 bg-[#e7d6ec] max-w-[576px] mx-auto">
         {/* Gradient Header */}
@@ -90,7 +106,7 @@ const Patient_Dashboard = () => {
             <div className="rounded-full bg-gradient-to-r from-[#B0A4F5] to-[#EDA197] p-[1px] h-6">
               <Button className="bg-[#f2ecf9] text-[11px] text-black rounded-full h-full flex items-center gap-1 px-2 py-1">
                 <Plus className="w-[10px] text-[#776EA5]" />
-                Book Session
+                Add Package
               </Button>
             </div>
           </div>
@@ -102,37 +118,29 @@ const Patient_Dashboard = () => {
         {/* Filter Row */}
         <div className="flex justify-between items-center my-2">
           <strong className="text-sm text-black font-semibold">
-            Available Counsellors
+            Upcoming Sessions
           </strong>
-          <Button className="text-sm text-[#776EA5] rounded-full h-6 flex items-center gap-1 bg-transparent shadow-none px-2">
-            <Funnel className="w-[13px] text-[#776EA5]" />
-            Filter
+          <Button
+            onClick={() => setShowAllUpcoming((prev) => !prev)}
+            className="text-sm text-[#776EA5] rounded-full h-6 flex items-center gap-1 bg-transparent shadow-none px-2"
+          >
+            {showAllUpcoming ? (
+              <EyeOff className="w-[13px] text-[#776EA5]" />
+            ) : (
+              <Eye className="w-[13px] text-[#776EA5]" />
+            )}
+            {showAllUpcoming ? "Show Less" : "View All"}
           </Button>
         </div>
 
-        {/* Doctor List */}
-        <Accordion Accordion type="multiple" className="space-y-3">
-          {doctors.map((doc) => (
-            <DoctorCard
-              key={doc.id}
-              doc={doc}
-              onBookClick={() => setIsDrawerOpen(true)}
-            />
-          ))}
-        </Accordion>
+        {/* Upcoming Session */}
+        <UpcomingSession sessions={upcomingSession} />
+        {showAllUpcoming && <UpcomingSession sessions={extraSession} />}
+        {/* Past Sessions */}
+        <PastSessions sessions={pastSessions} />
       </div>
-
-      {/* Session Booking Drawer */}
-      <SessionDrawer
-        isOpen={isDrawerOpen}
-        onOpenChange={setIsDrawerOpen}
-        selectedTime={selectedTime}
-        setSelectedTime={setSelectedTime}
-      />
     </div>
-
-     
   );
 };
 
-export default Patient_Dashboard;
+export default Upcoming_Sessions;

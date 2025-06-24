@@ -9,7 +9,7 @@ import {
 } from "./ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
-const UpcomingSession = ({ sessions, showUpcomingButtons = false }) => {
+const RescheduleSession = ({ sessions, showRescheduleButtons = false }) => {
   return (
     <div>
       <Accordion
@@ -83,7 +83,7 @@ const UpcomingSession = ({ sessions, showUpcomingButtons = false }) => {
             </div>
 
             <div className="flex gap-4 items-center mt-2">
-              {showUpcomingButtons ? (
+              {showRescheduleButtons ? (
                 <>
                   <Button
                     disabled
@@ -119,4 +119,4 @@ const UpcomingSession = ({ sessions, showUpcomingButtons = false }) => {
   );
 };
 
-export default UpcomingSession;
+export default RescheduleSession;

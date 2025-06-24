@@ -1,6 +1,6 @@
 import React from 'react'
 
-const PastSessions = ({sessions}) => {
+const RePastSessions = ({sessions}) => {
   return (
     <div className="">
     <h2 className="text-sm font-semibold py-2">Past Sessions</h2>
@@ -29,4 +29,4 @@ const PastSessions = ({sessions}) => {
   )
 }
 
-export default PastSessions
+export default RePastSessions
