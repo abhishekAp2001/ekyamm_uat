@@ -1,0 +1,150 @@
+"use client";
+import React from "react";
+import Image from "next/image";
+import { ChevronLeft, X } from "lucide-react";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+const certificationList = [
+  {
+    degree: "M.D",
+    specialization: "Psychology",
+    passingYear: "2001",
+    college: "AIIPMR Mumbai",
+    university: "Mumbai University",
+    city: "Mumbai",
+    state: "Maharashtra",
+    certificates: [
+      "/images/photo.png",
+      "/images/photo.png",
+      "/images/photo.png",
+    ],
+  },
+  {
+    degree: "M.D",
+    specialization: "Psychology",
+    passingYear: "2001",
+    college: "AIIPMR Mumbai",
+    university: "Mumbai University",
+    city: "Mumbai",
+    state: "Maharashtra",
+    certificates: [
+      "/images/photo.png",
+      "/images/photo.png",
+      "/images/photo.png",
+    ],
+  },
+];
+
+const Certifications = () => {
+  return (
+    <div className="min-h-screen w-full bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] px-4 pt-2 pb-6 max-w-[576px] mx-auto">
+      {/* Header */}
+      <div className="flex items-center gap-2 mb-4 fixed top-0 left-0 right-0 px-4 bg-[#eeecfb] max-w-[576px] mx-auto">
+        <div className="py-4 flex items-center gap-2">
+          <ChevronLeft className="w-5 h-5 text-black" />
+          <h1 className="text-[16px] font-semibold">Certifications</h1>
+        </div>
+      </div>
+
+      {/* Certification Cards */}
+      <div className="flex flex-col gap-6 pt-[15%] lg:pt-[10%]">
+        {certificationList.map((item, index) => (
+          <div
+            key={index}
+            className="bg-[#FFFFFF80] rounded-[12px]  px-[35px] py-7 flex flex-col gap-2"
+          >
+            <p className="text-sm font-medium">
+              Degree:
+              <strong className="text-sm font-medium"> {item.degree}</strong>
+            </p>
+            <p className="text-sm font-medium">
+              <strong className="text-sm font-medium">Specialisation:</strong>{" "}
+              {item.specialization}
+            </p>
+            <p className="text-sm font-medium">
+              <strong className="text-sm font-medium">Passing Year:</strong>{" "}
+              {item.passingYear}
+            </p>
+            <p className="text-sm font-medium">
+              <strong className="text-sm font-medium">College Name:</strong>{" "}
+              {item.college}
+            </p>
+            <p className="text-sm font-medium">
+              <strong className="text-sm font-medium">University:</strong>{" "}
+              {item.university}
+            </p>
+            <p className="text-sm font-medium">
+              <strong className="text-sm font-medium">City:</strong> {item.city}
+            </p>
+            <p className="text-sm font-medium">
+              <strong className="text-sm font-medium">State:</strong>{" "}
+              {item.state}
+            </p>
+            <p className="text-sm font-medium">
+              <strong className="text-sm font-medium">Certificates:</strong>
+            </p>
+
+            <div className="flex gap-3 mt-2 flex-wrap">
+              {item.certificates.map((img, i) => (
+                <Dialog key={i} className='h-[80vh]'>
+                  <DialogTrigger asChild>
+                    <div className="relative group w-[84px] h-[105px] rounded-[9px] overflow-hidden cursor-pointer">
+                      <Image
+                        src={img}
+                        alt="certificate"
+                        fill
+                        className="object-cover rounded-[9px]"
+                      />
+                      {/* Black overlay with zoom icon */}
+                      <div className="absolute inset-0 bg-[#000000b3] transition-opacity duration-200 flex items-center justify-center">
+                      <Image
+                        src='/images/preview.png'
+                        alt="preview"
+                        width={20}
+                        height={20}
+                        className="object-cover rounded-[9px]"
+                      />
+                      </div>
+                    </div>
+                  </DialogTrigger>
+
+                  <DialogContent className="w-full h-[80vh] p-0 bg-transparent border-none">
+                    {/* Cancel button */}
+                    <div className="absolute top-2 right-2 z-10">
+                      <DialogClose asChild>
+                        <button className="">
+                          <span className="text-white text-xl border-0"><X /></span>
+                        </button>
+                      </DialogClose>
+                    </div>
+
+                    <div className="w-full h-full flex items-center justify-center p-4 bg-[#000000b3] rounded-[7px]">
+                      <Image
+                        src={img}
+                        alt="Zoomed certificate"
+                        width={600}
+                        height={800}
+                        className="rounded-lg object-contain max-h-[80vh] w-auto"
+                      />
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Certifications;

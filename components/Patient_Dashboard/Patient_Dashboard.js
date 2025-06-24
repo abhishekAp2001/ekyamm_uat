@@ -18,6 +18,7 @@ import { showErrorToast } from "@/lib/toast";
 import { setCookie } from "cookies-next";
 import AvailableSession from "./AvailableSession";
 
+
 const Patient_Dashboard = () => {
   const [patient, setPatient] = useState(null);
   const [counsellors, setCounsellors] = useState([]);
@@ -112,6 +113,7 @@ const Patient_Dashboard = () => {
         {/* Doctor List */}
         <Accordion type="multiple" className="space-y-3">
           {counsellors.map((counsellor,_x) => (
+
             <DoctorCard
               key={_x}
               doc={counsellor}
@@ -129,6 +131,8 @@ const Patient_Dashboard = () => {
         setSelectedTime={setSelectedTime}
       />
     </div>
+
+     
   );
 };
 
