@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -9,57 +9,81 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTrigger,
-  DrawerTitle,
 } from "@/components/ui/drawer";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import Link from "next/link";
-import { Plus, X } from "lucide-react";
-import PP_Header from "../PP_Header/PP_Header";
-import { getCookie, setCookie } from "cookies-next";
-import { showErrorToast } from "@/lib/toast";
-import { sanitizeInput } from "@/lib/utils";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
+import { showErrorToast } from "@/lib/toast";
+import { getCookie, hasCookie, setCookie } from "cookies-next";
 import axiosInstance from "@/lib/axiosInstance";
 import { Baseurl } from "@/lib/constants";
 import Select from "react-select";
-import { Checkbox } from "@/components/ui/checkbox";
 import axios from "axios";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
+import { isMobile } from "react-device-detect";
+import PP_Header from "../PP_Header/PP_Header";
+import { base64ToFile } from "@/lib/utils";
+
 polyfillCountryFlagEmojis();
 
 const PP_Details = ({ type }) => {
   const router = useRouter();
   const customAxios = axiosInstance();
+  const cameraInputRef = useRef(null);
+  const photoInputRef = useRef(null);
   const [patientData, setPatientData] = useState(null);
-  const [user, setUser] = useState(null);
   const [channelPartnerData, setChannelPartnerData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [countryList, setCountryList] = useState([]);
   const [sameAsMobile, setSameAsMobile] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [token,setToken] = useState("")
 
   const [formData, setFormData] = useState({
-    mobileNumber: "",
-    password: "",
-    confirmPassword: "",
-    verificationToken: "",
-  });
-  const [formErrors, setFormErrors] = useState({
-    mobileNumber: "",
-    password: "",
-    confirmPassword: "",
-    verificationToken: "",
+    profileImageBase64: "",
+    firstName: "",
+    lastName: "",
+    countryCode_primary: "🇮🇳 +91",
+    primaryMobileNumber: "",
+    email: "",
+    countryCode_whatsapp: "🇮🇳 +91",
+    whatsappNumber: "",
+    gender: "",
+    addressDetails: {
+      pincode: "",
+      area: "",
+      city: "",
+      state: "",
+    },
   });
 
   const [touched, setTouched] = useState({
-    type: false,
-    clinicName: false,
-    userName: false,
-    email: false,
+    firstName: false,
+    lastName: false,
     primaryMobileNumber: false,
     whatsappNumber: false,
-    emergencyNumber: false,
+    gender: false,
+    addressDetails: {
+      pincode: false,
+    },
   });
+
+  // Validation functions
+  const isPincodeValid = (pincode) => /^\d{6}$/.test(pincode);
+  const isEmailValid = (email) => /\S+@\S+\.\S+/.test(email);
+  const isMobileValid = (mobile) => /^\d{10}$/.test(mobile);
+  const isFormValid = () =>
+    formData.firstName &&
+    formData.lastName &&
+    isMobileValid(formData.primaryMobileNumber) &&
+    formData.gender &&
+    isPincodeValid(formData.addressDetails.pincode) &&
+    (!formData.whatsappNumber || isMobileValid(formData.whatsappNumber)) &&
+    (!formData.email || isEmailValid(formData.email));
+
+  // Country options for Select
   const countryOptions = useMemo(
     () =>
       countryList.map((country) => ({
@@ -69,39 +93,42 @@ const PP_Details = ({ type }) => {
       })),
     [countryList]
   );
-  const [mobile, setMobile1] = useState("");
-  const [selected, setSelected] = useState({
-    code: "+91",
-    name: "India",
-    flag: "/images/india.png",
-  });
-  const [open, setOpen] = useState(false);
 
-  const isEmailValid = (email) => /\S+@\S+\.\S+/.test(email);
-  const isMobileValid = (mobile) => /^\d{10}$/.test(mobile);
-  const isFormValid = () => {
-    return (
-      formData.type &&
-      formData.clinicName &&
-      formData.userName &&
-      isUserNameAvailable === true &&
-      isEmailValid(formData.email) &&
-      isMobileValid(formData.primaryMobileNumber) &&
-      isMobileValid(formData.whatsappNumber) &&
-      isMobileValid(formData.emergencyNumber)
-    );
+  // Convert file to base64
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
   };
 
-  const isDisabled = true;
+  // Fetch country list
+  const getCountryList = async () => {
+    try {
+      const response = await customAxios.get(`v2/country?search=`);
+      if (response?.data?.success) {
+        setCountryList(response?.data?.data);
+      }
+    } catch (error) {
+      if (error.forceLogout) {
+        router.push("/login");
+      } else {
+        showErrorToast(error?.response?.data?.error?.message || "Something Went Wrong");
+      }
+    }
+  };
 
+  // Fetch patient data and verify channel partner
   useEffect(() => {
     const userCookie = getCookie("userData");
     if (!userCookie) {
       router.push(`/patient/${type}/create/password`);
       return;
     }
-    const patientData = JSON.parse(userCookie);
-    setPatientData(patientData);
+    const parsedPatientData = JSON.parse(userCookie);
+    setPatientData(parsedPatientData);
 
     const verifyChannelPartner = async (username) => {
       setLoading(true);
@@ -109,227 +136,532 @@ const PP_Details = ({ type }) => {
         const response = await customAxios.post(`v2/cp/channelPartner/verify`, {
           username: type,
         });
-
-        if (response?.data?.success === true) {
+        if (response?.data?.success) {
           setCookie("channelPartnerData", JSON.stringify(response.data.data));
           setChannelPartnerData(response.data.data);
-          setFormData((prev) => ({
-            ...prev,
-            verificationToken: sanitizeInput(
-              response.data.data?.verificationToken
-            ),
-          }));
+          // setFormData((prev) => ({
+          //   ...prev,
+          //   verificationToken: response.data.data?.verificationToken,
+          // }));
         } else {
-          showErrorToast(
-            response?.data?.error?.message || "Verification failed"
-          );
+          showErrorToast(response?.data?.error?.message || "Verification failed");
         }
       } catch (err) {
         showErrorToast(
-          err?.response?.data?.error?.message ||
-            "An error occurred while verifying"
+          err?.response?.data?.error?.message || "An error occurred while verifying"
         );
       } finally {
         setLoading(false);
       }
     };
 
-    const getPatient = async (patientId, entityId) => {
+    const getPatient = async () => {
       try {
-        const token  ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjQ4YzhhYTlkYWU2YTZjN2U4ZDk3N2MiLCJlbWFpbCI6ImNoaW50ZW5AZWt5YW1tLmNvbSIsInVzZXJUeXBlIjoic3VwZXJBZG1pbiIsImlhdCI6MTcxNzA1NDE3NiwiZXhwIjoxNzE3MDk3Mzc2fQ.ZKsjdo6PaDKj-3MdQ6Hg4uYvwG657O-3c0Flb_R3Np0";
-        const response = await axios.get(Baseurl + "/v2/patient/" + patientId, {
-          params: {
-            type: "patient",
-          },
+        const userData = JSON.parse(getCookie("userData"));
+        const token = userData?.token;
+        const response = await axios.get(`${Baseurl}/v2/cp/patient/`, {
           headers: {
-            Authorization: "Bearer " + token,
+            accesstoken: token,
             "Content-Type": "application/json",
-          },
-          data: {
-            entityId: entityId,
           },
         });
         if (response?.data?.success) {
-          setUser(response?.data?.data);
+          const data = response?.data?.data;
+          setFormData((prev) => ({
+            ...prev,
+            firstName: data?.firstName || "",
+            lastName: data?.lastName || "",
+            countryCode_primary: data?.countryCode_primary || "🇮🇳 +91",
+            primaryMobileNumber: data?.primaryMobileNumber || "",
+            email: data?.email || "",
+          }));
+          setTouched((prev) => ({
+            ...prev,
+            firstName: !!data?.firstName,
+            lastName: !!data?.lastName,
+            primaryMobileNumber: !!data?.primaryMobileNumber,
+            email: !!data?.email,
+          }));
         }
       } catch (err) {
-        console.log('err',err);
-        
-        showErrorToast(
-          err?.response?.data?.error?.message || "Error during sign-in"
-        );
-      } finally {
-        setLoading(false);
+        showErrorToast(err?.response?.data?.error?.message || "Error fetching patient data");
       }
     };
 
+    // Load from localStorage
+    const savedData = localStorage.getItem("pp_details");
+    if (savedData) {
+      try {
+        const parsedData = JSON.parse(savedData);
+        setFormData((prev) => ({
+          ...prev,
+          profileImageBase64: parsedData.profileImageBase64 || "",
+          firstName: parsedData.firstName || "",
+          lastName: parsedData.lastName || "",
+          countryCode_whatsapp: parsedData.countryCode_whatsapp || "🇮🇳 +91",
+          whatsappNumber: parsedData.whatsappNumber || "",
+          gender: parsedData.gender || "",
+          addressDetails: {
+            pincode: parsedData.addressDetails?.pincode || "",
+            area: parsedData.addressDetails?.area || "",
+            city: parsedData.addressDetails?.city || "",
+            state: parsedData.addressDetails?.state || "",
+          },
+        }));
+        setSameAsMobile(parsedData.whatsappNumber === parsedData.primaryMobileNumber);
+        setTouched((prev) => ({
+          ...prev,
+          firstName: !!parsedData.firstName,
+          lastName: !!parsedData.lastName,
+          whatsappNumber: !!parsedData.whatsappNumber,
+          gender: !!parsedData.gender,
+          addressDetails: {
+            pincode: !!parsedData.addressDetails?.pincode,
+          },
+        }));
+      } catch (error) {
+        console.error("Error parsing pp_details from localStorage:", error);
+      }
+    }
+
+    getCountryList();
     verifyChannelPartner(type);
-    const patientId = "66a10a19c8ca863d98b3ee01";
-    const entityId = "66cb61aaf3252d4ff3e9badd";
-    getPatient(patientId, entityId);
+    getPatient();
   }, [type]);
 
-  const getCountryList = async () => {
-    try {
-      const response = await customAxios.get(`v2/country?search=${""}`);
-      if (response?.data?.success === true) {
-        setCountryList(response?.data?.data);
-      }
-    } catch (error) {
-      console.log("11error", error);
-      if (error.forceLogout) {
-        router.push("/login");
-      } else {
-        showErrorToast(
-          error?.response?.data?.error?.message || "Something Went Wrong"
-        );
+  // Handle photo upload
+  const handlePhotoUpload = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        const base64 = await fileToBase64(file);
+        setFormData((prev) => ({ ...prev, profileImageBase64: base64 }));
+        setDrawerOpen(false);
+      } catch (error) {
+        console.error("Error converting file to base64:", error);
+        showErrorToast("Failed to upload profile image");
       }
     }
   };
-  useEffect(() => {
-    getCountryList();
-  }, []);
+
+  // Handle photo deletion
+  const handlePhotoDelete = () => {
+    setFormData((prev) => ({ ...prev, profileImageBase64: "" }));
+    setDrawerOpen(false);
+  };
+
+  // Trigger camera/photo input
+  const handleTakePhoto = () => {
+    if (cameraInputRef.current) {
+      cameraInputRef.current.click();
+    }
+  };
+
+  const handleChoosePhoto = () => {
+    if (photoInputRef.current) {
+      photoInputRef.current.click();
+    }
+  };
+
+  // Handle input change for mobile numbers
+  const handleInputChange = (e, field) => {
+    const value = e.target.value.replace(/\D/g, "").slice(0, 10);
+    setFormData((prev) => {
+      const newFormData = { ...prev, [field]: value };
+      if (sameAsMobile && field === "primaryMobileNumber") {
+        newFormData.whatsappNumber = value;
+        newFormData.countryCode_whatsapp = prev.countryCode_primary;
+      }
+      return newFormData;
+    });
+    handleBlur(field);
+  };
+
+  // Handle text input change
+  const handleTextInputChange = (e, field, subField = null) => {
+    const value = field === "email" ? e.target.value.toLowerCase() : e.target.value;
+    if (subField) {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: { ...prev[field], [subField]: value },
+      }));
+      handleBlur(field + "." + subField);
+    } else {
+      setFormData((prev) => ({ ...prev, [field]: value }));
+      handleBlur(field);
+    }
+  };
+
+  // Handle PIN code change
+  const handlePinCodeChange = async (value) => {
+    const digitsOnly = value.replace(/\D/g, "").slice(0, 6);
+    setFormData((prev) => ({
+      ...prev,
+      addressDetails: { ...prev.addressDetails, pincode: digitsOnly },
+    }));
+    handleBlur("pincode");
+
+    if (digitsOnly.length === 6 && isPincodeValid(digitsOnly)) {
+      try {
+        const response = await axios.get(`https://api.postalpincode.in/pincode/${digitsOnly}`);
+        if (response?.data[0]?.Status === "Success") {
+          const { State, District, Name, Block } = response?.data[0]?.PostOffice[0];
+          setFormData((prev) => ({
+            ...prev,
+            addressDetails: {
+              ...prev.addressDetails,
+              area: Name,
+              city: Block === "NA" ? District : Block,
+              state: State,
+            },
+          }));
+          setTouched((prev) => ({
+            ...prev,
+            addressDetails: {
+              ...prev.addressDetails,
+              area: true,
+              city: true,
+              state: true,
+            },
+          }));
+        } else {
+          setFormData((prev) => ({
+            ...prev,
+            addressDetails: {
+              ...prev.addressDetails,
+              area: "",
+              city: "",
+              state: "",
+            },
+          }));
+          showErrorToast("Invalid PIN code");
+        }
+      } catch (error) {
+        console.error("Error fetching location data:", error);
+        showErrorToast("Failed to fetch location data");
+        setFormData((prev) => ({
+          ...prev,
+          addressDetails: {
+            ...prev.addressDetails,
+            area: "",
+            city: "",
+            state: "",
+          },
+        }));
+      }
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        addressDetails: {
+          ...prev.addressDetails,
+          area: "",
+          city: "",
+          state: "",
+        },
+      }));
+    }
+  };
+
+  // Handle gender change
+  const handleGenderChange = (value) => {
+    setFormData((prev) => ({ ...prev, gender: value }));
+    handleBlur("gender");
+  };
+
+  // Handle blur
+  const handleBlur = (field) => {
+    if (field === "pincode" || field.startsWith("addressDetails.")) {
+      const subField = field === "pincode" ? "pincode" : field.split(".")[1];
+      setTouched((prev) => ({
+        ...prev,
+        addressDetails: { ...prev.addressDetails, [subField]: true },
+      }));
+    } else {
+      setTouched((prev) => ({ ...prev, [field]: true }));
+    }
+  };
+
+  const handleSave = async () => {
+    if (isFormValid()) {
+      handleUpdatePatientDetails()
+    } else {
+      setTouched({
+        firstName: true,
+        lastName: true,
+        primaryMobileNumber: true,
+        whatsappNumber: true,
+        gender: true,
+        addressDetails: { pincode: true, area: true },
+      });
+      showErrorToast("Please fill all required fields correctly");
+    }
+  };
+
+  useEffect(()=>{
+    const userDataCookie = getCookie("userData");
+          let token;
+          if (userDataCookie) {
+            try {
+              token = JSON.parse(userDataCookie).token;
+            } catch (error) {
+              console.error("Error parsing userData cookie:", error);
+            }
+          }
+          setToken(token)
+          if (!token) {
+            showErrorToast("Authentication required. Please log in.");
+            router.push("/create");
+            return;
+          }
+  },[])
+
+  const handleUpdatePatientDetails = async() =>{
+    setIsLoading(true)
+    try {
+        if(formData?.profileImageBase64){
+          const imageUrl = await uploadImage(formData?.profileImageBase64,"profile") || ""
+          console.log(imageUrl)
+          setFormData({
+            ...formData,
+            profileImageUrl:imageUrl
+          })
+        }
+          const payload = delete formData.profileImageBase64
+        const response = await axios.put(Baseurl+`/v2/cp/patient/update`,{
+          patientDetails:formData
+        },{
+          headers:{
+            accesstoken:token
+          }
+        })
+        if(response?.data?.success){
+          setCookie("PatientInfo",JSON.stringify(response?.data?.data))
+          router.push(`/patient/${type}/family-details`)
+        }
+      } catch (error) {
+        console.error("Error saving data:", error);
+        showErrorToast(error?.response?.data?.error?.message);
+      }
+      finally{
+        setIsLoading(false)
+      }
+  }
+
+  const uploadImage = async (filename, type) => {
+      try {
+        
+        const file = base64ToFile(filename, "myImage.png");
+        const form = new FormData();
+        form.append("filename", file);
+        const response = await axios.post(Baseurl+`/v2/psychiatrist/uploadImage`, form,{
+          headers:{
+            accesstoken:token
+          }
+        });
+        if (response?.data?.success) {
+          const imageUrl = response?.data?.image;
+          return imageUrl;
+        }
+      } catch (error) {
+        if (error.forceLogout) {
+          router.push("/login");
+        } else {
+          showErrorToast(error?.response?.data?.error?.message);
+        }
+        return null;
+      }
+    };
+
+
 
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
       <PP_Header />
       <div className="h-full pb-[26%] overflow-auto px-[17px]">
         {/* Profile Section */}
-        <div className="flex justify-center w-[140.8px] mx-auto relative mb-6">
+        <div className="flex justify-center w-[140.8px] h-fit rounded-[17.63px] mx-auto relative mb-6">
           <Image
-            src="/images/profile.png"
+            src={formData.profileImageBase64 || "/images/profile.png"}
             width={100}
             height={90}
-            className="w-full h-fit"
-            alt="profile"
+            className="w-full h-fit object-cover"
+            alt="Profile"
           />
-          <Drawer>
+          <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
             <DrawerTrigger>
               <Image
                 src="/images/camera.png"
                 width={31}
                 height={31}
                 className="w-[31px] h-fit absolute bottom-[-10px] right-[-10px]"
-                alt="camera"
+                alt="Camera"
+                onClick={() => setDrawerOpen(true)}
               />
             </DrawerTrigger>
-            <DrawerContent className="bg-gradient-to-b from-[#e7e4f8] via-[#f0e1df] via-70% to-[#feedea] rounded-t-[16px]">
+            <DrawerContent className="bg-gradient-to-b from-[#e7e4f8] via-[#f0e1df] via-70% to-[#feedea]">
               <DrawerHeader>
-                <DrawerTitle className="sr-only">Choose Photo</DrawerTitle>
                 <DrawerDescription className="flex flex-col gap-3">
-                  {["Take Photo", "Choose Photo", "Delete Photo"].map(
-                    (text, idx) => (
-                      <Button
-                        key={idx}
-                        className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px] rounded-[8.16px]"
-                      >
-                        <Link href="">{text}</Link>
-                        <Image
-                          src="/images/arrow.png"
-                          width={24}
-                          height={24}
-                          alt="arrow"
-                        />
-                      </Button>
-                    )
+                  {isMobile && (
+                    <Button
+                      className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px]"
+                      onClick={handleTakePhoto}
+                    >
+                      Take Photo
+                      <Image
+                        src="/images/arrow.png"
+                        width={24}
+                        height={24}
+                        className="w-[24px]"
+                        alt="Arrow"
+                      />
+                    </Button>
                   )}
+                  <Button
+                    className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px]"
+                    onClick={handleChoosePhoto}
+                  >
+                    Choose Photo
+                    <Image
+                      src="/images/arrow.png"
+                      width={24}
+                      height={24}
+                      className="w-[24px]"
+                      alt="Arrow"
+                    />
+                  </Button>
+                  <Button
+                    className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px]"
+                    onClick={handlePhotoDelete}
+                  >
+                    Delete Photo
+                    <Image
+                      src="/images/arrow.png"
+                      width={24}
+                      height={24}
+                      className="w-[24px]"
+                      alt="Arrow"
+                    />
+                  </Button>
+                  <input
+                    ref={cameraInputRef}
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    className="hidden"
+                    onChange={handlePhotoUpload}
+                  />
+                  <input
+                    ref={photoInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handlePhotoUpload}
+                  />
                 </DrawerDescription>
               </DrawerHeader>
+              <DrawerFooter className="p-0"></DrawerFooter>
             </DrawerContent>
           </Drawer>
         </div>
 
         {/* Form */}
-        <div className="rounded-[12px]">
+        <div className=" rounded-[12px] ">
           {/* First Name */}
-          <Label className="text-[15px] text-gray-500 mb-[7.59px] mt-5">
-            First Name *
-          </Label>
-          <Input
-            placeholder="Shubham"
-            className="bg-white rounded-[7.26px] text-[15px] font-semibold  w-full h-[38px]"
-          />
+          <div>
+            <Label className="text-[15px] text-gray-500 mb-[7.59px] mt-3">
+              First Name *
+            </Label>
+            <Input
+              placeholder="Enter First Name"
+              className="bg-white rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px]"
+              value={formData.firstName}
+              onChange={(e) => handleTextInputChange(e, "firstName")}
+              onBlur={() => handleBlur("firstName")}
+            />
+            {touched.firstName && !formData.firstName && (
+              <span className="text-red-500 text-sm mt-1 block">First Name is required</span>
+            )}
+          </div>
 
           {/* Last Name */}
-          <Label className="text-[15px] text-gray-500 mb-[7.59px] mt-[22px]">
-            Last Name
-          </Label>
-          <Input
-            placeholder="Thakur"
-            className="w-full bg-white rounded-[7.26px] text-[15px] font-semibold h-[39px]"
-          />
+          <div>
+            <Label className={`text-[15px] mb-[7.59px] mt-[22px] ${formData.firstName ? "text-gray-500" : "text-[#00000040]"}`}>
+              Last Name *
+            </Label>
+            <Input
+              placeholder="Enter Last Name"
+              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
+                formData.firstName ? "bg-white placeholder:text-gray-500" : "bg-[#ffffff10] placeholder:text-[#00000040]"
+              }`}
+              value={formData.lastName}
+              onChange={(e) => handleTextInputChange(e, "lastName")}
+              onBlur={() => handleBlur("lastName")}
+              disabled={!formData.firstName}
+            />
+            {touched.lastName && !formData.lastName && (
+              <span className="text-red-500 text-sm mt-1 block">Last Name is required</span>
+            )}
+          </div>
 
+          {/* Primary Mobile Number */}
           <div className="mt-[22px]">
-            <Label className="text-[15px] text-gray-500 font-medium mb-[7.59px] mt-[22px]">
-              Primary Mobile Number <span className="text-red-500">*</span>
+            <Label className={`text-[15px] mb-[7.59px] ${formData.lastName ? "text-gray-500" : "text-[#00000040]"}`}>
+              Primary Mobile Number *
             </Label>
             <div className="flex items-center h-[39px]">
               <Select
                 options={countryOptions}
-                value={countryOptions.find(
-                  (option) => option.value === formData.countryCode_primary
-                )}
-                onChange={(selectedOption) => {
-                  const newCountryCode = selectedOption
-                    ? selectedOption.value
-                    : "🇮🇳 +91";
-                  setFormData((prev) => ({
-                    ...prev,
-                    countryCode_primary: newCountryCode,
-                    ...(sameAsMobile && {
-                      countryCode_whatsapp: newCountryCode,
-                    }),
-                  }));
-                }}
-                disabled={false}
+                value={countryOptions.find((option) => option.value === formData.countryCode_primary)}
+                disabled
                 className="w-[100px] border-none shadow-none"
                 styles={{
                   control: (base) => ({
                     ...base,
+                    borderRadius: "7.26px 0 0 7.26px",
+                    borderRightWidth: 0,
+                    height: "39px",
+                    minHeight: "39px",
                     width: "max-content",
+                    backgroundColor: "#fff",
                   }),
                   menu: (base) => ({ ...base, width: "200px" }),
                 }}
                 formatOptionLabel={(option, { context }) =>
-                  context === "menu"
-                    ? `${option.label} - ${option.name}`
-                    : option.label
+                  context === "menu" ? `${option.label} - ${option.name}` : option.label
                 }
                 menuPlacement="top"
               />
               <Input
                 id="primaryMobileNumber"
+                type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
-                type="text"
                 placeholder="Enter primary mobile no."
                 value={formData.primaryMobileNumber}
-                onChange={(e) => handleInputChange(e, "primaryMobileNumber")}
-                onBlur={() => handleBlur("primaryMobileNumber")}
-                disabled={false}
-                className="bg-white border border-gray-300 rounded-[7.26px] placeholder:text-gray-500 font-semibold py-2 px-4 h-[38px] w-full"
+                disabled
+                className="border rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] bg-white placeholder:text-gray-500"
+                maxLength={10}
               />
             </div>
+            {touched.primaryMobileNumber && !formData.primaryMobileNumber && (
+              <span className="text-red-500 text-sm mt-1 block">Mobile number is required</span>
+            )}
             {touched.primaryMobileNumber &&
               formData.primaryMobileNumber &&
               !isMobileValid(formData.primaryMobileNumber) && (
-                <span className="text-red-500 text-sm mt-1 block">
-                  Must be 10 digits
-                </span>
+                <span className="text-red-500 text-sm mt-1 block">Must be 10 digits</span>
               )}
-            {touched.primaryMobileNumber && !formData.primaryMobileNumber && (
-              <span className="text-red-500 text-sm mt-1 block">
-                Mobile number is required
-              </span>
-            )}
           </div>
+
+          {/* WhatsApp Number */}
           <div className="mt-[22px]">
             <div className="flex items-center">
-              <Label className="text-[15px] text-gray-500 font-medium mb-[7.59px] mt-[22px]">
-                Whatsapp Number
+              <Label className={`text-[15px] w-[55%] mb-[7.59px] ${isMobileValid(formData.primaryMobileNumber) ? "text-gray-500" : "text-[#00000040]"}`}>
+                WhatsApp Number
               </Label>
               <div className="flex gap-[6px] items-center w-[45%]">
                 <Checkbox
+                  className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"
                   checked={sameAsMobile}
                   onCheckedChange={(checked) => {
                     setSameAsMobile(checked);
@@ -339,20 +671,13 @@ const PP_Details = ({ type }) => {
                         whatsappNumber: prev.primaryMobileNumber,
                         countryCode_whatsapp: prev.countryCode_primary,
                       }));
-                      setTouched((prev) => ({
-                        ...prev,
-                        whatsappNumber: true,
-                      }));
+                      setTouched((prev) => ({ ...prev, whatsappNumber: true }));
                     }
                   }}
-                  className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"
+                  disabled={!isMobileValid(formData.primaryMobileNumber)}
                 />
                 <label
-                  className={`text-[12px] ${
-                    isMobileValid(formData.primaryMobileNumber)
-                      ? "text-gray-500 "
-                      : "text-[#00000040]"
-                  }`}
+                  className={`text-[12px] ${isMobileValid(formData.primaryMobileNumber) ? "text-gray-500" : "text-[#00000040]"}`}
                 >
                   Same as Mobile Number
                 </label>
@@ -361,29 +686,29 @@ const PP_Details = ({ type }) => {
             <div className="flex items-center h-[39px]">
               <Select
                 options={countryOptions}
-                value={countryOptions.find(
-                  (option) => option.value === formData.countryCode_whatsapp
-                )}
+                value={countryOptions.find((option) => option.value === formData.countryCode_whatsapp)}
                 onChange={(selectedOption) =>
-                  setFormData({
-                    ...formData,
-                    countryCode_whatsapp: selectedOption
-                      ? selectedOption.value
-                      : "🇮🇳 +91",
-                  })
+                  setFormData((prev) => ({
+                    ...prev,
+                    countryCode_whatsapp: selectedOption ? selectedOption.value : "🇮🇳 +91",
+                  }))
                 }
-                className="w-[100px] border-none shadow-none bg-white"
+                isDisabled={sameAsMobile || !isMobileValid(formData.primaryMobileNumber)}
+                className="w-[100px] border-none shadow-none"
                 styles={{
                   control: (base) => ({
                     ...base,
+                    borderRadius: "7.26px 0 0 7.26px",
+                    borderRightWidth: 0,
+                    height: "39px",
+                    minHeight: "39px",
                     width: "max-content",
+                    backgroundColor: sameAsMobile || !isMobileValid(formData.primaryMobileNumber) ? "#faf5f8" : "#fff",
                   }),
                   menu: (base) => ({ ...base, width: "200px" }),
                 }}
                 formatOptionLabel={(option, { context }) =>
-                  context === "menu"
-                    ? `${option.label} - ${option.name}`
-                    : option.label
+                  context === "menu" ? `${option.label} - ${option.name}` : option.label
                 }
                 menuPlacement="top"
               />
@@ -392,105 +717,152 @@ const PP_Details = ({ type }) => {
                 type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
-                placeholder="Enter whatsapp no."
+                placeholder="Enter WhatsApp no."
                 value={formData.whatsappNumber}
                 onChange={(e) => handleInputChange(e, "whatsappNumber")}
                 onBlur={() => handleBlur("whatsappNumber")}
-                className="bg-white border border-gray-300 rounded-[7.26px] placeholder:text-gray-500 font-semibold py-2 px-4 h-[38px] w-full"
+                disabled={sameAsMobile || !isMobileValid(formData.primaryMobileNumber)}
+                className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
+                  sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
+                    ? "bg-[#ffffff10] placeholder:text-[#00000040]"
+                    : "bg-white placeholder:text-gray-500"
+                }`}
+                maxLength={10}
               />
             </div>
-            {touched.whatsappNumber &&
-              formData.whatsappNumber &&
-              !isMobileValid(formData.whatsappNumber) && (
-                <span className="text-red-500 text-sm mt-1 block">
-                  Must be 10 digits
-                </span>
-              )}
-            {touched.whatsappNumber && !formData.whatsappNumber && (
-              <span className="text-red-500 text-sm mt-1 block">
-                WhatsApp number is required
-              </span>
+            {touched.whatsappNumber && formData.whatsappNumber && !isMobileValid(formData.whatsappNumber) && (
+              <span className="text-red-500 text-sm mt-1 block">Must be 10 digits</span>
             )}
           </div>
 
           {/* Gender */}
-          <div className="flex flex-col mb-4 mt-[24px]">
-            <Label className="text-[15px] text-gray-500 font-medium mb-[7.59px]">
-              Gender <span className="text-red-500">*</span>
+          <div className="mt-[22px]">
+            <Label className={`text-[15px] mb-[7.59px] ${isMobileValid(formData.primaryMobileNumber) ? "text-gray-500" : "text-[#00000040]"}`}>
+              Gender *
             </Label>
             <div className="flex gap-6 items-center text-gray-600 text-[15px]">
-              <Label className="flex items-center gap-2">
-                <Input
-                  type="radio"
-                  name="gender"
-                  value="male"
-                  className="form-radio text-[#776EA5] bg-transparent accent-[#000000] w-4 h-4"
-                />
-                Male
-              </Label>
-
-              <Label className="flex items-center gap-2">
-                <Input
-                  type="radio"
-                  name="gender"
-                  value="female"
-                  className="form-radio text-[#776EA5] bg-transparent accent-[#000000] w-4 h-4"
-                />
-                Female
-              </Label>
-              <Label className="flex items-center gap-2">
-                <Input
-                  type="radio"
-                  name="gender"
-                  value="other"
-                  className="form-radio text-[#776EA5] bg-transparent accent-[#000000] w-4 h-4"
-                />
-                Other
-              </Label>
+              {["male", "female", "other"].map((value) => (
+                <Label key={value} className="flex items-center gap-2">
+                  <Input
+                    type="radio"
+                    name="gender"
+                    value={value}
+                    checked={formData.gender === value}
+                    onChange={() => handleGenderChange(value)}
+                    disabled={!isMobileValid(formData.primaryMobileNumber)}
+                    className="form-radio text-[#776EA5] bg-transparent accent-[#000000] w-4 h-4"
+                  />
+                  {value.charAt(0).toUpperCase() + value.slice(1)}
+                </Label>
+              ))}
             </div>
+            {touched.gender && !formData.gender && (
+              <span className="text-red-500 text-sm mt-1 block">Gender is required</span>
+            )}
           </div>
 
           {/* Email */}
-          <Label className="text-[15px] text-gray-500 font-medium mb-[7.59px] mt-[22px]">
-            Email Address
-          </Label>
-          <Input
-            placeholder="Enter Email address"
-            className="w-full bg-white rounded-[7.26px] text-[15px] font-semibold h-[39px]"
-          />
+          <div>
+            <Label className={`text-[15px] mb-[7.59px] mt-[22px] text-[#00000040]`}>
+              Email Address
+            </Label>
+            <Input
+              placeholder="Enter Email address"
+              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
+                formData.gender ? "bg-white placeholder:text-gray-500" : "bg-[#ffffffde] placeholder:text-[#00000040]"
+              }`}
+              value={formData.email}
+              disabled
+            />
+            {touched.email && formData.email && !isEmailValid(formData.email) && (
+              <span className="text-red-500 text-sm mt-1 block">Invalid email</span>
+            )}
+          </div>
 
-          {/* Address Fields */}
-          {[
-            { label: "Pincode", required: true },
-            { label: "Area" },
-            { label: "City" },
-            { label: "State" },
-          ].map(({ label, required }) => (
-            <div key={label}>
-              <Label className="text-[15px] text-gray-500 font-medium mb-[7.59px] mt-[22px]">
-                {label} {required && <span className="text-red-500">*</span>}
-              </Label>
-              <Input
-                placeholder={`Enter ${label} name`}
-                className="w-full bg-white rounded-[7.26px] text-[15px] font-semibold h-[39px]"
-              />
-            </div>
-          ))}
+          {/* Address Details */}
+          <div>
+            <Label className={`text-[15px] mb-[7.59px] mt-[22px] ${formData.gender ? "text-gray-500" : "text-[#00000040]"}`}>
+              Pincode *
+            </Label>
+            <Input
+              placeholder="Enter Pincode"
+              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
+                formData.gender ? "bg-white placeholder:text-gray-500" : "bg-[#ffffffde] placeholder:text-[#00000040]"
+              }`}
+              onChange={(e) => handlePinCodeChange(e.target.value)}
+              value={formData.addressDetails.pincode}
+              disabled={!formData.gender}
+              maxLength={6}
+              inputMode="numeric"
+              pattern="[0-9]*"
+            />
+            {touched.addressDetails.pincode && !formData.addressDetails.pincode && (
+              <span className="text-red-500 text-sm mt-1 block">PIN code is required</span>
+            )}
+            {touched.addressDetails.pincode &&
+              formData.addressDetails.pincode &&
+              !isPincodeValid(formData.addressDetails.pincode) && (
+                <span className="text-red-500 text-sm mt-1 block">Must be 6 digits</span>
+            )}
+          </div>
+          <div>
+            <Label className={`text-[15px] mb-[7.59px] mt-[22px] ${isPincodeValid(formData.addressDetails.pincode) ? "text-gray-500" : "text-[#00000040]"}`}>
+              Area
+            </Label>
+            <Input
+              placeholder="Enter Area"
+              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
+                isPincodeValid(formData.addressDetails.pincode) ? "bg-white placeholder:text-gray-500" : "bg-[#ffffff] placeholder:text-[#00000040]"
+              }`}
+              value={formData.addressDetails.area}
+              onChange={(e) => handleTextInputChange(e, "addressDetails", "area")}
+              onBlur={() => handleBlur("addressDetails.area")}
+              disabled={!isPincodeValid(formData.addressDetails.pincode)}
+            />
+          </div>
+          <div>
+            <Label className={`text-[15px] mb-[7.59px] mt-[22px] ${isPincodeValid(formData.addressDetails.pincode) ? "text-gray-500" : "text-[#00000040]"}`}>
+              City
+            </Label>
+            <Input
+              placeholder="Enter City"
+              className="bg-white rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px]"
+              value={formData.addressDetails.city}
+              disabled
+            />
+          </div>
+          <div>
+            <Label className={`text-[15px] mb-[7.59px] mt-[22px] ${isPincodeValid(formData.addressDetails.pincode) ? "text-gray-500" : "text-[#00000040]"}`}>
+              State
+            </Label>
+            <Input
+              placeholder="Enter State"
+              className="bg-white rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px]"
+              value={formData.addressDetails.state}
+              disabled
+            />
+          </div>
         </div>
 
         {/* Bottom Buttons */}
-        <div className="bg-gradient-to-b from-[#fce8e5] to-[#fce8e5] fixed bottom-0 left-0 right-0 flex justify-between gap-3 pb-[23px] px-4 max-w-[576px] mx-auto">
-          <Button className="border border-[#CC627B] bg-transparent text-[#CC627B] text-[15px] font-[600] w-[48%] h-[45px] rounded-[8px]">
+        <div className="bg-gradient-to-b from-[#fce8e5] to-[#fce8e5] fixed bottom-0 left-0 right-0 flex justify-between gap-3 pb-[23px] px-[22px] max-w-[576px] mx-auto">
+          <Button
+            className="border border-[#CC627B] bg-transparent text-[#CC627B] text-[14px] font-[600] w-[48%] h-[45px] rounded-[8px]"
+            onClick={() => router.push("/")}
+          >
             Cancel
           </Button>
-          <Link
-            href={"/patient-registration/family-details"}
-            className="w-[48%]"
+          <Button
+            className={`text-white text-[14px] font-[600] w-[48%] h-[45px] rounded-[8px] ${
+              isFormValid()
+                ? "bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0]"
+                : "bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[#FFFFFF] cursor-not-allowed"
+            }`}
+            onClick={handleSave}
+            disabled={!isFormValid()}
           >
-            <Button className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[15px] font-[600] w-full h-[45px] rounded-[8px]">
-              Save & Continue
-            </Button>
-          </Link>
+            Save & Continue
+          </Button>
         </div>
       </div>
     </div>

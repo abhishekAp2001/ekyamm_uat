@@ -174,15 +174,13 @@ const Family_Details = ({ type }) => {
       const response = await axios.post(
         Baseurl + "/v2/cp/patient/familyMember",
         payload,
-        {
-          headers: { accesstoken: token },
-        }
+        {headers: { accesstoken: token },}
       );
       if (response.data.success) {
         showSuccessToast("Family member added successfully");
         setCookie("completeUserData", response.data.data);
         if (formData.emergencyContact) {
-          router.push(`/patient/${type}/dashboard`);
+          router.push(`/patient/dashboard`);
         } else {
           router.push(`/patient/${type}/emergency-details`);
         }

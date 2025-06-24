@@ -9,7 +9,8 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
+}
+ from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Menu, Plus, X } from "lucide-react";
@@ -17,7 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Dashboard_card from "../Dashboard_card/Dashboard_card";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
+ 
 const SalesDashboard = () => {
   const greeting = new Date().getHours() < 12 ? "Morning" : (new Date().getHours() < 16 || (new Date().getHours() === 16 && new Date().getMinutes() === 0)) ? "Afternoon" : "Evening";
   return (
@@ -38,7 +39,7 @@ const SalesDashboard = () => {
           </Avatar>
         </div>
       </div>
-      <div className="px-3 h-full  overflow-auto pt-[20%] lg:pt-[15%]">
+      <div className="px-3 h-full  overflow-auto pt-[26%] lg:pt-[17%]">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <span className="text-[12px] text-gray-500">Good {greeting},</span>
@@ -59,7 +60,7 @@ const SalesDashboard = () => {
         <div className="flex justify-between items-center gap-3">
           <Dashboard_card />
         </div>
-
+ 
         {/* Channel Partner */}
         <div className="mt-[12.35px] pt-[8.21px] pb-3.5 border=[1.47px] border-[#FFFFFF4D] rounded-2xl">
           <div className="flex justify-between items-center ps-2 pe-[16.93px]"></div>
@@ -83,7 +84,7 @@ const SalesDashboard = () => {
                   View All
                 </Link>
               </div>
-
+ 
               <div className="bg-[#FFFFFF80] text-black text-[16px] font-[600] py-[17px] p-[8px] flex  justify-between items-center w-full h-[44px] rounded-[8.62px]">
                 <div className="flex items-center gap-[7px]">
                   <Image
@@ -128,7 +129,7 @@ const SalesDashboard = () => {
             <DrawerTrigger className="mt-[10.8px] bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] h-[45px]  rounded-[8px] flex items-center justify-center w-full">
               Add User
             </DrawerTrigger>
-            <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea]">
+            <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
               <DrawerHeader>
                 <DrawerTitle className="text-[16px] font-[600] text-center">
                   Add User
@@ -185,7 +186,7 @@ const SalesDashboard = () => {
           </Drawer>
         </div>
       </div>
-
+ 
       {/* footer */}
       <div className="footer_bar bg-[#FFFFFFB2] max-w-[576px] h-[58px] fixed bottom-0 left-0 right-0 flex items-center m-auto">
       {/* <div className="footer_bar bg-[#FFFFFFB2] h-[58px] absolute bottom-0 left-0 right-0 flex items-center"> */}
@@ -233,7 +234,9 @@ const SalesDashboard = () => {
     </>
   );
 };
-
+ 
 export default SalesDashboard;
+ 
+ 
  
  
