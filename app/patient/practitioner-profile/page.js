@@ -1,5 +1,5 @@
 
-import Profile from "@/components/patient/practitioner/profile";
+import Profile from "@/components/patient/Practitioner/Profile";
 import React from "react";
 
 const page = () => {

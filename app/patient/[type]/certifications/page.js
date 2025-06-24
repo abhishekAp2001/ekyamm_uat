@@ -1,4 +1,4 @@
-import Certifications from '@/components/Certifications/Certifications'
+import Certifications from '@/components/patient/Certifications/Certifications'
 import React from 'react'
 
 const page = () => {
