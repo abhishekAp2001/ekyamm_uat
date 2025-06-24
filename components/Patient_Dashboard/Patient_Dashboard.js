@@ -17,7 +17,7 @@ import axios from "axios";
 import { showErrorToast } from "@/lib/toast";
 import { setCookie } from "cookies-next";
 import AvailableSession from "./AvailableSession";
-import Profile from "./patient/Practitioner/Profile";
+
 import {
   Drawer,
   DrawerClose,
@@ -30,6 +30,7 @@ import {
 } from "../ui/drawer";
 import Certifications from "../patient/Certifications/Certifications";
 import Client_Testimonial from "../patient/Client_Testimonials/Client_Testimonial";
+import Profile from "../patient/practitioner/Profile";
 
 const Patient_Dashboard = () => {
   const [patient, setPatient] = useState(null);
