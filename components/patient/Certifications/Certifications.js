@@ -102,9 +102,9 @@ const Certifications = ({ setShowCertifications, doc }) => {
                     </div>
                   </DialogTrigger>
 
-                  <DialogContent className="w-full h-[80vh] p-0 bg-transparent border-none">
+                  <DialogContent className="w-full h-[80vh] p-0 bg-transparent border-none z-90">
                     {/* Cancel button */}
-                    <div className="absolute top-2 right-2 z-10">
+                    <div className="absolute top-2 right-2">
                       <DialogClose asChild>
                         <button className="">
                           <span className="text-white text-xl border-0">

@@ -32,7 +32,6 @@ const Client_Testimonial = ({ setShowClientTestimonials }) => {
         >
           <AccordionItem
             value="item-1"
-            
             className="rounded-[12px] bg-white px-4 py-3"
           >
             <AccordionTrigger className="flex items-start justify-between gap-2 [&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-muted-foreground">
