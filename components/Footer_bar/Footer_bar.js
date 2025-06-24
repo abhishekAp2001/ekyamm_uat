@@ -4,7 +4,7 @@ import React from "react";
 const Footer_bar = () => {
   return (
     <>
-      <div className="flex gap-1 items-center">
+      <div className="flex gap-1 items-center justify-center">
         <span className="text-[10px] text-gray-500 font-medium">
           Powered by
         </span>

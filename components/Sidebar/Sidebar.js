@@ -3,8 +3,10 @@
 import Image from "next/image";
 import { useState } from "react";
 import SignOutModal from "../SignOutModal/SignOutModal"; // adjust path as needed
+import { useRouter } from "next/navigation";
 
 const Sidebar = ({ onClose }) => {
+  const router = useRouter();
   const [showSignOutModal, setShowSignOutModal] = useState(false);
 
   const handleSignOutClick = () => {
@@ -19,6 +21,7 @@ const Sidebar = ({ onClose }) => {
     // Add actual sign-out logic here
     console.log("Signed out");
     setShowSignOutModal(false);
+    router.push(`/patient/login`);
   };
 
   return (
@@ -103,7 +106,7 @@ const Sidebar = ({ onClose }) => {
                   width={24}
                   height={24}
                 />
-                <p   className="text-[14px] font-[600] font-[Quicksand] text-white">
+                <p className="text-[14px] font-[600] font-[Quicksand] text-white">
                   Sign Out
                 </p>
               </div>

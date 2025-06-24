@@ -1,11 +1,10 @@
-
-import PP_profile from '@/components/PP_profile/PP_profile'
+import Session_Details from '@/components/Session_Details/Session_Details'
 import React from 'react'
 
 const page = () => {
   return (
     <>
-   <PP_profile/>
+      <Session_Details/>
     </>
   )
 }
