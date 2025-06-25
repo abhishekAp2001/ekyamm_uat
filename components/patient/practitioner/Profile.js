@@ -73,22 +73,29 @@ const Profile = ({
           <div className="mt-3 w-full h-[74px] rounded-[8px] bg-gradient-to-r from-[#eeecfb] to-[#fce8e5] px-4 flex flex-col justify-center">
             <span className="text-black text-sm font-semibold">Language:</span>
             <p className="text-black text-sm font-normal">
-              {typeof doc?.practiceDetails?.languageProficiency === "string" ? (
-                doc.practiceDetails.languageProficiency
-                  ?.split(",")
-                  ?.map((lang, _lx) => (
+              {Array.isArray(doc?.practiceDetails?.languageProficiency)
+                ? doc.practiceDetails.languageProficiency.map((lang, _lx) => (
                     <span
                       key={_lx}
                       className={`${
-                        _lx == 0 ? "text-sm text-[#776EA5] font-black" : ""
+                        _lx === 0 ? "text-sm text-[#776EA5] font-black" : ""
                       }`}
                     >
                       {lang?.trim() || ""}{" "}
                     </span>
                   ))
-              ) : (
-                <span>N/A</span>
-              )}
+                : doc.practiceDetails.languageProficiency
+                    ?.split(",")
+                    ?.map((lang, _lx) => (
+                      <span
+                        key={_lx}
+                        className={`${
+                          _lx === 0 ? "text-sm text-[#776EA5] font-black" : ""
+                        }`}
+                      >
+                        {lang?.trim() || ""}{" "}
+                      </span>
+                    ))}
               {/* <strong className="text-sm text-[#776EA5] font-black">
                 Telugu,
               </strong>
@@ -102,7 +109,7 @@ const Profile = ({
               Does not treat:
             </span>
             <p className="text-black text-sm font-normal">
-              {doc?.practiceDetails?.whatIDontTreat}              
+              {doc?.practiceDetails?.whatIDontTreat}
             </p>
           </div>
 
