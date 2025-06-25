@@ -299,7 +299,7 @@ const P_Mobile_Verification = ({ type }) => {
 
   return (
     <>
-      <div className=" bg-gradient-to-b  from-[#DFDAFB] to-[#F9CCC5] h-full flex flex-col justify-evenly items-center px-[16px]">
+      <div className=" bg-gradient-to-b  from-[#DFDAFB] to-[#F9CCC5] h-full flex flex-col justify-evenly items-center px-[16px] max-w-[576px] mx-auto">
         {/* slider */}
         <div className="flex flex-col items-center justify-center w-[294px]">
           <div className="relative flex justify-between w-full max-w-xl items-center">

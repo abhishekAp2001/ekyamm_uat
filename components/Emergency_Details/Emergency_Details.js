@@ -22,8 +22,18 @@ import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import Emergency_Header from "../Emergency_Header/Emergency_Header";
 import { Button } from "../ui/button";
 import axios from "axios";
-import { Loader2 } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import { Baseurl } from "@/lib/constants";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "../ui/drawer";
 polyfillCountryFlagEmojis();
 
 const Emergency_Details = ({ type }) => {
@@ -184,7 +194,9 @@ const Emergency_Details = ({ type }) => {
         setCookie("completeUserData", response.data.data);
         router.push(`/patient/dashboard`);
       } else {
-        showErrorToast(response.data.message || "Failed to add emergency detail");
+        showErrorToast(
+          response.data.message || "Failed to add emergency detail"
+        );
       }
     } catch (error) {
       showErrorToast(err.response?.data?.error?.message || "Submission failed");
@@ -374,7 +386,7 @@ const Emergency_Details = ({ type }) => {
             >
               Primary Mobile Number *
             </Label>
-            <div className="flex items-center h-[39px]">
+            <div className="flex items-center gap-3 h-[39px]">
               <Select
                 options={countryOptions}
                 value={countryOptions.find(
@@ -413,7 +425,7 @@ const Emergency_Details = ({ type }) => {
                 onChange={(e) => handleInputChange(e, "primaryMobileNumber")}
                 onBlur={() => handleBlur("primaryMobileNumber")}
                 disabled={!formData.lastName}
-                className={`rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
+                className={`rounded-[7.26px]  border-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                   formData.lastName ? "bg-white" : "bg-[#ffffff10]"
                 }`}
                 maxLength={10}
@@ -548,14 +560,45 @@ const Emergency_Details = ({ type }) => {
           </div> */}
         </div>
         <div className="bg-[#e8e6f7] flex justify-between items-center gap-3 fixed bottom-0 px-[17px] pb-[18px] left-0 right-0 max-w-[576px] m-auto">
-          <Button
+          {/* <Button
             className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
             onClick={() => {
               router.push(`/patient/${type}/family-details`);
             }}
           >
             Cancel
-          </Button>
+          </Button> */}
+          <Drawer className="pt-[9.97px] max-w-[576px] m-auto">
+            <DrawerTrigger className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+              Cancel
+            </DrawerTrigger>
+            <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
+              <DrawerHeader>
+                <DrawerTitle className="text-[16px] font-[600] text-center">
+                  Are you sure
+                </DrawerTitle>
+                <DrawerDescription className="mt-6 flex gap-3 w-full">
+                  <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                    Confirm
+                  </Button>
+
+                  <Button className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                    Continue
+                  </Button>
+                </DrawerDescription>
+              </DrawerHeader>
+              <DrawerFooter className="p-0">
+                <DrawerClose>
+                  <Button
+                    variant="outline"
+                    className="absolute top-[10px] right-0"
+                  >
+                    <X className="w-2 h-2 text-black" />
+                  </Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
           <Button
             disabled={!isFormValid() || loading}
             onClick={handleSubmit}

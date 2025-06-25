@@ -75,7 +75,7 @@ const PaymentConfirmation = ({ type }) => {
 
   return (
     <>
-      <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col">
+      <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
         <Link href={`/channel-partner/${type}/payment`}>
           <Confirm_Header />
         </Link>

@@ -23,7 +23,7 @@ const NP_Registration = () => {
 
   return (
     <>
-      <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col">
+      <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
         <NP_Header />
         <div className="h-full flex flex-col justify-between overflow-auto px-[13px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb]">
           <div className="flex flex-col">

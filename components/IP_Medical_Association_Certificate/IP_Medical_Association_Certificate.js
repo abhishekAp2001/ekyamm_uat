@@ -42,7 +42,7 @@ const IP_Medical_Association_Certificate = () => {
   }, []);
 
   return (
-    <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col">
+    <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
       <IP_Header text="Medical Association Details" />
       <div className="h-full mb-[26%] overflow-auto px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb]">
         {/* Practitioner details */}

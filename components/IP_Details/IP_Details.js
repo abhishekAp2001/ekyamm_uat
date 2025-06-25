@@ -481,7 +481,7 @@ const IP_Details = () => {
             >
               Primary Mobile Number *
             </Label>
-            <div className="flex items-center h-[39px]">
+            <div className="flex items-center gap-3 h-[39px]">
               <Select
                 options={countryOptions}
                 value={countryOptions.find(option => option.value === formData.countryCode_primary)}
@@ -528,7 +528,7 @@ const IP_Details = () => {
                 onChange={(e) => handleInputChange(e, "primaryMobileNumber")}
                 onBlur={() => handleBlur("primaryMobileNumber")}
                 disabled={!isEmailValid(formData.email)}
-                className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
+                className={`rounded-[7.26px]  border-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                   isEmailValid(formData.email)
                     ? "bg-white placeholder:text-gray-500 border-0 shadow-none"
                     : "bg-[#ffffff10] placeholder:text-[#00000040] border-0 shadow-none"

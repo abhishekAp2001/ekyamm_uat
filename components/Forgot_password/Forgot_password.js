@@ -31,7 +31,7 @@ const Forgot_password = () => {
                 {value === "" ? (
                   <>Enter OTP</>
                 ) : (
-                  <>You entered: {value}</>
+                  <>You entered</>
                 )}
               </div>
               <InputOTP
