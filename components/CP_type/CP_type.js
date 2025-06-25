@@ -442,7 +442,7 @@ const CP_type = () => {
               >
                 Clinic Primary Mobile Number *
               </Label>
-              <div className="flex items-center h-[39px]">
+              <div className="flex items-center gap-3 h-[39px]">
                 <Select
                   options={countryOptions}
                   value={countryOptions.find(
@@ -493,7 +493,7 @@ const CP_type = () => {
                   onChange={(e) => handleInputChange(e, "primaryMobileNumber")}
                   onBlur={() => handleBlur("primaryMobileNumber")}
                   disabled={!isEmailValid(formData.email)}
-                  className={`border rounded-[7.26px] font-semibold rounded-l-none border-l-0 placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
+                  className={`border rounded-[7.26px] font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                     isEmailValid(formData.email)
                       ? "bg-white placeholder:text-gray-500"
                       : "bg-[#ffffff10] placeholder:text-[#00000040]"
@@ -640,7 +640,7 @@ const CP_type = () => {
               >
                 Clinic Emergency Number *
               </Label>
-              <div className="flex items-center h-[39px]">
+              <div className="flex items-center gap-3 h-[39px]">
                 <Select
                   options={countryOptions}
                   value={countryOptions.find(

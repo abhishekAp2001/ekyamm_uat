@@ -199,7 +199,7 @@ one symbol, and no spaces.`;
 
   return (
     <>
-      <div className=" bg-gradient-to-b  from-[#DFDAFB] to-[#F9CCC5] h-full flex flex-col justify-evenly items-center px-[16px]">
+      <div className=" bg-gradient-to-b  from-[#DFDAFB] to-[#F9CCC5] h-full flex flex-col justify-evenly items-center px-[16px] max-w-[576px] mx-auto">
         {formLoader && (
           <div
             className="fixed inset-0 bg-[#000000b8] bg-opacity-20 flex items-center justify-center z-50 transition-opacity duration-300"

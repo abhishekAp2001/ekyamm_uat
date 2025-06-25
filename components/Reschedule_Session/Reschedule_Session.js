@@ -33,7 +33,7 @@ const Reschedule_Session = () => {
   };
 
   return (
-    <div className="relative h-screen max-w-[576px] flex flex-col bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5]">
+    <div className="relative h-screen max-w-[576px] flex flex-col bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5] ">
       {/* Fixed Header */}
       <div className="fixed top-0 left-0 right-0 z-50 flex flex-col gap-8 bg-[#e7d6ec] max-w-[576px] mx-auto">
         <div className="bg-gradient-to-r from-[#B0A4F5] to-[#EDA197] rounded-bl-3xl rounded-br-3xl px-3 py-5 h-[128px]">

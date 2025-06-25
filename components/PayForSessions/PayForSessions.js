@@ -46,7 +46,7 @@ const PayForSessions = ({ type }) => {
   ]);
   return (
     <>
-      <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col">
+      <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
         <BackNav
           title="Pay for Sessions Package"
           to={`/channel-partner/${type}/sessions-selection`}

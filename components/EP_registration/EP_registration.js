@@ -227,7 +227,7 @@ const EP_registration = ({ type }) => {
   }, [type]);
 
   return (
-    <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col">
+    <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
       <EP_Header />
       <div className="h-full pb-[28%] lg:pb-[14%] overflow-auto px-[17px]">
         <div className="w-full h-[25px] text-[#776EA5] font-semibold text-[20px] leading-[25px] mb-2 text-center">

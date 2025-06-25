@@ -46,7 +46,7 @@ const P_Pay_For_Session = ({ type }) => {
   ]);
   return (
     <>
-      <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col">
+      <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
         <div className="bg-[#f6f4fd]">
         <BackNav className='text-[16px]'
           title="Pay for Sessions"

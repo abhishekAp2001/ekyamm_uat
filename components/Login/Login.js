@@ -77,7 +77,7 @@ const Login = () => {
 
   return (
     <>
-      <div className="bg-gradient-to-b from-[#DFDAFB] to-[#F9CCC5] h-screen relative">
+      <div className="bg-gradient-to-b from-[#DFDAFB] to-[#F9CCC5] h-screen relative max-w-[576px] mx-auto">
         <div className=" h-full flex  items-center px-4">
           <div className="w-full">
             <div className="border-2 bg-[#FFFFFF80] border-[#FFFFFF4D] rounded-4xl pt-5 px-6 pb-3 text-center w-full">

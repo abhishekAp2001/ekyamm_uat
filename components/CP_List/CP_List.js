@@ -26,7 +26,7 @@ const CP_List = () => {
   }, []);
   return (
     <>
-      <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col">
+      <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
         <div className="px-[17px] h-full mb-[10%] overflow-auto">
           <div className="sticky top-0 left-0 right-0 z-10 bg-[#efecfa]">
             <div className="flex items-center p-4 px-0 gap-[9px]">

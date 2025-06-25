@@ -5,7 +5,7 @@ import React from "react";
 
 const PP_name = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f8f6ff]">
+    <div className="min-h-screen flex items-center justify-center bg-[#f8f6ff]max-w-[576px] mx-auto">
       <div className="w-[705px] bg-white shadow-lg overflow-hidden border border-[#e4dffd]">
         {/* Top Image with rounded bottom corners */}
         <div className="w-full h-[250px] relative overflow-hidden">

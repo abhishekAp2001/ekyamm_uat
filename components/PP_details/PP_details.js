@@ -4,10 +4,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
+  DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import Image from "next/image";
@@ -24,6 +26,7 @@ import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { isMobile } from "react-device-detect";
 import PP_Header from "../PP_Header/PP_Header";
 import { base64ToFile } from "@/lib/utils";
+import { X } from "lucide-react";
 
 polyfillCountryFlagEmojis();
 
@@ -39,7 +42,7 @@ const PP_Details = ({ type }) => {
   const [sameAsMobile, setSameAsMobile] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [token,setToken] = useState("")
+  const [token, setToken] = useState("");
 
   const [formData, setFormData] = useState({
     profileImageBase64: "",
@@ -115,7 +118,9 @@ const PP_Details = ({ type }) => {
       if (error.forceLogout) {
         router.push("/login");
       } else {
-        showErrorToast(error?.response?.data?.error?.message || "Something Went Wrong");
+        showErrorToast(
+          error?.response?.data?.error?.message || "Something Went Wrong"
+        );
       }
     }
   };
@@ -144,11 +149,14 @@ const PP_Details = ({ type }) => {
           //   verificationToken: response.data.data?.verificationToken,
           // }));
         } else {
-          showErrorToast(response?.data?.error?.message || "Verification failed");
+          showErrorToast(
+            response?.data?.error?.message || "Verification failed"
+          );
         }
       } catch (err) {
         showErrorToast(
-          err?.response?.data?.error?.message || "An error occurred while verifying"
+          err?.response?.data?.error?.message ||
+            "An error occurred while verifying"
         );
       } finally {
         setLoading(false);
@@ -184,7 +192,9 @@ const PP_Details = ({ type }) => {
           }));
         }
       } catch (err) {
-        showErrorToast(err?.response?.data?.error?.message || "Error fetching patient data");
+        showErrorToast(
+          err?.response?.data?.error?.message || "Error fetching patient data"
+        );
       }
     };
 
@@ -208,7 +218,9 @@ const PP_Details = ({ type }) => {
             state: parsedData.addressDetails?.state || "",
           },
         }));
-        setSameAsMobile(parsedData.whatsappNumber === parsedData.primaryMobileNumber);
+        setSameAsMobile(
+          parsedData.whatsappNumber === parsedData.primaryMobileNumber
+        );
         setTouched((prev) => ({
           ...prev,
           firstName: !!parsedData.firstName,
@@ -279,7 +291,8 @@ const PP_Details = ({ type }) => {
 
   // Handle text input change
   const handleTextInputChange = (e, field, subField = null) => {
-    const value = field === "email" ? e.target.value.toLowerCase() : e.target.value;
+    const value =
+      field === "email" ? e.target.value.toLowerCase() : e.target.value;
     if (subField) {
       setFormData((prev) => ({
         ...prev,
@@ -303,9 +316,12 @@ const PP_Details = ({ type }) => {
 
     if (digitsOnly.length === 6 && isPincodeValid(digitsOnly)) {
       try {
-        const response = await axios.get(`https://api.postalpincode.in/pincode/${digitsOnly}`);
+        const response = await axios.get(
+          `https://api.postalpincode.in/pincode/${digitsOnly}`
+        );
         if (response?.data[0]?.Status === "Success") {
-          const { State, District, Name, Block } = response?.data[0]?.PostOffice[0];
+          const { State, District, Name, Block } =
+            response?.data[0]?.PostOffice[0];
           setFormData((prev) => ({
             ...prev,
             addressDetails: {
@@ -383,7 +399,7 @@ const PP_Details = ({ type }) => {
 
   const handleSave = async () => {
     if (isFormValid()) {
-      handleUpdatePatientDetails()
+      handleUpdatePatientDetails();
     } else {
       setTouched({
         firstName: true,
@@ -397,82 +413,87 @@ const PP_Details = ({ type }) => {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     const userDataCookie = getCookie("patientSessionData");
-          let token;
-          if (userDataCookie) {
-            try {
-              token = JSON.parse(userDataCookie).token;
-            } catch (error) {
-              console.error("Error parsing userData cookie:", error);
-            }
-          }
-          setToken(token)
-          if (!token) {
-            showErrorToast("Authentication required. Please log in.");
-            router.push("/create");
-            return;
-          }
-  },[])
-
-  const handleUpdatePatientDetails = async() =>{
-    setIsLoading(true)
-    try {
-        if(formData?.profileImageBase64){
-          const imageUrl = await uploadImage(formData?.profileImageBase64,"profile") || ""
-          console.log(imageUrl)
-          setFormData({
-            ...formData,
-            profileImageUrl:imageUrl
-          })
-        }
-          const payload = delete formData.profileImageBase64
-        const response = await axios.put(Baseurl+`/v2/cp/patient/update`,{
-          patientDetails:formData
-        },{
-          headers:{
-            accesstoken:token
-          }
-        })
-        if(response?.data?.success){
-          setCookie("PatientInfo",JSON.stringify(response?.data?.data))
-          router.push(`/patient/${type}/family-details`)
-        }
+    let token;
+    if (userDataCookie) {
+      try {
+        token = JSON.parse(userDataCookie).token;
       } catch (error) {
-        console.error("Error saving data:", error);
-        showErrorToast(error?.response?.data?.error?.message);
+        console.error("Error parsing userData cookie:", error);
       }
-      finally{
-        setIsLoading(false)
+    }
+    setToken(token);
+    if (!token) {
+      showErrorToast("Authentication required. Please log in.");
+      router.push("/create");
+      return;
+    }
+  }, []);
+
+  const handleUpdatePatientDetails = async () => {
+    setIsLoading(true);
+    try {
+      if (formData?.profileImageBase64) {
+        const imageUrl =
+          (await uploadImage(formData?.profileImageBase64, "profile")) || "";
+        console.log(imageUrl);
+        setFormData({
+          ...formData,
+          profileImageUrl: imageUrl,
+        });
       }
-  }
+      const payload = delete formData.profileImageBase64;
+      const response = await axios.put(
+        Baseurl + `/v2/cp/patient/update`,
+        {
+          patientDetails: formData,
+        },
+        {
+          headers: {
+            accesstoken: token,
+          },
+        }
+      );
+      if (response?.data?.success) {
+        setCookie("PatientInfo", JSON.stringify(response?.data?.data));
+        router.push(`/patient/${type}/family-details`);
+      }
+    } catch (error) {
+      console.error("Error saving data:", error);
+      showErrorToast(error?.response?.data?.error?.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const uploadImage = async (filename, type) => {
-      try {
-        
-        const file = base64ToFile(filename, "myImage.png");
-        const form = new FormData();
-        form.append("filename", file);
-        const response = await axios.post(Baseurl+`/v2/psychiatrist/uploadImage`, form,{
-          headers:{
-            accesstoken:token
-          }
-        });
-        if (response?.data?.success) {
-          const imageUrl = response?.data?.image;
-          return imageUrl;
+    try {
+      const file = base64ToFile(filename, "myImage.png");
+      const form = new FormData();
+      form.append("filename", file);
+      const response = await axios.post(
+        Baseurl + `/v2/psychiatrist/uploadImage`,
+        form,
+        {
+          headers: {
+            accesstoken: token,
+          },
         }
-      } catch (error) {
-        if (error.forceLogout) {
-          router.push("/login");
-        } else {
-          showErrorToast(error?.response?.data?.error?.message);
-        }
-        return null;
+      );
+      if (response?.data?.success) {
+        const imageUrl = response?.data?.image;
+        return imageUrl;
       }
-    };
-
-
+    } catch (error) {
+      if (error.forceLogout) {
+        router.push("/login");
+      } else {
+        showErrorToast(error?.response?.data?.error?.message);
+      }
+      return null;
+    }
+  };
 
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
@@ -579,19 +600,27 @@ const PP_Details = ({ type }) => {
               onBlur={() => handleBlur("firstName")}
             />
             {touched.firstName && !formData.firstName && (
-              <span className="text-red-500 text-sm mt-1 block">First Name is required</span>
+              <span className="text-red-500 text-sm mt-1 block">
+                First Name is required
+              </span>
             )}
           </div>
 
           {/* Last Name */}
           <div>
-            <Label className={`text-[15px] mb-[7.59px] mt-[22px] ${formData.firstName ? "text-gray-500" : "text-[#00000040]"}`}>
+            <Label
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${
+                formData.firstName ? "text-gray-500" : "text-[#00000040]"
+              }`}
+            >
               Last Name *
             </Label>
             <Input
               placeholder="Enter Last Name"
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                formData.firstName ? "bg-white placeholder:text-gray-500" : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                formData.firstName
+                  ? "bg-white placeholder:text-gray-500"
+                  : "bg-[#ffffff10] placeholder:text-[#00000040]"
               }`}
               value={formData.lastName}
               onChange={(e) => handleTextInputChange(e, "lastName")}
@@ -599,19 +628,27 @@ const PP_Details = ({ type }) => {
               disabled={!formData.firstName}
             />
             {touched.lastName && !formData.lastName && (
-              <span className="text-red-500 text-sm mt-1 block">Last Name is required</span>
+              <span className="text-red-500 text-sm mt-1 block">
+                Last Name is required
+              </span>
             )}
           </div>
 
           {/* Primary Mobile Number */}
           <div className="mt-[22px]">
-            <Label className={`text-[15px] mb-[7.59px] ${formData.lastName ? "text-gray-500" : "text-[#00000040]"}`}>
+            <Label
+              className={`text-[15px] mb-[7.59px] ${
+                formData.lastName ? "text-gray-500" : "text-[#00000040]"
+              }`}
+            >
               Primary Mobile Number *
             </Label>
-            <div className="flex items-center h-[39px]">
+            <div className="flex items-center gap-3 h-[39px]">
               <Select
                 options={countryOptions}
-                value={countryOptions.find((option) => option.value === formData.countryCode_primary)}
+                value={countryOptions.find(
+                  (option) => option.value === formData.countryCode_primary
+                )}
                 disabled
                 className="w-[100px] border-none shadow-none"
                 styles={{
@@ -627,7 +664,9 @@ const PP_Details = ({ type }) => {
                   menu: (base) => ({ ...base, width: "200px" }),
                 }}
                 formatOptionLabel={(option, { context }) =>
-                  context === "menu" ? `${option.label} - ${option.name}` : option.label
+                  context === "menu"
+                    ? `${option.label} - ${option.name}`
+                    : option.label
                 }
                 menuPlacement="top"
               />
@@ -639,24 +678,34 @@ const PP_Details = ({ type }) => {
                 placeholder="Enter primary mobile no."
                 value={formData.primaryMobileNumber}
                 disabled
-                className="border rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] bg-white placeholder:text-gray-500"
+                className="rounded-[7.26px]  border-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] bg-white placeholder:text-gray-500"
                 maxLength={10}
               />
             </div>
             {touched.primaryMobileNumber && !formData.primaryMobileNumber && (
-              <span className="text-red-500 text-sm mt-1 block">Mobile number is required</span>
+              <span className="text-red-500 text-sm mt-1 block">
+                Mobile number is required
+              </span>
             )}
             {touched.primaryMobileNumber &&
               formData.primaryMobileNumber &&
               !isMobileValid(formData.primaryMobileNumber) && (
-                <span className="text-red-500 text-sm mt-1 block">Must be 10 digits</span>
+                <span className="text-red-500 text-sm mt-1 block">
+                  Must be 10 digits
+                </span>
               )}
           </div>
 
           {/* WhatsApp Number */}
           <div className="mt-[22px]">
             <div className="flex items-center">
-              <Label className={`text-[15px] w-[55%] mb-[7.59px] ${isMobileValid(formData.primaryMobileNumber) ? "text-gray-500" : "text-[#00000040]"}`}>
+              <Label
+                className={`text-[15px] w-[55%] mb-[7.59px] ${
+                  isMobileValid(formData.primaryMobileNumber)
+                    ? "text-gray-500"
+                    : "text-[#00000040]"
+                }`}
+              >
                 WhatsApp Number
               </Label>
               <div className="flex gap-[6px] items-center w-[45%]">
@@ -677,7 +726,11 @@ const PP_Details = ({ type }) => {
                   disabled={!isMobileValid(formData.primaryMobileNumber)}
                 />
                 <label
-                  className={`text-[12px] ${isMobileValid(formData.primaryMobileNumber) ? "text-gray-500" : "text-[#00000040]"}`}
+                  className={`text-[12px] ${
+                    isMobileValid(formData.primaryMobileNumber)
+                      ? "text-gray-500"
+                      : "text-[#00000040]"
+                  }`}
                 >
                   Same as Mobile Number
                 </label>
@@ -686,14 +739,20 @@ const PP_Details = ({ type }) => {
             <div className="flex items-center h-[39px]">
               <Select
                 options={countryOptions}
-                value={countryOptions.find((option) => option.value === formData.countryCode_whatsapp)}
+                value={countryOptions.find(
+                  (option) => option.value === formData.countryCode_whatsapp
+                )}
                 onChange={(selectedOption) =>
                   setFormData((prev) => ({
                     ...prev,
-                    countryCode_whatsapp: selectedOption ? selectedOption.value : "🇮🇳 +91",
+                    countryCode_whatsapp: selectedOption
+                      ? selectedOption.value
+                      : "🇮🇳 +91",
                   }))
                 }
-                isDisabled={sameAsMobile || !isMobileValid(formData.primaryMobileNumber)}
+                isDisabled={
+                  sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
+                }
                 className="w-[100px] border-none shadow-none"
                 styles={{
                   control: (base) => ({
@@ -703,12 +762,18 @@ const PP_Details = ({ type }) => {
                     height: "39px",
                     minHeight: "39px",
                     width: "max-content",
-                    backgroundColor: sameAsMobile || !isMobileValid(formData.primaryMobileNumber) ? "#faf5f8" : "#fff",
+                    backgroundColor:
+                      sameAsMobile ||
+                      !isMobileValid(formData.primaryMobileNumber)
+                        ? "#faf5f8"
+                        : "#fff",
                   }),
                   menu: (base) => ({ ...base, width: "200px" }),
                 }}
                 formatOptionLabel={(option, { context }) =>
-                  context === "menu" ? `${option.label} - ${option.name}` : option.label
+                  context === "menu"
+                    ? `${option.label} - ${option.name}`
+                    : option.label
                 }
                 menuPlacement="top"
               />
@@ -721,7 +786,9 @@ const PP_Details = ({ type }) => {
                 value={formData.whatsappNumber}
                 onChange={(e) => handleInputChange(e, "whatsappNumber")}
                 onBlur={() => handleBlur("whatsappNumber")}
-                disabled={sameAsMobile || !isMobileValid(formData.primaryMobileNumber)}
+                disabled={
+                  sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
+                }
                 className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                   sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
                     ? "bg-[#ffffff10] placeholder:text-[#00000040]"
@@ -730,14 +797,24 @@ const PP_Details = ({ type }) => {
                 maxLength={10}
               />
             </div>
-            {touched.whatsappNumber && formData.whatsappNumber && !isMobileValid(formData.whatsappNumber) && (
-              <span className="text-red-500 text-sm mt-1 block">Must be 10 digits</span>
-            )}
+            {touched.whatsappNumber &&
+              formData.whatsappNumber &&
+              !isMobileValid(formData.whatsappNumber) && (
+                <span className="text-red-500 text-sm mt-1 block">
+                  Must be 10 digits
+                </span>
+              )}
           </div>
 
           {/* Gender */}
           <div className="mt-[22px]">
-            <Label className={`text-[15px] mb-[7.59px] ${isMobileValid(formData.primaryMobileNumber) ? "text-gray-500" : "text-[#00000040]"}`}>
+            <Label
+              className={`text-[15px] mb-[7.59px] ${
+                isMobileValid(formData.primaryMobileNumber)
+                  ? "text-gray-500"
+                  : "text-[#00000040]"
+              }`}
+            >
               Gender *
             </Label>
             <div className="flex gap-6 items-center text-gray-600 text-[15px]">
@@ -757,37 +834,53 @@ const PP_Details = ({ type }) => {
               ))}
             </div>
             {touched.gender && !formData.gender && (
-              <span className="text-red-500 text-sm mt-1 block">Gender is required</span>
+              <span className="text-red-500 text-sm mt-1 block">
+                Gender is required
+              </span>
             )}
           </div>
 
           {/* Email */}
           <div>
-            <Label className={`text-[15px] mb-[7.59px] mt-[22px] text-[#00000040]`}>
+            <Label
+              className={`text-[15px] mb-[7.59px] mt-[22px] text-[#00000040]`}
+            >
               Email Address
             </Label>
             <Input
               placeholder="Enter Email address"
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                formData.gender ? "bg-white placeholder:text-gray-500" : "bg-[#ffffffde] placeholder:text-[#00000040]"
+                formData.gender
+                  ? "bg-white placeholder:text-gray-500"
+                  : "bg-[#ffffffde] placeholder:text-[#00000040]"
               }`}
               value={formData.email}
               disabled
             />
-            {touched.email && formData.email && !isEmailValid(formData.email) && (
-              <span className="text-red-500 text-sm mt-1 block">Invalid email</span>
-            )}
+            {touched.email &&
+              formData.email &&
+              !isEmailValid(formData.email) && (
+                <span className="text-red-500 text-sm mt-1 block">
+                  Invalid email
+                </span>
+              )}
           </div>
 
           {/* Address Details */}
           <div>
-            <Label className={`text-[15px] mb-[7.59px] mt-[22px] ${formData.gender ? "text-gray-500" : "text-[#00000040]"}`}>
+            <Label
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${
+                formData.gender ? "text-gray-500" : "text-[#00000040]"
+              }`}
+            >
               Pincode *
             </Label>
             <Input
               placeholder="Enter Pincode"
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                formData.gender ? "bg-white placeholder:text-gray-500" : "bg-[#ffffffde] placeholder:text-[#00000040]"
+                formData.gender
+                  ? "bg-white placeholder:text-gray-500"
+                  : "bg-[#ffffffde] placeholder:text-[#00000040]"
               }`}
               onChange={(e) => handlePinCodeChange(e.target.value)}
               value={formData.addressDetails.pincode}
@@ -796,32 +889,53 @@ const PP_Details = ({ type }) => {
               inputMode="numeric"
               pattern="[0-9]*"
             />
-            {touched.addressDetails.pincode && !formData.addressDetails.pincode && (
-              <span className="text-red-500 text-sm mt-1 block">PIN code is required</span>
-            )}
+            {touched.addressDetails.pincode &&
+              !formData.addressDetails.pincode && (
+                <span className="text-red-500 text-sm mt-1 block">
+                  PIN code is required
+                </span>
+              )}
             {touched.addressDetails.pincode &&
               formData.addressDetails.pincode &&
               !isPincodeValid(formData.addressDetails.pincode) && (
-                <span className="text-red-500 text-sm mt-1 block">Must be 6 digits</span>
-            )}
+                <span className="text-red-500 text-sm mt-1 block">
+                  Must be 6 digits
+                </span>
+              )}
           </div>
           <div>
-            <Label className={`text-[15px] mb-[7.59px] mt-[22px] ${isPincodeValid(formData.addressDetails.pincode) ? "text-gray-500" : "text-[#00000040]"}`}>
+            <Label
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${
+                isPincodeValid(formData.addressDetails.pincode)
+                  ? "text-gray-500"
+                  : "text-[#00000040]"
+              }`}
+            >
               Area
             </Label>
             <Input
               placeholder="Enter Area"
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                isPincodeValid(formData.addressDetails.pincode) ? "bg-white placeholder:text-gray-500" : "bg-[#ffffff] placeholder:text-[#00000040]"
+                isPincodeValid(formData.addressDetails.pincode)
+                  ? "bg-white placeholder:text-gray-500"
+                  : "bg-[#ffffff] placeholder:text-[#00000040]"
               }`}
               value={formData.addressDetails.area}
-              onChange={(e) => handleTextInputChange(e, "addressDetails", "area")}
+              onChange={(e) =>
+                handleTextInputChange(e, "addressDetails", "area")
+              }
               onBlur={() => handleBlur("addressDetails.area")}
               disabled={!isPincodeValid(formData.addressDetails.pincode)}
             />
           </div>
           <div>
-            <Label className={`text-[15px] mb-[7.59px] mt-[22px] ${isPincodeValid(formData.addressDetails.pincode) ? "text-gray-500" : "text-[#00000040]"}`}>
+            <Label
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${
+                isPincodeValid(formData.addressDetails.pincode)
+                  ? "text-gray-500"
+                  : "text-[#00000040]"
+              }`}
+            >
               City
             </Label>
             <Input
@@ -832,7 +946,13 @@ const PP_Details = ({ type }) => {
             />
           </div>
           <div>
-            <Label className={`text-[15px] mb-[7.59px] mt-[22px] ${isPincodeValid(formData.addressDetails.pincode) ? "text-gray-500" : "text-[#00000040]"}`}>
+            <Label
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${
+                isPincodeValid(formData.addressDetails.pincode)
+                  ? "text-gray-500"
+                  : "text-[#00000040]"
+              }`}
+            >
               State
             </Label>
             <Input
@@ -846,12 +966,44 @@ const PP_Details = ({ type }) => {
 
         {/* Bottom Buttons */}
         <div className="bg-gradient-to-b from-[#fce8e5] to-[#fce8e5] fixed bottom-0 left-0 right-0 flex justify-between gap-3 pb-[23px] px-[22px] max-w-[576px] mx-auto">
-          <Button
+          {/* <Button
             className="border border-[#CC627B] bg-transparent text-[#CC627B] text-[14px] font-[600] w-[48%] h-[45px] rounded-[8px]"
             onClick={() => router.push("/")}
           >
             Cancel
-          </Button>
+          </Button> */}
+
+          <Drawer className="pt-[9.97px] max-w-[576px] m-auto">
+            <DrawerTrigger className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+              Cancel
+            </DrawerTrigger>
+            <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
+              <DrawerHeader>
+                <DrawerTitle className="text-[16px] font-[600] text-center">
+                  Are you sure
+                </DrawerTitle>
+                <DrawerDescription className="mt-6 flex gap-3 w-full">
+                  <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                    Confirm
+                  </Button>
+
+                  <Button className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                    Continue
+                  </Button>
+                </DrawerDescription>
+              </DrawerHeader>
+              <DrawerFooter className="p-0">
+                <DrawerClose>
+                  <Button
+                    variant="outline"
+                    className="absolute top-[10px] right-0"
+                  >
+                    <X className="w-2 h-2 text-black" />
+                  </Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
           <Button
             className={`text-white text-[14px] font-[600] w-[48%] h-[45px] rounded-[8px] ${
               isFormValid()

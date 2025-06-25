@@ -138,7 +138,7 @@ const CP_clinic_details = () => {
   };
 
   return (
-    <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col">
+    <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col max-w-[576px] mx-auto">
       <CP_Header />
       <div className="min-h-screen pt-[10%] pb-[4%] overflow-auto px-[17px] mt-3 bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5]">
         <div className="bg-[#FFFFFF80] rounded-[12px] p-4 px-3">

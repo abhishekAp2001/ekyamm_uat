@@ -60,7 +60,7 @@ const Profile = ({
           </div>
 
           {/* Info Card 1 */}
-          <div className="mt-5 w-full h-[56px] rounded-[8px] bg-gradient-to-r from-[#eeecfb] to-[#fce8e5] px-4 flex flex-col justify-center">
+          <div className="mt-5 w-full py-[10px] rounded-[8px] bg-gradient-to-r from-[#eeecfb] to-[#fce8e5] px-4 flex flex-col justify-center">
             <span className="text-black text-sm font-semibold">
               Experience:
             </span>
@@ -70,7 +70,7 @@ const Profile = ({
           </div>
 
           {/* Info Card 2 */}
-          <div className="mt-3 w-full h-[74px] rounded-[8px] bg-gradient-to-r from-[#eeecfb] to-[#fce8e5] px-4 flex flex-col justify-center">
+          <div className="mt-3 w-full py-[10px] rounded-[8px] bg-gradient-to-r from-[#eeecfb] to-[#fce8e5] px-4 flex flex-col justify-center">
             <span className="text-black text-sm font-semibold">Language:</span>
             <p className="text-black text-sm font-normal">
               {Array.isArray(doc?.practiceDetails?.languageProficiency)
@@ -104,7 +104,7 @@ const Profile = ({
           </div>
 
           {/* Info Card 3 */}
-          <div className="mt-3 w-full h-[56px] rounded-[8px] bg-gradient-to-r from-[#eeecfb] to-[#fce8e5] px-4 flex flex-col justify-center">
+          <div className="mt-3 w-full py-[10px] rounded-[8px] bg-gradient-to-r from-[#eeecfb] to-[#fce8e5] px-4 flex flex-col justify-center">
             <span className="text-black text-sm font-semibold">
               Does not treat:
             </span>
@@ -114,7 +114,7 @@ const Profile = ({
           </div>
 
           {/* Info Card 4 */}
-          <div className="mt-3 w-full h-[128px] rounded-[8px] bg-gradient-to-r from-[#eeecfb] to-[#fce8e5] px-4 flex flex-col justify-center">
+          <div className="mt-3 w-full py-[10px]  rounded-[8px] bg-gradient-to-r from-[#eeecfb] to-[#fce8e5] px-4 flex flex-col justify-center">
             <span className="text-black text-sm font-semibold">
               Want to expect in the session:
             </span>

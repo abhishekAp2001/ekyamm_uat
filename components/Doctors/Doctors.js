@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { ChevronLeft, ChevronUpIcon } from "lucide-react";
+import { ChevronLeft, ChevronUpIcon, X } from "lucide-react";
 import {
   Drawer,
   DrawerTrigger,
@@ -341,9 +341,40 @@ const Doctors = () => {
           </div>
 
           <div className="gap-3 fixed bottom-0 pb-[23px] left-0 right-0 flex justify-center z-50 bg-gradient-to-b from-[#fce8e5] to-[#fce8e5] max-w-[576px] mx-auto px-4 ">
-            <button className="border border-[#CC627B] text-[#CC627B] rounded-[8px] text-[15px] font-[600] w-[48%] h-[45px]">
+            {/* <button className="border border-[#CC627B] text-[#CC627B] rounded-[8px] text-[15px] font-[600] w-[48%] h-[45px]">
               Cancel
-            </button>
+            </button> */}
+            <Drawer className="pt-[9.97px] max-w-[576px] m-auto">
+          <DrawerTrigger className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+            Cancel
+          </DrawerTrigger>
+          <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
+            <DrawerHeader>
+              <DrawerTitle className="text-[16px] font-[600] text-center">
+                Are you sure
+              </DrawerTitle>
+              <DrawerDescription className="mt-6 flex gap-3 w-full">
+                <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                  Confirm
+                </Button>
+
+                <Button className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                  Continue
+                </Button>
+              </DrawerDescription>
+            </DrawerHeader>
+            <DrawerFooter className="p-0">
+              <DrawerClose>
+                <Button
+                  variant="outline"
+                  className="absolute top-[10px] right-0"
+                >
+                  <X className="w-2 h-2 text-black" />
+                </Button>
+              </DrawerClose>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
             <button className="opacity-35 bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white rounded-[8px] text-[15px] font-[600] w-[48%] h-[45px]">
               Confirm
             </button>
