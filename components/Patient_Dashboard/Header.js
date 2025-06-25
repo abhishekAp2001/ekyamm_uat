@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MapPin, Menu } from "lucide-react";
 import Sidebar from "../Sidebar/Sidebar";
 import Image from "next/image";
@@ -12,22 +12,28 @@ import { greeting } from "@/lib/utils";
  */
 const Header = ({ loading = false, patient }) => {
   const [showSidebar, setShowSidebar] = useState(false);
-  const { firstName = "", lastName = "" } = patient || {};
-  // determine greeting based on current time
+  const [filterCount, setFilterCount] = useState(0);
 
+  const {
+    firstName = "",
+    lastName = "",
+    clinicName = "",
+    addressDetails = null,
+  } = patient || {};
+  // determine greeting based on current time
 
   return (
     <div className="bg-gradient-to-r from-[#B0A4F5] to-[#EDA197] rounded-bl-3xl rounded-br-3xl px-3 py-5 h-[128px]">
       <div className="flex flex-col">
         <div className="flex flex-col justify-center items-center">
-          <h1 className="text-[18px] text-white font-semibold">
-            Cloudnine Hospital
-          </h1>
+          <h1 className="text-[18px] text-white font-semibold">{clinicName}</h1>
           <div className="flex items-center gap-[2px]">
             <div className="bg-[#FFFFFF80] rounded-full w-[12px] h-[12px] flex items-center justify-center">
               <MapPin className="w-2 h-2 text-[#9f99bebd]" />
             </div>
-            <span className="text-xs text-[#FFFFFF80] font-medium">CMS</span>
+            <span className="text-xs text-[#FFFFFF80] font-medium">
+              {addressDetails?.area}
+            </span>
           </div>
         </div>
 
