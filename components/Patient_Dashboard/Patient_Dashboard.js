@@ -17,7 +17,7 @@ import axios from "axios";
 import { showErrorToast } from "@/lib/toast";
 import { setCookie } from "cookies-next";
 import AvailableSession from "./AvailableSession";
-import Profile from "@/components/patient/Practitioner/Profile";
+
 import {
   Drawer,
   DrawerClose,
@@ -30,10 +30,10 @@ import {
 } from "../ui/drawer";
 import Certifications from "../patient/Certifications/Certifications";
 import Client_Testimonial from "../patient/Client_Testimonials/Client_Testimonial";
+import Profile from "../patient/practitioner/Profile";
 
 const Patient_Dashboard = () => {
   const [patient, setPatient] = useState(null);
-
   const [counsellors, setCounsellors] = useState([]);
   const [selectedCounsellors, setSelectedCounsellors] = useState({});
   const [loading, setLoading] = useState(true);
@@ -76,11 +76,12 @@ const Patient_Dashboard = () => {
       try {
         setLoading(true);
 
+// sessionFee: "",
         const response = await axios.get(`${Baseurl}/v2/cp/counsellors`, {
           params: {
-            gender: "",
-            language: "",
-            language: "",
+            
+            language: "Hindi",
+            
           },
           headers: {
             accesstoken: patientSessionToken,
