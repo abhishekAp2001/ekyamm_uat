@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { Funnel, MapPin, Menu, Plus } from "lucide-react";
+import { Funnel, Loader2, MapPin, Menu, Plus } from "lucide-react";
 import { Accordion } from "../ui/accordion";
 import DoctorCard from "../DoctorCard";
 import SessionDrawer from "../SessionDrawer";
@@ -18,35 +18,39 @@ import { showErrorToast } from "@/lib/toast";
 import { setCookie } from "cookies-next";
 import AvailableSession from "./AvailableSession";
 
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "../ui/drawer";
 import Certifications from "../patient/Certifications/Certifications";
 import Client_Testimonial from "../patient/Client_Testimonials/Client_Testimonial";
 import Profile from "../patient/practitioner/Profile";
-
+import Filter from "../patient/Filter/Filter";
 const Patient_Dashboard = () => {
   const [patient, setPatient] = useState(null);
   const [counsellors, setCounsellors] = useState([]);
   const [selectedCounsellors, setSelectedCounsellors] = useState({});
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [counsellorsLoading, setCounsellorsLoading] = useState(false);
   const [showCounsellorProfile, setShowCounsellorProfile] = useState(false);
   const [showCertifications, setShowCertifications] = useState(false);
   const [showClientTestimonials, setShowClientTestimonials] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
+  const [filterCount, setFilterCount] = useState(0);
+  const [filterParams, setFilterParams] = useState({
+    language: "",
+    sessionFee: "",
+    gender: "",
+  });
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
 
   const patientSessionToken = getPatientSessionToken();
-  // const currentPatientId = getCurrentPatientId();
+
+  const handleApplyFilter = (params) => {
+    setLoading(true);
+    // Simulate API call or processing delay
+    setFilterParams(params);
+    setShowFilter(false);
+    setLoading(false);
+  };
 
   useEffect(() => {
     const getPatient = async () => {
@@ -74,15 +78,11 @@ const Patient_Dashboard = () => {
 
     const getCounsellors = async () => {
       try {
-        setLoading(true);
+        setCounsellorsLoading(true);
 
-// sessionFee: "",
+        
         const response = await axios.get(`${Baseurl}/v2/cp/counsellors`, {
-          params: {
-            
-            language: "Hindi",
-            
-          },
+          params: filterParams,
           headers: {
             accesstoken: patientSessionToken,
             "Content-Type": "application/json",
@@ -96,17 +96,27 @@ const Patient_Dashboard = () => {
           showErrorToast(res.data.error?.message || "Fetch failed");
         }
       } catch (err) {
+        setCounsellors([]);
         console.log("err", err);
         showErrorToast(
           err?.response?.data?.error?.message || "Error fetching patient data"
         );
       } finally {
-        setLoading(false);
+        setCounsellorsLoading(false);
       }
     };
     getCounsellors();
     getPatient();
-  }, []);
+  }, [filterParams]);
+
+  useEffect(() => {
+    let count = 0;
+    if (filterParams.gender !== "") count++;
+    if (filterParams.language !== "") count++;
+    if (filterParams.sessionFee !== "") count++;
+
+    setFilterCount(count);
+  }, [filterParams]);
 
   return (
     <>
@@ -115,8 +125,11 @@ const Patient_Dashboard = () => {
           {/* Fixed Header */}
           <div className="fixed top-0 left-0 right-0 z-50 flex flex-col gap-8 bg-[#e7d6ec] max-w-[576px] mx-auto">
             {/* Gradient Header */}
-            <Header loading={loading} patient={patient} />
-
+            <Header
+              loading={loading}
+              patient={patient}
+              filterParams={filterParams}
+            />
             {/* Available Session Section */}
             <AvailableSession loading={loading} patient={patient} />
           </div>
@@ -128,26 +141,44 @@ const Patient_Dashboard = () => {
               <strong className="text-sm text-black font-semibold">
                 Available Counsellors
               </strong>
-              <Button className="text-sm text-[#776EA5] rounded-full h-6 flex items-center gap-1 bg-transparent shadow-none px-2">
+              <Button
+                onClick={() => {
+                  setShowFilter(true);
+                }}
+                className="text-sm text-[#776EA5] rounded-full h-6 flex items-center gap-1 bg-transparent shadow-none px-2 relative"
+              >
                 <Funnel className="w-[13px] text-[#776EA5]" />
                 Filter
+                {filterCount > 0 ? (
+                  <div className="absolute top-[-5px] right-[-5px] bg-white rounded-full w-[18px] h-[18px]">
+                    {filterCount}
+                  </div>
+                ) : (
+                  <></>
+                )}
               </Button>
             </div>
 
             {/* Doctor List */}
-            <Accordion type="multiple" className="space-y-3">
-              {counsellors.map((counsellor, _x) => (
-                <DoctorCard
-                  key={_x}
-                  doc={counsellor}
-                  onBookClick={() => {
-                    setIsDrawerOpen(true);
-                  }}
-                  setShowCounsellorProfile={setShowCounsellorProfile}
-                  setSelectedCounsellors={setSelectedCounsellors}
-                />
-              ))}
-            </Accordion>
+            {counsellorsLoading ? (
+              <div className="flex justify-center"><Loader2 className="w-6 h-6 animate-spin" aria-hidden="true" /></div>
+            ) : (
+              <>
+                <Accordion type="multiple" className="space-y-3">
+                  {counsellors.map((counsellor, _x) => (
+                    <DoctorCard
+                      key={_x}
+                      doc={counsellor}
+                      onBookClick={() => {
+                        setIsDrawerOpen(true);
+                      }}
+                      setShowCounsellorProfile={setShowCounsellorProfile}
+                      setSelectedCounsellors={setSelectedCounsellors}
+                    />
+                  ))}
+                </Accordion>
+              </>
+            )}
           </div>
 
           {/* Session Booking Drawer */}
@@ -159,6 +190,7 @@ const Patient_Dashboard = () => {
           />
         </div>
       </div>
+      
       {showCounsellorProfile ? (
         <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90">
           <div className="relative h-screen overflow-y-auto">
@@ -177,7 +209,10 @@ const Patient_Dashboard = () => {
       {showCertifications ? (
         <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90">
           <div className="relative h-screen overflow-y-auto">
-            <Certifications setShowCertifications={setShowCertifications} doc={selectedCounsellors}/>
+            <Certifications
+              setShowCertifications={setShowCertifications}
+              doc={selectedCounsellors}
+            />
           </div>
         </div>
       ) : (
@@ -187,7 +222,24 @@ const Patient_Dashboard = () => {
       {showClientTestimonials ? (
         <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90">
           <div className="relative h-screen overflow-y-auto">
-            <Client_Testimonial setShowClientTestimonials={setShowClientTestimonials}/>
+            <Client_Testimonial
+              setShowClientTestimonials={setShowClientTestimonials}
+            />
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
+
+      {showFilter ? (
+        <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90">
+          <div className="relative h-screen overflow-y-auto">
+            <Filter
+              setShowFilter={setShowFilter}
+              onApplyFilter={handleApplyFilter}
+              initialParams={filterParams}
+              loading={loading}
+            />
           </div>
         </div>
       ) : (
