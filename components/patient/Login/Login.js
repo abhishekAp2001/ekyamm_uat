@@ -47,11 +47,11 @@ const Login = () => {
 
     try {
       setLoading(true);
-      // const encodedPassword = customEncodeString(password);
-      // const encryptedPassword = encryptData(encodedPassword);
+      const encodedPassword = customEncodeString(password);
+      const encryptedPassword = encryptData(encodedPassword);
       const payload = {
         mobileNumber: userName,
-        password: password,
+        password: encryptedPassword,
       };
       const response = await axios.post("/v2/cp/user/signin", payload);
       if (response?.data?.success === true) {

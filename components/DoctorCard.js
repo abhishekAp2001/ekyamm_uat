@@ -55,22 +55,30 @@ const DoctorCard = ({
             {doc?.generalInformation?.city}, {doc?.generalInformation?.state}
           </p>
           <p className="text-xs font-medium text-[#6D6A5D]">
-            {typeof doc?.practiceDetails?.languageProficiency === "string" ? (
-              doc.practiceDetails.languageProficiency
-                ?.split(",")
-                ?.map((lang, _lx) => (
+            {Array.isArray(doc?.practiceDetails?.languageProficiency)
+              ? doc.practiceDetails.languageProficiency.map((lang, _lx) => (
                   <span
                     key={_lx}
                     className={`${
-                        _lx == 0 ? "text-sm text-[#776EA5] font-black" : ""
-                      }`}
+                      _lx === 0 ? "text-sm text-[#776EA5] font-black" : ""
+                    }`}
                   >
                     {lang?.trim() || ""}{" "}
                   </span>
                 ))
-            ) : (
-              <span>N/A</span>
-            )}
+              : doc.practiceDetails.languageProficiency
+                  ?.split(",")
+                  ?.map((lang, _lx) => (
+                    <span
+                      key={_lx}
+                      className={`${
+                        _lx === 0 ? "text-sm text-[#776EA5] font-black" : ""
+                      }`}
+                    >
+                      {lang?.trim() || ""}{" "}
+                    </span>
+                  ))}
+
             {/* <span className="font-[700] text-[#776EA5]">Telugu</span> Marathi,
             Konkani, Tamil, Odia, Spanish, Hindi, English, French */}
           </p>
@@ -84,19 +92,17 @@ const DoctorCard = ({
       <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm mt-3 p-4 pt-0">
         <div className="flex flex-col">
           <p className="text-sm font-semibold text-black">Expertise</p>
-          <p className="text-xs font-medium text-[#6D6A5D]">{typeof doc?.practiceDetails?.languageProficiency === "string" ? (
+          <p className="text-xs font-medium text-[#6D6A5D]">
+            {typeof doc?.practiceDetails?.specialization === "string" ? (
               doc.practiceDetails.specialization
                 ?.split(",")
                 ?.map((lang, _lx) => (
-                  <span
-                    key={_lx}
-                  >
-                    {lang?.trim() || ""}{" "}
-                  </span>
+                  <span key={_lx}>{lang?.trim() || ""} </span>
                 ))
             ) : (
               <span>N/A</span>
-            )}</p>
+            )}
+          </p>
         </div>
         <div className="flex flex-col items-end text-right">
           <p className="text-sm font-semibold text-black">Gender</p>
@@ -112,7 +118,9 @@ const DoctorCard = ({
         </div>
         <div className="flex flex-col items-end text-right">
           <p className="text-sm font-semibold text-black">Session Fee</p>
-          <p className="text-xs font-medium text-[#6D6A5D]">{formatAmount(doc?.practiceDetails?.fees?.singleSession)}</p>
+          <p className="text-xs font-medium text-[#6D6A5D]">
+            {formatAmount(doc?.practiceDetails?.fees?.singleSession)}
+          </p>
         </div>
       </div>
 

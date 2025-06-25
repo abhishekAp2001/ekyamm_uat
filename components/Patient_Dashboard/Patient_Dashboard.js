@@ -76,11 +76,12 @@ const Patient_Dashboard = () => {
       try {
         setLoading(true);
 
+// sessionFee: "",
         const response = await axios.get(`${Baseurl}/v2/cp/counsellors`, {
           params: {
-            gender: "",
-            language: "",
-            language: "",
+            
+            language: "Hindi",
+            
           },
           headers: {
             accesstoken: patientSessionToken,
