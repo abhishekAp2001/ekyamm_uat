@@ -24,46 +24,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-const Doctors = () => {
-  // const sessionData = [
-  //   {
-  //     label: "Morning",
-  //     times: [
-  //       { time: "08:00 AM", disabled: true },
-  //       { time: "09:00 AM", disabled: true },
-  //       { time: "10:00 AM", disabled: false },
-  //       { time: "11:00 AM", disabled: false },
-  //     ],
-  //   },
-  //   {
-  //     label: "Afternoon",
-  //     times: [
-  //       { time: "12:00 PM", disabled: false },
-  //       { time: "01:00 PM", disabled: true },
-  //       { time: "02:00 PM", disabled: false },
-  //       { time: "03:00 PM", disabled: false },
-  //     ],
-  //   },
-  //   {
-  //     label: "Evening",
-  //     times: [
-  //       { time: "04:00 PM", disabled: false },
-  //       { time: "05:00 PM", disabled: false },
-  //       { time: "06:00 PM", disabled: true },
-  //       { time: "07:00 PM", disabled: false },
-  //     ],
-  //   },
-  //   {
-  //     label: "Night",
-  //     times: [
-  //       { time: "08:00 PM", disabled: false },
-  //       { time: "09:00 PM", disabled: false },
-  //       { time: "10:00 PM", disabled: false },
-  //       { time: "11:00 PM", disabled: true },
-  //     ],
-  //   },
-  // ];
-
+const Schedule_Session = () => {
   const sessionData = [
     {
       value: "morning",
@@ -140,7 +101,7 @@ const Doctors = () => {
               <Label className="block text-[#8F8F8F] mb-1">Session Type</Label>
               <Input
                 type="text"
-                placeholder='Enter session type'
+                placeholder="Enter session type"
                 className="w-full h-10 rounded-[7.26px] bg-white px-3 py-2  border border-[#E6E6E6] text-black text-[12px] font-bold focus:border-none focus:ring-0 focus-visible:border-none focus-visible:ring-0 focus-visible:outline-0"
               />
             </div>
@@ -234,7 +195,7 @@ const Doctors = () => {
                           />
                         </div>
                       </div>
-{/* 
+                      {/* 
                       <div className="flex-1 overflow-y-auto mt-3">
                         {sessionData.map((session) => (
                           <div
@@ -266,39 +227,40 @@ const Doctors = () => {
                         ))}
                       </div> */}
                       <div className="mt-3">
-                         <Accordion
-                              type="single"
-                              collapsible
-                              className="w-full focus-visible:border-0 focus-visible:shadow-none focus-visible:ring-0 focus:shdow-none"
-                              defaultValue="morning"
+                        <Accordion
+                          type="single"
+                          collapsible
+                          className="w-full focus-visible:border-0 focus-visible:shadow-none focus-visible:ring-0 focus:shdow-none"
+                          defaultValue="morning"
+                        >
+                          {sessionData.map((session) => (
+                            <AccordionItem
+                              className="bg-white opacity-60 p-4 rounded-[12px] mb-[10px] hover:decoration-0 focus-visible:ring-0 focus:shdow-none "
+                              key={session.value}
+                              value={session.value}
                             >
-                              {sessionData.map((session) => (
-                                <AccordionItem className='bg-white opacity-60 p-4 rounded-[12px] mb-[10px] hover:decoration-0 focus-visible:ring-0 focus:shdow-none '
-                                  key={session.value}
-                                  value={session.value}
-                                >
-                                  <AccordionTrigger>
-                                    {session.label}
-                                  </AccordionTrigger>
-                                  <AccordionContent className="flex flex-wrap gap-2 pt-3 pb-0">
-                                    {session.times.map((slot, index) => (
-                                      <Button
-                                        key={index}
-                                        disabled={slot.disabled}
-                                        className={`px-2 py-2 rounded-[8px] border text-sm font-medium text-black hover:decoration-0 focus-visible:border-0 focus-visible:shadow-none focus-visible:ring-0 focus:shdow-none cursor-pointer
+                              <AccordionTrigger>
+                                {session.label}
+                              </AccordionTrigger>
+                              <AccordionContent className="flex flex-wrap gap-2 pt-3 pb-0">
+                                {session.times.map((slot, index) => (
+                                  <Button
+                                    key={index}
+                                    disabled={slot.disabled}
+                                    className={`px-2 py-2 rounded-[8px] border text-sm font-medium text-black hover:decoration-0 focus-visible:border-0 focus-visible:shadow-none focus-visible:ring-0 focus:shdow-none cursor-pointer
                                         ${
                                           slot.disabled
                                             ? "text-pink-300 border-pink-300 bg-white-100 cursor-not-allowed"
                                             : "text-pink-600 border-pink-300 hover:bg-pink-50 bg-transparent"
                                         }`}
-                                      >
-                                        {slot.time}
-                                      </Button>
-                                    ))}
-                                  </AccordionContent>
-                                </AccordionItem>
-                              ))}
-                            </Accordion>
+                                  >
+                                    {slot.time}
+                                  </Button>
+                                ))}
+                              </AccordionContent>
+                            </AccordionItem>
+                          ))}
+                        </Accordion>
                       </div>
 
                       <div className="flex justify-between gap-4 mt-4">
@@ -354,4 +316,4 @@ const Doctors = () => {
   );
 };
 
-export default Doctors;
+export default Schedule_Session;
