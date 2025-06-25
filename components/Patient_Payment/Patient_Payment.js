@@ -61,7 +61,7 @@ const Patient_Payment = () => {
             <p className="text-[14px] placeholder:text-gray-500 text-black font-[500] mb-1">Expiry</p>
             <Input
               type="text"
-              placeholder="22/22"
+              placeholder="00/00"
               className="w-full bg-white rounded-[7.26px] px-3 py-2 text-sm font-medium text-black placeholder-gray-400"
             />
           </div>
@@ -69,7 +69,7 @@ const Patient_Payment = () => {
             <p className="text-[14px] placeholder:text-gray-500 text-black font-[500] mb-1">CVV</p>
             <Input
               type="text"
-              placeholder="123"
+              placeholder="000"
               className="w-full bg-white rounded-[7.26px] px-3 py-2 text-sm font-medium text-black placeholder-gray-400"
             />
           </div>

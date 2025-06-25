@@ -7,7 +7,7 @@ const SS_Header = () => {
       <div className=" bg-[#f6f4fd]">
         <div className="flex items-center justify-between p-4">
           {/* Left Icon */}
-          <div className="flex justify-items-start gap-2">
+          <div className="flex justify-items-start items-center gap-2">
             <ChevronLeft size={28} className="text-black cursor-pointer" />
             <span className="text-[16px] font-[600] text-black">
               Sessions Synopsis

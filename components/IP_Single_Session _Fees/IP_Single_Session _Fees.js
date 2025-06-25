@@ -263,7 +263,7 @@ const IP_Single_Session_Fees = () => {
             <Input
               id="panCard"
               type="text"
-              placeholder="AAAAA1111A"
+              placeholder="Enter pan no."
               value={formData.panCard}
               onChange={handlePanChange}
               onBlur={() => handleBlur("panCard")}

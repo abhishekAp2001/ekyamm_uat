@@ -110,7 +110,6 @@ const Patient_Profile = () => {
               </DrawerTrigger>
               <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
                 <DrawerHeader>
-                  {/* <DrawerTitle className='text-[16px] font-[600] text-center'>Add User</DrawerTitle> */}
                   <DrawerDescription className="flex flex-col gap-3">
                     <Button className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex  justify-between items-center w-full h-[50px] rounded-[8.62px]">
                       <Link href={"/cp_type"}>Take Photo</Link>
@@ -144,12 +143,7 @@ const Patient_Profile = () => {
                     </Button>
                   </DrawerDescription>
                 </DrawerHeader>
-                <DrawerFooter className="p-0">
-                  {/* <Button>Submit</Button> */}
-                  {/* <DrawerClose className='absolute top-[10px] right-0'>
-                  <Button variant="outline" ><X className="w-2 h-2 text-black"/></Button>
-                </DrawerClose> */}
-                </DrawerFooter>
+                <DrawerFooter className="p-0"></DrawerFooter>
               </DrawerContent>
             </Drawer>
           </div>
@@ -251,9 +245,10 @@ const Patient_Profile = () => {
                 Edit Profile
               </Button>
             </DrawerTrigger>
-            <DrawerContent className=" bg-gradient-to-b from-[#e7e4f8] via-[#f0e1df] via-70% to-[#feedea] h-[330px] w-full">
+
+            <DrawerContent className="bg-gradient-to-b from-[#e7e4f8] via-[#f0e1df] via-70% to-[#feedea] rounded-t-[16px] max-w-[576px] mx-auto bottom-drawer">
               <DrawerHeader>
-                <DrawerDescription className="flex flex-col">
+                <DrawerDescription className="flex flex-col px-4">
                   {/* Stepper Line */}
                   <div className="flex justify-center items-center mt-[10px] mb-[25px]">
                     <div className="flex items-center w-[324px] h-[11px]">
@@ -261,14 +256,14 @@ const Patient_Profile = () => {
                         <React.Fragment key={idx}>
                           {/* Step circle */}
                           <div
-                            className={`w-2 h-2 rounded-full border-2 ${
+                            className={`w-2 h-2 rounded-full border-[3px] ${
                               step === 0 || (otpSent && step <= 1)
-                                ? "bg-green-500 border-green-500"
+                                ? "bg-[#776EA5] border-[#776EA5]"
                                 : "bg-gray-300 border-gray-400"
                             }`}
                           ></div>
 
-                          {/* Line only between steps, not after last circle */}
+                          {/* Step line (not after last circle) */}
                           {idx < 2 && (
                             <div
                               className={`flex-1 h-[2px] ${
@@ -283,66 +278,42 @@ const Patient_Profile = () => {
                     </div>
                   </div>
 
-                  {/* OTP Section */}
+                  {/* OTP Input UI */}
                   <div className="flex flex-col justify-center items-center">
                     <span className="text-[16px] font-[600] text-black mb-[12px]">
                       Verify Yourself
                     </span>
-                    <span className="text-[14px] font-[500] text-black">
+                    <span className="text-[14px] font-[500] text-black text-center">
                       Enter OTP shared on your mobile number
                     </span>
 
                     <div className="mt-[32px]">
-                      <InputOTP
-                        maxLength={6}
-                        pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
-                        className="gap-2"
-                      >
-                        <InputOTPGroup className="flex gap-3  border-[#776EA5]">
-                          <InputOTPSlot
-                            index={0}
-                            className="rounded-[9.23px] h-[45px] w-[45px]"
-                          />
-                          <InputOTPSlot
-                            index={1}
-                            className="rounded-[9.23px] h-[45px] w-[45px]"
-                          />
-                          <InputOTPSlot
-                            index={2}
-                            className="rounded-[9.23px] h-[45px] w-[45px]"
-                          />
-                          <InputOTPSlot
-                            index={3}
-                            className="rounded-[9.23px] h-[45px] w-[45px]"
-                          />
-                          <InputOTPSlot
-                            index={4}
-                            className="rounded-[9.23px] h-[45px] w-[45px]"
-                          />
-                          <InputOTPSlot
-                            index={5}
-                            className="rounded-[9.23px] h-[45px] w-[45px]"
-                          />
+                      <InputOTP maxLength={6} className="gap-2">
+                        <InputOTPGroup className="flex gap-3">
+                          {[...Array(6)].map((_, i) => (
+                            <InputOTPSlot
+                              key={i}
+                              index={i}
+                              className="rounded-[9.23px] h-[45px] w-[45px] border-[1.54px] border-[#776EA5] text-base text-black"
+                            />
+                          ))}
                         </InputOTPGroup>
                       </InputOTP>
                     </div>
-                    <div className="flex justify-between items-center gap-3 mt-[27.55px] fixed bottom-[50px]">
-                      <Button className="border border-[#CC627B] bg-transparent text-[14px] font-[600] text-[#CC627B] py-[14.5px] mx-auto rounded-[8px] w-[153.74px] h-[45px]">
-                        Cancel
-                      </Button>
-                      <Button
-                        onClick={() => setOtpSent(true)}
-                        className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white py-[14.5px] mx-auto rounded-[8px] w-[172.27px] h-[45px]"
-                      >
-                        Send OTP
-                      </Button>
-                    </div>
-                    {/* <div className="flex flex-col relative left-50 top-26">
-                    <div className="text-[12px] font-[500] text-gray-500">Resend OTP in 2:00</div>
-                  </div> */}
                   </div>
                 </DrawerDescription>
               </DrawerHeader>
+
+              <DrawerFooter className="p-4">
+                <div className="flex justify-between items-center gap-3 w-full">
+                  <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] rounded-[8px] w-[48%] h-[45px]">
+                    Cancel
+                  </Button>
+                  <Button className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white rounded-[8px] w-[48%] h-[45px]">
+                    Send OTP
+                  </Button>
+                </div>
+              </DrawerFooter>
             </DrawerContent>
           </Drawer>
         </div>
@@ -472,7 +443,7 @@ const Patient_Profile = () => {
                         <Input
                           id="mobile"
                           type="text"
-                          placeholder="9876543210"
+                          placeholder="Enter new mobile no."
                           value={mobile}
                           // onChange={handleInputChange}
                           onChange={(e) => handleInputChange(e, setMobile1)}

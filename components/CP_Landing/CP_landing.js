@@ -66,7 +66,7 @@ const CP_landing = ({ type }) => {
                 <strong className="text-[36px] text-[#776EA5] font-bold leading-[34px]">
                   Balance Your{" "}
                 </strong>
-                <div className="leading-6">
+                <div className="leading-6 flex items-center gap-2">
                   <strong className="text-[36px] text-[#CC627B] font-bold leading-[34px]">
                     Mind
                   </strong>
@@ -90,7 +90,6 @@ const CP_landing = ({ type }) => {
                 className="text-[15px] text-white"
               >
             <Button className=" bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white py-[14.5px] h-[45px]  rounded-[8px] flex items-center justify-center w-[198px]">
-            
                 Add Patient
             </Button>
               </Link>
