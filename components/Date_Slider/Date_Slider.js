@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { format, addDays, subDays } from "date-fns";
 
-const Date_Slider = () => {
-  const [currentDate, setCurrentDate] = useState(new Date());
+const Date_Slider = ({ selectedDate = new Date() }) => {
+  const [currentDate, setCurrentDate] = useState(selectedDate);
 
   const goToPreviousDate = () => {
     setCurrentDate((prevDate) => subDays(prevDate, 1));

@@ -1,7 +1,19 @@
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { format, parseISO } from "date-fns";
 
-const SessionSection = ({ period, times, selectedTime, setSelectedTime }) => (
+const SessionSection = ({
+  period,
+  times,
+  selectedFromTime,
+  setSelectedFromTime,
+  setSelectedToTime,
+}) => (
   <Accordion type="single" collapsible className="">
     <AccordionItem
       value={period}
@@ -12,18 +24,22 @@ const SessionSection = ({ period, times, selectedTime, setSelectedTime }) => (
       </AccordionTrigger>
       <AccordionContent className="pb-0">
         <div className="grid grid-cols-4 gap-2 mt-3">
-          {times.map((time) => (
+          {times.map((time, ti) => (
             <Button
-              key={time}
+              disabled={!time?.available}
+              key={ti}
               variant="outline"
               className={`text-xs rounded-[8px] border border-[#CC627B] text-[#CC627B] py-2 transition-all bg-transparent hover:text-white ${
-                selectedTime === time
+                selectedFromTime === time?.from
                   ? "bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white border-none"
                   : "hover:bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0]"
               }`}
-              onClick={() => setSelectedTime(time)}
+              onClick={() => {
+                setSelectedFromTime(time?.from);
+                setSelectedToTime(time?.to);
+              }}
             >
-              {time}
+              {format(parseISO(time?.from), "hh:mm a")}
             </Button>
           ))}
         </div>
