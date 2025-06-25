@@ -4,27 +4,35 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
-import { Button } from "../ui/button";
+
 import { ChevronLeft, ChevronUpIcon } from "lucide-react";
 import {
   Drawer,
   DrawerTrigger,
   DrawerContent,
-  DrawerHeader,
-  DrawerDescription,
-  DrawerFooter,
   DrawerClose,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import { Checkbox } from "../ui/checkbox";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  patientSessionData as getPatientSessionData,
+  selectedCounsellorData as getSelectedCounsellorData,
+} from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useRouter } from "next/navigation";
 
 const Schedule_Session = () => {
+  const router = useRouter();
+  const patientSessionData = getPatientSessionData();
+  const selectedCounsellorData = getSelectedCounsellorData();
+
   const sessionData = [
     {
       value: "morning",
@@ -51,50 +59,102 @@ const Schedule_Session = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] relative max-w-[576px] mx-auto">
       <div className="fixed top-0 left-0 right-0 h-[64px] z-50 flex items-center px-4 bg-gradient-to-b from-[#eeecfb] to-[#eeecfb] max-w-[576px] mx-auto">
-        <ChevronLeft size={24} className="text-black cursor-pointer" />
+        <ChevronLeft
+          size={24}
+          className="text-black cursor-pointer"
+          onClick={() => {
+            router.push(`/patent/dashboard`);
+          }}
+        />
         <strong className="ml-2 text-[16px] font-semibold text-gray-800">
           Schedule Session
         </strong>
       </div>
       <div className="pt-15 px-4 pb-20 flex justify-center relative">
         <div className="w-full flex flex-col gap-2">
-          {[
-            {
-              name: "Shubham Naik",
-              image: "/images/photo.png",
-              label: "Patient",
-            },
-            {
-              name: "Saria Dilon",
-              image: "/images/photo2.png",
-              label: "Assign Practitioner",
-            },
-          ].map((profile, index) => (
-            <div key={index}>
-              <label className="block text-[#8F8F8F] mb-1 text-[15px]">
-                {profile.label}
-              </label>
-              <div className="w-full bg-[#FFFFFF]/50 rounded-[12px] px-[12px] py-[8px] flex items-center justify-between">
-                <div className="flex items-center gap-[12px]">
-                  <Image
-                    alt="profile"
-                    src={profile.image}
-                    width={42}
-                    height={42}
+          <div>
+            <label className="block text-[#8F8F8F] mb-1 text-[15px]">
+              Patient
+            </label>
+            <div className="w-full bg-[#FFFFFF]/50 rounded-[12px] px-[12px] py-[8px] flex items-center justify-between">
+              <div className="flex items-center gap-[12px]">
+                <Avatar>
+                  <AvatarImage
                     className="rounded-full object-cover w-[42px] h-[42px]"
+                    src={patientSessionData?.profileImageUrl}
+                    alt={`${patientSessionData?.firstName} ${patientSessionData?.lastName}`}
                   />
-                  <div>
-                    <Label className="text-[16px] text-black font-[600] font-['Quicksand']">
-                      {profile.name}
-                    </Label>
-                    <Label className="text-[15px] text-[#6D6A5D] font-[500] font-['Quicksand']">
-                      +91 9876543210
-                    </Label>
-                  </div>
+                  <AvatarFallback>
+                    {`${patientSessionData?.firstName} ${patientSessionData?.lastName}`
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <Label className="text-[16px] text-black font-[600] font-['Quicksand']">
+                    {`${patientSessionData?.firstName} ${patientSessionData?.lastName}`}
+                  </Label>
+                  <Label className="text-[15px] text-[#6D6A5D] font-[500] font-['Quicksand']">
+                    {`${
+                      patientSessionData?.countryCode_primary.match(/\d+$/)
+                        ? "+" +
+                          patientSessionData.countryCode_primary.match(
+                            /\d+$/
+                          )[0]
+                        : "+91"
+                    } ${patientSessionData?.primaryMobileNumber}`}
+                  </Label>
                 </div>
               </div>
             </div>
-          ))}
+          </div>
+
+          <div>
+            <label className="block text-[#8F8F8F] mb-1 text-[15px]">
+              Assign Practitioner
+            </label>
+            <div className="w-full bg-[#FFFFFF]/50 rounded-[12px] px-[12px] py-[8px] flex items-center justify-between">
+              <div className="flex items-center gap-[12px]">
+                <Avatar>
+                  <AvatarImage
+                    className="rounded-full object-cover w-[42px] h-[42px]"
+                    src={
+                      selectedCounsellorData?.generalInformation
+                        ?.profileImageUrl
+                    }
+                    alt={`${selectedCounsellorData?.generalInformation?.firstName} ${selectedCounsellorData?.generalInformation?.lastName}`}
+                  />
+                  <AvatarFallback>
+                    {`${selectedCounsellorData?.generalInformation?.firstName} ${selectedCounsellorData?.generalInformation?.lastName}`
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <Label className="text-[16px] text-black font-[600] font-['Quicksand']">
+                    {`${selectedCounsellorData?.generalInformation?.firstName} ${selectedCounsellorData?.generalInformation?.lastName}`}
+                  </Label>
+                  <Label className="text-[15px] text-[#6D6A5D] font-[500] font-['Quicksand']">
+                    {`${
+                      selectedCounsellorData?.generalInformation?.countryCode_primary.match(
+                        /\d+$/
+                      )
+                        ? "+" +
+                          selectedCounsellorData?.generalInformation?.countryCode_primary.match(
+                            /\d+$/
+                          )[0]
+                        : "+91"
+                    } ${
+                      selectedCounsellorData?.generalInformation
+                        ?.primaryMobileNumber
+                    }`}
+                  </Label>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <div className="flex flex-col gap-4 font-quicksand text-sm bg-gradient-to-br rounded-[16px]">
             <div>
@@ -162,7 +222,7 @@ const Schedule_Session = () => {
                         </h2>
 
                         <DrawerClose asChild>
-                          <button
+                          <Button
                             type="button"
                             className="absolute right-0 top-0 z-50"
                           >
@@ -172,7 +232,7 @@ const Schedule_Session = () => {
                               width={24}
                               height={24}
                             />
-                          </button>
+                          </Button>
                         </DrawerClose>
 
                         <div className="w-full h-[18px] gap-3 mx-auto flex items-center justify-center mt-3">
@@ -195,37 +255,7 @@ const Schedule_Session = () => {
                           />
                         </div>
                       </div>
-                      {/* 
-                      <div className="flex-1 overflow-y-auto mt-3">
-                        {sessionData.map((session) => (
-                          <div
-                            key={session.label}
-                            className="w-full h-[118px] bg-white opacity-20 rounded-xl p-3 mb-3 flex flex-col gap-5 "
-                          >
-                            <div className="flex justify-between items-start">
-                              <h3 className="text-[14px] font-semibold text-gray-800">
-                                {session.label}
-                              </h3>
-                              <ChevronUpIcon className="w-5 h-5 text-gray-600" />
-                            </div>
-                            <div className="grid grid-cols-4 gap-2">
-                              {session.times.map(({ time, disabled }) => (
-                                <button
-                                  key={time}
-                                  disabled={disabled}
-                                  className={`w-full h-[38.86px] text-xs rounded-md border flex items-center justify-center ${
-                                    disabled
-                                      ? "text-gray-400 border-gray-300 bg-gray-100 cursor-not-allowed"
-                                      : "text-[#CC627B] border-[#CC627B] hover:bg-pink-50"
-                                  }`}
-                                >
-                                  {time}
-                                </button>
-                              ))}
-                            </div>                           
-                          </div>
-                        ))}
-                      </div> */}
+
                       <div className="mt-3">
                         <Accordion
                           type="single"
@@ -281,12 +311,6 @@ const Schedule_Session = () => {
               <label className="text-[#8F8F8F]">
                 Weekly Recurring Sessions
               </label>
-              {/* <input
-                type="checkbox"
-                className="w-4 h-4 border border-[#BBA3E4]"
-                style={{ accentColor: "#776EA5" }}
-              /> */}
-
               <Checkbox className="h-4 w-[16.05px] border-[1.5px] border-[#776EA5] rounded-[1.7px]" />
             </div>
 

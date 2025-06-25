@@ -1,5 +1,5 @@
-import Schedule_Session from "@/components/Schedule-Session/Schedule_Session";
 
+import Schedule_Session from "@/components/patient/Schedule-Session/Schedule_Session";
 import React from "react";
 
 const page = () => {

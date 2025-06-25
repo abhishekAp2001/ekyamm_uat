@@ -4,6 +4,9 @@ import Sidebar from "../Sidebar/Sidebar";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { greeting } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+
+import { patientSessionData as getPatientSessionData } from "@/lib/utils";
 
 /**
  * Header component displays hospital info, greeting, user avatar and name.
@@ -12,7 +15,7 @@ import { greeting } from "@/lib/utils";
  */
 const Header = ({ loading = false, patient }) => {
   const [showSidebar, setShowSidebar] = useState(false);
-  const [filterCount, setFilterCount] = useState(0);
+  const patientSessionData = getPatientSessionData();
 
   const {
     firstName = "",
@@ -45,13 +48,26 @@ const Header = ({ loading = false, patient }) => {
 
         <div className="flex justify-between items-center mt-2 relative">
           <div className="flex items-center gap-2">
-            <Image
+            <Avatar>
+              <AvatarImage
+                className="h-[34px] w-[34px] pt-1.5 mix-blend-multiply"
+                src={patientSessionData?.profileImageUrl}
+                alt={`${patientSessionData?.firstName} ${patientSessionData?.lastName}`}
+              />
+              <AvatarFallback>
+                {`${patientSessionData?.firstName} ${patientSessionData?.lastName}`
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
+              </AvatarFallback>
+            </Avatar>
+            {/* <Image
               src="/images/user.png"
               width={34}
               height={34}
-              className="pt-1.5 mix-blend-multiply"
+              className="h-[34px] w-[34px] pt-1.5 mix-blend-multiply"
               alt="User"
-            />
+            /> */}
             <div className="flex flex-col">
               {/* greeting */}
               <span className="text-sm text-white">Good {greeting},</span>
