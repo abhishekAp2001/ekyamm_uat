@@ -474,6 +474,7 @@ const Cloudnine_Hospital = ({ type }) => {
                 "Cancel"
               )}
             </Button>
+            
             <Button
               onClick={handleGenerateInvoice}
               disabled={loading || !isFormValid()}

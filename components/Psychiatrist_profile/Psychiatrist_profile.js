@@ -15,11 +15,11 @@ import {
 
 const Psychiatrist_profile = () => {
   return (
-    <div className="h-screen flex flex-col items-start justify-start bg-gradient-to-b  from-[#DFDAFB] to-[#F9CCC5] relative px-4 overflow-auto max-w-[574px] mx-auto">
+    <div className="h-screen flex flex-col items-center justify-start bg-gradient-to-b  from-[#DFDAFB] to-[#F9CCC5] relative px-4 overflow-auto max-w-[574px] mx-auto">
       {/* Header */}
       <div className="fixed top-0 left-0 right-0 h-[64px] z-50 flex items-center px-4 max-w-[574px] mx-auto">
         <div className="flex justify-between w-full items-center">
-        <ChevronLeft size={24} className="text-black cursor-pointer" />
+        <ChevronLeft size={28} className="text-black cursor-pointer" />
      
           <Image src="/images/chats.png" alt="Chats" width={40} height={43} />
       </div>
@@ -88,13 +88,13 @@ const Psychiatrist_profile = () => {
           {/* Timing */}
           <div className="w-full bg-gradient-to-r from-[#bba3e438] to-[#eda1974d] rounded-[8px] p-[10px] mt-4 px-4 text-left">
             <p className="text-[15px] font-semibold">Timing:</p>
-            <p className="text-[13px] mt-[2px]">Open 24 hours</p>
+            <p className="text-sm">Open 24 hours</p>
           </div>
 
           {/* Address */}
           <div className="w-full bg-gradient-to-r from-[#bba3e438] to-[#eda1974d] rounded-[8px] p-[10px] mt-3 text-left">
             <p className="text-[15px] font-semibold">Address:</p>
-            <p className="text-[13px] mt-[2px] leading-snug">
+            <p className="text-sm mt-[2px] leading-snug">
               Blue Sapphire Business Park, nr. Govind Yashada Chowk,
               Vishwashanti Colony, Pimple Saudagar, Pune, Pimpri-Chinchwad,
               Maharashtra 411027

@@ -81,6 +81,9 @@ const NP_Registration = () => {
                   Number(sessions_selection?.sessionCreditCount)}
               </span>
             </div>
+            <Button className=" bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white py-[14.5px] h-[45px]  rounded-[8px] flex items-center justify-center w-[198px] mx-auto text-center mt-3">
+              Add Patient
+            </Button>
           </div>
           <div className="bg-gradient-to-b from-[#fce8e5] to-[#fce8e5] flex flex-col items-center gap-3  py-[23px] px-[17px] left-0 right-0 max-w-[576px] mx-auto">
             <Footer_bar />

@@ -236,7 +236,7 @@ const CP_type = () => {
   );
 
   return (
-    <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col">
+    <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col max-w-[576px] mx-auto">
       <CP_Header />
       <div className="min-h-screen pt-[8%] lg:pt-[8%] pb-[20%] lg:pb-[14%] overflow-auto px-[17px] bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5]">
         <div>
@@ -404,7 +404,10 @@ const CP_type = () => {
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value.toLowerCase(), })
+                  setFormData({
+                    ...formData,
+                    email: e.target.value.toLowerCase(),
+                  })
                 }
                 onBlur={() => handleBlur("email")}
                 disabled={!formData.userName || isUserNameAvailable !== true}

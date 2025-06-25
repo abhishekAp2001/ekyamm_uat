@@ -156,7 +156,7 @@ const CP_clinic_details = () => {
               id="pincode"
               type="number"
               inputMode="numeric"
-              placeholder="111111"
+              placeholder="Enter pin code "
               className="bg-white rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] placeholder:text-gray-500 pt-3 pb-3.5 px-4 h-[39px]"
               value={formData.pincode}
               onChange={(e) => handlePincodeChange(e.target.value)}
@@ -189,7 +189,7 @@ const CP_clinic_details = () => {
             <Input
               id="area"
               type="text"
-              placeholder="Area"
+              placeholder="Enter area"
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] pt-3 pb-3.5 px-4 h-[39px] ${
                 isPincodeValid(formData.pincode)
                   ? "bg-white placeholder:text-gray-500"
@@ -220,7 +220,7 @@ const CP_clinic_details = () => {
             <Input
               id="city"
               type="text"
-              placeholder="City"
+              placeholder=" Enter city"
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] pt-3 pb-3.5 px-4 h-[39px] ${
                 isPincodeValid(formData.pincode)
                   ? "bg-white placeholder:text-gray-500"
@@ -251,7 +251,7 @@ const CP_clinic_details = () => {
             <Input
               id="state"
               type="text"
-              placeholder="State"
+              placeholder="Enter state"
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] pt-3 pb-3.5 px-4 h-[39px] ${
                 isPincodeValid(formData.pincode)
                   ? "bg-white placeholder:text-gray-500"
