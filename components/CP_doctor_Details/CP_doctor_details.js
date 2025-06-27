@@ -247,7 +247,7 @@ const CP_doctor_details = () => {
                 className={`flex-1 rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] placeholder:text-[#00000040] py-3 px-4 h-[39px] ${
                   formData.title
                     ? "bg-white placeholder:text-gray-500"
-                    : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                    : "bg-[#ffffff90] placeholder:text-[#00000040]"
                 }`}
               />
             </div>
@@ -281,7 +281,7 @@ const CP_doctor_details = () => {
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
                 formData.firstName
                   ? "bg-white placeholder:text-[#00000040]"
-                  : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                  : "bg-[#ffffff90] placeholder:text-[#00000040]"
               }`}
             />
             {touched.lastName && !formData.lastName && (
@@ -310,7 +310,7 @@ const CP_doctor_details = () => {
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
                 formData.lastName
                   ? "bg-white placeholder:text-gray-500"
-                  : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                  : "bg-[#ffffff90] placeholder:text-[#00000040]"
               }`}
             />
             {touched.email && !formData.email && (
@@ -337,7 +337,7 @@ const CP_doctor_details = () => {
             >
               Dr&apos;s Primary Mobile Number *
             </Label>
-            <div className="flex items-center h-[39px]">
+            <div className="flex items-center gap-3 h-[39px]">
               <Select
                 options={countryOptions}
                 value={countryOptions.find(option => option.value === formData.countryCode_primary)}
@@ -381,7 +381,7 @@ const CP_doctor_details = () => {
                 className={`border-0 rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                   isEmailValid(formData.email)
                     ? "bg-white placeholder:text-gray-500"
-                    : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                    : "bg-[#ffffff90] placeholder:text-[#00000040]"
                 }`}
                 maxLength={10}
               />
@@ -400,10 +400,10 @@ const CP_doctor_details = () => {
               )}
           </div>
           <div className="mt-[22px]">
-            <div className="flex items-center">
+            <div className="flex items-center justify-between">
               <Label
                 htmlFor="whatsappNumber"
-                className={`text-[15px] w-[55%] mb-2 ${
+                className={`text-[15px] w-[55%] mb-2 max-[576px]:w-[80%] ${
                   isMobileValid(formData.primaryMobileNumber)
                     ? "text-gray-500"
                     : "text-[#00000040]"
@@ -411,8 +411,9 @@ const CP_doctor_details = () => {
               >
                 Dr&apos;s WhatsApp Number *
               </Label>
-              <div className="flex gap-[6px] items-center w-[45%]">
+              <div className="flex gap-[6px] items-center justify-end w-[45%]">
                 <Checkbox
+                id="same_as_mobile"
                   checked={sameAsMobile}
                   onCheckedChange={(checked) => {
                     setSameAsMobile(checked);
@@ -429,18 +430,20 @@ const CP_doctor_details = () => {
                     }
                   }}
                   disabled={!isMobileValid(formData.primaryMobileNumber)}
-                  className={`w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1 ${
+                  className={`w-4 h-4 border border-[#776EA5] rounded-[1.8px] ${
                   isMobileValid(formData.primaryMobileNumber)
                     ? "text-gray-500"
                     : "text-[#00000040]"
                 }`}
                 />
-                <label className="text-[12px] text-gray-500 font-medium">
+                <label 
+                htmlFor="same_as_mobile"
+                className="text-[12px] text-gray-500 font-medium">
                   Same as Mobile Number
                 </label>
               </div>
             </div>
-            <div className="flex items-center h-[39px]">
+            <div className="flex items-center h-[39px] gap-3">
               <Select
                 options={countryOptions}
                 value={countryOptions.find(option => option.value === formData.countryCode_whatsapp)}
@@ -481,7 +484,7 @@ const CP_doctor_details = () => {
                 disabled={sameAsMobile || !isMobileValid(formData.primaryMobileNumber)}
                 className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                   sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
-                    ? "bg-[#ffffff10] placeholder:text-[#00000040]"
+                    ? "bg-[#ffffff90] placeholder:text-[#00000040]"
                     : "bg-white placeholder:text-gray-500"
                 }`}
                 maxLength={10}
@@ -511,7 +514,7 @@ const CP_doctor_details = () => {
             >
               Dr&apos;s Emergency Number *
             </Label>
-            <div className="flex items-center h-[39px]">
+            <div className="flex items-center h-[39px] gap-3">
               <Select
                 options={countryOptions}
                 value={countryOptions.find(option => option.value === formData.countryCode_emergency)}
@@ -553,7 +556,7 @@ const CP_doctor_details = () => {
                 className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                   isMobileValid(formData.whatsappNumber)
                     ? "bg-white placeholder:text-gray-500"
-                    : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                    : "bg-[#ffffff90] placeholder:text-[#00000040]"
                 }`}
                 maxLength={10}
               />

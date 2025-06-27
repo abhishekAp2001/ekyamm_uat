@@ -99,7 +99,6 @@ const Patient_Registration = ({ type }) => {
 
       if (response?.data?.success === true) {
         setCookie("invitePatientInfo", JSON.stringify(response?.data?.data?.patient));
-        showSuccessToast("Patient added.");
         router.push(`/channel-partner/${type}/patient-history`);
       } else {
         showErrorToast(
@@ -217,7 +216,7 @@ const Patient_Registration = ({ type }) => {
               <Label className="text-[15px] text-gray-500 font-medium mb-[7.59px] mt-[22px]">
                 Primary Mobile Number <span className="text-red-500">*</span>
               </Label>
-              <div className="flex items-center relative">
+              <div className="flex items-center relative gap-3">
                 {/* Custom Country Dropdown */}
                 <Select
                   options={countryOptions}

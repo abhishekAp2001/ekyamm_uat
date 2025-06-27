@@ -35,7 +35,6 @@ const OTP_Send = ({ type }) => {
   const sendOtp = async () => {
     if (isLoading) return;
 
-    
     setLoading(true);
     try {
       if (selectedMethod === "mobile") {
@@ -165,15 +164,14 @@ const OTP_Send = ({ type }) => {
         tempid: "1707171767456458609",
       };
       // const result = await axios.get(apiUrl, { params });
-      const response = await customAxios.post(`v2/cp/mobile/otpGenerate`,{
-        mobile:mobileNumber,
-        type:"cpLoginOTP",
-        verificationToken:channelPartnerData?.verificationToken
-      })
-      // if (result.data.result === "success") 
-      if(response?.data?.success)
-        {
-          return true;
+      const response = await customAxios.post(`v2/cp/mobile/otpGenerate`, {
+        mobile: mobileNumber,
+        type: "cpLoginOTP",
+        verificationToken: channelPartnerData?.verificationToken,
+      });
+      // if (result.data.result === "success")
+      if (response?.data?.success) {
+        return true;
       } else {
         showErrorToast(`Failed to generate OTP`);
       }
@@ -214,13 +212,12 @@ const OTP_Send = ({ type }) => {
       };
 
       // const result = await axios.get(apiUrl, { params });
-      const response = await customAxios.post(`v2/cp/mobile/otpValidate`,{
-        mobile:mobileNumber,
-        otp:otp
-      })
+      const response = await customAxios.post(`v2/cp/mobile/otpValidate`, {
+        mobile: mobileNumber,
+        otp: otp,
+      });
       // if (result.data.result === "success")
-      if(response?.data?.success)
-         {
+      if (response?.data?.success) {
         return true;
       } else {
         // console.log(result);
@@ -302,17 +299,19 @@ const OTP_Send = ({ type }) => {
             <strong className="text-[20px] text-[#776EA5] font-semibold">
               {channelPartnerData?.clinicName || "Greetings Hospital"}
             </strong>
-             <div className="flex items-center justify-center gap-1">
-            <div className="bg-[#776EA5] rounded-full w-[16.78px] h-[16.78px] flex justify-center items-center">
-              <MapPin color="white" className="w-[12.15px] h-[12.15px]" />
+            <div className="flex items-center justify-center gap-1">
+              <div className="bg-[#776EA5] rounded-full w-[16.78px] h-[16.78px] flex justify-center items-center">
+                <MapPin color="white" className="w-[12.15px] h-[12.15px]" />
+              </div>
+              <span className="text-sm text-[#776EA5] font-medium">
+                {channelPartnerData?.area}
+              </span>
             </div>
-            <span className="text-sm text-[#776EA5] font-medium">
-              {channelPartnerData?.area}
-            </span>
-          </div>
             <div className="border-2 bg-[#FFFFFF80] border-[#FFFFFF4D] rounded-4xl py-[17px] text-center w-full my-[64px]  px-5">
               <strong className="text-[15px] text-black font-[600] text-center">
-                Send OTP to
+                {selectedMethod === "mobile" 
+                  ? "Send OTP to"
+                  : "Send OTP to Verified ID"}
               </strong>
               <div>
                 <div className="flex justify-between items-center mt-[15px] gap-3">
@@ -359,38 +358,6 @@ const OTP_Send = ({ type }) => {
                 {otpSendStatus ? (
                   <>
                     <div className="my-[15px]">
-                      {/* <InputOTP
-                        maxLength={6}
-                        value={otp}
-                        onChange={(otp) => setOtp(otp)}
-                      >
-                        <InputOTPGroup className="flex justify-between gap-2 items-center w-full">
-                          <InputOTPSlot
-                            index={0}
-                            className="w-[42px] h-[42px] border-[1.54px] border-[#776EA5] rounded-[9.23px] text-[16px] text-gray-500"
-                          />
-                          <InputOTPSlot
-                            index={1}
-                            className="w-[42px] h-[42px] border-[1.54px] border-[#776EA5] rounded-[9.23px] text-[16px] text-gray-500"
-                          />
-                          <InputOTPSlot
-                            index={2}
-                            className="w-[42px] h-[42px] border-[1.54px] border-[#776EA5] rounded-[9.23px] text-[16px] text-gray-500"
-                          />
-                          <InputOTPSlot
-                            index={3}
-                            className="w-[42px] h-[42px] border-[1.54px] border-[#776EA5] rounded-[9.23px] text-[16px] text-gray-500"
-                          />
-                          <InputOTPSlot
-                            index={4}
-                            className="w-[42px] h-[42px] border-[1.54px] border-[#776EA5] rounded-[9.23px] text-[16px] text-gray-500"
-                          />
-                          <InputOTPSlot
-                            index={5}
-                            className="w-[42px] h-[42px] border-[1.54px] border-[#776EA5] rounded-[9.23px] text-[16px] text-gray-500"
-                          />
-                        </InputOTPGroup>
-                      </InputOTP> */}
                       <div className="relative flex items-center">
                         <OTPInput
                           value={otp}
@@ -414,9 +381,17 @@ const OTP_Send = ({ type }) => {
                           aria-label={showOtp ? "Hide OTP" : "Show OTP"}
                         >
                           {showOtp ? (
-                            <EyeOff width={20} height={20} className="h-4 w-4 text-[#776EA5]" />
+                            <EyeOff
+                              width={20}
+                              height={20}
+                              className="h-4 w-4 text-[#776EA5]"
+                            />
                           ) : (
-                            <Eye width={20} height={20} className="h-4 w-4 text-[#776EA5]" />
+                            <Eye
+                              width={20}
+                              height={20}
+                              className="h-4 w-4 text-[#776EA5]"
+                            />
                           )}
                         </Button>
                       </div>
@@ -428,7 +403,9 @@ const OTP_Send = ({ type }) => {
                 <Button
                   onClick={otpSendStatus ? verifyOtp : sendOtp}
                   disabled={
-                    isLoading|| !selectedMethod || (otpSendStatus && isResendDisabled && !otp)
+                    isLoading ||
+                    !selectedMethod ||
+                    (otpSendStatus && isResendDisabled && !otp)
                   }
                   className="cursor-pointer bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white border py-[14.5px] rounded-[8px] flex items-center justify-center w-full h-[45px] mt-[15px]"
                 >

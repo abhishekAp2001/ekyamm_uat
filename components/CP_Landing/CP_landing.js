@@ -66,7 +66,7 @@ const CP_landing = ({ type }) => {
                 <strong className="text-[36px] text-[#776EA5] font-bold leading-[34px]">
                   Balance Your{" "}
                 </strong>
-                <div className="leading-6 flex items-center gap-2">
+                <div className="leading-6 flex items-center gap-[10px] pb-[6px]">
                   <strong className="text-[36px] text-[#CC627B] font-bold leading-[34px]">
                     Mind
                   </strong>

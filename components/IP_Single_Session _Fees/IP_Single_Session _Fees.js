@@ -236,7 +236,7 @@ const IP_Single_Session_Fees = () => {
                     disabled={!pkg.enabled || !isAmountValid(formData.singleSession)}
                     className={`bg-white rounded-[5px] text-[15px] text-black font-semibold placeholder:text-[15px] placeholder:text-[#00000066] py-3 px-2 w-[74px] h-[28px] ${
                       !pkg.enabled || !isAmountValid(formData.singleSession)
-                        ? "bg-[#ffffff10] placeholder:text-[#00000040]"
+                        ? "bg-[#ffffff90] placeholder:text-[#00000040]"
                         : ""
                     }`}
                   />
@@ -271,7 +271,7 @@ const IP_Single_Session_Fees = () => {
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
                 isAmountValid(formData.singleSession)
                   ? "bg-white placeholder:text-gray-500"
-                  : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                  : "bg-[#ffffff90] placeholder:text-[#00000040]"
               }`}
               maxLength={10}
             />
@@ -308,7 +308,7 @@ const IP_Single_Session_Fees = () => {
                   className={`w-[60px] rounded-l-[7.26px] text-[15px] font-semibold h-[39px] px-2 ${
                     isPanValid(formData.panCard)
                       ? "bg-white text-gray-500"
-                      : "bg-[#ffffff10] text-[#00000040]"
+                      : "bg-[#ffffff90] text-[#00000040]"
                   }`}
                 >
                   <SelectValue placeholder="State" />
@@ -340,7 +340,7 @@ const IP_Single_Session_Fees = () => {
                 className={`text-[15px] font-semibold px-2 text-black outline-none w-[70px] ${
                   isPanValid(formData.panCard)
                     ? "bg-white placeholder:text-gray-500"
-                    : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                    : "bg-[#ffffff90] placeholder:text-[#00000040]"
                 }`}
                 maxLength={3}
               />

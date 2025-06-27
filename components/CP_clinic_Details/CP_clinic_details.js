@@ -193,7 +193,7 @@ const CP_clinic_details = () => {
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] pt-3 pb-3.5 px-4 h-[39px] ${
                 isPincodeValid(formData.pincode)
                   ? "bg-white placeholder:text-gray-500"
-                  : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                  : "bg-[#ffffff90] placeholder:text-[#00000040]"
               }`}
               value={formData.area}
               onChange={(e) => handleInputChange(e, "area")}
@@ -224,7 +224,7 @@ const CP_clinic_details = () => {
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] pt-3 pb-3.5 px-4 h-[39px] ${
                 isPincodeValid(formData.pincode)
                   ? "bg-white placeholder:text-gray-500"
-                  : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                  : "bg-[#ffffff90] placeholder:text-[#00000040]"
               }`}
               value={formData.city}
               onChange={(e) => handleInputChange(e, "city")}
@@ -255,7 +255,7 @@ const CP_clinic_details = () => {
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] pt-3 pb-3.5 px-4 h-[39px] ${
                 isPincodeValid(formData.pincode)
                   ? "bg-white placeholder:text-gray-500"
-                  : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                  : "bg-[#ffffff90] placeholder:text-[#00000040]"
               }`}
               value={formData.state}
               onChange={(e) => handleInputChange(e, "state")}

@@ -524,7 +524,7 @@ const PP_Details = ({ type }) => {
                 <DrawerDescription className="flex flex-col gap-3">
                   {isMobile && (
                     <Button
-                      className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px]"
+                      className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px] rounded-[8.62px]"
                       onClick={handleTakePhoto}
                     >
                       Take Photo
@@ -538,7 +538,7 @@ const PP_Details = ({ type }) => {
                     </Button>
                   )}
                   <Button
-                    className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px]"
+                    className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px] rounded-[8.62px]"
                     onClick={handleChoosePhoto}
                   >
                     Choose Photo
@@ -551,7 +551,7 @@ const PP_Details = ({ type }) => {
                     />
                   </Button>
                   <Button
-                    className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px]"
+                    className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px] rounded-[8.62px]"
                     onClick={handlePhotoDelete}
                   >
                     Delete Photo
@@ -620,7 +620,7 @@ const PP_Details = ({ type }) => {
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
                 formData.firstName
                   ? "bg-white placeholder:text-gray-500"
-                  : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                  : "bg-[#ffffff90] placeholder:text-[#00000040]"
               }`}
               value={formData.lastName}
               onChange={(e) => handleTextInputChange(e, "lastName")}
@@ -791,7 +791,7 @@ const PP_Details = ({ type }) => {
                 }
                 className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                   sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
-                    ? "bg-[#ffffff10] placeholder:text-[#00000040]"
+                    ? "bg-[#ffffff90] placeholder:text-[#00000040]"
                     : "bg-white placeholder:text-gray-500"
                 }`}
                 maxLength={10}

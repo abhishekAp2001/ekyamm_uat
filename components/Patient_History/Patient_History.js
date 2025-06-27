@@ -235,7 +235,7 @@ const Patient_History = ({ type }) => {
               <Label className="text-[15px] text-gray-500 font-medium mb-[7.59px] mt-[22px]">
                 Primary Mobile Number <span className="text-red-500">*</span>
               </Label>
-              <div className="flex items-center relative">
+              <div className="flex items-center relative gap-3">
                 {/* Custom Country Dropdown */}
                 <Select
                   options={countryOptions}
@@ -245,7 +245,7 @@ const Patient_History = ({ type }) => {
                       (patientPreviousData?.countryCode_primary || "🇮🇳 +91")
                   )}
                   isDisabled={true}
-                  className="w-[100px] border-none shadow-none"
+                  className="w-[100px] border-0 shadow-none"
                   styles={{
                     control: (base) => ({
                       ...base,
@@ -348,7 +348,7 @@ const Patient_History = ({ type }) => {
                   </DrawerFooter>
                 </DrawerContent>
               </Drawer>
-              <Button
+              {/* <Button
                 onClick={handleSelectPackage}
                 disabled={loading}
                 className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] mx-auto rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
@@ -358,8 +358,18 @@ const Patient_History = ({ type }) => {
                 ) : (
                   "Select Package"
                 )}
+              </Button> */}
 
-                {/* </Link> */}
+              <Button
+                onClick={handleSelectPackage}
+                disabled={loading || !formData.history?.trim()}
+                className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] mx-auto rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
+              >
+                {loading ? (
+                  <Loader2Icon className="animate-spin" />
+                ) : (
+                  "Select Package"
+                )}
               </Button>
             </div>
             <Footer_bar />

@@ -225,7 +225,7 @@ const IP_Medical_Association_Details = () => {
             className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
               isNameValid()
                 ? "bg-white placeholder:text-gray-500"
-                : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                : "bg-[#ffffff90] placeholder:text-[#00000040]"
             }`}
           />
           {touched.medicalAssociationNumber && !isMedicalAssociationNumberValid() && (
@@ -256,7 +256,7 @@ const IP_Medical_Association_Details = () => {
                   <DrawerDescription className="flex flex-col gap-3">
                     {isMobile && (
                       <Button
-                        className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px]"
+                        className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px] rounded-[8.62px]"
                         onClick={() => handleFileInputTrigger("camera")}
                       >
                         Take Photo
@@ -270,7 +270,7 @@ const IP_Medical_Association_Details = () => {
                       </Button>
                     )}
                     <Button
-                      className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px]"
+                      className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px] rounded-[8.62px]"
                       onClick={() => handleFileInputTrigger("gallery")}
                     >
                       Choose from Gallery
@@ -283,7 +283,7 @@ const IP_Medical_Association_Details = () => {
                       />
                     </Button>
                     <Button
-                      className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px]"
+                      className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px] rounded-[8.62px]"
                       onClick={() => handleFileInputTrigger("file")}
                     >
                       Upload from File

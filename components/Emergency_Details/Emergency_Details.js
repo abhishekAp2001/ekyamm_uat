@@ -305,7 +305,7 @@ const Emergency_Details = ({ type }) => {
               onBlur={() => handleBlur("firstName")}
               disabled={!formData.relation}
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                formData.relation ? "bg-white" : "bg-[#ffffff10]"
+                formData.relation ? "bg-white" : "bg-[#ffffff90]"
               }`}
             />
             {touched.firstName && !formData.firstName && (
@@ -334,7 +334,7 @@ const Emergency_Details = ({ type }) => {
               onBlur={() => handleBlur("lastName")}
               disabled={!formData.firstName}
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                formData.firstName ? "bg-white" : "bg-[#ffffff10]"
+                formData.firstName ? "bg-white" : "bg-[#ffffff90]"
               }`}
             />
             {touched.lastName && !formData.lastName && (
@@ -363,7 +363,7 @@ const Emergency_Details = ({ type }) => {
               onBlur={() => handleBlur("email")}
               disabled={!formData.lastName}
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                formData.lastName ? "bg-white" : "bg-[#ffffff10]"
+                formData.lastName ? "bg-white" : "bg-[#ffffff90]"
               }`}
             />
 
@@ -426,7 +426,7 @@ const Emergency_Details = ({ type }) => {
                 onBlur={() => handleBlur("primaryMobileNumber")}
                 disabled={!formData.lastName}
                 className={`rounded-[7.26px]  border-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
-                  formData.lastName ? "bg-white" : "bg-[#ffffff10]"
+                  formData.lastName ? "bg-white" : "bg-[#ffffff90]"
                 }`}
                 maxLength={10}
               />
@@ -525,7 +525,7 @@ const Emergency_Details = ({ type }) => {
                 }
                 className={`rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                   sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
-                    ? "bg-[#ffffff10]"
+                    ? "bg-[#ffffff90]"
                     : "bg-white"
                 }`}
                 maxLength={10}

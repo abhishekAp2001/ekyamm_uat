@@ -352,7 +352,7 @@ const Cloudnine_Hospital = ({ type }) => {
               <Label className="text-[15px] text-gray-500 font-medium mb-[7.59px] mt-[22px]">
                 Primary Mobile Number <span className="text-red-500">*</span>
               </Label>
-              <div className="flex items-center relative">
+              <div className="flex items-center relative gap-3">
                 {/* Custom Country Dropdown */}
                 <Select
                   options={countryOptions}

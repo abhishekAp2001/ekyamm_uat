@@ -89,7 +89,9 @@ const IP_Details = () => {
       if (error.forceLogout) {
         router.push("/login");
       } else {
-        showErrorToast(error?.response?.data?.error?.message || "Something Went Wrong");
+        showErrorToast(
+          error?.response?.data?.error?.message || "Something Went Wrong"
+        );
       }
     }
   };
@@ -158,7 +160,7 @@ const IP_Details = () => {
       try {
         const base64 = await fileToBase64(file);
         setFormData((prev) => ({ ...prev, profileImageBase64: base64 }));
-        handleCloseDrawer()
+        handleCloseDrawer();
       } catch (error) {
         console.error("Error converting file to base64:", error);
         showErrorToast("Failed to upload profile image");
@@ -169,7 +171,7 @@ const IP_Details = () => {
   // Handle photo deletion
   const handlePhotoDelete = () => {
     setFormData((prev) => ({ ...prev, profileImageBase64: "" }));
-    handleCloseDrawer()
+    handleCloseDrawer();
   };
 
   // Trigger camera input
@@ -201,7 +203,7 @@ const IP_Details = () => {
   };
 
   // Handle text input change for firstName, lastName, and email
-   const handleTextInputChange = (e, field) => {
+  const handleTextInputChange = (e, field) => {
     if (field === "email") {
       setFormData((prev) => ({
         ...prev,
@@ -263,10 +265,10 @@ const IP_Details = () => {
       })),
     [countryList]
   );
-  const [drawerOpen,setDrawerOpen] =useState(false)
-  const handleCloseDrawer =()=>{
-    setDrawerOpen(false)
-  }
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const handleCloseDrawer = () => {
+    setDrawerOpen(false);
+  };
 
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
@@ -280,7 +282,7 @@ const IP_Details = () => {
             className="w-full h-fit object-cover"
             alt="Profile"
           />
-          <Drawer open={drawerOpen} onClose={handleCloseDrawer} >
+          <Drawer open={drawerOpen} onClose={handleCloseDrawer}>
             <DrawerTrigger>
               <Image
                 src="/images/camera.png"
@@ -288,7 +290,7 @@ const IP_Details = () => {
                 height={31}
                 className="w-[31px] h-fit absolute bottom-[-10px] right-[-10px]"
                 alt="Camera"
-                onClick={()=>setDrawerOpen(true)}
+                onClick={() => setDrawerOpen(true)}
               />
             </DrawerTrigger>
             <DrawerTitle></DrawerTitle>
@@ -297,7 +299,7 @@ const IP_Details = () => {
                 <DrawerDescription className="flex flex-col gap-3">
                   {isMobile && (
                     <Button
-                      className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px]"
+                      className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px] rounded-[8.62px]"
                       onClick={handleTakePhoto}
                     >
                       Take Photo
@@ -311,7 +313,7 @@ const IP_Details = () => {
                     </Button>
                   )}
                   <Button
-                    className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px]"
+                    className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px] rounded-[8.62px]"
                     onClick={handleChoosePhoto}
                   >
                     Choose Photo
@@ -324,7 +326,7 @@ const IP_Details = () => {
                     />
                   </Button>
                   <Button
-                    className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px]"
+                    className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px] rounded-[8.62px]"
                     onClick={handlePhotoDelete}
                   >
                     Delete Photo
@@ -387,10 +389,10 @@ const IP_Details = () => {
                 onChange={(e) => handleTextInputChange(e, "firstName")}
                 onBlur={() => handleBlur("firstName")}
                 disabled={!formData.title}
-                className={`flex-1 rounded-[7.26px] text-[15px]text-black font-semibold placeholder:text-[15px]py-3 px-4 h-[39px] ${
+                className={`flex-1 rounded-[7.26px] text-[15px]text-black font-semibold placeholder:text-[15px]    py-3 px-4 h-[39px] ${
                   formData.title
                     ? "bg-white placeholder:text-gray-500"
-                    : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                    : "bg-[#ffffff90] placeholder:text-[#00000040]"
                 }`}
               />
             </div>
@@ -425,7 +427,7 @@ const IP_Details = () => {
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
                 formData.firstName
                   ? "bg-white placeholder:text-gray-500"
-                  : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                  : "bg-[#ffffff90] placeholder:text-[#00000040]"
               }`}
             />
             {touched.lastName && !formData.lastName && (
@@ -451,10 +453,10 @@ const IP_Details = () => {
               onChange={(e) => handleTextInputChange(e, "email")}
               onBlur={() => handleBlur("email")}
               disabled={!formData.lastName}
-              className={`rounded-[7.26px] text-[15px]text-black font-semibold placeholder:text-[15px]py-3 px-4 h-[39px] ${
+              className={`rounded-[7.26px] text-[15px]text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
                 formData.lastName
                   ? "bg-white placeholder:text-gray-500"
-                  : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                  : "bg-[#ffffff90] placeholder:text-[#00000040]"
               }`}
             />
             {touched.email && !formData.email && (
@@ -484,7 +486,9 @@ const IP_Details = () => {
             <div className="flex items-center gap-3 h-[39px]">
               <Select
                 options={countryOptions}
-                value={countryOptions.find(option => option.value === formData.countryCode_primary)}
+                value={countryOptions.find(
+                  (option) => option.value === formData.countryCode_primary
+                )}
                 onChange={(selectedOption) => {
                   const newCountryCode = selectedOption
                     ? selectedOption.value
@@ -507,7 +511,9 @@ const IP_Details = () => {
                     height: "39px",
                     minHeight: "39px",
                     width: "max-content",
-                    backgroundColor:isEmailValid(formData.email) ?"#fff" : "#faf5f8"
+                    backgroundColor: isEmailValid(formData.email)
+                      ? "#fff"
+                      : "#faf5f8",
                   }),
                   menu: (base) => ({ ...base, width: "200px" }),
                 }}
@@ -531,9 +537,9 @@ const IP_Details = () => {
                 className={`rounded-[7.26px]  border-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                   isEmailValid(formData.email)
                     ? "bg-white placeholder:text-gray-500 border-0 shadow-none"
-                    : "bg-[#ffffff10] placeholder:text-[#00000040] border-0 shadow-none"
+                    : "bg-[#ffffff90] placeholder:text-[#00000040] border-0 shadow-none"
                 }`}
-                maxLength={10}                
+                maxLength={10}
               />
             </div>
             {touched.primaryMobileNumber && !formData.primaryMobileNumber && (
@@ -592,7 +598,7 @@ const IP_Details = () => {
                 </label>
               </div>
             </div>
-            <div className="flex items-center h-[39px]">
+            <div className="flex items-center h-[39px] gap-3">
               <Select
                 options={countryOptions}
                 value={countryOptions.find(
@@ -618,7 +624,11 @@ const IP_Details = () => {
                     height: "39px",
                     minHeight: "39px",
                     width: "max-content",
-                     backgroundColor: sameAsMobile || isMobileValid(formData.primaryMobileNumber) ?"#fff" : "#faf5f8"
+                    backgroundColor:
+                      sameAsMobile ||
+                      isMobileValid(formData.primaryMobileNumber)
+                        ? "#fff"
+                        : "#faf5f8",
                   }),
                   menu: (base) => ({ ...base, width: "200px" }),
                 }}
@@ -643,7 +653,7 @@ const IP_Details = () => {
                 }
                 className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                   sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
-                    ? "bg-[#ffffff10] placeholder:text-[#00000040]"
+                    ? "bg-[#ffffff90] placeholder:text-[#00000040]"
                     : "bg-white placeholder:text-gray-500"
                 }`}
                 maxLength={10}
@@ -673,7 +683,7 @@ const IP_Details = () => {
             >
               Emergency Number *
             </Label>
-            <div className="flex items-center h-[39px]">
+            <div className="flex items-center h-[39px] gap-3">
               <Select
                 options={countryOptions}
                 value={countryOptions.find(
@@ -697,7 +707,9 @@ const IP_Details = () => {
                     height: "39px",
                     minHeight: "39px",
                     width: "max-content",
-                     backgroundColor: isMobileValid(formData.whatsappNumber) ?"#fff" : "#faf5f8"
+                    backgroundColor: isMobileValid(formData.whatsappNumber)
+                      ? "#fff"
+                      : "#faf5f8",
                   }),
                   menu: (base) => ({ ...base, width: "200px" }),
                 }}
@@ -719,7 +731,7 @@ const IP_Details = () => {
                 className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                   isMobileValid(formData.whatsappNumber)
                     ? "bg-white placeholder:text-gray-500"
-                    : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                    : "bg-[#ffffff90] placeholder:text-[#00000040]"
                 }`}
                 maxLength={10}
                 inputMode="numeric"

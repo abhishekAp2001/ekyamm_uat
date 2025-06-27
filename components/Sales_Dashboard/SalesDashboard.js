@@ -25,7 +25,7 @@ const SalesDashboard = () => {
     <>
       <div className="bg-gradient-to-r  from-[#B0A4F5] to-[#EDA197] rounded-bl-3xl rounded-br-3xl px-3 py-5 mb-0 fixed top-0 left-0 right-0 max-w-[576px] mx-auto">
         <div className="flex justify-between items-center">
-          <Menu color="white" width={24} />
+          <Menu color="white" width={24} className="mr-5" />
           <Image
             src="/images/ekyamm.png"
             width={100}
@@ -136,7 +136,7 @@ const SalesDashboard = () => {
                 </DrawerTitle>
                 <DrawerDescription className="mt-6 flex flex-col gap-3">
                   <Link href={"/sales/cp_type"}>
-                    <Button className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex  justify-between items-center w-full h-[50px]">
+                    <Button className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex  justify-between items-center w-full h-[50px] rounded-[8.62px]">
                       Channel Partner
                       <Image
                         src="/images/arrow.png"
@@ -148,7 +148,7 @@ const SalesDashboard = () => {
                     </Button>
                   </Link>
                   <Link href={"/sales/ip_details"}>
-                    <Button className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex  justify-between items-center w-full h-[50px]">
+                    <Button className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex  justify-between items-center w-full h-[50px] rounded-[8.62px]">
                       Individual Practitioner
                       <Image
                         src="/images/arrow.png"
@@ -159,7 +159,7 @@ const SalesDashboard = () => {
                       />
                     </Button>
                   </Link>
-                  <Button className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex  justify-between items-center w-full h-[50px]">
+                  <Button className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex  justify-between items-center w-full h-[50px] rounded-[8.62px]">
                     <Link href={""}>Clinic</Link>
                     <Image
                       src="/images/arrow.png"
