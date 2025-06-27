@@ -7,7 +7,7 @@ import { Calendar } from "@/components/ui/calendar";
 import Image from "next/image";
 import { addDays, format, isSameMonth, parseISO, subDays } from "date-fns";
 
-import { ChevronLeft, ChevronUpIcon, Loader, X } from "lucide-react";
+import { ChevronLeft, ChevronUpIcon, Loader, Loader2, X } from "lucide-react";
 import {
   Drawer,
   DrawerTrigger,
@@ -36,21 +36,24 @@ import {
 import axios from "axios";
 import { Baseurl } from "@/lib/constants";
 import SessionSection from "@/components/SessionSection";
-import Date_Slider from "@/components/Date_Slider/Date_Slider";
+
+import { showErrorToast, showSuccessToast } from "@/lib/toast";
 
 const Schedule_Session = () => {
   const router = useRouter();
   const patientSessionData = getPatientSessionData();
   const selectedCounsellorData = getSelectedCounsellorData();
 
-  const [isNavigating, setIsNavigating] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isFetchDaysNavigating, setIsFetchDaysNavigating] = useState(false);
   const [selectedFromTime, setSelectedFromTime] = useState(null);
   const [selectedToTime, setSelectedToTime] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [calenderLoading, setCalenderLoading] = useState(false);
   const [timeSlogLoading, setTimeSlogLoading] = useState(false);
+  const [sessionDetail, setSessionDetail] = useState("");
   const [calenderOpen, setCalenderOpen] = useState(false);
+  const [isRecurring, setIsRecurring] = useState(false);
   const [patientSessionToken, setPatientSessionToken] = useState(
     getPatientSessionToken()
   );
@@ -90,7 +93,8 @@ const Schedule_Session = () => {
 
     try {
       let bodyData = {
-        practitionerId: selectedCounsellorData?.loginId || "",
+        practitionerId:
+          "664de84a3b4469bc4e0327f3" || selectedCounsellorData?.loginId || "",
         year: year,
         month: month,
       };
@@ -123,6 +127,107 @@ const Schedule_Session = () => {
       setIsFetchDaysNavigating(false);
     }
   };
+
+  const validateForm = () => {
+    if (!patientSessionData?.firstName || !patientSessionData?.lastName) {
+      showErrorToast("Missing patient first or last name.");
+      return false;
+    }
+
+    const { loginId, generalInformation } = selectedCounsellorData || {};
+    if (
+      !loginId ||
+      !generalInformation?.firstName ||
+      !generalInformation?.lastName ||
+      !generalInformation?.email
+    ) {
+      showErrorToast(
+        "Missing practitioner login ID, first name, last name, or email."
+      );
+      return false;
+    }
+
+    if (!selectedDate || !selectedFromTime || !selectedToTime) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleBlur = (field) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  };
+
+  const [touched, setTouched] = useState({
+    sessionDate: false,
+    sessionTime: false,
+  });
+
+  const handleConfirmBooking = async () => {
+    setTouched((prev) => ({
+      ...prev,
+      sessionDate: true,
+      sessionTime: true,
+    }));
+
+    const isValid = validateForm();
+
+    if (!isValid) {
+      showErrorToast("All fields are required.");
+      return;
+    }
+
+    const payload = {
+      sessionDetails: {
+        sessionTime: {
+          from: selectedFromTime,
+          to: selectedToTime,
+        },
+        practitioner: {
+          practitionerId: selectedCounsellorData?.loginId || "",
+          name: `${
+            selectedCounsellorData?.generalInformation?.firstName || ""
+          } ${selectedCounsellorData?.generalInformation?.lastName || ""}`,
+          email: selectedCounsellorData?.generalInformation?.email || "",
+        },
+        sessionDetail: sessionDetail.trim(),
+      },
+    };
+
+    if (isRecurring) {
+      payload.recurringSession = true;
+    }
+
+    try {
+      setLoading(true);
+      const headers = {
+        headers: {
+          accesstoken: patientSessionToken,
+          "Content-Type": "application/json",
+        },
+      };
+
+      const response = await axios.post(
+        `${Baseurl}/v2/cp/patient/session`,
+        payload,
+        headers
+      );
+
+      if (response.data.success) {
+        showSuccessToast("Session booked successfully!");
+        setDrawerOpen(false);
+        // router.push("/patient/dashboard");
+      } else {
+        showErrorToast("Failed to book session. Please try again.");
+      }
+    } catch (error) {
+      showErrorToast(
+        error?.response?.data?.error?.message || "Something went wrong.1"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     fetchAvailability(currentMonth);
   }, [currentMonth]);
@@ -136,7 +241,8 @@ const Schedule_Session = () => {
       try {
         // practitionerId: selectedCounsellorData?.loginId || "",
         let bodyData = {
-          practitionerId: selectedCounsellorData?.loginId || "",
+          practitionerId:
+            "664de84a3b4469bc4e0327f3" || selectedCounsellorData?.loginId || "",
           sessionDate: selectedDate,
         };
         let headers = {
@@ -180,7 +286,7 @@ const Schedule_Session = () => {
           size={24}
           className="text-black cursor-pointer"
           onClick={() => {
-            router.push(`/patent/dashboard`);
+            router.push(`/patient/dashboard`);
           }}
         />
         <strong className="ml-2 text-[16px] font-semibold text-gray-800">
@@ -319,6 +425,7 @@ const Schedule_Session = () => {
                         value={
                           selectedDate ? format(selectedDate, "dd/MM/yyyy") : ""
                         }
+                        onBlur={() => handleBlur("sessionDate")}
                         placeholder="Enter date"
                         className="w-full h-10 rounded-[7.26px] bg-white px-3 py-2 border border-[#E6E6E6]"
                       />
@@ -363,6 +470,13 @@ const Schedule_Session = () => {
                     </div>
                   </PopoverContent>
                 </Popover>
+                {touched.sessionDate && !selectedDate ? (
+                  <span className="text-red-500 text-sm mt-1 block">
+                    Please select a session date
+                  </span>
+                ) : (
+                  <></>
+                )}
               </div>
 
               <div className="flex-1">
@@ -381,6 +495,7 @@ const Schedule_Session = () => {
                             ? format(parseISO(selectedFromTime), "hh:mm a")
                             : ""
                         }
+                        onBlur={() => handleBlur("sessionTime")}
                         className="opacity-50 w-full h-10 rounded-[7.26px] bg-white px-3 py-2  border border-[#E6E6E6] cursor-pointer"
                         onClick={() => {
                           if (selectedDate) {
@@ -476,13 +591,23 @@ const Schedule_Session = () => {
                       </DrawerClose>
                       <Button
                         className="flex-1 bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white h-[45px] rounded-[8px] text-[15px]"
-                        onClick={() => {}}
+                        onClick={() => {
+                          setDrawerOpen(false);
+                        }}
                       >
                         Confirm
                       </Button>
                     </DrawerFooter>
                   </DrawerContent>
                 </Drawer>
+                {touched.sessionTime &&
+                (!selectedFromTime || !selectedToTime) ? (
+                  <span className="text-red-500 text-sm mt-1 block">
+                    Please select a slot
+                  </span>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
 
@@ -490,7 +615,11 @@ const Schedule_Session = () => {
               <label className="text-[#8F8F8F]">
                 Weekly Recurring Sessions
               </label>
-              <Checkbox className="h-4 w-[16.05px] border-[1.5px] border-[#776EA5] rounded-[1.7px]" checked/>
+              <Checkbox
+                className="h-4 w-[16.05px] border-[1.5px] border-[#776EA5] rounded-[1.7px]"
+                checked={isRecurring}
+                onCheckedChange={(checked) => setIsRecurring(checked)}
+              />
             </div>
 
             <div>
@@ -498,19 +627,35 @@ const Schedule_Session = () => {
                 Session Details (Optional)
               </label>
               <textarea
+                value={sessionDetail}
+                onChange={(e) => setSessionDetail(e.target.value)}
                 placeholder="Enter session details here"
                 disabled
-                className="w-full h-[100px] rounded-[7.26px] bg-white px-3 py-2 border border-[#E6E6E6] opacity-50"
+                className="w-full h-[100px] rounded-[7.26px] bg-white px-3 py-2 border border-[#E6E6E6] opacity-80"
               />
             </div>
           </div>
 
           <div className="gap-3 fixed bottom-0 pb-[23px] left-0 right-0 flex justify-center z-50 bg-gradient-to-b from-[#fce8e5] to-[#fce8e5] max-w-[576px] mx-auto px-4 ">
-            <button className="border border-[#CC627B] text-[#CC627B] rounded-[8px] text-[15px] font-[600] w-[48%] h-[45px]">
+            <button
+              onClick={() => {
+                router.push(`/patient/dashboard`);
+              }}
+              className="border border-[#CC627B] text-[#CC627B] rounded-[8px] text-[15px] font-[600] w-[48%] h-[45px]"
+            >
               Cancel
             </button>
-            <button className="opacity-35 bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white rounded-[8px] text-[15px] font-[600] w-[48%] h-[45px]">
-              Confirm
+            <button
+              onClick={handleConfirmBooking}
+              type="button"
+              disabled={!validateForm() || loading}
+              className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white rounded-[8px] text-[15px] font-[600] w-[48%] h-[45px] flex items-center justify-center cursor-pointer"
+            >
+              {loading ? (
+                <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
+              ) : (
+                "Confirm"
+              )}
             </button>
           </div>
         </div>
