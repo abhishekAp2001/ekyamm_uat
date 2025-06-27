@@ -308,7 +308,7 @@ const CP_type = () => {
                 className={`rounded-[7.26px] font-semibold py-3 px-4 h-[39px] ${
                   formData.type
                     ? "bg-white placeholder:text-[15px] placeholder:text-gray-500"
-                    : "bg-[#ffffff10]"
+                    : "bg-[#ffffff90]"
                 }`}
               />
               {touched.clinicName && !formData.clinicName && (
@@ -342,7 +342,7 @@ const CP_type = () => {
                     className={`w-full rounded-[7.26px] font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
                       formData.clinicName
                         ? "bg-white placeholder:text-gray-500"
-                        : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                        : "bg-[#ffffff90] placeholder:text-[#00000040]"
                     }`}
                   />
                   {isUserNameAvailable === true ? (
@@ -414,7 +414,7 @@ const CP_type = () => {
                 className={`rounded-[7.26px] font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
                   formData.userName && isUserNameAvailable === true
                     ? "bg-white placeholder:text-gray-500"
-                    : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                    : "bg-[#ffffff90] placeholder:text-[#00000040]"
                 }`}
               />
 
@@ -496,7 +496,7 @@ const CP_type = () => {
                   className={`border rounded-[7.26px] font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                     isEmailValid(formData.email)
                       ? "bg-white placeholder:text-gray-500"
-                      : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                      : "bg-[#ffffff90] placeholder:text-[#00000040]"
                   }`}
                 />
               </div>
@@ -514,10 +514,10 @@ const CP_type = () => {
               )}
             </div>
             <div className="mt-[22px]">
-              <div className="flex items-center">
+              <div className="flex items-center justify-between">
                 <Label
                   htmlFor="whatsappNumber"
-                  className={`text-[15px] w-[55%] mb-2 ${
+                  className={`text-[15px] w-[55%] max-[576px]:w-[80%] ${
                     isMobileValid(formData.primaryMobileNumber)
                       ? "text-gray-500 border-0 shadow-none"
                       : "text-[#00000040] border-0 shadow-none"
@@ -525,8 +525,9 @@ const CP_type = () => {
                 >
                   Clinic Whatsapp Number *
                 </Label>
-                <div className="flex gap-[6px] items-center w-[45%]">
+                <div className="flex gap-[6px] items-center justify-end w-[45%]">
                   <Checkbox
+                  id="same_as_mobile"
                     checked={sameAsMobile}
                     onCheckedChange={(checked) => {
                       setSameAsMobile(checked);
@@ -543,9 +544,10 @@ const CP_type = () => {
                       }
                     }}
                     disabled={!isMobileValid(formData.primaryMobileNumber)}
-                    className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"
+                    className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] "
                   />
                   <label
+                  htmlFor="same_as_mobile"
                     className={`text-[12px] ${
                       isMobileValid(formData.primaryMobileNumber)
                         ? "text-gray-500 "
@@ -556,7 +558,7 @@ const CP_type = () => {
                   </label>
                 </div>
               </div>
-              <div className="flex items-center h-[39px]">
+              <div className="flex items-center h-[39px] gap-3">
                 <Select
                   options={countryOptions}
                   value={countryOptions.find(
@@ -611,7 +613,7 @@ const CP_type = () => {
                   }
                   className={`rounded-[7.26px] border-0 font-semibold rounded-l-none placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                     sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
-                      ? "bg-[#ffffff10] placeholder:text-[#00000040] border-0 shadow-none"
+                      ? "bg-[#ffffff90] placeholder:text-[#00000040] border-0 shadow-none"
                       : "bg-white placeholder:text-gray-500 border-0 shadow-none"
                   }`}
                 />
@@ -690,7 +692,7 @@ const CP_type = () => {
                   className={`border rounded-[7.26px] font-semibold rounded-l-none shadow border-l-0 placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                     isMobileValid(formData.whatsappNumber)
                       ? "bg-white placeholder:text-gray-500 border-0 shadow-none"
-                      : "bg-[#ffffff10] placeholder:text-[#00000040] border-0 shadow-none"
+                      : "bg-[#ffffff90] placeholder:text-[#00000040] border-0 shadow-none"
                   }`}
                 />
               </div>

@@ -169,31 +169,33 @@ const IP_General_Information = () => {
             <Label className="text-[15px] mb-2 mt-[22px] text-gray-500">
               Years of Experience *
             </Label>
-            <div className="flex items-baseline gap-2">
-              <Input
-                type="number"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                placeholder="Exp."
-                className="bg-white rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] placeholder:text-gray-500 py-3 px-3 w-[46px] h-[38px]"
-                value={formData.yearsOfExperience}
-                onChange={(e) => handleInputChange(e, "yearsOfExperience")}
-                onBlur={() => handleBlur("yearsOfExperience")}
-              />
-              <span className="text-[15px] text-gray-500">Years</span>
-            </div>
-            {touched.yearsOfExperience && !formData.yearsOfExperience && (
-              <span className="text-red-500 text-sm mt-1 block">
-                Years of experience is required
-              </span>
-            )}
-            {touched.yearsOfExperience &&
-              formData.yearsOfExperience &&
-              !isYearsOfExperienceValid() && (
+            <div>
+              <div className="flex items-baseline justify-end gap-2">
+                <Input
+                  type="number"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="0"
+                  className="bg-white rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] placeholder:text-gray-500 py-3 px-3 w-[46px] h-[38px]"
+                  value={formData.yearsOfExperience}
+                  onChange={(e) => handleInputChange(e, "yearsOfExperience")}
+                  onBlur={() => handleBlur("yearsOfExperience")}
+                />
+                <span className="text-[15px] text-gray-500">Years</span>
+              </div>
+              {touched.yearsOfExperience && !formData.yearsOfExperience && (
                 <span className="text-red-500 text-sm mt-1 block">
-                  Must be a valid number
+                  Years of experience is required
                 </span>
               )}
+              {touched.yearsOfExperience &&
+                formData.yearsOfExperience &&
+                !isYearsOfExperienceValid() && (
+                  <span className="text-red-500 text-sm mt-1 block">
+                    Must be a valid number
+                  </span>
+                )}
+            </div>
           </div>
 
           {/* Specialization selector */}
@@ -215,7 +217,7 @@ const IP_General_Information = () => {
                   className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-3 h-[38px] ${
                     isYearsOfExperienceValid()
                       ? "bg-white placeholder:text-gray-500"
-                      : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                      : "bg-[#ffffff90] placeholder:text-[#00000040]"
                   }`}
                   value={specialisationInput}
                   onChange={(e) => setSpecialisationInput(e.target.value)}
@@ -283,7 +285,7 @@ const IP_General_Information = () => {
                   className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-3 h-[38px] ${
                     isSpecializationValid()
                       ? "bg-white placeholder:text-gray-500"
-                      : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                      : "bg-[#ffffff90] placeholder:text-[#00000040]"
                   }`}
                   value={dontTreatInput}
                   onChange={(e) => setDontTreatInput(e.target.value)}
@@ -347,7 +349,7 @@ const IP_General_Information = () => {
               className={`text-[15px] text-black font-semibold ${
                 isWhatIDontTreatValid()
                   ? "bg-white"
-                  : "bg-[#ffffff10] text-[#00000040] placeholder:font-medium placeholder:text-gray-500"
+                  : "bg-[#ffffff90] text-[#00000040] placeholder:font-medium placeholder:text-gray-500"
               }`}
               value={formData.whatToExpectInSession}
               onChange={(e) => handleInputChange(e, "whatToExpectInSession")}
@@ -379,7 +381,7 @@ const IP_General_Information = () => {
                   className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-3 h-[38px] ${
                     isWhatToExpectValid()
                       ? "bg-white placeholder:text-gray-500"
-                      : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                      : "bg-[#ffffff90] placeholder:text-[#00000040]"
                   }`}
                   value={languageInput}
                   onChange={(e) => setLanguageInput(e.target.value)}

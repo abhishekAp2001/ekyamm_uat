@@ -84,7 +84,7 @@ one symbol, and no spaces.`;
       isValid = false;
       console.log("in4");
     }
-// console.log("verifiedUser",verifiedUser?.verificationToken  );
+    // console.log("verifiedUser",verifiedUser?.verificationToken  );
     console.log("formData", formData);
 
     setFormErrors(newErrors);
@@ -145,7 +145,7 @@ one symbol, and no spaces.`;
       router.push(`/patient/${type}/create`);
       return;
     }
-    const verifiedUserData = JSON.parse(verifiedUserCookie);    
+    const verifiedUserData = JSON.parse(verifiedUserCookie);
     setVerifiedUser(verifiedUserData);
 
     const patientCookie = getCookie("patientLoginDetail");
@@ -367,7 +367,12 @@ one symbol, and no spaces.`;
                 <div className="flex justify-between items-center mt-[24.69px]  gap-3">
                   <Button
                     type="submit"
-                    disabled={loading}
+                    // disabled={loading}
+                    disabled={
+                      loading ||
+                      !formData.password.trim() ||
+                      !formData.confirmPassword.trim()
+                    }
                     className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]   rounded-[8px] flex items-center justify-center w-full h-[45px]"
                   >
                     {loading ? (

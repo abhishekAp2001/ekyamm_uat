@@ -195,7 +195,7 @@ const EP_registration = ({ type }) => {
   );
 
   const handleMobileNumberChange = (e) => {
-    const value = e.target.value;
+    const value = e.target.value.replace(/\D/g, "").slice(0, 10);
     setFormData((prev) => ({
       ...prev,
       primaryMobileNumber: value,
@@ -247,7 +247,7 @@ const EP_registration = ({ type }) => {
             <Label className="text-[15px] text-gray-500 font-medium mb-[7.59px]">
               Primary Mobile Number <span className="text-red-500">*</span>
             </Label>
-            <div className="flex items-center relative">
+            <div className="flex items-center relative gap-3">
               <Select
                 options={countryOptions}
                 value={countryOptions.find(
@@ -286,14 +286,14 @@ const EP_registration = ({ type }) => {
                 menuPlacement="top"
               />
               <Input
-                type="number"
+                type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
                 value={formData.primaryMobileNumber}
                 onChange={handleMobileNumberChange}
                 onBlur={() => handleBlur("primaryMobileNumber")}
                 placeholder="Enter Mobile Number"
-                className="bg-white border border-gray-300 rounded-l-none rounded-r-[7.26px] placeholder:text-[15px] placeholder:text-gray-500 placeholder:font-medium font-semibold py-2 px-4 h-[39px] w-full"
+                className="bg-white border border-gray-300 rounded-[7.26px] placeholder:text-[15px] placeholder:text-gray-500 placeholder:font-medium font-semibold py-2 px-4 h-[39px] w-full"
                 disabled={loading} // Disable input during search
               />
             </div>

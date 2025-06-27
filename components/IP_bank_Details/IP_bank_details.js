@@ -381,7 +381,7 @@ const IP_bank_details = () => {
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
                 isIfscValid(formData.ifscCode)
                   ? "bg-white placeholder:text-gray-500"
-                  : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                  : "bg-[#ffffff90] placeholder:text-[#00000040]"
               }`}
             />
             {touched.bankName && !formData.bankName && (
@@ -411,7 +411,7 @@ const IP_bank_details = () => {
                 className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
                   formData.bankName
                     ? "bg-white placeholder:text-gray-500"
-                    : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                    : "bg-[#ffffff90] placeholder:text-[#00000040]"
                 }`}
               />
               {touched.accountNumber &&
@@ -461,7 +461,7 @@ const IP_bank_details = () => {
                 className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
                   isAccountNumberValid(formData.accountNumber)
                     ? "bg-white placeholder:text-gray-500"
-                    : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                    : "bg-[#ffffff90] placeholder:text-[#00000040]"
                 }`}
               />
               {touched.confirmAccountNumber &&
@@ -526,7 +526,7 @@ const IP_bank_details = () => {
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
                 isConfirmAccountNumberValid()
                   ? "bg-white placeholder:text-gray-500"
-                  : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                  : "bg-[#ffffff90] placeholder:text-[#00000040]"
               }`}
             />
             {touched.accountHolderName && !formData.accountHolderName && (
@@ -617,7 +617,7 @@ const IP_bank_details = () => {
                 Sending Invite...
               </div>
             ) : (
-              "Send Invites"
+              "Send Invite"
             )}
           </Button>
         </div>

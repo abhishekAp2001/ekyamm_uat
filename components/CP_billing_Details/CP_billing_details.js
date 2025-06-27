@@ -283,13 +283,13 @@ const CP_billing_details = () => {
                   type="email"
                   placeholder="Enter your email"
                   value={formData.billingEmail}
-                  onChange={(e) => handleTextInputChange(e, "billingEmail")}
+                  onChange={(e) => handleTextInputChange({ ...e, target: { ...e.target, value: e.target.value.toLowerCase() } }, "billingEmail")}
                   onBlur={() => handleBlur("billingEmail")}
                   disabled={!formData.billingType}
                   className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
                     formData.billingType
                       ? "bg-white placeholder:text-gray-500"
-                      : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                      : "bg-[#ffffff90] placeholder:text-[#00000040]"
                   }`}
                 />
                 {touched.billingEmail && !formData.billingEmail && (
@@ -330,7 +330,7 @@ const CP_billing_details = () => {
               className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
                 formData.billingType
                   ? "bg-white placeholder:text-gray-500"
-                  : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                  : "bg-[#ffffff90] placeholder:text-[#00000040]"
               }`}
               maxLength={10}
             />
@@ -369,7 +369,7 @@ const CP_billing_details = () => {
                   className={`w-[60px] rounded-l-[7.26px] rounded-r-none  text-[15px] font-semibold h-[39px] px-2 ${
                     isPanCardValid(formData.panCard)
                       ? "bg-white text-gray-500"
-                      : "bg-[#ffffff10] text-[#00000040]"
+                      : "bg-[#ffffff90] text-[#00000040]"
                   }`}
                 >
                   <SelectValue placeholder="State" />
@@ -401,7 +401,7 @@ const CP_billing_details = () => {
                 className={`text-[14px] font-semibold px-2 text-black outline-none w-[70px] ${
                   isPanCardValid(formData.panCard)
                     ? "bg-white placeholder:text-gray-500"
-                    : "bg-[#ffffff10] placeholder:text-[#00000040]"
+                    : "bg-[#ffffff90] placeholder:text-[#00000040]"
                 }`}
                 maxLength={3}
               />
