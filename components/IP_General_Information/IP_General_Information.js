@@ -434,7 +434,9 @@ const IP_General_Information = () => {
             <div className="">
               <Label
                 htmlFor="text"
-                className="text-[15px] font-medium mb-2 mt-[22px] text-gray-500"
+                className={`text-[15px] font-medium mb-[7.59px] ${
+                  isWhatToExpectValid() ? "text-gray-500" : "text-[#00000040]"
+                }`}
               >
                 Suggested Languages
               </Label>
@@ -452,6 +454,7 @@ const IP_General_Information = () => {
                         "languageProficiency"
                       )
                     }
+                    disabled={!isWhatToExpectValid()}
                   >
                     {language}
                     <CirclePlus

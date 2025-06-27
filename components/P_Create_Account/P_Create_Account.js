@@ -10,7 +10,7 @@ import axiosInstance from "@/lib/axiosInstance";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { useRouter } from "next/navigation";
-import { sanitizeInput } from "@/lib/utils";
+import { customEncodeString, encryptData, sanitizeInput } from "@/lib/utils";
 
 const P_Create_Account = ({ type }) => {
   const customAxios = axiosInstance();
@@ -107,9 +107,11 @@ one symbol, and no spaces.`;
 
       setFormLoader(true);
       try {
+        const encodedPassword = customEncodeString(formData.password);
+        const encryptedPassword = encryptData(encodedPassword);
         const response = await customAxios.post(`v2/cp/user/signin`, {
           verificationToken: verifiedUser?.verificationToken,
-          password: formData.password,
+          password: encryptedPassword,
           mobileNumber: formData.mobileNumber,
           countryCode: "🇮🇳 +91",
           mobileVerified: true,

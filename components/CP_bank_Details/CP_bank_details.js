@@ -37,7 +37,7 @@ const CP_bank_details = () => {
   const isAccountNumberValid = (account) => /^\d{9,18}$/.test(account);
   const isAccountHolderNameValid = (name) => /^[A-Za-z\s]{3,}$/.test(name);
   const isConfirmAccountNumberValid = () =>
-    formData.accountNumber === formData.confirmAccountNumber;
+    formData.accountNumber === formData.confirmAccountNumber && formData.accountNumber !== ""
   const isFormValid = () =>
     isIfscValid(formData.ifscCode) &&
     formData.bankName &&

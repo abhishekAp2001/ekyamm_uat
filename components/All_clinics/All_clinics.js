@@ -7,15 +7,24 @@ const All_clinics = ({ list }) => {
     <>
       <div className="flex flex-wrap mt-[10.9px]">
         {list?.map((list, index) => (
-          <div key={index}
+          <div
+            key={index}
             className="w-1/3 rounded-[65px] flex flex-col items-center gap-1 mb-3.5"
           >
             <Avatar>
               <AvatarFallback>
-                {list?.clinicName ||
-                  `${list?.generalInformation?.firstName} ${list?.generalInformation?.lastName}`}
+                {list?.clinicName
+                  ? list.clinicName
+                      .split(" ")
+                      .map((word) => word[0])
+                      .join("")
+                      .toUpperCase()
+                  : `${list?.generalInformation?.firstName?.[0] || ""}${
+                      list?.generalInformation?.lastName?.[0] || ""
+                    }`.toUpperCase()}
               </AvatarFallback>
             </Avatar>
+
             <div className="flex flex-col">
               <span className="text-[14px] text-black font-medium whitespace-pre-line text-center">
                 {list?.clinicName ||

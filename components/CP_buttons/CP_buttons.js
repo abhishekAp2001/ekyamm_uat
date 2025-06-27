@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { deleteCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
@@ -20,7 +20,10 @@ import { X } from "lucide-react";
 
 const CP_buttons = ({ disabled, onSave, buttonText = "Save & Continue" }) => {
   const router = useRouter();
-
+  const [show,setShow] = useState(false)
+  const handleClose = () =>{
+    setShow(false)
+  }
   const handleCancel = () => {
     router.push("/sales");
     deleteCookie("cp_type");
@@ -38,34 +41,26 @@ const CP_buttons = ({ disabled, onSave, buttonText = "Save & Continue" }) => {
         }}>
           Cancel
         </Button> */}
-        <Drawer className="pt-[9.97px] max-w-[576px] m-auto">
-          <DrawerTrigger className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+        <Drawer open={show} onClose={handleClose} className="pt-[9.97px] max-w-[576px] m-auto">
+          <DrawerTrigger onClick={()=>setShow(true)} className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
             Cancel
           </DrawerTrigger>
           <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
             <DrawerHeader>
               <DrawerTitle className="text-[16px] font-[600] text-center">
-                Are you sure
+                By cancelling, you are confirming to not add this partner to be part of Ekyamm
               </DrawerTitle>
               <DrawerDescription className="mt-6 flex gap-3 w-full">
-                <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                <Button onClick={()=>handleCancel()} className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
                   Confirm
                 </Button>
 
-                <Button className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                <Button onClick={()=>handleClose()} className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
                   Continue
                 </Button>
               </DrawerDescription>
             </DrawerHeader>
             <DrawerFooter className="p-0">
-              <DrawerClose>
-                <Button
-                  variant="outline"
-                  className="absolute top-[10px] right-0"
-                >
-                  <X className="w-2 h-2 text-black" />
-                </Button>
-              </DrawerClose>
             </DrawerFooter>
           </DrawerContent>
         </Drawer>
