@@ -4,6 +4,7 @@ import { ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { formatAmount } from "@/lib/utils";
 
 const Profile = ({
   setShowCounsellorProfile,
@@ -147,8 +148,14 @@ const Profile = ({
 
       {/* Fixed Bottom CTA Button */}
       <div className="fixed bottom-0 left-0 right-0 bg-[#fce8e5] flex justify-center py-4 max-w-[576px] mx-auto px-6">
-        <Button className="w-full h-[45px] bg-gradient-to-r from-[#E7A1A0] to-[#BBA3E4] text-white text-[15px] font-semibold rounded-[8px]">
-          Book Now at ₹1,500/- per session
+        <Button
+          onClick={() => {
+            setCookie("selectedCounsellor", JSON.stringify(doc));
+            router.push("/patient/schedule-session");
+          }}
+          className="w-full h-[45px] bg-gradient-to-r from-[#E7A1A0] to-[#BBA3E4] text-white text-[15px] font-semibold rounded-[8px]"
+        >
+          Book Now at {formatAmount(doc?.practiceDetails?.fees?.singleSession)}/- per session
         </Button>
       </div>
     </div>
