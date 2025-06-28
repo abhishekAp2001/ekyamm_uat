@@ -376,7 +376,7 @@ const P_Mobile_Verification = ({ type }) => {
                 <>
                   <div className="my-[15px]">
                     <div className="text-[12px] text-gray-500 font-medium text-left mb-1 relative ">
-                      Enter OTP
+                      Enter OTP 
                     </div>
 
                     <div className="relative flex items-center">
