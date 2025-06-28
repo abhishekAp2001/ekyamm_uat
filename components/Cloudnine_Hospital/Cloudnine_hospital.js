@@ -8,7 +8,7 @@ import { Button } from "../ui/button";
 import Select_Header from "../Select_Header/Select_header";
 import Footer_bar from "../Footer_bar/Footer_bar";
 import Link from "next/link";
-import { deleteCookie, getCookie, setCookie } from "cookies-next";
+import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import Select from "react-select";
 import axiosInstance from "@/lib/axiosInstance";
@@ -21,6 +21,7 @@ import {
   formatAmount,
 } from "@/lib/utils";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "../ui/drawer";
+import PR_Header from "../PR_Header/PR_Header";
 polyfillCountryFlagEmojis();
 
 const Cloudnine_Hospital = ({ type }) => {
@@ -34,6 +35,7 @@ const Cloudnine_Hospital = ({ type }) => {
   const [feeLoading, setFeeLoading] = useState(false);
   const [billingType, setBillingType] = useState("");
   const [totalPayable, setTotalPayable] = useState(0);
+  const [show, setShow ] = useState(false)
   const [patientPreviousData, setPatientPreviousData] = useState({
     _id: "",
     firstName: "",
@@ -53,6 +55,10 @@ const Cloudnine_Hospital = ({ type }) => {
     min: 0,
     max: 0,
   });
+
+  const handleClose = () =>{
+    setShow(false)
+  }
 
   const isFormValid = () => {
     // console.log("formData", formData);
@@ -206,11 +212,6 @@ const Cloudnine_Hospital = ({ type }) => {
 
   const handleCancel = async () => {
     setCancelLoading(true);
-    const confirmChange = window.confirm(`Are you sure?`);
-    if (!confirmChange) {
-      setCancelLoading(false);
-      return;
-    }
 
     try {
       const response = await axios.delete(`v2/cp/patient/delete`, {
@@ -319,7 +320,15 @@ const Cloudnine_Hospital = ({ type }) => {
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
-        <Select_Header />
+        <PR_Header
+          type={type}
+          patientType={
+            hasCookie("invitePatientInfo") &&
+            JSON.parse(getCookie("invitePatientInfo"))?.patientType
+          }
+          text="Select Package"
+          handleCancel={handleCancel}
+        />
         <div className="h-full overflow-auto pb-[28%] px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb]">
           <div className="w-full h-[25px] text-[#776EA5] font-semibold text-[20px] leading-[25px] mb-2 text-center">
             {channelPartnerData?.clinicName || "Greetings Hospital"}
@@ -371,7 +380,7 @@ const Cloudnine_Hospital = ({ type }) => {
                       height: "39px",
                       minHeight: "39px",
                       width: "max-content",
-                       backgroundColor:formData.lastName ?"#fff" : "#fcf9fb"
+                      backgroundColor: formData.lastName ? "#fff" : "#fcf9fb",
                     }),
                     menu: (base) => ({ ...base, width: "200px" }),
                   }}
@@ -464,48 +473,54 @@ const Cloudnine_Hospital = ({ type }) => {
         {/* Buttons */}
         <div className="bg-gradient-to-b from-[#fce8e5] to-[#fce8e5] flex flex-col items-center gap-3 fixed bottom-0 pb-[23px] px-[17px] left-0 right-0 max-w-[576px] mx-auto">
           <div className="w-full flex gap-[12.2px]">
-            {/* <Button
-              onClick={handleCancel}
-              disabled={cancelLoading}
-              className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px] rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
+            <Drawer
+              open={show}
+              onClose={() => handleClose()}
+              className="pt-[9.97px] max-w-[576px] m-auto"
             >
-              {cancelLoading ? (
-                <Loader2Icon className="animate-spin" />
-              ) : (
-                "Cancel"
-              )}
-            </Button> */}
-             <Drawer className="pt-[9.97px] max-w-[576px] m-auto">
-                      <DrawerTrigger className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
-                        Cancel
-                      </DrawerTrigger>
-                      <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
-                        <DrawerHeader>
-                          <DrawerTitle className="text-[16px] font-[600] text-center">
-                            Are you sure
-                          </DrawerTitle>
-                          <DrawerDescription className="mt-6 flex gap-3 w-full">
-                            <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
-                              Confirm
-                            </Button>
-            
-                            <Button className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
-                              Continue
-                            </Button>
-                          </DrawerDescription>
-                        </DrawerHeader>
-                        <DrawerFooter className="p-0">
-                          <DrawerClose>
-                            <Button
-                              variant="outline"
-                              className="absolute top-[10px] right-0"
-                            >
-                              <X className="w-2 h-2 text-black" />
-                            </Button>
-                          </DrawerClose>
-                        </DrawerFooter>
-                      </DrawerContent>
-                    </Drawer>
+              <DrawerTrigger
+                onClick={() => {
+                  setShow(true);
+                }}
+                className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
+              >
+                {cancelLoading ? (
+                  <Loader2Icon className="animate-spin" />
+                ) : (
+                  "Cancel"
+                )}
+              </DrawerTrigger>
+              <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
+                <DrawerHeader>
+                  <DrawerTitle className="text-[16px] font-[600] text-center">
+                    {hasCookie("invitePatientInfo") &&
+                    JSON.parse(getCookie("invitePatientInfo"))?.patientType ===
+                      1
+                      ? "By cancelling, you are confirming to not add additional session for this patient"
+                      : "By cancelling, you are confirming to not Invite this patient to avail body-mind-emotional balance"}
+                  </DrawerTitle>
+                  <DrawerDescription className="mt-6 flex gap-3 w-full">
+                    <Button onClick={()=>{
+                      if(hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType === 1){
+                        deleteCookie("invitePatientInfo")
+                        deleteCookie("sessions_selection")
+                        router.push(`/channel-partner/${type}/patient-registration`)
+                      }
+                      if(hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType === 2){
+                        setShow(false)
+                        handleCancel()
+                      }
+                      }} className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                      Confirm
+                    </Button>
+
+                    <Button onClick={()=>handleClose()} className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                      Continue
+                    </Button>
+                  </DrawerDescription>
+                </DrawerHeader>
+              </DrawerContent>
+            </Drawer>
             <Button
               onClick={handleGenerateInvoice}
               disabled={loading || !isFormValid()}

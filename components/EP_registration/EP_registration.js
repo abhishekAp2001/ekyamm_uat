@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import EP_Header from "../EP_Header/EP_Header";
 import Footer_bar from "../Footer_bar/Footer_bar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -16,6 +15,7 @@ import axios from "axios";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { Loader2Icon, MapPin } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import PR_Header from "../PR_Header/PR_Header";
 
 // Custom debounce function
 const customDebounce = (func, delay) => {
@@ -174,8 +174,7 @@ const EP_registration = ({ type }) => {
     // console.log('formData',formData)
     //   return
     try {
-      setCookie("invitePatientInfo", JSON.stringify(formData));
-      showSuccessToast("Patient added.");
+      setCookie("invitePatientInfo", JSON.stringify({...formData,patientType:1}));
       router.push(`/channel-partner/${type}/patient-history`);
     } catch (err) {
       showErrorToast(
@@ -228,7 +227,7 @@ const EP_registration = ({ type }) => {
 
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
-      <EP_Header />
+      <PR_Header type={type} patientType={1} text="Existing Patient" />
       <div className="h-full pb-[28%] lg:pb-[14%] overflow-auto px-[17px]">
         <div className="w-full h-[25px] text-[#776EA5] font-semibold text-[20px] leading-[25px] mb-2 text-center">
           {channelPartnerData?.clinicName || "Greetings Hospital"}

@@ -514,7 +514,7 @@ const PP_Details = ({ type }) => {
                 src="/images/camera.png"
                 width={31}
                 height={31}
-                className="w-[31px] h-fit absolute bottom-[-10px] right-[-10px]"
+                className="w-[31px] h-fit absolute bottom-[-10px] right-[-10px] "
                 alt="Camera"
                 onClick={() => setDrawerOpen(true)}
               />
@@ -736,7 +736,7 @@ const PP_Details = ({ type }) => {
                 </label>
               </div>
             </div>
-            <div className="flex items-center h-[39px]">
+            <div className="flex items-center gap-3 h-[39px]">
               <Select
                 options={countryOptions}
                 value={countryOptions.find(
@@ -789,7 +789,7 @@ const PP_Details = ({ type }) => {
                 disabled={
                   sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
                 }
-                className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
+                className={`border rounded-[7.26px] border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                   sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
                     ? "bg-[#ffffff90] placeholder:text-[#00000040]"
                     : "bg-white placeholder:text-gray-500"

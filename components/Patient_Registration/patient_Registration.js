@@ -98,7 +98,8 @@ const Patient_Registration = ({ type }) => {
       });
 
       if (response?.data?.success === true) {
-        setCookie("invitePatientInfo", JSON.stringify(response?.data?.data?.patient));
+        const patientData = {...response?.data?.data?.patient,patientType:2}
+        setCookie("invitePatientInfo", JSON.stringify(patientData));
         router.push(`/channel-partner/${type}/patient-history`);
       } else {
         showErrorToast(
@@ -138,7 +139,7 @@ const Patient_Registration = ({ type }) => {
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
-        <PR_Header />
+        <PR_Header type={type} patientType={2} text="New Patient Registration"  />
         <div className="h-full pt-[15%] lg:pt-[10%] pb-[20%] lg:pb-[12%]  overflow-auto px-[16px]">
           <div className="w-full h-[25px] text-[#776EA5] font-semibold text-[20px] leading-[25px] mb-2 text-center">
             {channelPartnerData?.clinicName || "Greetings Hospital"}

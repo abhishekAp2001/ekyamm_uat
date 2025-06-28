@@ -8,7 +8,7 @@ import { Textarea } from "../ui/textarea";
 import Footer_bar from "../Footer_bar/Footer_bar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { deleteCookie, getCookie, setCookie } from "cookies-next";
+import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next";
 import Select from "react-select";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import axiosInstance from "@/lib/axiosInstance";
@@ -34,6 +34,7 @@ const Patient_History = ({ type }) => {
   const [countrySearch, setCountrySearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [cancelLoading, setCancelLoading] = useState(false);
+  const [show, setShow] = useState(false)
   const [patientPreviousData, setPatientPreviousData] = useState({
     _id: "",
     firstName: "",
@@ -46,6 +47,10 @@ const Patient_History = ({ type }) => {
     cp_patientId: patientPreviousData?._id,
     history: "",
   });
+
+  const handleClose = () =>{
+    setShow(false)
+  }
 
   const isFormValid = () => {
     // console.log("formData", formData);
@@ -76,10 +81,10 @@ const Patient_History = ({ type }) => {
       const response = await axios.post(`v2/cp/patient/history`, formData);
 
       if (response?.data?.success === true) {
-        showSuccessToast(response?.data?.data?.message || "Patient added.");
+        // showSuccessToast(response?.data?.data?.message || "Patient added.");
         setCookie(
           "invitePatientInfo",
-          JSON.stringify(response?.data?.data?.patient)
+          JSON.stringify({...response?.data?.data?.patient,patientType: patientPreviousData?.patientType})
         );
         router.push(`/channel-partner/${type}/sessions-selection`);
       } else {
@@ -99,11 +104,6 @@ const Patient_History = ({ type }) => {
   };
   const handleCancel = async () => {
     setCancelLoading(true);
-    const confirmChange = window.confirm(`Are you sure?`);
-    if (!confirmChange) {
-      setCancelLoading(false);
-      return;
-    }
 
     try {
       const response = await axios.delete(`v2/cp/patient/delete`, {
@@ -202,7 +202,14 @@ const Patient_History = ({ type }) => {
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
-        <PR_Header />
+        <PR_Header
+          type={type}
+          patientType={hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType}
+          text={
+            hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType === 1 ? "Existing Patient" : "New Patient Registration"
+          }
+          handleCancel={handleCancel}
+        />
         <div className="h-full pb-[30%] lg:pb-0 overflow-auto px-[16px] bg-gradient-to-t  from-[#fce8e5]  to-[#eeecfb]">
           <div className="w-full h-[25px] text-[#776EA5] font-semibold text-[20px] leading-[25px] mb-2 text-center">
             {channelPartnerData?.clinicName || "Greetings Hospital"}
@@ -305,60 +312,46 @@ const Patient_History = ({ type }) => {
           {/* Buttons */}
           <div className="bg-gradient-to-t from-[#fce8e5] to-[#fce8e5] flex flex-col justify-between items-center gap-4 mt-[20.35px] fixed bottom-0 pb-[23px] left-0 right-0 px-4 max-w-[576px] mx-auto">
             <div className="w-full flex gap-[12.2px]">
-              {/* <Button
-                onClick={handleCancel}
-                disabled={cancelLoading}
-                className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px] rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
-              >
-                {cancelLoading ? (
+              <Drawer open={show} onClose={()=>handleClose()} className="pt-[9.97px] max-w-[576px] m-auto">
+                <DrawerTrigger onClick={()=>{setShow(true)}}  className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                  {cancelLoading ? (
                   <Loader2Icon className="animate-spin" />
                 ) : (
                   "Cancel"
                 )}
-              </Button> */}
-
-              <Drawer className="pt-[9.97px] max-w-[576px] m-auto">
-                <DrawerTrigger className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
-                  Cancel
                 </DrawerTrigger>
                 <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
                   <DrawerHeader>
                     <DrawerTitle className="text-[16px] font-[600] text-center">
-                      Are you sure
+                      {
+                         hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType === 1 ? 
+                         "By cancelling, you are confirming to not add additional session for this patient" 
+                         :
+                          "By cancelling, you are confirming to not Invite this patient to avail body-mind-emotional balance"
+                      }
                     </DrawerTitle>
                     <DrawerDescription className="mt-6 flex gap-3 w-full">
-                      <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                      <Button onClick={()=>{
+                        if(hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType === 1){
+                          deleteCookie("invitePatientInfo")
+                          deleteCookie("sessions_selection")
+                          router.push(`/channel-partner/${type}/patient-registration`)
+                        }
+                        if(hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType === 2){
+                          setShow(false)
+                          handleCancel()
+                        }
+                      }} className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
                         Confirm
                       </Button>
 
-                      <Button className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                      <Button onClick={()=>handleClose()} className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
                         Continue
                       </Button>
                     </DrawerDescription>
                   </DrawerHeader>
-                  <DrawerFooter className="p-0">
-                    <DrawerClose>
-                      <Button
-                        variant="outline"
-                        className="absolute top-[10px] right-0"
-                      >
-                        <X className="w-2 h-2 text-black" />
-                      </Button>
-                    </DrawerClose>
-                  </DrawerFooter>
                 </DrawerContent>
               </Drawer>
-              {/* <Button
-                onClick={handleSelectPackage}
-                disabled={loading}
-                className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] mx-auto rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
-              >
-                {loading ? (
-                  <Loader2Icon className="animate-spin" />
-                ) : (
-                  "Select Package"
-                )}
-              </Button> */}
 
               <Button
                 onClick={handleSelectPackage}
