@@ -381,6 +381,8 @@ const P_Mobile_Verification = ({ type }) => {
 
                     <div className="relative flex items-center">
                       <OTPInput
+                        type="text"
+                        inputType="number"
                         value={otp}
                         onChange={setOtp}
                         numInputs={6}

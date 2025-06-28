@@ -360,6 +360,8 @@ const OTP_Send = ({ type }) => {
                     <div className="my-[15px]">
                       <div className="relative flex items-center">
                         <OTPInput
+                          type="text"
+                          inputType="number"
                           value={otp}
                           onChange={setOtp}
                           numInputs={6}
