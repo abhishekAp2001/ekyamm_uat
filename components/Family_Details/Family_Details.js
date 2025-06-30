@@ -52,7 +52,7 @@ const Family_Details = ({ type }) => {
     countryCode_whatsapp: "🇮🇳 +91",
     whatsappNumber: "",
   });
-
+  const [show, setShow] = useState(false);
   const [touched, setTouched] = useState({
     relation: false,
     firstName: false,
@@ -244,6 +244,10 @@ const Family_Details = ({ type }) => {
     };
     verifyChannelPartner(type);
   }, [type]);
+
+  const handleClose = () => {
+    setShow(false);
+  };
 
   return (
     <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col max-w-[576px] mx-auto">
@@ -567,21 +571,29 @@ const Family_Details = ({ type }) => {
           >
             Cancel
           </Button> */}
-          <Drawer className="pt-[9.97px] max-w-[576px] m-auto">
-            <DrawerTrigger className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+            <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
+            onClick={() => setShow(true)}>
               Cancel
-            </DrawerTrigger>
+            </Button>          
+          <Drawer className="pt-[9.97px] max-w-[576px] m-auto"
+          open={show}
+          onClose={handleClose}
+          >
             <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
               <DrawerHeader>
                 <DrawerTitle className="text-[16px] font-[600] text-center">
                   Are you sure
                 </DrawerTitle>
                 <DrawerDescription className="mt-6 flex gap-3 w-full">
-                  <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                  <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
+                  onClick={() => handleClose()}
+                  >
                     Confirm
                   </Button>
 
-                  <Button className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                  <Button className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
+                  onClick={() => handleClose()}
+                  >
                     Continue
                   </Button>
                 </DrawerDescription>
