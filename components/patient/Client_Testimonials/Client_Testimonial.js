@@ -24,17 +24,17 @@ const Client_Testimonial = ({ setShowClientTestimonials, doc }) => {
           </span>
         </div>
       </div>
-      {doc?.testimonials?.map((testimonial, index) => (
 
-      <div className="pt-[16%] lg:pt-[10%]" key={index}>        
+      <div className="pt-[16%] lg:pt-[10%]">        
         <Accordion
-          type="single"
-          collapsible
+          type="multiple"
           className="w-full flex flex-col gap-3"
+          defaultValue={doc?.testimonials?.map((_, index) => `item-${index}`)}
         >
-
+        {doc?.testimonials?.map((testimonial, index) => (
           <AccordionItem
-            value="item-2"
+            key={index}
+            value={`item-${index}`}
             className="rounded-[16px] bg-white px-4 py-3"
           >
             <AccordionTrigger className="flex items-start justify-between gap-2 [&>svg]:h-5 [&>svg]:w-5 [&>svg]:text-muted-foreground">
@@ -49,15 +49,15 @@ const Client_Testimonial = ({ setShowClientTestimonials, doc }) => {
                 </div>
               </div>
             </AccordionTrigger>
-            <AccordionContent>
+            <AccordionContent className="pb-0">
               <p className="text-sm text-black text-left mt-2 leading-snug font-normal">
                 {testimonial.feedback}
               </p>
             </AccordionContent>
           </AccordionItem>
+        ))}
         </Accordion>
       </div>
-      ))}
 
     </div>
   );
