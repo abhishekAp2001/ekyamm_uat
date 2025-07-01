@@ -12,14 +12,16 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-
+import { useRouter } from "next/navigation";
 const Psychiatrist_profile = () => {
+  const router = useRouter();
   return (
     <div className="h-screen flex flex-col items-center justify-start bg-gradient-to-b  from-[#DFDAFB] to-[#F9CCC5] relative px-4 overflow-auto max-w-[574px] mx-auto">
       {/* Header */}
       <div className="fixed top-0 left-0 right-0 h-[64px] z-50 flex items-center px-4 max-w-[574px] mx-auto">
         <div className="flex justify-between w-full items-center">
-        <ChevronLeft size={28} className="text-black cursor-pointer" />
+        <ChevronLeft size={28} className="text-black cursor-pointer"
+          onClick={()=>{router.push("/patient/patient-profile")}}/>
      
           <Image src="/images/chats.png" alt="Chats" width={40} height={43} />
       </div>
