@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import SignOutModal from "../SignOutModal/SignOutModal"; // adjust path as needed
 import { useRouter } from "next/navigation";
-
+import { whatsappUrl } from "@/lib/constants";
 const Sidebar = ({ onClose }) => {
   const router = useRouter();
   const [showSignOutModal, setShowSignOutModal] = useState(false);
@@ -127,6 +127,7 @@ const Sidebar = ({ onClose }) => {
             <p className="text-[12px] text-black opacity-50 text-center">
               Support
             </p>
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
             <div className="flex items-center gap-[4px] px-2 py-1 rounded-[6px] bg-[#0000000D]">
               <Image
                 src="/images/headphones.png"
@@ -136,6 +137,7 @@ const Sidebar = ({ onClose }) => {
               />
               <span className="text-[14px] font-[600] text-black">Chat</span>
             </div>
+            </a>
           </div>
         </div>
       </div>

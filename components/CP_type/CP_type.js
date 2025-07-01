@@ -345,7 +345,8 @@ const CP_type = () => {
                         : "bg-[#ffffff90] placeholder:text-[#00000040]"
                     }`}
                   />
-                  {isUserNameAvailable === true ? (
+                  {/* Only show icon if username is not empty */}
+                  {formData.userName && isUserNameAvailable === true && (
                     <Image
                       src="/images/green_check.png"
                       width={20}
@@ -353,10 +354,8 @@ const CP_type = () => {
                       className="w-[20.83px] pt-1.5 absolute top-[3px] right-3.5"
                       alt="check"
                     />
-                  ) : (
-                    <></>
                   )}
-                  {isUserNameAvailable === false ? (
+                  {formData.userName && isUserNameAvailable === false && (
                     <Image
                       src="/images/error_circle.png"
                       width={20}
@@ -364,11 +363,10 @@ const CP_type = () => {
                       className="w-[20.83px] pt-1.5 absolute top-[3px] right-3.5"
                       alt="check"
                     />
-                  ) : (
-                    <></>
                   )}
                 </div>
               </div>
+              {/* Error messages */}
               {touched.userName && isCheckingUserName && (
                 <span className="text-yellow-500 text-sm mt-1 block">
                   Checking...
@@ -376,16 +374,19 @@ const CP_type = () => {
               )}
               {touched.userName &&
                 !isCheckingUserName &&
+                !formData.userName && (
+                  <span className="text-red-500 text-sm mt-1 block">
+                    Username is required
+                  </span>
+                )}
+              {touched.userName &&
+                !isCheckingUserName &&
+                formData.userName &&
                 isUserNameAvailable === false && (
                   <span className="text-red-500 text-sm mt-1 block">
                     Username not available
                   </span>
                 )}
-              {touched.userName && !formData.userName && (
-                <span className="text-red-500 text-sm mt-1 block">
-                  Username is required
-                </span>
-              )}
             </div>
             <div>
               <Label
