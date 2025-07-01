@@ -62,7 +62,8 @@ const Certifications = ({ setShowCertifications, doc }) => {
 
       {/* Certification Cards */}
       <div className="flex flex-col gap-6 pt-[15%] lg:pt-[10%]">
-        {doc?.practiceDetails?.medicalAssociations?.map((item, index) => (
+        {doc?.practiceDetails?.medicalAssociations && doc.practiceDetails?.medicalAssociations.length > 0 ? (
+          doc?.practiceDetails?.medicalAssociations?.map((item, index) => (
           <div
             key={index}
             className="bg-[#FFFFFF80] rounded-[12px]  px-[35px] py-7 flex flex-col gap-2"
@@ -127,7 +128,12 @@ const Certifications = ({ setShowCertifications, doc }) => {
               ))}
             </div>
           </div>
-        ))}
+        ))
+        ):(
+          <div className="text-center text-gray-500 py-8">
+              No certifications available.
+            </div>
+        )}
       </div>
     </div>
   );

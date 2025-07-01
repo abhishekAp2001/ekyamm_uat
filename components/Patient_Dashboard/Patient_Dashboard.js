@@ -224,6 +224,7 @@ const Patient_Dashboard = () => {
           <div className="relative h-screen overflow-y-auto">
             <Client_Testimonial
               setShowClientTestimonials={setShowClientTestimonials}
+              doc = {selectedCounsellors}
             />
           </div>
         </div>
