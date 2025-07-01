@@ -73,7 +73,6 @@ const EP_registration = ({ type }) => {
       formData.firstName &&
       formData.lastName &&
       formData.countryCode_primary &&
-      isEmailValid(formData.email) &&
       isMobileValid(formData.primaryMobileNumber)
     );
   };

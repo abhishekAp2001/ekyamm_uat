@@ -9,7 +9,7 @@ import {
 } from "./ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
-const UpcomingSession = ({ sessions, showUpcomingButtons = false }) => {
+const UpcomingSession = ({ sessions, showUpcomingButtons = true }) => {
   return (
     <div>
       <Accordion

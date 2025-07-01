@@ -24,32 +24,10 @@ import {
 } from "@/components/ui/input-otp";
 import { ChevronLeft } from "lucide-react";
 
-const sessionData = [
-  {
-    date: "24th Apr",
-    time: "12:00 AM",
-    doctor: "Dr. Ramesh Naik",
-    previous: "Tuesday, March 25, 2023",
-  },
-  {
-    date: "14th Apr",
-    time: "10:30 AM",
-    doctor: "Dr. Suresh Sawant",
-    previous: "Tuesday, March 15, 2023",
-  },
-  {
-    date: "2nd Apr",
-    time: "09:30 AM",
-    doctor: "Dr. Neeta Singh",
-    previous: "Tuesday, Feb 25, 2023",
-  },
-];
-
 const Patient_Profile = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [otpSent, setOtpSent] = useState(false);
   const [mobile, setMobile1] = useState("");
-
   const handleInputChange = (e, setMobile) => {
     const digitsOnly = e.target.value.replace(/\D/g, "");
     if (digitsOnly.length <= 10) {

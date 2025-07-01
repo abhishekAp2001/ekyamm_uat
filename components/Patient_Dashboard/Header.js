@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { greeting } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-
+import { useRouter } from "next/navigation";
 import { patientSessionData as getPatientSessionData } from "@/lib/utils";
 
 /**
@@ -14,6 +14,7 @@ import { patientSessionData as getPatientSessionData } from "@/lib/utils";
  * data should have firstName and lastName fields.
  */
 const Header = ({ loading = false, patient }) => {
+  const router = useRouter();
   const [showSidebar, setShowSidebar] = useState(false);
   const patientSessionData = getPatientSessionData();
 
@@ -48,7 +49,8 @@ const Header = ({ loading = false, patient }) => {
 
         <div className="flex justify-between items-center mt-2 relative">
           <div className="flex items-center gap-2">
-            <Avatar>
+            <Avatar
+            onClick={()=> router.push("/patient/patient-profile")}>
               <AvatarImage
                 className="h-[34px] w-[34px] pt-1.5 mix-blend-multiply"
                 src={patientSessionData?.profileImageUrl}
