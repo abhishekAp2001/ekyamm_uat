@@ -94,7 +94,7 @@ const Schedule_Session = () => {
     try {
       let bodyData = {
         practitionerId:
-          "664de84a3b4469bc4e0327f3" || selectedCounsellorData?.loginId || "",
+           selectedCounsellorData?.loginId || "",
         year: year,
         month: month,
       };
@@ -240,10 +240,16 @@ const Schedule_Session = () => {
     const fetchAvailabilitySlots = async (monthDate) => {
       try {
         // practitionerId: selectedCounsellorData?.loginId || "",
+        const date = new Date(selectedDate);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+        const day = String(date.getDate()).padStart(2, "0");
+
+        const formattedDate = `${year}-${month}-${day}`;
         let bodyData = {
           practitionerId:
-            "664de84a3b4469bc4e0327f3" || selectedCounsellorData?.loginId || "",
-          sessionDate: selectedDate,
+             selectedCounsellorData?.loginId || "",
+          sessionDate: formattedDate,
         };
         let headers = {
           headers: {
@@ -269,6 +275,7 @@ const Schedule_Session = () => {
       }
     };
     if (selectedDate) {
+      console.log("selectedDate",selectedDate)
       fetchAvailabilitySlots();
     }
   }, [selectedDate]);
