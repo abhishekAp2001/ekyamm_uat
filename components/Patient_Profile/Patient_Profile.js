@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import Image from "next/image";
 import PP_Header from "../PP_Header/PP_Header";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
   Drawer,
   DrawerClose,
@@ -23,11 +24,40 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { ChevronLeft } from "lucide-react";
+import { getCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
+import Profile from "../patient/practitioner/Profile";
+const sessionData = [
+  {
+    date: "24th Apr",
+    time: "12:00 AM",
+    doctor: "Dr. Ramesh Naik",
+    previous: "Tuesday, March 25, 2023",
+  },
+  {
+    date: "14th Apr",
+    time: "10:30 AM",
+    doctor: "Dr. Suresh Sawant",
+    previous: "Tuesday, March 15, 2023",
+  },
+  {
+    date: "2nd Apr",
+    time: "09:30 AM",
+    doctor: "Dr. Neeta Singh",
+    previous: "Tuesday, Feb 25, 2023",
+  },
+];
 
 const Patient_Profile = () => {
+  const router = useRouter();
+  const patient = JSON.parse(getCookie("PatientInfo"))
+  console.log("Patient Profile Data:", patient);
   const [activeIndex, setActiveIndex] = useState(null);
   const [otpSent, setOtpSent] = useState(false);
   const [mobile, setMobile1] = useState("");
+  const [showCounsellorProfile, setShowCounsellorProfile] = useState(false);
+  const [showCertifications, setShowCertifications] = useState(false);
+  const [showClientTestimonials, setShowClientTestimonials] = useState(false);
   const handleInputChange = (e, setMobile) => {
     const digitsOnly = e.target.value.replace(/\D/g, "");
     if (digitsOnly.length <= 10) {
@@ -48,12 +78,18 @@ const Patient_Profile = () => {
     });
   };
 
+  const handleRouting = (route) => {
+    if (route) {
+      router.push(route);
+    }
+  }
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
       <div className="">
         <div className="flex items-center justify-between p-5">
           {/* Left Icon */}
-          <ChevronLeft size={28} className="text-black cursor-pointer" />
+          <ChevronLeft size={28} className="text-black cursor-pointer" 
+          onClick={()=>{router.push("/patient/dashboard")}}/>
           {/* Right Side Image */}
           <Image
             src="/images/box.png"
@@ -69,13 +105,19 @@ const Patient_Profile = () => {
         {/* Main Card */}
         <div className="bg-[#FFFFFF]  p-6 pb-1 mt-[55px] rounded-[16px]">
           <div className="flex justify-center  rounded-[17.63px] mx-auto relative mb-6 mt-[-77px]">
-            <Image
-              src="/images/rectangle.png"
-              width={100}
-              height={100}
-              className="rounded-full"
-              alt="ekyamm"
-            />
+            <Avatar className="w-[100px] h-[100px]">
+              <AvatarImage
+                src={patient?.profileImageUrl}
+                alt={`${patient?.firstName} ${patient?.lastName}`}
+                className="rounded-full object-cover"
+              />
+              <AvatarFallback>
+                {`${patient?.firstName} ${patient?.lastName}`
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
+              </AvatarFallback>
+            </Avatar>
             <Drawer className="pt-[9.97px]">
               <DrawerTrigger className="">
                 <Image
@@ -126,11 +168,11 @@ const Patient_Profile = () => {
             </Drawer>
           </div>
           <strong className="flex text-[20px] font-[600] text-black items-center justify-center mb-2">
-            Manjunath Naik
+            {patient?.firstName} {patient?.lastName}
           </strong>
 
           <div className="flex text-[14px] font-[500] text-gray-500 items-center justify-center">
-            +91 8576758924
+            +91 {patient?.primaryMobileNumber}
             <Image
               src="/images/edit.png"
               width={10}
@@ -141,7 +183,7 @@ const Patient_Profile = () => {
           </div>
 
           <div className="flex text-[14px] font-[500] text-gray-500 items-center justify-center mb-4">
-            kiran.rathi@gamil.com
+            {patient?.email ? patient.email : "-------"}
             <Image
               src="/images/edit.png"
               width={10}
@@ -158,34 +200,53 @@ const Patient_Profile = () => {
               icon: "/images/schedule_icon.png",
               bold: true,
               info: true,
+              onclick: () => {
+                router.push("/patient/upcoming-sessions");
+              },
+              disabled: false
             },
             {
               label: "Sessions Synopsis",
               icon: "/images/schedule_icon.png",
               bold: true,
               info: true,
+              onclick: () => {
+                router.push("/patient/sessions-synopsis");
+              },
+              disabled: false
             },
             {
               label: "Therapist Details",
               icon: "/images/mindfulness.png",
               bold: true,
               info: true,
+              onclick: () => {
+                setShowCounsellorProfile(true);
+              },
+              disabled: false
             },
             {
               label: "Call In-Clinic Psychologist",
               icon: "/images/wifi_calling_bar_1.png",
               bold: false,
               info: false,
+              disabled: true
             },
             {
               label: "Clinic Details",
               icon: "/images/medical_services.png",
               bold: true,
               info: true,
+              onclick: () => {
+                router.push("/patient/psychiatrist-profile");
+              },
+              disabled: false
             },
           ].map((item, idx) => (
             <div key={idx} className="mb-4">
-              <button className="bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[8px] p-2 h-[56px] p-3 w-full text-left flex items-center justify-between">
+              <button className="bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[8px] p-2 h-[56px] p-3 w-full text-left flex items-center justify-between {}"
+              onClick={item.onclick}
+              disabled={item.disabled}>
                 <span className="flex items-center text-[14px] font-[600] text-black ml-1">
                   <Image
                     src={item.icon}
@@ -510,6 +571,20 @@ const Patient_Profile = () => {
           />
         </div>
       </div>
+      {showCounsellorProfile ? (
+        <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90">
+          <div className="relative h-screen overflow-y-auto">
+            <Profile
+              setShowCounsellorProfile={setShowCounsellorProfile}
+              setShowCertifications={setShowCertifications}
+              setShowClientTestimonials={setShowClientTestimonials}
+              doc={patient?.practitionerTagged}
+            />
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

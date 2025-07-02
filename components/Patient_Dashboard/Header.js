@@ -30,7 +30,7 @@ const Header = ({ loading = false, patient }) => {
     <div className="bg-gradient-to-r from-[#B0A4F5] to-[#EDA197] rounded-bl-3xl rounded-br-3xl px-3 py-5 h-[128px]">
       <div className="flex flex-col">
         <div className="flex flex-col justify-center items-center">
-          <h1 className="text-[18px] text-white font-semibold">{clinicName}</h1>
+          <h1 className="text-[18px] text-white font-semibold">{patientSessionData?.clinicDetails?.clinicName}</h1>
           <div className="flex items-center gap-[2px]">
             <div className="bg-[#FFFFFF80] rounded-full w-[12px] h-[12px] flex items-center justify-center">
               <MapPin className="w-2 h-2 text-[#9f99bebd]" />
@@ -50,7 +50,7 @@ const Header = ({ loading = false, patient }) => {
         <div className="flex justify-between items-center mt-2 relative">
           <div className="flex items-center gap-2">
             <Avatar
-            onClick={()=> router.push("/patient/patient-profile")}>
+            onClick={() => router.push("/patient/patient-profile")}>
               <AvatarImage
                 className="h-[34px] w-[34px] pt-1.5 mix-blend-multiply"
                 src={patientSessionData?.profileImageUrl}

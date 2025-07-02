@@ -20,6 +20,8 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { getCookie } from "cookies-next";
 const Sessions_Synopsis = () => {
   const sessionDates = [
     "21 March 2022",
@@ -28,7 +30,7 @@ const Sessions_Synopsis = () => {
     "01 February 2022",
     "23 January 2022",
   ];
-
+  const patient = JSON.parse(getCookie("PatientInfo"))
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
       <SS_Header />
@@ -36,16 +38,23 @@ const Sessions_Synopsis = () => {
         {/* Profile Card */}
         <div className="mb-6 bg-[#FFFFFF80] rounded-[9px] p-3 mt-6">
           <div className="flex items-center gap-4">
-            <Image
-              src="/images/rectangle.png"
-              width={42}
-              height={42}
-              alt="chat"
-            />
+            <Avatar className="w-[42px] h-[42px]">
+              <AvatarImage
+                src={patient?.profileImageUrl}
+                alt={`${patient?.firstName} ${patient?.lastName}`}
+                className="rounded-full object-cover"
+              />
+              <AvatarFallback>
+                {`${patient?.firstName} ${patient?.lastName}`
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
+              </AvatarFallback>
+            </Avatar>
             <div>
-              <p className="text-[14px] font-[600] text-black">Kiran Rathi</p>
+              <p className="text-[14px] font-[600] text-black">{patient?.firstName} {patient?.lastName}</p>
               <p className="text-[11px] font-[500] text-gray-500">
-                +91 9876543210
+                +91 {patient?.primaryMobileNumber}
               </p>
             </div>
           </div>

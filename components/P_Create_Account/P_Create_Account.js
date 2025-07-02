@@ -373,7 +373,9 @@ one symbol, and no spaces.`;
                     disabled={
                       loading ||
                       !formData.password.trim() ||
-                      !formData.confirmPassword.trim()
+                      !formData.confirmPassword.trim() ||
+                      formData.password.trim() !== formData.confirmPassword.trim()
+
                     }
                     className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]   rounded-[8px] flex items-center justify-center w-full h-[45px]"
                   >

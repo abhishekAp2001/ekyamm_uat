@@ -109,7 +109,7 @@ const Filter = ({
       <div className="flex-grow px-4 mt-[18px] pb-[90px] pt-[16%] lg:pt-[10%]">
         {/* Session Fee */}
         <div className="bg-white rounded-[12px] p-4 mb-[10px]">
-          <div className="text-[15px] font-[500] text-gray-500 mb-3">
+          <div className="text-[15px] font-[500] text-gray-500 mb-5">
             Session Fee
           </div>
           <Slider
