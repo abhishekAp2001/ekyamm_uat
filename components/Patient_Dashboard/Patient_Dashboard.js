@@ -22,6 +22,7 @@ import Certifications from "../patient/Certifications/Certifications";
 import Client_Testimonial from "../patient/Client_Testimonials/Client_Testimonial";
 import Profile from "../patient/practitioner/Profile";
 import Filter from "../patient/Filter/Filter";
+import Upcoming_Sessions from "../Upcoming_Sessions/Upcoming_Sessions";
 const Patient_Dashboard = () => {
   const [patient, setPatient] = useState(null);
   const [counsellors, setCounsellors] = useState([]);
@@ -33,6 +34,7 @@ const Patient_Dashboard = () => {
   const [showClientTestimonials, setShowClientTestimonials] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [filterCount, setFilterCount] = useState(0);
+  const [practitioner, setPractitioner] = useState(true)
   const [filterParams, setFilterParams] = useState({
     language: "",
     sessionFee: "",
@@ -135,7 +137,7 @@ const Patient_Dashboard = () => {
           </div>
 
           {/* Scrollable Body */}
-          <div className="mt-[192px] flex-1 overflow-y-auto px-3 pb-5">
+          {!practitioner? (<div className="mt-[192px] flex-1 overflow-y-auto px-3 pb-5">
             {/* Filter Row */}
             <div className="flex justify-between items-center my-2">
               <strong className="text-sm text-black font-semibold">
@@ -179,7 +181,9 @@ const Patient_Dashboard = () => {
                 </Accordion>
               </>
             )}
-          </div>
+          </div>):(<>
+          <Upcoming_Sessions/>
+          </>)}
 
           {/* Session Booking Drawer */}
           <SessionDrawer
