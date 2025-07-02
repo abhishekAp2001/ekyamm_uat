@@ -426,14 +426,16 @@ const P_Mobile_Verification = ({ type }) => {
 
               <div className="flex flex-col mt-[24.69px]  gap-2">
                 <div className="flex justify-between items-center ">
-                  <Button className="border border-[#CC627B] bg-transparent text-[14px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                  <Button className="border border-[#CC627B] bg-transparent text-[14px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
+                  onClick={() => router.push(`/patient/login`)}>
                     Already a User?
                   </Button>
                   <Button
                     type="button"
                     disabled={
                       loading ||
-                      (otpSendStatus && isResendDisabled && !otp) ||
+                      (otpSendStatus ? otp.length !== 6
+                        : formData.primaryMobileNumber.length !== 10) ||
                       !isFormValid
                     }
                     onClick={otpSendStatus ? verifyOtp : handleSendOtp}

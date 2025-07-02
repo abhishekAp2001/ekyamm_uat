@@ -524,7 +524,8 @@ const PP_Details = ({ type }) => {
                 onClick={() => setDrawerOpen(true)}
               />
             </DrawerTrigger>
-            <DrawerContent className="bg-gradient-to-b from-[#e7e4f8] via-[#f0e1df] via-70% to-[#feedea]">
+            <DrawerContent className="bg-gradient-to-b from-[#e7e4f8] via-[#f0e1df] via-70% to-[#feedea] rounded-t-[12px]"
+            style={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}>
               <DrawerHeader>
                 <DrawerDescription className="flex flex-col gap-3">
                   {isMobile && (

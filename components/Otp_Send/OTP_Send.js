@@ -309,9 +309,12 @@ const OTP_Send = ({ type }) => {
             </div>
             <div className="border-2 bg-[#FFFFFF80] border-[#FFFFFF4D] rounded-4xl py-[17px] text-center w-full my-[64px]  px-5">
               <strong className="text-[15px] text-black font-[600] text-center">
-                {selectedMethod === "mobile" 
-                  ? "Send OTP to"
-                  : "Send OTP to Verified ID"}
+                {otpSendStatus
+                  ? "Enter OTP"
+                  : selectedMethod === "mobile"
+                    ? "Send OTP to"
+                    : "Send OTP to Verified ID"}
+                
               </strong>
               <div>
                 <div className="flex justify-between items-center mt-[15px] gap-3">
@@ -407,7 +410,7 @@ const OTP_Send = ({ type }) => {
                   disabled={
                     isLoading ||
                     !selectedMethod ||
-                    (otpSendStatus && isResendDisabled && !otp)
+                    (otpSendStatus && (!otp || otp.length !== 6))
                   }
                   className="cursor-pointer bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white border py-[14.5px] rounded-[8px] flex items-center justify-center w-full h-[45px] mt-[15px]"
                 >
