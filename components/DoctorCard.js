@@ -15,7 +15,6 @@ const DoctorCard = ({
   setShowCounsellorProfile,
   setSelectedCounsellors,
 }) => {
-
   const router = useRouter();
   return (
     <AccordionItem

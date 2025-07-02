@@ -12,8 +12,10 @@ import UpcomingSession from "../UpcomingSession";
 import PastSessions from "../PastSessions";
 import { AccordionContent } from "@radix-ui/react-accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-
+import { ChevronLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 const Upcoming_Sessions = () => {
+  const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
@@ -41,8 +43,8 @@ const Upcoming_Sessions = () => {
   return (
     <div className="relative h-screen max-w-[576px]  flex flex-col  bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5] ">
       {/* Fixed Header */}
-      <div className="fixed top-0 left-0 right-0 z-50 flex flex-col gap-8 bg-[#e7d6ec] max-w-[576px] mx-auto">
-        {/* Gradient Header */}
+      {/* <div className="fixed top-0 left-0 right-0 z-50 flex flex-col gap-8 bg-[#e7d6ec] max-w-[576px] mx-auto">
+        Gradient Header
         <div className="bg-gradient-to-r from-[#B0A4F5] to-[#EDA197] rounded-bl-3xl rounded-br-3xl px-3 py-5 h-[128px]">
           <div className="flex flex-col">
             <div className="flex flex-col justify-center items-center">
@@ -87,7 +89,7 @@ const Upcoming_Sessions = () => {
           </div>
         </div>
 
-        {/* Available Session Section */}
+        Available Session Section
         <div className="bg-[#FFFFFF80] px-3 py-2 border border-[#FFFFFF33] rounded-[10px] mx-3 -mt-5 z-20 relative">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -111,10 +113,23 @@ const Upcoming_Sessions = () => {
             </div>
           </div>
         </div>
-      </div>
-
+      </div> */}
+      {/* Go back button */}
+      <div className="flex items-center justify-between p-5">
+          {/* Left Icon */}
+          <ChevronLeft size={28} className="text-black cursor-pointer" 
+          onClick={()=>{router.push("/patient/patient-profile")}}/>
+          {/* Right Side Image */}
+          <Image
+            src="/images/box.png"
+            width={28}
+            height={18}
+            alt="right-icon"
+            className="bg-transparent"
+          />
+        </div>
       {/* Scrollable Body */}
-      <div className="mt-[192px] flex-1 overflow-y-auto px-3 pb-5">
+      <div className=" flex-1 overflow-y-auto px-3 pb-5">
         {/* Filter Row */}
         <div className="flex justify-between items-center my-2">
           <strong className="text-sm text-black font-semibold">
