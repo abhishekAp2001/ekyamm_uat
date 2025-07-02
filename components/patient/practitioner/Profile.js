@@ -12,6 +12,7 @@ const Profile = ({
   setShowClientTestimonials,
   doc,
 }) => {
+  console.log("Counsellor Profile Data:", doc);
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] relative max-w-[576px] mx-auto">
       {/* Fixed Header */}

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const All_clinics = ({ list }) => {
   return (
@@ -12,6 +12,10 @@ const All_clinics = ({ list }) => {
             className="w-1/3 rounded-[65px] flex flex-col items-center gap-1 mb-3.5"
           >
             <Avatar>
+              <AvatarImage
+                src={list?.generalInformation?.profileImageUrl}
+                alt={`${list?.generalInformation?.firstName} ${list?.generalInformation?.lastName}`}
+              />
               <AvatarFallback>
                 {list?.clinicName
                   ? list.clinicName

@@ -15,7 +15,7 @@ import Header from "./Header";
 import { Baseurl } from "@/lib/constants";
 import axios from "axios";
 import { showErrorToast } from "@/lib/toast";
-import { setCookie } from "cookies-next";
+import { getCookie, setCookie } from "cookies-next";
 import AvailableSession from "./AvailableSession";
 
 import Certifications from "../patient/Certifications/Certifications";
@@ -117,7 +117,7 @@ const Patient_Dashboard = () => {
 
     setFilterCount(count);
   }, [filterParams]);
-
+  console.log("PatientInfo", JSON.parse(getCookie("PatientInfo")))
   return (
     <>
       <div className="flex flex-col min-h-screen bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5]  relative max-w-[576px] m-auto overflow-y-auto">

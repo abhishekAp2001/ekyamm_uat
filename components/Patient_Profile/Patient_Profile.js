@@ -26,6 +26,7 @@ import {
 import { ChevronLeft } from "lucide-react";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
+import Profile from "../patient/practitioner/Profile";
 const sessionData = [
   {
     date: "24th Apr",
@@ -54,7 +55,9 @@ const Patient_Profile = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [otpSent, setOtpSent] = useState(false);
   const [mobile, setMobile1] = useState("");
-
+  const [showCounsellorProfile, setShowCounsellorProfile] = useState(false);
+  const [showCertifications, setShowCertifications] = useState(false);
+  const [showClientTestimonials, setShowClientTestimonials] = useState(false);
   const handleInputChange = (e, setMobile) => {
     const digitsOnly = e.target.value.replace(/\D/g, "");
     if (digitsOnly.length <= 10) {
@@ -197,7 +200,9 @@ const Patient_Profile = () => {
               icon: "/images/schedule_icon.png",
               bold: true,
               info: true,
-              route: "/patient/upcoming-sessions",
+              onclick: () => {
+                router.push("/patient/upcoming-sessions");
+              },
               disabled: false
             },
             {
@@ -205,7 +210,9 @@ const Patient_Profile = () => {
               icon: "/images/schedule_icon.png",
               bold: true,
               info: true,
-              route: "/patient/sessions-synopsis",
+              onclick: () => {
+                router.push("/patient/sessions-synopsis");
+              },
               disabled: false
             },
             {
@@ -213,7 +220,9 @@ const Patient_Profile = () => {
               icon: "/images/mindfulness.png",
               bold: true,
               info: true,
-              route: "/patient/psychiatrist-profile",
+              onclick: () => {
+                setShowCounsellorProfile(true);
+              },
               disabled: false
             },
             {
@@ -228,12 +237,15 @@ const Patient_Profile = () => {
               icon: "/images/medical_services.png",
               bold: true,
               info: true,
+              onclick: () => {
+                router.push("/patient/psychiatrist-profile");
+              },
               disabled: false
             },
           ].map((item, idx) => (
             <div key={idx} className="mb-4">
               <button className="bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[8px] p-2 h-[56px] p-3 w-full text-left flex items-center justify-between {}"
-              onClick={() => {handleRouting(item.route)}}
+              onClick={item.onclick}
               disabled={item.disabled}>
                 <span className="flex items-center text-[14px] font-[600] text-black ml-1">
                   <Image
@@ -559,6 +571,20 @@ const Patient_Profile = () => {
           />
         </div>
       </div>
+      {showCounsellorProfile ? (
+        <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90">
+          <div className="relative h-screen overflow-y-auto">
+            <Profile
+              setShowCounsellorProfile={setShowCounsellorProfile}
+              setShowCertifications={setShowCertifications}
+              setShowClientTestimonials={setShowClientTestimonials}
+              doc={patient?.practitionerTagged}
+            />
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
