@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Eye, EyeOff, Funnel, Link2, MapPin, Menu, Phone, Plus } from "lucide-react";
@@ -14,12 +14,21 @@ import { AccordionContent } from "@radix-ui/react-accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
-const Upcoming_Sessions = () => {
+import axios from "axios";
+import { patientSessionToken as getPatientSessionToken } from "@/lib/utils";
+import { showErrorToast } from "@/lib/toast";
+import { Baseurl } from "@/lib/constants";
+import { getCookie } from "cookies-next";
+import { Loader2 } from "lucide-react";
+const Upcoming_Sessions = ({dashboard = false}) => {
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
   const [showAllUpcoming, setShowAllUpcoming] = useState(false);
+  const patientSessionToken = getPatientSessionToken();
+  const [loading, setLoading] = useState(false);
+  const [sessions, setSessions] = useState(null);
   const extraSession = {
     time: "12:00 PM",
     location: "Andheri",
@@ -40,6 +49,30 @@ const Upcoming_Sessions = () => {
       ? "Afternoon"
       : "Evening";
 
+      useEffect(() => {
+          const getPatientSession = async () => {
+            try {
+              setLoading(true);
+              const response = await axios.get(`${Baseurl}/v2/cp/patient?type=sessions`, {
+                headers: {
+                  accesstoken: patientSessionToken,
+                  "Content-Type": "application/json",
+                },
+              });
+              if (response?.data?.success) {
+                setSessions(response?.data?.data);
+              }
+            } catch (err) {
+              console.log("err", err);
+              showErrorToast(
+                err?.response?.data?.error?.message || "Error fetching patient data"
+              );
+            } finally {
+              setLoading(false);
+            }
+          };
+          getPatientSession();
+  }, []);
   return (
     <div className="relative h-screen max-w-[576px]  flex flex-col  bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5] ">
       {/* Fixed Header */}
@@ -115,7 +148,10 @@ const Upcoming_Sessions = () => {
         </div>
       </div> */}
       {/* Go back button */}
-      <div className="flex items-center justify-between p-5">
+      {dashboard ? (
+        <></>
+      ):(
+        <div className="flex items-center justify-between p-5">
           {/* Left Icon */}
           <ChevronLeft size={28} className="text-black cursor-pointer" 
           onClick={()=>{router.push("/patient/patient-profile")}}/>
@@ -128,8 +164,12 @@ const Upcoming_Sessions = () => {
             className="bg-transparent"
           />
         </div>
+      )}
       {/* Scrollable Body */}
-      <div className=" flex-1 overflow-y-auto px-3 pb-5">
+      { loading ? (
+        <div className="flex justify-center"><Loader2 className="w-6 h-6 animate-spin" aria-hidden="true" /></div>):
+        (
+          <div className=" flex-1 overflow-y-auto px-3 pb-5">
         {/* Filter Row */}
         <div className="flex justify-between items-center my-2">
           <strong className="text-sm text-black font-semibold">
@@ -148,12 +188,21 @@ const Upcoming_Sessions = () => {
           </Button>
         </div>
 
-        {/* Upcoming Session */}
-        <UpcomingSession sessions={upcomingSession} />
-        {showAllUpcoming && <UpcomingSession sessions={extraSession} />}
-        {/* Past Sessions */}
-        <PastSessions sessions={pastSessions} />
-      </div>
+            {/* Upcoming Session */}
+            {sessions?.upcomingSessions && (
+              <>
+                {/* Always show first two */}
+                <UpcomingSession upcomingsessions={showAllUpcoming
+                  ? sessions.upcomingSessions
+                  : sessions.upcomingSessions.slice(0, 2)} />
+              </>
+            )}
+            {/* Past Sessions */}
+            <PastSessions
+              sessions={sessions?.pastSessions} />
+          </div>
+        )}
+      
     </div>
   );
 };

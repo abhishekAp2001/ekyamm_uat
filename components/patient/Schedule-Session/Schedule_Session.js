@@ -43,7 +43,6 @@ const Schedule_Session = () => {
   const router = useRouter();
   const patientSessionData = getPatientSessionData();
   const selectedCounsellorData = getSelectedCounsellorData();
-
   const [loading, setLoading] = useState(false);
   const [isFetchDaysNavigating, setIsFetchDaysNavigating] = useState(false);
   const [selectedFromTime, setSelectedFromTime] = useState(null);
@@ -486,7 +485,7 @@ const Schedule_Session = () => {
                       />
                     </div>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0 relative">
+                  <PopoverContent className="w-auto p-0 relative"side="bottom" align="start">
                     <div className="relative">
                       <Calendar
                         mode="single"

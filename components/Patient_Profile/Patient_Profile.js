@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -27,6 +27,12 @@ import { ChevronLeft } from "lucide-react";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import Profile from "../patient/practitioner/Profile";
+import Client_Testimonial from "../patient/Client_Testimonials/Client_Testimonial";
+import Certifications from "../patient/Certifications/Certifications";
+import axios from "axios";
+import { patientSessionToken as getPatientSessionToken } from "@/lib/utils";
+import { showErrorToast } from "@/lib/toast";
+import { Baseurl } from "@/lib/constants";
 const sessionData = [
   {
     date: "24th Apr",
@@ -50,8 +56,8 @@ const sessionData = [
 
 const Patient_Profile = () => {
   const router = useRouter();
-  const patient = JSON.parse(getCookie("PatientInfo"))
-  console.log("Patient Profile Data:", patient);
+  const cookieValue = getCookie("PatientInfo");
+  const patient = cookieValue ? JSON.parse(cookieValue) : {};
   const [activeIndex, setActiveIndex] = useState(null);
   const [otpSent, setOtpSent] = useState(false);
   const [mobile, setMobile1] = useState("");
@@ -83,6 +89,33 @@ const Patient_Profile = () => {
       router.push(route);
     }
   }
+   const [therapist, setTherapist] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const patientSessionToken = getPatientSessionToken();
+      useEffect(() => {
+      const getTherapistDetails = async () => {
+        try {
+          setLoading(true);
+          const response = await axios.get(`${Baseurl}/v2/cp/patient?type=therapist`, {
+            headers: {
+              accesstoken: patientSessionToken,
+              "Content-Type": "application/json",
+            },
+          });
+          if (response?.data?.success) {
+            setTherapist(response?.data?.data.practitionerTagged);
+          }
+        } catch (err) {
+          console.log("err", err);
+          showErrorToast(
+            err?.response?.data?.error?.message || "Error fetching patient data"
+          );
+        } finally {
+          setLoading(false);
+        }
+      };
+      getTherapistDetails();
+    }, []);
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
       <div className="">
@@ -244,7 +277,8 @@ const Patient_Profile = () => {
             },
           ].map((item, idx) => (
             <div key={idx} className="mb-4">
-              <button className="bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[8px] p-2 h-[56px] p-3 w-full text-left flex items-center justify-between {}"
+              <button className="bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[8px] p-2 h-[56px] p-3 w-full text-left flex items-center justify-between"
+              style={item.disabled ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
               onClick={item.onclick}
               disabled={item.disabled}>
                 <span className="flex items-center text-[14px] font-[600] text-black ml-1">
@@ -578,7 +612,32 @@ const Patient_Profile = () => {
               setShowCounsellorProfile={setShowCounsellorProfile}
               setShowCertifications={setShowCertifications}
               setShowClientTestimonials={setShowClientTestimonials}
+              doc={therapist}
+            />
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
+      {showCertifications ? (
+        <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90">
+          <div className="relative h-screen overflow-y-auto">
+            <Certifications
+              setShowCertifications={setShowCertifications}
               doc={patient?.practitionerTagged}
+            />
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
+
+      {showClientTestimonials ? (
+        <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90">
+          <div className="relative h-screen overflow-y-auto">
+            <Client_Testimonial
+              setShowClientTestimonials={setShowClientTestimonials}
+              doc = {patient?.practitionerTagged}
             />
           </div>
         </div>
