@@ -47,13 +47,22 @@ const Select_Package = () => {
   const router = useRouter();
   const patientSessionData = getPatientSessionData();
   const selectedCounsellorData = getSelectedCounsellorData();
-  console.log("selected counsellor data", selectedCounsellorData);
   const [sessionType, setSessionType] = useState("Counselling");
   const [sessionMode, setSessionMode] = useState("online");
   const [openConfirmed, setOpenConfirmed] = useState(true);
   const [openUnconfirmed, setOpenUnconfirmed] = useState(true);
+  const [selectedPackageIdx, setSelectedPackageIdx] = useState(1);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [totalPrice, setTotalPrice] = useState(selectedCounsellorData?.practiceDetails?.fees?.singleSession);
-
+  const setSelectedPackage = (idx) => {
+    if (idx === selectedPackageIdx) {
+      setSelectedPackageIdx(1);
+      setTotalPrice(selectedCounsellorData?.practiceDetails?.fees?.singleSession);
+    }
+    else{
+      setSelectedPackageIdx(idx);
+    }
+  }
   return (
     <>
       <div className="flex flex-col h-screen bg-gradient-to-b space-y-4 from-[#f9f9f9] to-[#ffe7e4] max-w-[576px] mx-auto">
@@ -196,8 +205,10 @@ const Select_Package = () => {
                   (packageItem, idx) => (
                     <div className="flex items-center space-x-2" key={idx}>
                       <Checkbox id={`package-${idx}`}
+                      checked = {selectedPackageIdx === packageItem?.sessions}
                         onCheckedChange={() => {
                           setTotalPrice(packageItem.rate);
+                          setSelectedPackage(packageItem?.sessions);
                         }}
                       />
                       <Label
@@ -248,21 +259,27 @@ const Select_Package = () => {
             >
               Cancel
             </Button> */}
-            <Drawer className="pt-[9.97px] max-w-[576px] m-auto">
-              <DrawerTrigger className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+            <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
+              onClick={() => setDrawerOpen(true)}>
                 Cancel
-              </DrawerTrigger>
+              </Button>
+            <Drawer className="pt-[9.97px] max-w-[576px] m-auto"
+              open = {drawerOpen} 
+              onClose = {() => setDrawerOpen(false)}>
               <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
                 <DrawerHeader>
                   <DrawerTitle className="text-[16px] font-[600] text-center">
                     Are you sure
                   </DrawerTitle>
                   <DrawerDescription className="mt-6 flex gap-3 w-full">
-                    <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                    <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
+                    onClick={()=>{router.push("/patient/dashboard")}}>
                       Confirm
                     </Button>
 
-                    <Button className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                    <Button className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
+                      onClick={() => {
+                      setDrawerOpen(false);}}>
                       Continue
                     </Button>
                   </DrawerDescription>
