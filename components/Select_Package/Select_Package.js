@@ -43,6 +43,7 @@ import {
   patientSessionData as getPatientSessionData,
   selectedCounsellorData as getSelectedCounsellorData
 } from "@/lib/utils";
+import { setCookie } from "cookies-next";
 const Select_Package = () => {
   const router = useRouter();
   const patientSessionData = getPatientSessionData();
@@ -299,7 +300,8 @@ const Select_Package = () => {
             <Button
               className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] h-[45px]  rounded-[8px] flex items-center justify-center w-[48%]"
               onClick={() => {
-                router.push("/patient/riskyrash/pay-for-sessions");
+                setCookie("session_selection",JSON.stringify({"total":totalPrice,"session_count":selectedPackageIdx}))
+                router.push(`/patient/pay-for-sessions`);
               }}
             >
               Generate Invoice

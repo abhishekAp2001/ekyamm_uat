@@ -463,6 +463,7 @@ const Family_Details = ({ type }) => {
               </Label>
               <div className="flex gap-[6px] items-center w-[45%]">
                 <Checkbox
+                id="sameAsMobile"
                   checked={sameAsMobile}
                   onCheckedChange={(checked) => {
                     setSameAsMobile(checked);
@@ -477,7 +478,8 @@ const Family_Details = ({ type }) => {
                   disabled={!isMobileValid(formData.primaryMobileNumber)}
                   className="w-4 h-4 border border-[#776EA5] rounded-[1.8px]"
                 />
-                <label className="text-[12px] text-gray-500 font-medium">
+                <label className="text-[12px] text-gray-500 font-medium"
+                htmlFor="sameAsMobile">
                   Same as Mobile Number
                 </label>
               </div>
@@ -547,6 +549,7 @@ const Family_Details = ({ type }) => {
           {/* Emergency Contact */}
           <div className="flex gap-[6px] items-center mt-[22px]">
             <Checkbox
+            id="emergencyContact"
               checked={formData.emergencyContact === true}
               disabled={!isFormValid()}
               onCheckedChange={(checked) =>
@@ -557,7 +560,8 @@ const Family_Details = ({ type }) => {
               }
               className="w-4 h-4 border border-[#776EA5] rounded-[2px]"
             />
-            <label className="text-[14px] text-[#776EA5] font-bold">
+            <label className="text-[14px] text-[#776EA5] font-bold"
+             htmlFor="emergencyContact">
               Make this as an Emergency Contact
             </label>
           </div>

@@ -82,7 +82,7 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col">
-                      <p className="text-[16px] font-bold text-gray-800">
+                      <p className="text-[14px] font-bold text-gray-800">
                         {patient?.practitionerTagged?.generalInformation?.firstName} {patient?.practitionerTagged?.generalInformation?.lastName}
                       </p>
                       <Phone

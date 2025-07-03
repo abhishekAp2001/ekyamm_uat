@@ -716,6 +716,7 @@ const PP_Details = ({ type }) => {
               </Label>
               <div className="flex gap-[6px] items-center w-[45%]">
                 <Checkbox
+                  id="sameAsMobile"
                   className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"
                   checked={sameAsMobile}
                   onCheckedChange={(checked) => {
@@ -732,6 +733,7 @@ const PP_Details = ({ type }) => {
                   disabled={!isMobileValid(formData.primaryMobileNumber)}
                 />
                 <label
+                  htmlFor="sameAsMobile"
                   className={`text-[12px] ${
                     isMobileValid(formData.primaryMobileNumber)
                       ? "text-gray-500"

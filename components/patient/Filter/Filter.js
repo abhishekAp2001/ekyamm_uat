@@ -31,8 +31,7 @@ const Filter = ({
     initialParams.language || ""
   );
   const [languageList, setLanguageList] = useState([]); // State for API-fetched languages
-  const [sessionFee, setSessionFee] = useState(initialParams.sessionFee || "");
-
+  const [sessionFee, setSessionFee] = useState(initialParams.sessionFee || "150");
   useEffect(() => {
     setSelectedGender(initialParams.gender || "");
     setSelectedLanguage(initialParams.language || "");
@@ -113,8 +112,8 @@ const Filter = ({
             Session Fee
           </div>
           <Slider
-            value={[sessionFee]}
-            onValueChange={(value) => setSessionFee(value[0])}
+            value={[sessionFee === "" ? 150 : Number(sessionFee)]}
+            onValueChange={(value) => setSessionFee(value[0] === 150 ? "" : value[0])}
             max={1500}
             min={150}
             step={10}
@@ -131,7 +130,7 @@ const Filter = ({
           </div>
           <RadioGroup
             value={selectedGender}
-            onValueChange={setSelectedGender}
+            onValueChange={(value) => setSelectedGender(value === selectedGender ? "" : value)}
             className="flex gap-4 items-center"
           >
             {["male", "female", "other"].map((gender) => (

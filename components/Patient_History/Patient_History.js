@@ -298,7 +298,7 @@ const Patient_History = ({ type }) => {
                   value={formData.history}
                   onBlur={() => handleBlur("history")}
                   placeholder="Add Patient History...."
-                  className=" bg-white text-[15px] text-[#000000] placeholder:text-gray-500 placeholder:font-medium shadow-none ronuded-[7.26px]"
+                  className=" bg-white text-[15px] text-[#000000] placeholder:text-gray-500 placeholder:font-medium shadow-none ronuded-[7.26px] overflow-y-auto resize-none h-[80px]"
                 />
               </div>
               {touched.history && !formData.history && (
