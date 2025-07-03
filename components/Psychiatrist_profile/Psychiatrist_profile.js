@@ -13,8 +13,41 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { Baseurl } from "@/lib/constants";
+import { getCookie } from "cookies-next";
+import { showErrorToast } from "@/lib/toast";
+import { patientSessionToken as getPatientSessionToken } from "@/lib/utils";
+import { useState, useEffect } from "react";
 const Psychiatrist_profile = () => {
   const router = useRouter();
+  const patientSessionToken = getPatientSessionToken();
+  const [loading, setLoading] = useState(false);
+  const [clinic, setClinic] = useState(null);
+    useEffect(() => {
+    const getClinicDetails = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${Baseurl}/v2/cp/patient?type=clinic`, {
+          headers: {
+            accesstoken: patientSessionToken,
+            "Content-Type": "application/json",
+          },
+        });
+        if (response?.data?.success) {
+          setClinic(response?.data?.data.clinicDetails);
+        }
+      } catch (err) {
+        console.log("err", err);
+        showErrorToast(
+          err?.response?.data?.error?.message || "Error fetching patient data"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+    getClinicDetails();
+  }, []);
   return (
     <div className="h-screen flex flex-col items-center justify-start bg-gradient-to-b  from-[#DFDAFB] to-[#F9CCC5] relative px-4 overflow-auto max-w-[574px] mx-auto">
       {/* Header */}
@@ -34,20 +67,33 @@ const Psychiatrist_profile = () => {
           {/* CH Circle */}
           <div className="relative w-full flex justify-center">
             <div
-              className="w-28 h-28 bg-[#8F82C1] rounded-full flex items-center justify-center text-white font-quicksand font-semibold"
-              style={{ fontSize: "50px", marginTop: "-76px" }}
-            >
-              CH
+                className="w-28 h-28 bg-[#8F82C1] rounded-full flex items-center justify-center text-white font-quicksand font-semibold"
+                style={{ fontSize: "50px", marginTop: "-76px" }}
+              >
+                {clinic?.clinicName
+                  ?.split(" ")
+                  .slice(0, 2)
+                  .map(word => word[0])
+                  .join("")
+                }
+              </div>
             </div>
-          </div>
 
           {/* Hospital Info */}
           <div className="w-[328px] flex flex-col items-center justify-center mt-2">
             <p className="font-quicksand font-semibold text-[20px] leading-[100%] text-center m-0">
-              Cloudnine Hospital
+              {clinic?.clinicName}
             </p>
             <p className="text-[15px] font-normal text-center m-0 leading-tight opacity-70">
-              Pimple Saudagar
+              {clinic?.doctorDetails?.doNotDisplay?(
+                <>
+                <span className="text-[#8F8F8F]">Doctor details not available</span>
+                </>
+              ) : (
+                <>
+                {clinic?.doctorDetails?.firstName} {clinic?.doctorDetails?.lastName}
+                </>
+              )}
             </p>
 
             {/* Icons + Emergency */}
@@ -97,14 +143,19 @@ const Psychiatrist_profile = () => {
           <div className="w-full bg-gradient-to-r from-[#bba3e438] to-[#eda1974d] rounded-[8px] p-[10px] mt-3 text-left">
             <p className="text-[15px] font-semibold">Address:</p>
             <p className="text-sm mt-[2px] leading-snug">
-              Blue Sapphire Business Park, nr. Govind Yashada Chowk,
-              Vishwashanti Colony, Pimple Saudagar, Pune, Pimpri-Chinchwad,
-              Maharashtra 411027
+              {clinic?.generalInformation?.area}, {clinic?.generalInformation?.city}
+            </p>
+            <p className="text-sm mt-[2px] leading-snug">
+              {clinic?.generalInformation?.state}, {clinic?.generalInformation?.pincode}
             </p>
           </div>
 
           {/* Doctor Info */}
-          <div className="w-full h-[56px] flex items-center justify-between bg-gradient-to-r from-[#bba3e438] to-[#eda1974d] rounded-[8px] p-[12px] gap-[10px] mt-3">
+          { clinic?.doctorDetails?.doNotDisplay ? (
+            <>
+            </>
+          ):(
+                      <div className="w-full h-[56px] flex items-center justify-between bg-gradient-to-r from-[#bba3e438] to-[#eda1974d] rounded-[8px] p-[12px] gap-[10px] mt-3">
             <div className="flex items-center gap-[10px]">
               <Image
                 src="/images/medical_services.png"
@@ -113,7 +164,7 @@ const Psychiatrist_profile = () => {
                 height={32}
                 className="rounded-full object-cover"
               />
-              <span className="text-[15px] font-medium">Dr. Seema Jain</span>
+              <span className="text-[15px] font-medium">{clinic?.doctorDetails?.firstName} {clinic?.doctorDetails?.lastName}</span>
             </div>
 
             {/* Drawer Trigger */}
@@ -160,7 +211,7 @@ const Psychiatrist_profile = () => {
                         </p>
                       </div>
                       <h3 className="text-[20px] font-semibold text-black mb-3">
-                        Dr. Seema Jain
+                        {clinic?.doctorDetails?.firstName} {clinic?.doctorDetails?.lastName}
                       </h3>
 
                       <div className="flex items-center justify-center gap-3 mb-3">
@@ -198,6 +249,7 @@ const Psychiatrist_profile = () => {
               </DrawerContent>
             </Drawer>
           </div>
+          )}
         </div>
       </div>
       </div>

@@ -5,18 +5,20 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatAmount } from "@/lib/utils";
-
+import axios from "axios";
+import { patientSessionToken as getPatientSessionToken } from "@/lib/utils";
+import { showErrorToast } from "@/lib/toast";
+import { Baseurl } from "@/lib/constants";
+import { useState, useEffect } from "react";
 const Profile = ({
   setShowCounsellorProfile,
   setShowCertifications,
   setShowClientTestimonials,
   doc,
 }) => {
-  console.log("Counsellor Profile Data:", doc);
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] relative max-w-[576px] mx-auto">
-      {/* Fixed Header */}
-      <div className="fixed top-0 left-0 right-0 w-full h-[64px] z-50 flex items-center justify-between px-4 bg-[#eeecfb] max-w-[576px] mx-auto">
+          <div className="fixed top-0 left-0 right-0 w-full h-[64px] z-50 flex items-center justify-between px-4 bg-[#eeecfb] max-w-[576px] mx-auto">
         <ChevronLeft
           size={24}
           className="text-black cursor-pointer"
@@ -28,8 +30,8 @@ const Profile = ({
           <Image src="/images/chats.png" alt="Chats" width={40} height={43} />
         </div>
       </div>
-
-      {/* Scrollable Content */}
+    {doc ? (
+      <>
       <div className="flex-1 pt-[116px] pb-[90px] w-full overflow-auto px-4">
         <div className="w-full mx-auto bg-[#FFFFFFCC] rounded-[12px] px-4 pt-8 pb-6 flex flex-col items-center">
           {/* Profile Image + Name */}
@@ -76,7 +78,7 @@ const Profile = ({
             <span className="text-black text-sm font-semibold">Language:</span>
             <p className="text-black text-sm font-normal">
               {Array.isArray(doc?.practiceDetails?.languageProficiency)
-                ? doc.practiceDetails.languageProficiency.map((lang, _lx) => (
+                ? doc?.practiceDetails?.languageProficiency.map((lang, _lx) => (
                     <span
                       key={_lx}
                       className={`${
@@ -86,7 +88,7 @@ const Profile = ({
                       {lang?.trim() || ""}{" "}
                     </span>
                   ))
-                : doc.practiceDetails.languageProficiency
+                : doc?.practiceDetails?.languageProficiency
                     ?.split(",")
                     ?.map((lang, _lx) => (
                       <span
@@ -118,7 +120,7 @@ const Profile = ({
           {/* Info Card 4 */}
           <div className="mt-3 w-full py-[10px]  rounded-[8px] bg-gradient-to-r from-[#eeecfb] to-[#fce8e5] px-4 flex flex-col justify-center">
             <span className="text-black text-sm font-semibold">
-              Want to expect in the session:
+              What to expect in the session:
             </span>
             <p className="text-black text-sm font-normal">
               {doc?.practiceDetails?.whatToExpectInSession}
@@ -147,7 +149,6 @@ const Profile = ({
         </div>
       </div>
 
-      {/* Fixed Bottom CTA Button */}
       <div className="fixed bottom-0 left-0 right-0 bg-[#fce8e5] flex justify-center py-4 max-w-[576px] mx-auto px-6">
         <Button
           onClick={() => {
@@ -159,7 +160,13 @@ const Profile = ({
           Book Now at {formatAmount(doc?.practiceDetails?.fees?.singleSession)}/- per session
         </Button>
       </div>
-    </div>
+      </>
+    ):(
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">No assigned therapist</p>
+      </div>
+    )}
+        </div>
   );
 };
 

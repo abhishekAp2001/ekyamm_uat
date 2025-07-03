@@ -34,7 +34,6 @@ const Patient_Dashboard = () => {
   const [showClientTestimonials, setShowClientTestimonials] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [filterCount, setFilterCount] = useState(0);
-  const [practitioner, setPractitioner] = useState(true)
   const [filterParams, setFilterParams] = useState({
     language: "",
     sessionFee: "",
@@ -45,7 +44,7 @@ const Patient_Dashboard = () => {
   const [selectedTime, setSelectedTime] = useState(null);
 
   const patientSessionToken = getPatientSessionToken();
-
+  const practitioner = patient?.practitionerTagged
   const handleApplyFilter = (params) => {
     setLoading(true);
     // Simulate API call or processing delay
@@ -91,7 +90,6 @@ const Patient_Dashboard = () => {
           },
         });
         if (response?.data?.success) {
-          console.log(response?.data?.data);
           setCounsellors(response?.data?.data);
         } else {
           setCounsellors([]);
@@ -119,7 +117,6 @@ const Patient_Dashboard = () => {
 
     setFilterCount(count);
   }, [filterParams]);
-  console.log("PatientInfo", JSON.parse(getCookie("PatientInfo")))
   return (
     <>
       <div className="flex flex-col min-h-screen bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5]  relative max-w-[576px] m-auto overflow-y-auto">
@@ -181,9 +178,10 @@ const Patient_Dashboard = () => {
                 </Accordion>
               </>
             )}
-          </div>):(<>
-          <Upcoming_Sessions/>
-          </>)}
+          </div>):(<div className="mt-[192px]">
+          <Upcoming_Sessions
+          dashboard = {true}/>
+          </div>)}
 
           {/* Session Booking Drawer */}
           <SessionDrawer
