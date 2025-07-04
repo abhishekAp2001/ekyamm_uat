@@ -14,7 +14,7 @@ import {
   Plus,
 } from "lucide-react";
 import { doctors, pastSessions, upcomingSession } from "@/lib/utils";
-import Sidebar from "../../Sidebar/Sidebar";
+import Sidebar from "../Sidebar/Sidebar";
 import UpcomingSession from "../UpcomingSession";
 import PastSessions from "../PastSessions";
 

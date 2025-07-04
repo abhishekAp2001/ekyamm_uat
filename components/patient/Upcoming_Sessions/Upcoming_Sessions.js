@@ -26,9 +26,9 @@ const Upcoming_Sessions = ({dashboard = false}) => {
   const [selectedTime, setSelectedTime] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
   const [showAllUpcoming, setShowAllUpcoming] = useState(false);
-  const patientSessionToken = getPatientSessionToken();
   const [loading, setLoading] = useState(false);
   const [sessions, setSessions] = useState(null);
+  const [patientSessionToken, setPatientSessionToken] = useState(null);
   const extraSession = {
     time: "12:00 PM",
     location: "Andheri",
@@ -46,10 +46,24 @@ const Upcoming_Sessions = ({dashboard = false}) => {
       ? "Morning"
       : new Date().getHours() < 16 ||
         (new Date().getHours() === 16 && new Date().getMinutes() === 0)
-      ? "Afternoon"
-      : "Evening";
+        ? "Afternoon"
+        : "Evening";
+        
+useEffect(() => {
+  if (typeof window === "undefined") return; // Only run on client
+  const cookie = getCookie("patientSessionData");
+  try {
+    if (cookie && cookie !== "undefined") {
+      const parsed = JSON.parse(cookie);
+      if (parsed?.token) setPatientSessionToken(parsed.token);
+    }
+  } catch (err) {
+    console.error("Parse failed", err);
+  }
+}, []);
 
       useEffect(() => {
+        if (!patientSessionToken) return;
           const getPatientSession = async () => {
             try {
               setLoading(true);
@@ -72,7 +86,7 @@ const Upcoming_Sessions = ({dashboard = false}) => {
             }
           };
           getPatientSession();
-  }, []);
+  }, [patientSessionToken]);
   return (
     <div className="relative h-screen max-w-[576px]  flex flex-col  bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5] ">
       {/* Fixed Header */}

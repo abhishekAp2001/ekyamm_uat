@@ -1,4 +1,6 @@
+"use client";
 import React from "react";
+import { useState,useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Link2, Phone } from "lucide-react";
 import {
@@ -10,7 +12,18 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getCookie } from "cookies-next";
 const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
-  const patient = JSON.parse(getCookie("PatientInfo"));
+    const [patient, setPatient] = useState(null);
+  
+  useEffect(() => {
+    const cookie = getCookie("PatientInfo");
+    if (cookie) {
+      try {
+        setPatient(JSON.parse(cookie));
+      } catch (err) {
+        console.error("Error parsing cookie", err);
+      }
+    }
+  }, []);
   function convertUTCtoIST(utcDateStr) {
     const utcDate = new Date(utcDateStr);
     const IST_OFFSET = 5.5 * 60;
@@ -42,8 +55,8 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
         className="mt-3"
         defaultValue="upcoming-0"
       >
-        {upcomingsessions && upcomingsessions.length > 0 ? (
-          upcomingsessions.map((session, index) => (
+        {upcomingsessions && upcomingsessions?.length > 0 ? (
+          upcomingsessions?.map((session, index) => (
             <AccordionItem
               value={`upcoming-${index}`}
               className="rounded-[12px] bg-[#ffffff80] opacity-80 relative mb-1"

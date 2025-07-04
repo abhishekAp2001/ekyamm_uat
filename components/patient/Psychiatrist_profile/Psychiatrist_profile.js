@@ -21,10 +21,15 @@ import { patientSessionToken as getPatientSessionToken } from "@/lib/utils";
 import { useState, useEffect } from "react";
 const Psychiatrist_profile = () => {
   const router = useRouter();
-  const patientSessionToken = getPatientSessionToken();
+    const [patientSessionToken, setPatientSessionToken] = useState(null);
   const [loading, setLoading] = useState(false);
   const [clinic, setClinic] = useState(null);
     useEffect(() => {
+      const token = getPatientSessionToken();
+      setPatientSessionToken(token);
+    }, []);
+    useEffect(() => {
+      if (!patientSessionToken) return;
     const getClinicDetails = async () => {
       try {
         setLoading(true);
@@ -47,7 +52,7 @@ const Psychiatrist_profile = () => {
       }
     };
     getClinicDetails();
-  }, []);
+  }, [patientSessionToken]);
   return (
     <div className="h-screen flex flex-col items-center justify-start bg-gradient-to-b  from-[#DFDAFB] to-[#F9CCC5] relative px-4 overflow-auto max-w-[574px] mx-auto">
       {/* Header */}

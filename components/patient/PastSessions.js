@@ -1,6 +1,7 @@
+"use client";
 import React from 'react'
 import { getCookie } from 'cookies-next';
-
+import { useState,useEffect } from 'react';
 const PastSessions = ({sessions}) => {
   function convertUTCtoIST(utcDateStr) {
     const utcDate = new Date(utcDateStr);
@@ -18,7 +19,18 @@ const PastSessions = ({sessions}) => {
     const timeStr = `${hours}:${minutesStr} ${ampm}`;
     return { date: dateStr, time: timeStr };
   }
-  const patient = JSON.parse(getCookie("PatientInfo"));
+    const [patient, setPatient] = useState(null);
+  
+  useEffect(() => {
+    const cookie = getCookie("PatientInfo");
+    if (cookie) {
+      try {
+        setPatient(JSON.parse(cookie));
+      } catch (err) {
+        console.error("Error parsing cookie", err);
+      }
+    }
+  }, []);
   function formatUTCDateToCustomString(utcDateStr) {
   const date = new Date(utcDateStr);
 
@@ -39,7 +51,7 @@ const PastSessions = ({sessions}) => {
   return (
     <div className="">
     <h2 className="text-sm font-semibold py-2">Past Sessions</h2>
-    {sessions && sessions.length > 0 ? (
+    {sessions && sessions?.length > 0 ? (
     <>
       {sessions?.map((session, index) => (
       <div

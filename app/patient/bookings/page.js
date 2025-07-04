@@ -18,7 +18,7 @@ const Page = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#DFDAFB] to-[#F9CCC5] max-w-[480px] mx-auto">
       <div className="bg-gradient-to-r from-[#B0A4F5] to-[#EDA197] pb-3 rounded-b-lg ">
-        <Greeting name={user.name} profilePic={user.profilePic} />
+        <Greeting name={user?.name} profilePic={user?.profilePic} />
         {/* Search Bar */}
         <div className="flex space-x-2 px-4">
           <div className="flex-1 relative">

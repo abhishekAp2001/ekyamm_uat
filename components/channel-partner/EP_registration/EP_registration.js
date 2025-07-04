@@ -15,7 +15,7 @@ import axios from "axios";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { Loader2Icon, MapPin } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import PR_Header from "@/components/channel-partner/PR_Header";
+import PR_Header from "../PR_Header/PR_Header";
 
 // Custom debounce function
 const customDebounce = (func, delay) => {

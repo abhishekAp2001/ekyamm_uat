@@ -1,4 +1,4 @@
-
+export const dynamic = "force-dynamic";
 import P_Pay_For_Session from '@/components/patient/P_Pay_For_Session/P_Pay_For_Session'
 import React from 'react'
 

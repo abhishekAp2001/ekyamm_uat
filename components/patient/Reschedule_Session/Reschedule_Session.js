@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Eye, EyeOff, MapPin, Menu, Plus } from "lucide-react";
-import Sidebar from "../../Sidebar/Sidebar";
+import Sidebar from "../Sidebar/Sidebar";
 import RescheduleSession from "../RescheduleSession";
 import RePastSessions from "../RePastSessions";
 import { reschedulesession, rePastSessions } from "@/lib/utils";

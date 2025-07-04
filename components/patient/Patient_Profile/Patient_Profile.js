@@ -68,7 +68,7 @@ const Patient_Profile = () => {
   const [showCounsellorProfile, setShowCounsellorProfile] = useState(false);
   const [showCertifications, setShowCertifications] = useState(false);
   const [showClientTestimonials, setShowClientTestimonials] = useState(false);
-
+    const [patientSessionToken, setPatientSessionToken] = useState(null);
       const [formData, setFormData] = useState({
           profileImageBase64: "",
           firstName: patient?.firstName||"",
@@ -116,8 +116,13 @@ const Patient_Profile = () => {
   }
   const [therapist, setTherapist] = useState(null);
   const [loading, setLoading] = useState(false);
-  const patientSessionToken = getPatientSessionToken();
   useEffect(() => {
+    const token = getPatientSessionToken();
+    setPatientSessionToken(token);
+  }, []);
+  
+  useEffect(() => {
+    if (!patientSessionToken) return;
     const getTherapistDetails = async () => {
       try {
         setLoading(true);
@@ -140,7 +145,7 @@ const Patient_Profile = () => {
       }
     };
     getTherapistDetails();
-  }, []);
+  }, [patientSessionToken]);
   const handleTakePhoto = () => {
     if (cameraInputRef.current) {
       cameraInputRef.current.click();

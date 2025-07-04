@@ -14,7 +14,7 @@ import { Baseurl } from "@/lib/constants";
 // AvailableSession shows session credits and a loader when fetching
 export default function AvailableSession({ loading = false, patient }) {
   const router = useRouter();
-  const patientSessionToken = getPatientSessionToken();
+  const [patientSessionToken, setPatientSessionToken] = useState(null);
   const [therapist, setTherapist] = useState();
   const { availableCredits = 0, totalCredits = 0 } = patient || {};
   const onBookSession = () => {
@@ -25,7 +25,12 @@ export default function AvailableSession({ loading = false, patient }) {
     setCookie("selectedCounsellor", JSON.stringify(therapist));
     router.push("/patient/select-package");
   };
+    useEffect(() => {
+      const token = getPatientSessionToken();
+      setPatientSessionToken(token);
+    }, []);
         useEffect(() => {
+              if (!patientSessionToken) return;
       const getTherapistDetails = async () => {
         try {
           const response = await axios.get(`${Baseurl}/v2/cp/patient?type=therapist`, {

@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import Upcoming_Sessions from '@/components/patient/Upcoming_Sessions/Upcoming_Sessions'
 import React from 'react'
 

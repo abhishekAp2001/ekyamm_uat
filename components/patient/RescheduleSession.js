@@ -1,13 +1,13 @@
 import React from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { Link2, Phone } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "./ui/accordion";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+} from "../ui/accordion";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const RescheduleSession = ({ sessions, showRescheduleButtons = false }) => {
   return (

@@ -29,7 +29,7 @@ import { patientSessionToken as getPatientSessionToken } from "@/lib/utils";
 import { showErrorToast } from "@/lib/toast";
 import { Baseurl } from "@/lib/constants";
 const Sessions_Synopsis = () => {
-  const patientSessionToken = getPatientSessionToken();
+  const [patientSessionToken, setPatientSessionToken] = useState(null);
   const [loading, setLoading] = useState(false);
   const [synopsis, setSynopsis] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -42,6 +42,12 @@ const Sessions_Synopsis = () => {
     "23 January 2022",
   ];
   useEffect(() => {
+    const token = getPatientSessionToken();
+    setPatientSessionToken(token);
+  }, []);
+  
+  useEffect(() => {
+    if (!patientSessionToken) return;
     const getPatientSynopsis = async () => {
       try {
         setLoading(true);
@@ -64,7 +70,7 @@ const Sessions_Synopsis = () => {
       }
     };
     getPatientSynopsis();
-  }, []);
+  }, [patientSessionToken]);
   function formatUTCDateSimple(utcDateStr) {
     const date = new Date(utcDateStr);
 
@@ -74,7 +80,18 @@ const Sessions_Synopsis = () => {
 
     return `${day} ${month} ${year}`;
   }
-  const patient = JSON.parse(getCookie("PatientInfo"))
+  const [patient, setPatient] = useState(null);
+
+useEffect(() => {
+  const cookie = getCookie("PatientInfo");
+  if (cookie) {
+    try {
+      setPatient(JSON.parse(cookie));
+    } catch (err) {
+      console.error("Error parsing cookie", err);
+    }
+  }
+}, []);
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
       <SS_Header />
@@ -107,7 +124,7 @@ const Sessions_Synopsis = () => {
         {/* Accordion List */}
         { loading ? (<div className="flex justify-center"><Loader2 className="w-6 h-6 animate-spin" aria-hidden="true" /></div>):(
                   <Accordion type="single" collapsible className="flex flex-col gap-3">
-          {synopsis && synopsis.length > 0 ? (
+          {synopsis && synopsis?.length > 0 ? (
             synopsis?.map((item, idx) => (
             <AccordionItem
               key={idx}
@@ -170,7 +187,7 @@ const Sessions_Synopsis = () => {
 
                   <div className="h-[210px] bg-[#FFFFFF] rounded-[12px] p-4 flex flex-col gap-[18px]">
                     <p className="text-sm font-medium">
-                      {selectedItem ? selectedItem.synopsisNote : "No synopsis available"}
+                      {selectedItem ? selectedItem?.synopsisNote : "No synopsis available"}
                     </p>
                     <div className="relative flex items-center justify-center w-full h-[110.21px] rounded-[9px] border-[0.93px] bg-[#000000]">
                       <Dialog>
@@ -182,7 +199,7 @@ const Sessions_Synopsis = () => {
                             {
                               selectedItem?.synopsisNoteImageUrl? (
                                 <Image
-                              src={selectedItem.synopsisNoteImageUrl}
+                              src={selectedItem?.synopsisNoteImageUrl}
                               width={18}
                               height={18}
                               alt="preview"
@@ -204,7 +221,7 @@ const Sessions_Synopsis = () => {
                           <div className="flex flex-col items-center justify-center h-full">
                             {selectedItem?.synopsisNoteImageUrl ? (
                               <Image
-                                src={selectedItem.synopsisNoteImageUrl}
+                                src={selectedItem?.synopsisNoteImageUrl}
                                 alt="Synopsis Note"
                                 width={500}
                                 height={500}

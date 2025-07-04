@@ -26,7 +26,7 @@ const Upcoming_Sessions = ({dashboard = false}) => {
   const [selectedTime, setSelectedTime] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
   const [showAllUpcoming, setShowAllUpcoming] = useState(false);
-  const patientSessionToken = getPatientSessionToken();
+    const [patientSessionToken, setPatientSessionToken] = useState(null);
   const [loading, setLoading] = useState(false);
   const [sessions, setSessions] = useState(null);
   const extraSession = {
@@ -48,8 +48,13 @@ const Upcoming_Sessions = ({dashboard = false}) => {
         (new Date().getHours() === 16 && new Date().getMinutes() === 0)
       ? "Afternoon"
       : "Evening";
-
+    useEffect(() => {
+      const token = getPatientSessionToken();
+      setPatientSessionToken(token);
+    }, []);
+    
       useEffect(() => {
+        if (!patientSessionToken) return;
           const getPatientSession = async () => {
             try {
               setLoading(true);
@@ -72,7 +77,7 @@ const Upcoming_Sessions = ({dashboard = false}) => {
             }
           };
           getPatientSession();
-  }, []);
+  }, [patientSessionToken]);
   return (
     <div className="relative h-screen max-w-[576px]  flex flex-col  bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5] ">
       {/* Fixed Header */}

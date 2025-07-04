@@ -16,22 +16,46 @@ import { selectedCounsellorData as getSelectedCounsellorData } from "@/lib/utils
 import { format } from "date-fns";
 const P_Pay_For_Session = ({ type }) => {
   const selectedCounsellorData = getSelectedCounsellorData()
-  console.log("seslectedcounsellordata",selectedCounsellorData)
-  const session = JSON.parse(getCookie("session_selection"))
-  const price = session.total
-  const sessions = session.session_count
+  const [session, setSession] = useState(null)
+  const price = session?.total
+  const sessions = session?.session_count
   const [clinicShare, setClinicShare] = useState(0);
   const [totalPayable, setTotalPayable] = useState(0);
   const [total, setTotal] = useState(0);
-  const sessions_selection = hasCookie("sessions_selection")
-    ? JSON.parse(getCookie("sessions_selection"))
-    : null;
-  const channelPartnerData = hasCookie("channelPartnerData")
-    ? JSON.parse(getCookie("channelPartnerData"))
-    : null;
-  const PatientInfo = hasCookie("PatientInfo")
-    ? JSON.parse(getCookie("PatientInfo"))
-    : null;
+  const [PatientInfo, setPatientInfo] = useState(null);
+  const [channelPartnerData, setChannelPartnerData] = useState(null);
+
+      useEffect(() => {
+      const cookie = getCookie("session_selection");
+      if (cookie) {
+        try {
+          setSession(JSON.parse(cookie));
+        } catch (err) {
+          console.error("Error parsing cookie", err);
+        }
+      }
+    }, []);
+
+    useEffect(() => {
+      const cookie = getCookie("channelPartnerData");
+      if (cookie) {
+        try {
+          setChannelPartnerData(JSON.parse(cookie));
+        } catch (err) {
+          console.error("Error parsing cookie", err);
+        }
+      }
+    }, []);
+  useEffect(() => {
+    const cookie = getCookie("PatientInfo");
+    if (cookie) {
+      try {
+        setPatientInfo(JSON.parse(cookie));
+      } catch (err) {
+        console.error("Error parsing cookie", err);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const calculatePrice = () => {

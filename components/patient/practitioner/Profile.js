@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatAmount } from "@/lib/utils";
 import axios from "axios";
-import { patientSessionToken as getPatientSessionToken } from "@/lib/utils";
 import { showErrorToast } from "@/lib/toast";
 import { Baseurl } from "@/lib/constants";
 import { useState, useEffect } from "react";
