@@ -1,11 +1,11 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { Button } from "../../ui/button";
+import React, { useState, useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import Image from "next/image";
 import PP_Header from "../PP_Header/PP_Header";
-import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Drawer,
   DrawerClose,
@@ -33,6 +33,8 @@ import axios from "axios";
 import { patientSessionToken as getPatientSessionToken } from "@/lib/utils";
 import { showErrorToast } from "@/lib/toast";
 import { Baseurl } from "@/lib/constants";
+import { setCookie } from "cookies-next";
+import { base64ToFile } from "@/lib/utils";
 const sessionData = [
   {
     date: "24th Apr",
@@ -57,6 +59,8 @@ const sessionData = [
 const Patient_Profile = () => {
   const router = useRouter();
   const cookieValue = getCookie("PatientInfo");
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const patient = cookieValue ? JSON.parse(cookieValue) : {};
   const [activeIndex, setActiveIndex] = useState(null);
   const [otpSent, setOtpSent] = useState(false);
@@ -64,6 +68,27 @@ const Patient_Profile = () => {
   const [showCounsellorProfile, setShowCounsellorProfile] = useState(false);
   const [showCertifications, setShowCertifications] = useState(false);
   const [showClientTestimonials, setShowClientTestimonials] = useState(false);
+
+      const [formData, setFormData] = useState({
+          profileImageBase64: "",
+          firstName: patient?.firstName||"",
+          lastName: patient?.lastName||"",
+          countryCode_primary: patient?.countryCode_primary||"🇮🇳 +91",
+          primaryMobileNumber: patient?.primaryMobileNumber||"",
+          email: patient?.email||"",
+          countryCode_whatsapp: patient?.countryCode_whatsapp||"🇮🇳 +91",
+          whatsappNumber: patient?.whatsappNumber||"",
+          gender: patient?.gender||"",
+          addressDetails: {
+              pincode: patient?.addressDetails?.pincode||"",
+              area: patient?.addressDetails?.area||"",
+              city: patient?.addressDetails?.city||"",
+              state: patient?.addressDetails?.state||"",
+          },
+      });
+  
+  const cameraInputRef = useRef(null);
+  const photoInputRef = useRef(null);
   const handleInputChange = (e, setMobile) => {
     const digitsOnly = e.target.value.replace(/\D/g, "");
     if (digitsOnly.length <= 10) {
@@ -89,40 +114,137 @@ const Patient_Profile = () => {
       router.push(route);
     }
   }
-   const [therapist, setTherapist] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const patientSessionToken = getPatientSessionToken();
-      useEffect(() => {
-      const getTherapistDetails = async () => {
-        try {
-          setLoading(true);
-          const response = await axios.get(`${Baseurl}/v2/cp/patient?type=therapist`, {
-            headers: {
-              accesstoken: patientSessionToken,
-              "Content-Type": "application/json",
-            },
-          });
-          if (response?.data?.success) {
-            setTherapist(response?.data?.data.practitionerTagged);
-          }
-        } catch (err) {
-          console.log("err", err);
-          showErrorToast(
-            err?.response?.data?.error?.message || "Error fetching patient data"
-          );
-        } finally {
-          setLoading(false);
+  const [therapist, setTherapist] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const patientSessionToken = getPatientSessionToken();
+  useEffect(() => {
+    const getTherapistDetails = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${Baseurl}/v2/cp/patient?type=therapist`, {
+          headers: {
+            accesstoken: patientSessionToken,
+            "Content-Type": "application/json",
+          },
+        });
+        if (response?.data?.success) {
+          setTherapist(response?.data?.data.practitionerTagged);
         }
-      };
-      getTherapistDetails();
-    }, []);
+      } catch (err) {
+        console.error("err", err);
+        showErrorToast(
+          err?.response?.data?.error?.message || "Error fetching patient data"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+    getTherapistDetails();
+  }, []);
+  const handleTakePhoto = () => {
+    if (cameraInputRef.current) {
+      cameraInputRef.current.click();
+    }
+  };
+
+  const handleChoosePhoto = () => {
+    if (photoInputRef.current) {
+      photoInputRef.current.click();
+    }
+  };
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
+  };
+ const handlePhotoUpload = async (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    try {
+      const base64 = await fileToBase64(file);
+      setFormData((prev) => ({ ...prev, profileImageBase64: base64 }));
+      setDrawerOpen(false);
+      // Pass the new base64 directly
+      handleUpdatePatientDetails({ ...formData, profileImageBase64: base64 });
+    } catch (error) {
+      showErrorToast("Failed to upload profile image");
+    }
+  }
+};
+
+  // Handle photo deletion
+const handlePhotoDelete = () => {
+  const updatedFormData = { ...formData, profileImageBase64: "", profileImageUrl: "" };
+  setFormData(updatedFormData);
+  setDrawerOpen(false);
+  handleUpdatePatientDetails(updatedFormData); // Pass the updated object
+};
+
+const handleUpdatePatientDetails = async (overrideFormData) => {
+  setIsLoading(true);
+  try {
+    const data = overrideFormData || formData;
+    let updatedFormData = { ...data };
+    if (data?.profileImageBase64) {
+      const imageUrl =
+        (await uploadImage(data?.profileImageBase64, "profile")) || "";
+      updatedFormData.profileImageUrl = imageUrl;
+    }
+    const { profileImageBase64, ...payload } = updatedFormData;
+    const response = await axios.put(
+      Baseurl + `/v2/cp/patient/update`,
+      { patientDetails: payload },
+      { headers: { accesstoken: patientSessionToken } }
+    );
+    if (response?.data?.success) {
+      setCookie("PatientInfo", JSON.stringify(response?.data?.data));
+      router.push(`/patient/patient-profile`);
+    }
+  } catch (error) {
+    showErrorToast(error?.response?.data?.error?.message);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+  const uploadImage = async (filename, type) => {
+    try {
+      const file = base64ToFile(filename, "myImage.png");
+      const form = new FormData();
+      form.append("filename", file);
+      const response = await axios.post(
+        Baseurl + `/v2/psychiatrist/uploadImage`,
+        form,
+        {
+          headers: {
+            accesstoken: patientSessionToken,
+          },
+        }
+      );
+      if (response?.data?.success) {
+        const imageUrl = response?.data?.image;
+        return imageUrl;
+      }
+    } catch (error) {
+      console.error("error",error)
+      if (error.forceLogout) {
+        router.push("/login");
+      } else {
+        showErrorToast(error?.response?.data?.error?.message);
+      }
+      return null;
+    }
+  };
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
       <div className="">
         <div className="flex items-center justify-between p-5">
           {/* Left Icon */}
-          <ChevronLeft size={28} className="text-black cursor-pointer" 
-          onClick={()=>{router.push("/patient/dashboard")}}/>
+          <ChevronLeft size={28} className="text-black cursor-pointer"
+            onClick={() => { router.push("/patient/dashboard") }} />
           {/* Right Side Image */}
           <Image
             src="/images/box.png"
@@ -151,20 +273,23 @@ const Patient_Profile = () => {
                   .join("")}
               </AvatarFallback>
             </Avatar>
-            <Drawer className="pt-[9.97px]">
+            <Drawer className="pt-[9.97px]" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
               <DrawerTrigger className="">
                 <Image
                   src="/images/camera.png"
                   width={31}
                   height={31}
-                  className="w-[31px] h-fit absolute bottom-[2px] right-[33%] lg:right-[40%]"
-                  alt="camera"
+                  className="w-[31px] h-fit absolute bottom-[-10px] right-[100px]"
+                  alt="Camera"
+                  onClick={() => setDrawerOpen(true)}
                 />
               </DrawerTrigger>
               <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
                 <DrawerHeader>
                   <DrawerDescription className="flex flex-col gap-3">
-                    <Button className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex  justify-between items-center w-full h-[50px] rounded-[8.62px]">
+                    <Button className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex  justify-between items-center w-full h-[50px] rounded-[8.62px]"
+                      onClick={handleTakePhoto}
+                    >
                       <Link href={"/cp_type"}>Take Photo</Link>
                       <Image
                         src="/images/arrow.png"
@@ -174,7 +299,9 @@ const Patient_Profile = () => {
                         alt="ekyamm"
                       />
                     </Button>
-                    <Button className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex  justify-between items-center w-full h-[50px] rounded-[8.62px]">
+                    <Button className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex  justify-between items-center w-full h-[50px] rounded-[8.62px]"
+                      onClick={handleChoosePhoto}
+                    >
                       <Link href={""}>Choose Photo</Link>
                       <Image
                         src="/images/arrow.png"
@@ -184,7 +311,8 @@ const Patient_Profile = () => {
                         alt="ekyamm"
                       />
                     </Button>
-                    <Button className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex  justify-between items-center w-full h-[50px] rounded-[8.62px]">
+                    <Button className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex  justify-between items-center w-full h-[50px] rounded-[8.62px]"
+                      onClick={handlePhotoDelete}>
                       <Link href={""}>Delete Photo</Link>
                       <Image
                         src="/images/arrow.png"
@@ -194,6 +322,21 @@ const Patient_Profile = () => {
                         alt="ekyamm"
                       />
                     </Button>
+                    <input
+                      ref={cameraInputRef}
+                      type="file"
+                      accept="image/*"
+                      capture="environment"
+                      className="hidden"
+                      onChange={handlePhotoUpload}
+                    />
+                    <input
+                      ref={photoInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handlePhotoUpload}
+                    />
                   </DrawerDescription>
                 </DrawerHeader>
                 <DrawerFooter className="p-0"></DrawerFooter>
@@ -278,9 +421,9 @@ const Patient_Profile = () => {
           ].map((item, idx) => (
             <div key={idx} className="mb-4">
               <button className="bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[8px] p-2 h-[56px] p-3 w-full text-left flex items-center justify-between"
-              style={item.disabled ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
-              onClick={item.onclick}
-              disabled={item.disabled}>
+                style={item.disabled ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+                onClick={item.onclick}
+                disabled={item.disabled}>
                 <span className="flex items-center text-[14px] font-[600] text-black ml-1">
                   <Image
                     src={item.icon}
@@ -329,21 +472,19 @@ const Patient_Profile = () => {
                         <React.Fragment key={idx}>
                           {/* Step circle */}
                           <div
-                            className={`w-2 h-2 rounded-full border-[3px] ${
-                              step === 0 || (otpSent && step <= 1)
+                            className={`w-2 h-2 rounded-full border-[3px] ${step === 0 || (otpSent && step <= 1)
                                 ? "bg-[#776EA5] border-[#776EA5]"
                                 : "bg-gray-300 border-gray-400"
-                            }`}
+                              }`}
                           ></div>
 
                           {/* Step line (not after last circle) */}
                           {idx < 2 && (
                             <div
-                              className={`flex-1 h-[2px] ${
-                                otpSent && step === 0
+                              className={`flex-1 h-[2px] ${otpSent && step === 0
                                   ? "bg-green-500"
                                   : "bg-gray-400"
-                              }`}
+                                }`}
                             ></div>
                           )}
                         </React.Fragment>
@@ -411,21 +552,19 @@ const Patient_Profile = () => {
                           <React.Fragment key={idx}>
                             {/* Step circle */}
                             <div
-                              className={`w-2 h-2 rounded-full border-2 ${
-                                step === 0 || (otpSent && step <= 1)
+                              className={`w-2 h-2 rounded-full border-2 ${step === 0 || (otpSent && step <= 1)
                                   ? "bg-green-500 border-green-500"
                                   : "bg-gray-300 border-gray-400"
-                              }`}
+                                }`}
                             ></div>
 
                             {/* Line only between steps, not after last circle */}
                             {idx < 2 && (
                               <div
-                                className={`flex-1 h-[2px] ${
-                                  otpSent && step === 0
+                                className={`flex-1 h-[2px] ${otpSent && step === 0
                                     ? "bg-green-500"
                                     : "bg-gray-400"
-                                }`}
+                                  }`}
                               ></div>
                             )}
                           </React.Fragment>
@@ -484,21 +623,19 @@ const Patient_Profile = () => {
                           <React.Fragment key={idx}>
                             {/* Step circle */}
                             <div
-                              className={`w-2 h-2 rounded-full border-2 ${
-                                step === 0 || (otpSent && step <= 1)
+                              className={`w-2 h-2 rounded-full border-2 ${step === 0 || (otpSent && step <= 1)
                                   ? "bg-green-500 border-green-500"
                                   : "bg-gray-300 border-gray-400"
-                              }`}
+                                }`}
                             ></div>
 
                             {/* Line only between steps, not after last circle */}
                             {idx < 2 && (
                               <div
-                                className={`flex-1 h-[2px] ${
-                                  otpSent && step === 0
+                                className={`flex-1 h-[2px] ${otpSent && step === 0
                                     ? "bg-green-500"
                                     : "bg-gray-400"
-                                }`}
+                                  }`}
                               ></div>
                             )}
                           </React.Fragment>
@@ -637,7 +774,7 @@ const Patient_Profile = () => {
           <div className="relative h-screen overflow-y-auto">
             <Client_Testimonial
               setShowClientTestimonials={setShowClientTestimonials}
-              doc = {patient?.practitionerTagged}
+              doc={patient?.practitionerTagged}
             />
           </div>
         </div>

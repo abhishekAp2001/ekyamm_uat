@@ -10,14 +10,16 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Button } from "../../ui/button";
+import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 const PP_Header = () => {
     const [show, setShow] = useState(false);
     const handleClose = () => {
     setShow(false);
   };
+  const router = useRouter()
   return (
     <>
     <div  className="">
@@ -37,7 +39,7 @@ const PP_Header = () => {
                         </DrawerTitle>
                         <DrawerDescription className="mt-6 flex gap-3 w-full">
                           <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
-                          onClick={() => handleClose()}>
+                          onClick={() => router.push("/patient/patient-profile")}>
                             Confirm
                           </Button>
         
