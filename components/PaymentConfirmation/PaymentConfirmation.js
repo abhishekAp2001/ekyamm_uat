@@ -14,7 +14,6 @@ import { useRouter } from "next/navigation";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Invoice from "./Invoice";
-import generatePDF from "react-to-pdf";
 import { useReactToPrint } from "react-to-print";
 const PaymentConfirmation = ({ type }) => {
   const targetRef = useRef()

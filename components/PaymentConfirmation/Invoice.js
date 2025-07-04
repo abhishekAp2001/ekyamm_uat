@@ -1,8 +1,31 @@
 import React from 'react'
-
+import { hasCookie, getCookie } from 'cookies-next';
 const Invoice = () => {
+    const sessions_selection = hasCookie("sessions_selection")
+        ? JSON.parse(getCookie("sessions_selection"))
+        : null;
+    const invitePatientInfo = hasCookie("invitePatientInfo")
+        ? JSON.parse(getCookie("invitePatientInfo"))
+        : null;
+    const qr_code_info = hasCookie("qrCodeInfo")
+        ? JSON.parse(getCookie("qrCodeInfo"))
+        : null;
+    const paymentStatusInfo = hasCookie("paymentStatusInfo")
+        ? JSON.parse(getCookie("paymentStatusInfo"))
+        : null;
+    const channelPartnerData = hasCookie("channelPartnerData")
+        ? JSON.parse(getCookie("channelPartnerData"))
+        : null;
+    function getFormattedDate() {
+        const today = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return today.toLocaleDateString('en-US', options);
+    }
+    const calculateGST = (total)=>{
+        const tax = total*0.18
+        return tax
+    }
     return (
-
         <div className='print-only'>
             <div className="invoice-box" id="invoice">
                 <table cellPadding={0} cellSpacing={0}>
@@ -19,8 +42,8 @@ const Invoice = () => {
                                 <table>
                                     <tbody><tr>
                                         <td>
-                                            <b>Invoice Number:</b> #123<br />
-                                            <b>Created:</b> January 1, 2025<br />
+                                            <b>Invoice Number:</b>{paymentStatusInfo?.invoiceId}<br />
+                                            <b>Created:</b>{getFormattedDate()}<br />
                                         </td>
                                     </tr>
                                     </tbody></table>
@@ -36,9 +59,9 @@ const Invoice = () => {
                                             john@example.com
                                         </td>
                                         <td>
-                                            Cloudnine Hospitals<br />
-                                            12345 Sunny Road<br />
-                                            Coimbatore 12345
+                                            {channelPartnerData?.clinicName}<br />
+                                            {channelPartnerData?.area}, {channelPartnerData?.city}<br />
+                                            {channelPartnerData?.state}, {channelPartnerData?.pincode}
                                         </td>
                                     </tr>
                                     </tbody></table>
@@ -81,29 +104,29 @@ const Invoice = () => {
                     </tr>
                         <tr className="item">
                             <td>1</td>
-                            <td style={{ fontWeight: 'bold' }}>Patient Name: Roshan Singh <br /> Has booked session with Ms. Sushma Trivedi on 10 April, 2025</td>
-                            <td>1</td>
-                            <td>₹300</td>
-                            <td>₹300</td>
+                            <td style={{ fontWeight: 'bold' }}>Patient Name: {invitePatientInfo?.firstName} {invitePatientInfo?.lastName} <br /> Has booked session with Ms. Sushma Trivedi on 10 April, 2025</td>
+                            <td>{paymentStatusInfo?.sessionCount}</td>
+                            <td>₹{paymentStatusInfo?.sessionPrice}</td>
+                            <td>{paymentStatusInfo?.totalAmount}</td>
                             <td>18%</td>
-                            <td>₹54</td>
+                            <td>₹{calculateGST(paymentStatusInfo?.totalAmount)}</td>
                             <td>₹0</td>
-                            <td>₹354</td>
+                            <td>₹{paymentStatusInfo?.totalAmount+calculateGST(paymentStatusInfo?.totalAmount)}</td>
                         </tr>
                         <tr className="item">
                             <td>2</td>
                             <td style={{ fontWeight: 'bold' }}>Patient Name: Roshan Singh <br /> Has booked session with Ms. Sushma Trivedi on 17 April, 2025</td>
-                            <td>1</td>
-                            <td>₹100</td>
-                            <td>₹100</td>
+                            <td>{paymentStatusInfo?.sessionCount}</td>
+                            <td>₹{paymentStatusInfo?.sessionPrice}</td>
+                            <td>{paymentStatusInfo?.totalAmount}</td>
                             <td>18%</td>
-                            <td>₹18</td>
-                            <td>₹10</td>
-                            <td>₹108</td>
+                            <td>₹{calculateGST(paymentStatusInfo?.totalAmount)}</td>
+                            <td>₹0</td>
+                            <td>₹{paymentStatusInfo?.totalAmount + calculateGST(paymentStatusInfo?.totalAmount)}</td>
                         </tr>
                         <tr className="total">
                             <td colSpan={8} style={{ textAlign: 'right' }}>Grand Total:</td>
-                            <td>₹462</td>
+                            <td>₹{paymentStatusInfo?.totalAmount + calculateGST(paymentStatusInfo?.totalAmount)}</td>
                         </tr>
                     </tbody></table>
                 <footer>

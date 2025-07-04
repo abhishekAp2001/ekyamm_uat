@@ -63,29 +63,79 @@ const Payment = ({ type }) => {
     sessions_selection?.sessionPrice,
     sessions_selection?.sessionCreditCount,
   ]);
-  useEffect(() => {
-    const getQrString = async () => {
-      try {
-        const response = await axios.post(`${Baseurl}/v2/cp/patient/sessionCredits`, {
-          channelPartnerUsername: type,
-          cp_patientId: invitePatientInfo?._id,
-          sessionCreditCount: sessions_selection?.sessionCreditCount,
-          sessionPrice: String(sessions_selection?.sessionPrice)
-          // sessionCreditCount: "1",
-          // sessionPrice: "1"
-        })
-        if (response?.data?.success) {
-          setCookie("qrCodeInfo", JSON.stringify(response?.data?.data));
-          setOrderId(response?.data?.data?.orderId);
-          generateQrCode(response?.data?.data?.upiIntent)
-        }
-      } catch (error) {
-        console.error("Erorr", error)
+
+useEffect(() => {
+  const deviceInfo = {
+    userAgent: navigator.userAgent,
+    platform: navigator.platform,
+    language: navigator.language,
+    screen: {
+      width: screen.width,
+      height: screen.height,
+      orientation: screen.orientation?.type || 'unknown'
+    }
+  };
+
+  function objectToLiteralString(obj, indent = 0) {
+    const spaces = ' '.repeat(indent);
+    let result = '';
+
+    for (const [key, value] of Object.entries(obj)) {
+      if (typeof value === 'object' && value !== null) {
+        result += `${spaces}${key}: {\n${objectToLiteralString(value, indent + 2)}${spaces}},\n`;
+      } else if (typeof value === 'string') {
+        result += `${spaces}${key}: "${value}",\n`;
+      } else {
+        result += `${spaces}${key}: ${value},\n`;
       }
     }
-    getQrString()
-  },
-    [])
+
+    return result;
+  }
+
+  const getIP = async () => {
+    try {
+      const response = await fetch('https://api.ipify.org?format=json');
+      const data = await response.json();
+      console.log("IP after get:", data.ip);
+      return data.ip;
+    } catch (error) {
+      console.error("Failed to fetch IP:", error);
+      return "";
+    }
+  };
+
+  const getQrString = async (ip, literalDeviceInfo) => {
+    try {
+      const response = await axios.post(`${Baseurl}/v2/cp/patient/sessionCredits`, {
+        channelPartnerUsername: type,
+        cp_patientId: invitePatientInfo?._id,
+        sessionCreditCount: sessions_selection?.sessionCreditCount,
+        sessionPrice: String(sessions_selection?.sessionPrice),
+        clientDetails: {
+          ip: String(ip),
+          deviceInfo: literalDeviceInfo
+        },
+      });
+      if (response?.data?.success) {
+        setCookie("qrCodeInfo", JSON.stringify(response?.data?.data));
+        setOrderId(response?.data?.data?.orderId);
+        generateQrCode(response?.data?.data?.upiIntent);
+      }
+    } catch (error) {
+      console.error("Error", error);
+    }
+  };
+
+  const doFlow = async () => {
+    const literalDeviceInfo = objectToLiteralString(deviceInfo); // ✅ FIX: pass the object!
+    const ip = await getIP();
+    await getQrString(ip, literalDeviceInfo);
+  };
+
+  doFlow();
+}, []);
+
   const generateQrCode = async (upiIntent) => {
     try {
       const dataUrl = await QRCode.toDataURL(upiIntent)
@@ -98,30 +148,28 @@ const Payment = ({ type }) => {
     if (!orderId) return; // Don't start interval until orderId is set
 
     const interval = setInterval(() => {
-      if(orderId)
-      checkStatus(orderId);
+      if (orderId)
+        checkStatus(orderId);
     }, 10000);
 
     async function checkStatus(orderId) {
       try {
-        console.log("order ID", orderId);
         const response = await axios.post(`${Baseurl}/v2/order/${orderId}/status`, {
           channelPartnerUsername: type,
           cp_patientId: invitePatientInfo?._id,
         });
-        if(response?.data?.success){
-          if(response?.data?.data?.status == "success"){
+        if (response?.data?.success) {
+          if (response?.data?.data?.status == "success") {
             setCookie("paymentStatusInfo", JSON.stringify(response?.data?.data));
             router.push(`/channel-partner/${type}/payment-confirmation`)
           }
-          if(response?.data?.data?.status !== "success" && response?.data?.data?.status !== "initiated"){
+          if (response?.data?.data?.status !== "success" && response?.data?.data?.status !== "initiated") {
             showErrorToast("Payment Failed");
             setTimeout(() => {
               router.push(`/channel-partner/${type}/pay-for-sessions`);
             }, 1000);
           }
         }
-        console.log("Check API Response", response);
       } catch (error) {
         console.error("Error", error);
       }
@@ -168,7 +216,7 @@ const Payment = ({ type }) => {
                     height={224}
                     alt="UPI QR Code"
                   />) : (
-                    <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true"/>
+                    <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
                   )}
                 </div>
               </Link>
