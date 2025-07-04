@@ -1,4 +1,4 @@
-import P_Mobile_Verification from "@/components/P_Mobile_Verification/P_Mobile_Verification";
+import P_Mobile_Verification from "@/components/patient/P_Mobile_Verification/P_Mobile_Verification";
 import React from "react";
 
 const page = async ({ params }) => {

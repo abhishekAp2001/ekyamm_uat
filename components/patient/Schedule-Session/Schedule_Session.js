@@ -35,7 +35,7 @@ import {
 } from "@/components/ui/popover";
 import axios from "axios";
 import { Baseurl } from "@/lib/constants";
-import SessionSection from "@/components/SessionSection";
+import SessionSection from "@/components/patient/SessionSection";
 
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 

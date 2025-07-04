@@ -1,4 +1,4 @@
-import SalesDashboard from '@/components/Sales_Dashboard/SalesDashboard'
+import SalesDashboard from '@/components/sales/Sales_Dashboard/SalesDashboard'
 import React from 'react'
 
 const page = () => {

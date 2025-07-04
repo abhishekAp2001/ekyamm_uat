@@ -1,4 +1,4 @@
-import Time_Up from '@/components/Time_Up/Time_Up'
+import Time_Up from '@/components/patient/Time_Up/Time_Up'
 import React from 'react'
 
 const page = () => {

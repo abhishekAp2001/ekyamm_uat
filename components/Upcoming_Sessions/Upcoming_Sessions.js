@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Eye, EyeOff, Funnel, Link2, MapPin, Menu, Phone, Plus } from "lucide-react";
 import { Accordion } from "../ui/accordion";
-import DoctorCard from "../DoctorCard";
+import DoctorCard from "../patient/DoctorCard";
 import SessionDrawer from "../SessionDrawer";
 import { doctors, pastSessions, upcomingSession } from "@/lib/utils";
 import Sidebar from "../Sidebar/Sidebar";

@@ -1,4 +1,4 @@
-import Upcoming_Sessions from '@/components/Upcoming_Sessions/Upcoming_Sessions'
+import Upcoming_Sessions from '@/components/patient/Upcoming_Sessions/Upcoming_Sessions'
 import React from 'react'
 
 const page = () => {

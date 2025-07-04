@@ -1,4 +1,4 @@
-import PP_Details from "@/components/PP_details/PP_details";
+import PP_Details from "@/components/patient/PP_details/PP_details";
 import React from "react";
 
 const page = async ({ params }) => {

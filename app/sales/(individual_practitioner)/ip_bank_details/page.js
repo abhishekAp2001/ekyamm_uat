@@ -1,5 +1,5 @@
 
-import IP_bank_details from '@/components/IP_bank_Details/IP_bank_details'
+import IP_bank_details from '@/components/sales/individual_practitioner/IP_bank_Details/IP_bank_details'
 import React from 'react'
 
 const page = () => {

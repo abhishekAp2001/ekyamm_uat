@@ -1,4 +1,4 @@
-import OTP_Send from '@/components/Otp_Send/OTP_Send'
+import OTP_Send from '@/components/channel-partner/Otp_Send/OTP_Send'
 import React from 'react'
 
 const page = async({params}) => {

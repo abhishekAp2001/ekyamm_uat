@@ -1,4 +1,4 @@
-import IP_Details from '@/components/IP_Details/IP_Details'
+import IP_Details from '@/components/sales/individual_practitioner/IP_Details/IP_Details'
 import React from 'react'
 
 const page = () => {

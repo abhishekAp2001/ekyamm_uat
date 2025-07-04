@@ -1,8 +1,8 @@
-import Greeting from "@/components/Greeting";
-import PastSessions from "@/components/PastSessions";
+import Greeting from "@/components/patient/Greeting";
+import PastSessions from "@/components/patient/PastSessions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import UpcomingSession from "@/components/UpcomingSession";
+import UpcomingSession from "@/components/patient/UpcomingSession";
 import { pastSessions, upcomingSession } from "@/lib/utils";
 import { LucideFilter, LucideSearch} from "lucide-react";
 import React from "react";

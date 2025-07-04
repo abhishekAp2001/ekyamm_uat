@@ -1,5 +1,5 @@
 
-import PP_name from '@/components/PP_name/PP_name'
+import PP_name from '@/components/patient/PP_name/PP_name'
 import React from 'react'
 
 const page = () => {

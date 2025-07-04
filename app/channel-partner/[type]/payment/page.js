@@ -1,4 +1,4 @@
-import Payment from '@/components/Payment/Payment'
+import Payment from '@/components/channel-partner/Payment/Payment'
 import React from 'react'
 
 const page = async({params}) => {

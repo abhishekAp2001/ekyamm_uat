@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import Patient_Header from "../Patient_Header/Patient_Header";
+import Patient_Header from "./Patient_Header/Patient_Header";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { whatsappUrl } from "@/lib/constants";

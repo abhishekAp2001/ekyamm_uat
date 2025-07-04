@@ -1,4 +1,4 @@
-import Select_Package from '@/components/Select_Package/Select_Package'
+import Select_Package from '@/components/patient/Select_Package/Select_Package'
 import React from 'react'
 
 const page = () => {

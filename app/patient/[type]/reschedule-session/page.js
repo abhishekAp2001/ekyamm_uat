@@ -1,4 +1,4 @@
-import Reschedule_Session from '@/components/Reschedule_Session/Reschedule_Session'
+import Reschedule_Session from '@/components/patient/Reschedule_Session/Reschedule_Session'
 import React from 'react'
 
 const page = () => {

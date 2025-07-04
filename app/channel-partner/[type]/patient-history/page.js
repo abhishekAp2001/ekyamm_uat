@@ -1,4 +1,4 @@
-import Patient_History from "@/components/Patient_History/Patient_History";
+import Patient_History from "@/components/channel-partner/Patient_History/Patient_History";
 import React from "react";
 
 const page = async ({ params }) => {

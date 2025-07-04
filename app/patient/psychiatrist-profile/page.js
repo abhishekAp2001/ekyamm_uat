@@ -1,5 +1,5 @@
 
-import Psychiatrist_profile from '@/components/Psychiatrist_profile/Psychiatrist_profile'
+import Psychiatrist_profile from '@/components/patient/Psychiatrist_profile/Psychiatrist_profile'
 import React from 'react'
 
 const page = () => {

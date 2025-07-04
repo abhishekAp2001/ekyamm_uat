@@ -1,4 +1,4 @@
-import PayForSessions from '@/components/PayForSessions/PayForSessions'
+import PayForSessions from '@/components/channel-partner/PayForSessions/PayForSessions'
 import React from 'react'
 
 const page = async({params}) => {

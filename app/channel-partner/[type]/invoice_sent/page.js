@@ -1,4 +1,4 @@
-import NP_Registration from '@/components/NP_Registration/NP_Registration'
+import NP_Registration from '@/components/channel-partner/NP_Registration/NP_Registration'
 import React from 'react'
 
 const page = async({params}) => {

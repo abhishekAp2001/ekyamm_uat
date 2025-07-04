@@ -1,4 +1,4 @@
-import Checkout from '@/components/Checkout/Checkout'
+import Checkout from '@/components/patient/Checkout/Checkout'
 import React from 'react'
 
 const page = () => {

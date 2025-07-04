@@ -1,4 +1,4 @@
-import PaymentConfirmation from '@/components/PaymentConfirmation/PaymentConfirmation'
+import PaymentConfirmation from '@/components/channel-partner/PaymentConfirmation/PaymentConfirmation'
 import React from 'react'
 
 const page = async({params}) => {

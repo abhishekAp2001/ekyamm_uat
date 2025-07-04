@@ -1,6 +1,6 @@
 
 
-import CP_billing_details from '@/components/CP_billing_Details/CP_billing_details'
+import CP_billing_details from '@/components/sales/channel_partner/CP_billing_Details/CP_billing_details'
 import React from 'react'
 
 const page = () => {

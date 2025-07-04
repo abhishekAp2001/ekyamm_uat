@@ -1,4 +1,4 @@
-import Sessions_Synopsis from '@/components/Sessions_Synopsis/Sessions_Synopsis'
+import Sessions_Synopsis from '@/components/patient/Sessions_Synopsis/Sessions_Synopsis'
 import React from 'react'
 
 const page = () => {
