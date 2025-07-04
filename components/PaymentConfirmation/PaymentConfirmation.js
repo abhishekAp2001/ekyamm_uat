@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef} from "react";
 
 import { Button } from "../ui/button";
 import Link from "next/link";
@@ -10,18 +10,36 @@ import { MapPin } from "lucide-react";
 import { getCookie, hasCookie } from "cookies-next";
 import { showSuccessToast } from "@/lib/toast";
 import { calculatePaymentDetails, clinicSharePercent, formatAmount } from "@/lib/utils";
-
+import { useRouter } from "next/navigation";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import Invoice from "./Invoice";
+import { useReactToPrint } from "react-to-print";
 const PaymentConfirmation = ({ type }) => {
+  const targetRef = useRef()
+  const router = useRouter()
   const [channelPartnerData, setChannelPartnerData] = useState(null);
   const [totalPayable, setTotalPayable] = useState(0);
-
+  const [secondsLeft, setSecondsLeft] = useState(30);
   const sessions_selection = hasCookie("sessions_selection")
     ? JSON.parse(getCookie("sessions_selection"))
     : null;
   const invitePatientInfo = hasCookie("invitePatientInfo")
     ? JSON.parse(getCookie("invitePatientInfo"))
     : null;
-
+  const qr_code_info = hasCookie("qrCodeInfo")
+    ? JSON.parse(getCookie("qrCodeInfo"))
+    : null;
+    useEffect(() => {
+    if (secondsLeft === 0) {
+      router.push(`/channel-partner/${type}`);
+      return;
+    }
+    const timer = setTimeout(() => {
+      setSecondsLeft((s) => s - 1);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [secondsLeft, router, type]);
   useEffect(() => {
     const cookieData = getCookie("channelPartnerData");
     const patientData = getCookie("invitePatientInfo");
@@ -73,6 +91,27 @@ const PaymentConfirmation = ({ type }) => {
     sessions_selection?.sessionCreditCount,
   ]);
 
+  const downloadPDF = () => {
+    const input = targetRef.current;
+    html2canvas(input, { scale: 2 }).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("invoice.pdf");
+    });
+  };
+  const handlePrint = useReactToPrint({
+    contentRef: targetRef,
+    pageStyle: `
+    @page { size: A4; margin: 10mm; }
+    body { font-size: 14px; color: red; }
+    .no-print { display: none; }
+  `,
+  });
+
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
@@ -115,7 +154,7 @@ const PaymentConfirmation = ({ type }) => {
                   Paid
                 </span>
                 <span className="text-[15px] font-[600] text-black mr-1">
-                  8163619319
+                  {qr_code_info?.payuRaw?.metaData?.txnId}
                 </span>
               </div>
             </div>
@@ -167,13 +206,15 @@ const PaymentConfirmation = ({ type }) => {
 
               <div className=" mt-3">
                 <Link href="#">
-                  <Button className="bg-[#776EA5] text-[15px] font-[700] text-white rounded-[8px] flex items-center justify-center w-full h-[45px]">
+                  <Button onClick={()=>{
+                    handlePrint()
+                  }} className="bg-[#776EA5] text-[15px] font-[700] text-white rounded-[8px] flex items-center justify-center w-full h-[45px]">
                     Download Receipt
                   </Button>
                 </Link>
               </div>
               <div className="flex justify-center mt-2 text-[12px] text-[#000000] opacity-30 font-[500]">
-                Moving to homepage in 30 seconds
+                Moving to homepage in {secondsLeft} seconds
               </div>
             </div>
           </div>
@@ -183,6 +224,9 @@ const PaymentConfirmation = ({ type }) => {
             </div>
           </div>
         </div>
+      </div>
+      <div ref={targetRef}>
+      <Invoice />
       </div>
     </>
   );

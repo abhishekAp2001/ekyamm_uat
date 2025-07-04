@@ -12,27 +12,32 @@ import {
   formatAmount,
 } from "@/lib/utils";
 import Confirm_Header from "../Confirm_Header";
-
+import { selectedCounsellorData as getSelectedCounsellorData } from "@/lib/utils";
+import { format } from "date-fns";
 const P_Pay_For_Session = ({ type }) => {
-  const [total, setTotal] = useState(0);
+  const selectedCounsellorData = getSelectedCounsellorData()
+  console.log("seslectedcounsellordata",selectedCounsellorData)
+  const session = JSON.parse(getCookie("session_selection"))
+  const price = session.total
+  const sessions = session.session_count
   const [clinicShare, setClinicShare] = useState(0);
   const [totalPayable, setTotalPayable] = useState(0);
-
+  const [total, setTotal] = useState(0);
   const sessions_selection = hasCookie("sessions_selection")
     ? JSON.parse(getCookie("sessions_selection"))
     : null;
   const channelPartnerData = hasCookie("channelPartnerData")
     ? JSON.parse(getCookie("channelPartnerData"))
     : null;
-  const invitePatientInfo = hasCookie("invitePatientInfo")
-    ? JSON.parse(getCookie("invitePatientInfo"))
+  const PatientInfo = hasCookie("PatientInfo")
+    ? JSON.parse(getCookie("PatientInfo"))
     : null;
 
   useEffect(() => {
     const calculatePrice = () => {
       const result = calculatePaymentDetails(
-        sessions_selection?.sessionPrice,
-        sessions_selection?.sessionCreditCount,
+        price,
+        sessions,
         clinicSharePercent
       );
       setClinicShare(result.clinicShare || 0);
@@ -41,8 +46,8 @@ const P_Pay_For_Session = ({ type }) => {
     };
     calculatePrice();
   }, [
-    sessions_selection?.sessionPrice,
-    sessions_selection?.sessionCreditCount,
+        price,
+        sessions
   ]);
   return (
     <>
@@ -50,7 +55,7 @@ const P_Pay_For_Session = ({ type }) => {
         <div className="bg-[#f6f4fd]">
         <BackNav className='text-[16px]'
           title="Pay for Sessions"
-          to={``}
+          to={`/patient/select-package`}
         />        
         </div>
         <div className="h-full flex flex-col overflow-auto px-[13px]  bg-gradient-to-b from-[#DFDAFB] to-[#F9CCC5]">
@@ -74,64 +79,79 @@ const P_Pay_For_Session = ({ type }) => {
             <p className="text-center mb-4">
               <span className="text-sm text-[#776EA5] font-black">Friday, 11 December 2024 | 11:00 AM</span>
             </p>
-            <div className="mb-3 bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[12px] p-2">
-              <span className="text-[15px] font-medium text-[#000000] ml-1">
+            <div className="mb-3 bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[12px] p-2 flex justify-between px-2">
+              <div>
+                <span className="text-[15px] font-medium text-[#000000] ml-1">
                 Patient Name:
               </span>
               <div className="text-[15px] font-[600] text-black ml-1">
-                {invitePatientInfo?.firstName} {invitePatientInfo?.lastName}
+                {PatientInfo?.firstName} {PatientInfo?.lastName}
+              </div>
+              </div>
+              <div>
+                <span className="text-[15px] font-medium text-[#000000] ml-1">
+                Practitioner Name:
+              </span>
+              <div className="text-[15px] font-[600] text-black ml-1">
+                {selectedCounsellorData?.generalInformation?.firstName} {selectedCounsellorData?.generalInformation?.lastName}
+              </div>
               </div>
             </div>
-            <div className="mb-3 bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[12px] p-2">
-              <div className=" flex  justify-between  ">
-                <span className="text-[15px] font-[400] text-[#000000] ml-1 pb-2">
-                  Number of Sessions:
-                </span>
-                <span className="text-[15px] font-[600] text-black mr-1">
-                  {sessions_selection?.sessionCreditCount}
-                </span>
+            
+            <div className="mb-3 bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[12px] p-2 flex justify-between px-2">
+              <div>
+                <span className="text-[15px] font-medium text-[#000000] ml-1">
+                session Mode:
+              </span>
+              <div className="text-[15px] font-[600] text-black ml-1">
+                {selectedCounsellorData?.practiceDetails?.type}
               </div>
-
-              <div className=" flex justify-between ">
-                <span className="text-[15px] font-[400] text-[#000000] ml-1">
-                  Session Fee (Hourly):
-                  {/* {sessions_selection?.sessionCreditCount} */}
-                </span>
-                <span className="text-[15px] font-[700] text-black mr-1">
-                  {/* <span className="mx-8">₹</span> */}
-                  {formatAmount(sessions_selection?.sessionPrice || 0)}
-                </span>
               </div>
             </div>
             <div className="flex mb-3 justify-between mt-2  pt-2 bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[12px] p-2">
-              <span className="text-[15px] font-[400] text-black ml-1">
-                Total:
+              <div className="flex flex-col">
+                <span className="text-[15px] font-[400] text-black ml-1">
+                Session Fee:
               </span>
-              <span className="text-[15px] font-[700] text-black mr-1">
+              <span className="text-[15px] font-[400] text-black ml-1">
+                Transaction Fee:
+              </span>
+                <span className="text-[15px] font-[400] text-black ml-1">
+                GST:
+              </span>
+              </div>
+              <div  className="flex flex-col">
+                 <span className="text-[15px] font-[700] text-black mr-1">
                 {/* <span className="mx-8">₹</span>
                 {Number(sessions_selection?.sessionPrice) *
                   Number(sessions_selection?.sessionCreditCount)} */}
                 {total}
               </span>
-            </div>
-            <div className="flex mb-3 justify-between mt-2  pt-2 bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[12px] p-2">
-              <span className="text-[15px] font-[400] text-black ml-1">
-                Clinic Share ({clinicSharePercent}%):
+              
+              <span className="text-[15px] font-[700] text-black mr-1">
+                {/* <span className="mx-8">₹</span>
+                {Number(sessions_selection?.sessionPrice) *
+                  Number(sessions_selection?.sessionCreditCount)} */}
+                {formatAmount(50)}
               </span>
               <span className="text-[15px] font-[700] text-black mr-1">
-                {clinicShare}
+                {/* <span className="mx-8">₹</span>
+                {Number(sessions_selection?.sessionPrice) *
+                  Number(sessions_selection?.sessionCreditCount)} */}
+                {formatAmount(100)}
               </span>
+              </div>
             </div>
 
             <div className="flex mb-3 justify-between mt-2  pt-2 bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[12px] p-2">
-              <span className="text-[15px] font-[400] text-black ml-1">
-                Total Payable:
+              <span className="text-[15px] font-[700] text-black ml-1">
+                Total:
               </span>
               <span className="text-[15px] font-[700] text-black mr-1">
-                {totalPayable}
+                {total}
               </span>
             </div>
-            <Link href={``}>
+            <Link href={`/patient/payment`}>
               <Button className="w-full bg-[#776EA5] rounded-[8px]">
                Pay to confirm session
               </Button>

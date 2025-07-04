@@ -5,8 +5,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
-
+import { useRouter } from "next/navigation";
 const Patient_Payment = () => {
+  const router = useRouter()
   const [paymentMode, setPaymentMode] = useState("card");
   const [saveCard, setSaveCard] = useState(true);
 
@@ -14,7 +15,8 @@ const Patient_Payment = () => {
     <div className="min-h-screen bg-gradient-to-b from-[#DFDAFB] to-[#F9CCC5] flex flex-col max-w-[576px] mx-auto">
       {/* Header */}
       <div className="flex items-center p-4 gap-[9px] bg-[#f6f4fd] fixed top-0 left-0 right-0 z-10 max-w-[576px] mx-auto">
-        <ChevronLeft size={24} className=" text-black-700" />
+        <ChevronLeft size={24} className=" text-black-700" 
+        onClick={()=>{router.push('/patient/pay-for-sessions')}}/>
         <div className="flex-1 text-[16px] font-semibold text-gray-800">
           Payment
         </div>
