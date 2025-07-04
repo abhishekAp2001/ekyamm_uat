@@ -432,41 +432,38 @@ const PP_Details = ({ type }) => {
     }
   }, []);
 
-  const handleUpdatePatientDetails = async () => {
-    setIsLoading(true);
-    try {
-      if (formData?.profileImageBase64) {
-        const imageUrl =
-          (await uploadImage(formData?.profileImageBase64, "profile")) || "";
-        console.log(imageUrl);
-        setFormData({
-          ...formData,
-          profileImageUrl: imageUrl,
-        });
-      }
-      const payload = delete formData.profileImageBase64;
-      const response = await axios.put(
-        Baseurl + `/v2/cp/patient/update`,
-        {
-          patientDetails: formData,
-        },
-        {
-          headers: {
-            accesstoken: token,
-          },
+    const handleUpdatePatientDetails = async () => {
+        setIsLoading(true);
+        try {
+            let updatedFormData = { ...formData }
+            if (formData?.profileImageBase64) {
+                const imageUrl =
+                    (await uploadImage(formData?.profileImageBase64, "profile")) || "";
+                updatedFormData.profileImageUrl = imageUrl;
+            }
+            const { profileImageBase64, ...payload } = updatedFormData;
+            const response = await axios.put(
+                Baseurl + `/v2/cp/patient/update`,
+                {
+                    patientDetails: payload,
+                },
+                {
+                    headers: {
+                        accesstoken: token,
+                    },
+                }
+            );
+            if (response?.data?.success) {
+                setCookie("PatientInfo", JSON.stringify(response?.data?.data));
+                router.push(`/patient/${type}/family-details`);
+            }
+        } catch (error) {
+            console.error("Error saving data:", error);
+            showErrorToast(error?.response?.data?.error?.message);
+        } finally {
+            setIsLoading(false);
         }
-      );
-      if (response?.data?.success) {
-        setCookie("PatientInfo", JSON.stringify(response?.data?.data));
-        router.push(`/patient/${type}/family-details`);
-      }
-    } catch (error) {
-      console.error("Error saving data:", error);
-      showErrorToast(error?.response?.data?.error?.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    };
 
   const uploadImage = async (filename, type) => {
     try {
