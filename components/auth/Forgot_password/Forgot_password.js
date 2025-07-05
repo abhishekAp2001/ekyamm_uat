@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/input-otp";
 import { whatsappUrl } from "@/lib/constants";
 
-const Forgot_password = () => {
+const Forgot_password = () => { 
   const [value, setValue] = React.useState("");
   return (
     <>
