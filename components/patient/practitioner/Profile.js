@@ -26,7 +26,7 @@ const Profile = ({
           }}
         />
         <div className="cursor-pointer">
-          <Image src="/images/chats.png" alt="Chats" width={40} height={43} />
+          <Image src="/images/Chats.png" alt="Chats" width={40} height={43} />
         </div>
       </div>
     {doc ? (

@@ -14,6 +14,8 @@ import {
 import Confirm_Header from "../../Confirm_Header";
 import { selectedCounsellorData as getSelectedCounsellorData } from "@/lib/utils";
 import { format } from "date-fns";
+import axios from "axios";
+import { Baseurl } from "@/lib/constants";
 const P_Pay_For_Session = ({ type }) => {
   const selectedCounsellorData = getSelectedCounsellorData()
   const [session, setSession] = useState(null)
@@ -24,7 +26,17 @@ const P_Pay_For_Session = ({ type }) => {
   const [total, setTotal] = useState(0);
   const [PatientInfo, setPatientInfo] = useState(null);
   const [channelPartnerData, setChannelPartnerData] = useState(null);
-
+  const [token, setToken] = useState(null)
+        useEffect(() => {
+      const cookie = getCookie("patientSessionData");
+      if (cookie) {
+        try {
+          setToken(JSON.parse(cookie));
+        } catch (err) {
+          console.error("Error parsing cookie", err);
+        }
+      }
+    }, []);
       useEffect(() => {
       const cookie = getCookie("session_selection");
       if (cookie) {
@@ -73,6 +85,23 @@ const P_Pay_For_Session = ({ type }) => {
         price,
         sessions
   ]);
+  const handlePayment = async () => {
+    console.log("token", token.token)
+    const response = await axios.post(`${Baseurl}/v2/cp/patient/sessionCredits/refill`, {
+      "sessionCreditCount": "1",
+      "sessionPrice": "1"
+    },
+      { headers: { accesstoken: token.token } })
+    if (response?.data?.success) {
+      const paymenyURL = response?.data?.data?.payuPayload?.action
+      const fields = response?.data?.data?.payuPayload?.fields
+      const payResponse = axios.post(paymenyURL, {
+        ...fields,
+        surl: "http://localhost:3000/channel-partner/chiropractors/payment-confirmation",
+        furl: "http://localhost:3000/patient/dashboard"
+      });
+    }
+  }
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
@@ -175,11 +204,10 @@ const P_Pay_For_Session = ({ type }) => {
                 {total}
               </span>
             </div>
-            <Link href={`/patient/payment`}>
-              <Button className="w-full bg-[#776EA5] rounded-[8px]">
+              <Button className="w-full bg-[#776EA5] rounded-[8px]"
+              onClick = {()=>{handlePayment()}}>
                Pay to confirm session
               </Button>
-            </Link>
           </div>
           {/* <div className="bg-gradient-to-b from-[#fce8e5] to-[#fce8e5] flex flex-col items-center gap-3  py-[23px] px-[17px] left-0 right-0 ">
             <Footer_bar />

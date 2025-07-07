@@ -355,7 +355,7 @@ const handleUpdatePatientDetails = async (overrideFormData) => {
           <div className="flex text-[14px] font-[500] text-gray-500 items-center justify-center">
             +91 {patient?.primaryMobileNumber}
             <Image
-              src="/images/edit.png"
+              src="/images/Edit.png"
               width={10}
               height={10}
               alt="edit"
@@ -366,7 +366,7 @@ const handleUpdatePatientDetails = async (overrideFormData) => {
           <div className="flex text-[14px] font-[500] text-gray-500 items-center justify-center mb-4">
             {patient?.email ? patient.email : "-------"}
             <Image
-              src="/images/edit.png"
+              src="/images/Edit.png"
               width={10}
               height={10}
               alt="edit"
