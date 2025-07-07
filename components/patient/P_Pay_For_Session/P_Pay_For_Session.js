@@ -16,6 +16,7 @@ import { selectedCounsellorData as getSelectedCounsellorData } from "@/lib/utils
 import { format } from "date-fns";
 import axios from "axios";
 import { Baseurl } from "@/lib/constants";
+import { string } from "i/lib/util";
 const P_Pay_For_Session = ({ type }) => {
   const selectedCounsellorData = getSelectedCounsellorData()
   const [session, setSession] = useState(null)
@@ -90,8 +91,8 @@ const P_Pay_For_Session = ({ type }) => {
   const handlePayment = async () => {
     try {
       const response = await axios.post(`${Baseurl}/v2/cp/patient/sessionCredits/refill`, {
-      "sessionCreditCount": "1",
-      "sessionPrice": "1"
+      "sessionCreditCount": String(session?.session_count),
+      "sessionPrice": String(session?.total)
     },
       { headers: { accesstoken: token.token } })
     if (response?.data?.success) {

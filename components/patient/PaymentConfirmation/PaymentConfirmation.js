@@ -55,10 +55,10 @@ const PaymentConfirmation = () => {
     ]);
 
   useEffect(() => {
-    // if (secondsLeft === 0) {
-    //   router.push(`/patient/dashboard`);
-    //   return;
-    // }
+    if (secondsLeft === 0) {
+      router.push(`/patient/dashboard`);
+      return;
+    }
     const timer = setTimeout(() => {
       setSecondsLeft((s) => s - 1);
     }, 1000);
