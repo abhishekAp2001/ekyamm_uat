@@ -61,7 +61,7 @@ const Psychiatrist_profile = () => {
         <ChevronLeft size={28} className="text-black cursor-pointer"
           onClick={()=>{router.push("/patient/patient-profile")}}/>
      
-          <Image src="/images/chats.png" alt="Chats" width={40} height={43} />
+          <Image src="/images/Chats.png" alt="Chats" width={40} height={43} />
       </div>
       </div>
 

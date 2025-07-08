@@ -354,24 +354,28 @@ const handleUpdatePatientDetails = async (overrideFormData) => {
 
           <div className="flex text-[14px] font-[500] text-gray-500 items-center justify-center">
             +91 {patient?.primaryMobileNumber}
-            <Image
-              src="/images/edit.png"
+            <div className="opacity-60">
+              <Image
+              src="/images/Edit.png"
               width={10}
               height={10}
               alt="edit"
               className="mx-2"
             />
+            </div>
           </div>
 
           <div className="flex text-[14px] font-[500] text-gray-500 items-center justify-center mb-4">
             {patient?.email ? patient.email : "-------"}
-            <Image
-              src="/images/edit.png"
+            <div className="opacity-60">
+              <Image
+              src="/images/Edit.png"
               width={10}
               height={10}
               alt="edit"
               className="mx-2"
             />
+            </div>
           </div>
 
           {/* Menu Items */}
@@ -460,11 +464,12 @@ const handleUpdatePatientDetails = async (overrideFormData) => {
           ))}
         </div>
         <div className="flex justify-center pt-[13px]">
+          <Button className="border border-[#CC627B] bg-transparent text-[14px] font-[600] text-[#CC627B] rounded-[8px] w-full h-[45px]"
+          onClick={()=>{router.push('/patient/edit-profile')}}>
+            Edit Profile
+          </Button>
           <Drawer>
             <DrawerTrigger className="w-full">
-              <Button className="border border-[#CC627B] bg-transparent text-[14px] font-[600] text-[#CC627B] rounded-[8px] w-full h-[45px]">
-                Edit Profile
-              </Button>
             </DrawerTrigger>
 
             <DrawerContent className="bg-gradient-to-b from-[#e7e4f8] via-[#f0e1df] via-70% to-[#feedea] rounded-t-[16px] max-w-[576px] mx-auto bottom-drawer">

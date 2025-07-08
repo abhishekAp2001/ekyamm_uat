@@ -440,7 +440,6 @@ const Edit_Patient = ({ type }) => {
     const handleClose = () => {
         setShow(false);
     };
-    console.log("Form Data", formData)
     return (
         <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
             <PP_Header />

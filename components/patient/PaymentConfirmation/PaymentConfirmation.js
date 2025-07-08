@@ -1,61 +1,28 @@
-"use client";
-import React, { useEffect, useRef, useState } from "react";
-import { Button } from "../../ui/button";
-import Link from "next/link";
-import Footer_bar from "../../Footer_bar/Footer_bar";
-import { getCookie, hasCookie } from "cookies-next";
-import { MapPin } from "lucide-react";
-import BackNav from "../../BackNav";
-import {
-  calculatePaymentDetails,
-  clinicSharePercent,
-  formatAmount,
-} from "@/lib/utils";
-import Confirm_Header from "../../Confirm_Header";
-import { selectedCounsellorData as getSelectedCounsellorData } from "@/lib/utils";
-import { format } from "date-fns";
-import axios from "axios";
-import { Baseurl } from "@/lib/constants";
-import { string } from "i/lib/util";
-const P_Pay_For_Session = ({ type }) => {
+'use client';
+import React, {useState,useEffect} from 'react'
+import { getCookie } from 'cookies-next'
+import BackNav from '@/components/BackNav';
+import { Button } from '@/components/ui/button';
+import { selectedCounsellorData as getSelectedCounsellorData } from '@/lib/utils';
+import { calculatePaymentDetails, formatAmount } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+const PaymentConfirmation = () => {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const transactionId = searchParams.get("txnid")
   const selectedCounsellorData = getSelectedCounsellorData()
   const [session, setSession] = useState(null)
   const price = session?.total
   const sessions = session?.session_count
-  const [clinicShare, setClinicShare] = useState(0);
-  const [totalPayable, setTotalPayable] = useState(0);
-  const [total, setTotal] = useState(0);
   const [PatientInfo, setPatientInfo] = useState(null);
-  const [channelPartnerData, setChannelPartnerData] = useState(null);
-  const [token, setToken] = useState(null)
-    const [formFields, setFormFields] = useState(null);
-     const payuFormRef = useRef(null);
-  useEffect(() => {
-    const cookie = getCookie("patientSessionData");
-    if (cookie) {
-      try {
-        setToken(JSON.parse(cookie));
-      } catch (err) {
-        console.error("Error parsing cookie", err);
-      }
-    }
-  }, []);
+  const [total, setTotal] = useState(0);
+  const [secondsLeft, setSecondsLeft] = useState(30);
   useEffect(() => {
     const cookie = getCookie("session_selection");
     if (cookie) {
       try {
         setSession(JSON.parse(cookie));
-      } catch (err) {
-        console.error("Error parsing cookie", err);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    const cookie = getCookie("channelPartnerData");
-    if (cookie) {
-      try {
-        setChannelPartnerData(JSON.parse(cookie));
       } catch (err) {
         console.error("Error parsing cookie", err);
       }
@@ -72,44 +39,31 @@ const P_Pay_For_Session = ({ type }) => {
     }
   }, []);
 
+    useEffect(() => {
+      const calculatePrice = () => {
+        const result = calculatePaymentDetails(
+          price,
+          sessions,
+          10,
+        );
+        setTotal(result?.total || 0);
+      };
+      calculatePrice();
+    }, [
+      price,
+      sessions
+    ]);
+
   useEffect(() => {
-    const calculatePrice = () => {
-      const result = calculatePaymentDetails(
-        price,
-        sessions,
-        clinicSharePercent,
-      );
-      setClinicShare(result.clinicShare || 0);
-      setTotal(result?.total || 0);
-      setTotalPayable(result?.totalPayable || 0);
-    };
-    calculatePrice();
-  }, [
-    price,
-    sessions
-  ]);
-  const handlePayment = async () => {
-    try {
-      const response = await axios.post(`${Baseurl}/v2/cp/patient/sessionCredits/refill`, {
-      "sessionCreditCount": String(session?.session_count),
-      "sessionPrice": String(session?.total)
-    },
-      { headers: { accesstoken: token.token } })
-    if (response?.data?.success) {
-      const payuPayload = response?.data?.data?.payuPayload
-      payuPayload.fields.surl = "http://localhost:3000/api/success"
-      payuPayload.fields.furl = "http://localhost:3000/api/failure"
-      setFormFields(payuPayload);
+    if (secondsLeft === 0) {
+      router.push(`/patient/dashboard`);
+      return;
     }
-    } catch (error) {
-      console.error("Error",error)
-    }
-  }
-  useEffect(() => {
-  if (formFields) {
-    payuFormRef.current?.submit();
-  }
-}, [formFields]);
+    const timer = setTimeout(() => {
+      setSecondsLeft((s) => s - 1);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [secondsLeft, router]);
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
@@ -120,7 +74,26 @@ const P_Pay_For_Session = ({ type }) => {
           />
         </div>
         <div className="h-full flex flex-col overflow-auto px-[13px]  bg-gradient-to-b from-[#DFDAFB] to-[#F9CCC5]">
-          <div className="mt-10 bg-[#FFFFFF] rounded-[9px] p-5 relative">
+          <div className="mt-3 mb-3 bg-[#FFFFFF] rounded-[9px] flex flex-col p-2 justify-center">
+              <div className=" flex  justify-between">
+                <span className="text-[15px] font-[400] text-[#000000] ml-1">
+                  Payment Status:
+                </span>
+                <span className="text-[15px] font-[400] text-black mr-1">
+                  Transaction ID:
+                </span>
+              </div>
+
+              <div className=" flex justify-between ">
+                <span className="text-[15px] font-[600] text-[#000000] ml-1">
+                  Paid
+                </span>
+                <span className="text-[15px] font-[600] text-black mr-1">
+                  {transactionId}
+                </span>
+              </div>
+            </div>
+          <div className="bg-[#FFFFFF] rounded-[9px] p-5 relative">
             <strong className=" flex text-[20px] font-[600] text-black items-center justify-center">
               Session
             </strong>
@@ -199,33 +172,24 @@ const P_Pay_For_Session = ({ type }) => {
                 {total}
               </span>
             </div>
-            <Button className="w-full bg-[#776EA5] rounded-[8px]"
-              onClick={() => { handlePayment() }}>
-              Pay to confirm session
+            <Button className="w-full bg-[#776EA5] rounded-[8px] h-[40px] text-[15px]">
+              Download Receipt
             </Button>
+            <Button className="w-full bg-white rounded-[8px] mt-2 h-[40px] text-[17px] border-1 border-[#776EA5] text-[#776EA5] font-bold"
+              onClick={() => {router.push('/patient/dashboard')}}>
+              Dashboard
+            </Button>
+            <div className="flex justify-center mt-2 text-[12px] text-[#000000] opacity-30 font-[500]">
+                Moving to homepage in {secondsLeft} seconds
+            </div>
           </div>
           {/* <div className="bg-gradient-to-b from-[#fce8e5] to-[#fce8e5] flex flex-col items-center gap-3  py-[23px] px-[17px] left-0 right-0 ">
             <Footer_bar />
           </div> */}
         </div>
-        <div>
-        {formFields && (
-        <form
-          ref={payuFormRef}
-          action={formFields.action}
-          method="post"
-          style={{ display: "none" }}
-        >
-          {Object.entries(formFields.fields).map(([k, v]) => (
-            <input key={k} type="hidden" name={k} value={v} />
-          ))}
-          <input type="submit" value="Submit" />
-        </form>
-      )}
-        </div>
       </div>
     </>
   );
-};
+}
 
-export default P_Pay_For_Session;
+export default PaymentConfirmation
