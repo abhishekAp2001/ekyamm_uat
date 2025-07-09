@@ -20,22 +20,23 @@ const PaymentSuccess = () => {
             try {
                 const response = await axios.post(
                     `${Baseurl}/v2/webhook/payu`,
-                    queryObj
+                    {...queryObj,isPayuHosted:true}
                 );
-                console.log('Webhook response:', response.data);
+                console.log('Webhook response data:', response.data);
+                console.log('Webhook response:', response);
+                
+        if (response?.data==="OK") {
+            showSuccessToast("Payment Successful")
+            setTimeout(() => {
+                router.push(`/patient/payment-confirmation?txnid=${queryObj?.txnid}`);
+            }, 1000);
+        }
             } catch (error) {
                 console.error('Error calling webhook:', error);
             }
         };
 
         payu();
-
-        if (queryObj?.status === "success") {
-            showSuccessToast("Payment Successful")
-            setTimeout(() => {
-                router.push(`/patient/payment-confirmation?txnid=${queryObj?.txnid}`);
-            }, 1000);
-        }
     }, [searchParams, router]);
 
   return (

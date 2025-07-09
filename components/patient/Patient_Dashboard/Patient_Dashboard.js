@@ -166,6 +166,7 @@ const Patient_Dashboard = () => {
                 <Accordion type="multiple" className="space-y-3">
                   {counsellors.map((counsellor, _x) => (
                     <DoctorCard
+                      patient={patient}
                       key={_x}
                       doc={counsellor}
                       onBookClick={() => {
