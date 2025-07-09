@@ -8,14 +8,24 @@ import { Button } from "@/components/ui/button";
 import { formatAmount } from "@/lib/utils";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
-
+import { getCookie } from "cookies-next";
 const DoctorCard = ({
+  patient,
   doc,
   onBookClick,
   setShowCounsellorProfile,
   setSelectedCounsellors,
 }) => {
   const router = useRouter();
+  const handleBookNowClick = () => {
+    setCookie("selectedCounsellor", JSON.stringify(doc));
+    if (!patient.practitionerTagged && patient.availableCredits === 0) {
+      router.push("/patient/select-package")
+    }
+    else {
+      router.push("/patient/schedule-session");
+    }
+  }
   return (
     <AccordionItem
       value={`item-${doc?.loginId}`}
@@ -130,8 +140,7 @@ const DoctorCard = ({
         <div className="px-4 mt-4">
           <Button
             onClick={() => {
-              setCookie("selectedCounsellor", JSON.stringify(doc));
-              router.push("/patient/schedule-session");
+              handleBookNowClick()
             }}
             className="w-full h-[45px] bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] py-[14.5px] text-[15px] font-semibold rounded-[8px]"
           >
