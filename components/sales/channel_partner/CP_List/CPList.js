@@ -1,17 +1,16 @@
 import Image from "next/image";
 import React from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../../../ui/avatar";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { Mail, Phone, MapPin } from "lucide-react";
-import { formatDate } from "date-fns";
-const All_clinics = ({ list }) => {
+
+const CPList = ({ list }) => {
   function cleanNumber(input) {
     return input.replace(/🇮🇳/, '')
       .replace(/\s+/g, '')
       .trim();
   }
-
-  function formatDate(isoString) {
+    function formatDate(isoString) {
 
     const date = new Date(isoString);
 
@@ -33,13 +32,10 @@ const All_clinics = ({ list }) => {
             <Dialog>
               <DialogTrigger asChild>
                 <Avatar className="cursor-pointer">
-                  {list?.generalInformation?.profileImageUrl ? (
-                    <AvatarImage
-                      src={list.generalInformation.profileImageUrl}
-                      alt={`${list?.generalInformation?.firstName} ${list?.generalInformation?.lastName}`}
-                    />
-                  ) : null}
-
+                  <AvatarImage
+                    src={list?.generalInformation?.profileImageUrl}
+                    alt={`${list?.generalInformation?.firstName} ${list?.generalInformation?.lastName}`}
+                  />
                   <AvatarFallback>
                     {list?.clinicName
                       ? list.clinicName
@@ -47,10 +43,10 @@ const All_clinics = ({ list }) => {
                         .map((word) => word[0])
                         .join("")
                         .toUpperCase()
-                      : `${list?.generalInformation?.firstName?.[0] || ""}${list?.generalInformation?.lastName?.[0] || ""}`.toUpperCase()}
+                      : `${list?.generalInformation?.firstName?.[0] || ""}${list?.generalInformation?.lastName?.[0] || ""
+                        }`.toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-
               </DialogTrigger>
 
               <DialogContent className=" bg-[#f2f2f2] rounded-2xl p-[18px_12px]">
@@ -63,25 +59,25 @@ const All_clinics = ({ list }) => {
                   <div className="flex items-start space-x-4">
                     <div className="flex-shrink-0 rounded-md bg-gray-100 p-2">
                       {/* Logo: replace src with your static logo or dynamic one */}
-                      <Avatar className="cursor-pointer">
-                  {list?.generalInformation?.profileImageUrl ? (
-                    <AvatarImage
-                      src={list.generalInformation.profileImageUrl}
-                      alt={`${list?.generalInformation?.firstName} ${list?.generalInformation?.lastName}`}
-                    />
-                  ) : null}
-
-                  <AvatarFallback>
-                    {list?.clinicName
-                      ? list.clinicName
-                        .split(" ")
-                        .map((word) => word[0])
-                        .join("")
-                        .toUpperCase()
-                      : `${list?.generalInformation?.firstName?.[0] || ""}${list?.generalInformation?.lastName?.[0] || ""}`.toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-
+                     <Avatar className="cursor-pointer">
+                                       {list?.generalInformation?.profileImageUrl ? (
+                                         <AvatarImage
+                                           src={list.generalInformation.profileImageUrl}
+                                           alt={`${list?.generalInformation?.firstName} ${list?.generalInformation?.lastName}`}
+                                         />
+                                       ) : null}
+                     
+                                       <AvatarFallback>
+                                         {list?.clinicName
+                                           ? list.clinicName
+                                             .split(" ")
+                                             .map((word) => word[0])
+                                             .join("")
+                                             .toUpperCase()
+                                           : `${list?.generalInformation?.firstName?.[0] || ""}${list?.generalInformation?.lastName?.[0] || ""}`.toUpperCase()}
+                                       </AvatarFallback>
+                                     </Avatar>
+                     
                     </div>
                     <div className="flex flex-col space-y-1 text-sm">
                       <span className="font-semibold text-base">
@@ -121,13 +117,10 @@ const All_clinics = ({ list }) => {
                       </span>
                       <span className="text-gray-700 font-medium">
                         <b>Date of Birth - </b>
-                        <span className="font-normal">
-                          {list?.generalInformation?.dateOfBirth
+                        <span className="font-normal">{list?.generalInformation?.dateOfBirth
                             ? formatDate(list?.generalInformation?.dateOfBirth)
                             : "Not added"
-                          }
-
-                        </span>
+                          }</span>
                       </span>
                     </div>
                   </div>
@@ -151,15 +144,7 @@ const All_clinics = ({ list }) => {
                   <div className="text-sm">
                     <div className="font-medium text-base">Address</div>
                     <div className="flex items-center text-gray-500">
-                      <MapPin className="w-4 h-4 mr-1" /> {list?.generalInformation?.residentialAddress &&
-                        list?.generalInformation?.city &&
-                        list?.generalInformation?.state &&
-                        list?.generalInformation?.pincode ? (
-                        `${list.generalInformation.residentialAddress}, ${list.generalInformation.city}, ${list.generalInformation.state}, ${list.generalInformation.pincode}`
-                      ) : (
-                        "Not added"
-                      )}
-
+                      <MapPin className="w-4 h-4 mr-1" /> {list?.generalInformation?.residentialAddress || "Not added"}
                     </div>
                   </div>
                 </div>
@@ -180,4 +165,4 @@ const All_clinics = ({ list }) => {
   );
 };
 
-export default All_clinics;
+export default CPList;

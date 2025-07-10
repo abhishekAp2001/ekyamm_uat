@@ -118,7 +118,7 @@ const Patient_Pays_Registration = ({ type }) => {
       }
     } else {
       setChannelPartnerData(null);
-      router.push(`/channel-partner/${type}`);
+      router.push(`/channel-partner/${type}/patient-pay-landing`);
     }
   }, [type]);
 

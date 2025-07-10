@@ -3,8 +3,45 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Brain, Circle, Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { setCookie } from "cookies-next";
+import axios from "axios";
+import { showErrorToast } from "@/lib/toast";
 const Patient_Pays_Landing = ({ type }) => {
+  const [loading,setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [channelPartnerData, setChannelPartnerData] = useState(null)
     const router = useRouter()
+      useEffect(() => {
+        const verifyChannelPartner = async (username) => {
+          setLoading(true);
+          setError(null);
+    
+          try {
+            const response = await axios.post(`v2/cp/channelPartner/verify`, {
+              username: type,
+            });
+    
+            if (response?.data?.success === true) {
+              setCookie("channelPartnerData", JSON.stringify(response.data.data));
+              setChannelPartnerData(response.data.data);
+            } else {
+              showErrorToast(
+                response?.data?.error?.message || "Verification failed"
+              );
+            }
+          } catch (err) {
+            // console.log(err);
+            showErrorToast(
+              err?.response?.data?.error?.message ||
+                "An error occurred while verifying"
+            );
+          } finally {
+            setLoading(false);
+          }
+        };
+        verifyChannelPartner(type); // Replace 'apollo' with dynamic username if needed
+      }, [type]);
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
       {/* Background Image on Right */}

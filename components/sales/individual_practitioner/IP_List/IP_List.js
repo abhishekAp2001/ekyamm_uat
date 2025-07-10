@@ -5,6 +5,7 @@ import All_clinics from "../../All_clinics/All_clinics";
 import { ChevronLeft } from "lucide-react";
 import axiosInstance from "@/lib/axiosInstance";
 import Link from "next/link";
+import IPList from "./IPList";
 
 const IP_List = () => {
   const axios = axiosInstance()
@@ -45,7 +46,7 @@ const IP_List = () => {
             
           </div>
           <div className="px-[10px] ">
-            <All_clinics list={individualPractitionerList}/>
+            <IPList list = {individualPractitionerList}/>
           </div>
         </div>
         </div>
