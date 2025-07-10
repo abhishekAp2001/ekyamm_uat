@@ -1161,6 +1161,7 @@ const Patient_Profile = () => {
         <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90">
           <div className="relative h-screen overflow-y-auto">
             <Profile
+            patient={patient}
               setShowCounsellorProfile={setShowCounsellorProfile}
               setShowCertifications={setShowCertifications}
               setShowClientTestimonials={setShowClientTestimonials}
