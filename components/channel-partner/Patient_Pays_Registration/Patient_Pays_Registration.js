@@ -32,7 +32,7 @@ const Patient_Pays_Registration = ({ type }) => {
   const [errors, setErrors] = useState(null);
   const [otp, setOtp] = useState("");
   const [showOtp, setShowOtp] = useState(false);
-  const [resendTimer, setResendTimer] = useState(10);
+  const [resendTimer, setResendTimer] = useState(120);
   const [isResendDisabled, setIsResendDisabled] = useState(false);
   const [isMobileNumberValid, setIsMobileNumberValid] = useState(false)
   const [emailOtpSendStatus, setEmailOtpSendStatus] = useState(false);
@@ -163,7 +163,7 @@ const Patient_Pays_Registration = ({ type }) => {
         if (response?.data?.success) {
           setLoading(false)
           setOtpSendStatus(true);
-          setResendTimer(10);
+          setResendTimer(120);
           setIsResendDisabled(true);
           setOtp("");
           showSuccessToast(`OTP sent to your verified email.`);

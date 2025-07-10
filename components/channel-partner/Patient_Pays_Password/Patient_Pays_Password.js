@@ -110,7 +110,7 @@ one symbol, and no spaces.`;
                     firstName: formData?.firstName,
                     lastName: formData?.lastName,
                     mobileVerified: true,
-                    emailVerified: "",
+                    emailVerified: formData?.email ? true : false,
                     password: formData?.password
                 }})
             if(response?.data?.success){
