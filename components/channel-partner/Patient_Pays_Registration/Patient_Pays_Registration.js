@@ -124,7 +124,7 @@ const Patient_Pays_Registration = ({ type }) => {
 
   const verifyMobile = async () => {
     try {
-      const response = await axios.post(`${Baseurl}/v2/cp/mobile/verify`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/mobile/verify`, {
         channelPartnerUsername: type,
         mobileNumber: formData.primaryMobileNumber,
         type: "createProfile"
@@ -153,7 +153,7 @@ const Patient_Pays_Registration = ({ type }) => {
       const mobileValid = await verifyMobile()
       if (mobileValid) {
         setIsMobileNumberValid(true)
-        const response = await axios.post(`${Baseurl}/v2/cp/mobile/otpGenerate`, {
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/mobile/otpGenerate`, {
           channelPartnerUsername: type,
           mobile: formData.primaryMobileNumber,
           type: "cpPatientPaySignupOTP",
@@ -183,7 +183,7 @@ const Patient_Pays_Registration = ({ type }) => {
   const validateMobileOTP = async () => {
     try {
       setLoading(true)
-      const response = await axios.post(`${Baseurl}/v2/cp/mobile/otpValidate`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/mobile/otpValidate`, {
         mobile: formData.primaryMobileNumber,
         otp: otp,
         type: "cpPatientPaySignupOTP"
@@ -222,7 +222,7 @@ const Patient_Pays_Registration = ({ type }) => {
 
   const verifyEmail = async () => {
     try {
-      const response = await axios.post(`${Baseurl}/v2/cp/email/verify`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/email/verify`, {
         channelPartnerUsername: type,
         email: formData.email,
         type: "createProfile"
@@ -251,7 +251,7 @@ const Patient_Pays_Registration = ({ type }) => {
       }
       const emailValid = await verifyEmail()
       if (emailValid) {
-        const response = await axios.post(`${Baseurl}/v2/cp/email/otpGenerate`, {
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/email/otpGenerate`, {
           channelPartnerUsername: type,
           email: formData.email,
           type: "cpPatientPaySignupOTP",
@@ -282,7 +282,7 @@ const Patient_Pays_Registration = ({ type }) => {
       setEmailLoading(true)
       const encodedOtp = customEncodeString(emailOtp);
       const encryptedOtp = encryptData(encodedOtp);
-      const response = await axios.post(`${Baseurl}/v2/cp/email/otpValidate`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/email/otpValidate`, {
         email: formData.email,
         otp: emailOtp,
         type: "cpPatientPaySignupOTP",

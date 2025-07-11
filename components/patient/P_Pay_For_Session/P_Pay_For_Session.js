@@ -90,7 +90,7 @@ const P_Pay_For_Session = ({ type }) => {
   ]);
   const handlePayment = async () => {
     try {
-      const response = await axios.post(`${Baseurl}/v2/cp/patient/sessionCredits/refill`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient/sessionCredits/refill`, {
       "sessionCreditCount": String(session?.session_count),
       "sessionPrice": String(session?.total)
     },

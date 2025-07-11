@@ -77,6 +77,7 @@ const Patient_Profile = () => {
   const [secondsLeft, setSecondsLeft] = useState(120);
   const [newVerifiedDrawer, setNewVerifiedDrawer] = useState(false)
   const [drawerFor, setDrawerFor] = useState("mobile")
+  const [imageDrawer,setImageDrawer] = useState(false)
   const [formData, setFormData] = useState({
     profileImageBase64: "",
     firstName: patient?.firstName || "",
@@ -140,7 +141,7 @@ const Patient_Profile = () => {
     const getTherapistDetails = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${Baseurl}/v2/cp/patient?type=therapist`, {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient?type=therapist`, {
           headers: {
             accesstoken: patientSessionToken,
             "Content-Type": "application/json",
@@ -214,7 +215,7 @@ const Patient_Profile = () => {
       }
       const { profileImageBase64, ...payload } = updatedFormData;
       const response = await axios.put(
-        Baseurl + `/v2/cp/patient/update`,
+        process.env.NEXT_PUBLIC_BASE_URL + `/v2/cp/patient/update`,
         { patientDetails: payload },
         { headers: { accesstoken: patientSessionToken } }
       );
@@ -235,7 +236,7 @@ const Patient_Profile = () => {
       const form = new FormData();
       form.append("filename", file);
       const response = await axios.post(
-        Baseurl + `/v2/psychiatrist/uploadImage`,
+        process.env.NEXT_PUBLIC_BASE_URL + `/v2/psychiatrist/uploadImage`,
         form,
         {
           headers: {
@@ -260,7 +261,7 @@ const Patient_Profile = () => {
   const sendOtpMObile = async (mobile = "") => {
     setDrawerOpen(true)
     try {
-      const response = await axios.post(`${Baseurl}/v2/cp/mobile/otpGenerateForProfile`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/mobile/otpGenerateForProfile`, {
         newMobile: mobile
       }, {
         headers: {
@@ -281,7 +282,7 @@ const Patient_Profile = () => {
   const verifyMobileOtp = async () => {
     try {
       setIsLoading(true)
-      const response = await axios.post(`${Baseurl}/v2/cp/mobile/otpValidateForProfile`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/mobile/otpValidateForProfile`, {
         otp: otp
       }, {
         headers: {
@@ -320,7 +321,7 @@ const Patient_Profile = () => {
         showErrorToast("Enter a valid mobile number")
         return
       }
-      const response = await axios.post(`${Baseurl}/v2/cp/mobile/otpGenerateForProfile`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/mobile/otpGenerateForProfile`, {
         newMobile: mobile
       }, {
         headers: {
@@ -344,7 +345,7 @@ const Patient_Profile = () => {
   const verifyNewMobileOtp = async () => {
     try {
       setIsLoading(true)
-      const response = await axios.post(`${Baseurl}/v2/cp/mobile/otpValidateForProfile`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/mobile/otpValidateForProfile`, {
         otp: otp
       }, {
         headers: {
@@ -370,7 +371,7 @@ const Patient_Profile = () => {
     setDrawerFor("email")
     setDrawerOpen(true)
     try {
-      const response = await axios.post(`${Baseurl}/v2/cp/email/otpGenerateForProfile`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/email/otpGenerateForProfile`, {
         email: email
       }, {
         headers: {
@@ -392,7 +393,7 @@ const Patient_Profile = () => {
     const verifyEmailOtp = async () => {
     try {
       setIsLoading(true)
-      const response = await axios.post(`${Baseurl}/v2/cp/email/otpValidateForProfile`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/email/otpValidateForProfile`, {
         otp: otp
       }, {
         headers: {
@@ -417,7 +418,7 @@ const Patient_Profile = () => {
     const verifyNewEmailOtp = async () => {
     try {
       setIsLoading(true)
-      const response = await axios.post(`${Baseurl}/v2/cp/email/otpValidateForProfile`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/email/otpValidateForProfile`, {
         otp: otp
       }, {
         headers: {
@@ -446,7 +447,7 @@ const Patient_Profile = () => {
         showErrorToast("Enter a valid email address");
         return;
       }
-      const response = await axios.post(`${Baseurl}/v2/cp/email/otpGenerateForProfile`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/email/otpGenerateForProfile`, {
         email: email
       }, {
         headers: {
@@ -468,7 +469,7 @@ const Patient_Profile = () => {
   }
   const updateContactDetails = async (mobile) => {
     try {
-      const response = await axios.put(`${Baseurl}/v2/cp/patient/contactDetails/update`, {
+      const response = await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient/contactDetails/update`, {
         countryCode_primary: "🇮🇳 +91",
         primaryMobileNumber: mobile
       }, {
@@ -506,7 +507,7 @@ const Patient_Profile = () => {
     const updateEmailDetails = async (email) => {
       console.log("email",email)
     try {
-      const response = await axios.put(`${Baseurl}/v2/cp/patient/contactDetails/update`, {
+      const response = await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient/contactDetails/update`, {
         email:email
       }, {
         headers: {
@@ -591,7 +592,7 @@ const Patient_Profile = () => {
                   .join("")}
               </AvatarFallback>
             </Avatar>
-            <Drawer className="pt-[9.97px]" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+            <Drawer className="pt-[9.97px]" open={imageDrawer} onClose={() => setImageDrawer(false)}>
               <DrawerTrigger className="">
                 <Image
                   src="/images/camera.png"
@@ -599,7 +600,7 @@ const Patient_Profile = () => {
                   height={31}
                   className="w-[31px] h-fit absolute bottom-[-10px] right-[100px]"
                   alt="Camera"
-                  onClick={() => setDrawerOpen(true)}
+                  onClick={() => setImageDrawer(true)}
                 />
               </DrawerTrigger>
               <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
@@ -683,7 +684,7 @@ const Patient_Profile = () => {
             {patient?.email ? patient.email : "-------"}
             <div
               className={`mx-2 ${!patient?.email ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
-              onClick={() => { sendOtpEmail() }}
+              onClick={() => { patient?.email && sendOtpEmail() }}
             >
               <Image
                 src="/images/Edit.png"

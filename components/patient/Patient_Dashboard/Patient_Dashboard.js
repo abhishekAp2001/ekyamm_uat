@@ -57,7 +57,7 @@ const Patient_Dashboard = () => {
     const getPatient = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${Baseurl}/v2/cp/patient/`, {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient/`, {
           headers: {
             accesstoken: patientSessionToken,
             "Content-Type": "application/json",
@@ -82,7 +82,7 @@ const Patient_Dashboard = () => {
         setCounsellorsLoading(true);
 
         
-        const response = await axios.get(`${Baseurl}/v2/cp/counsellors`, {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/counsellors`, {
           params: filterParams,
           headers: {
             accesstoken: patientSessionToken,

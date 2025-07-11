@@ -101,7 +101,7 @@ one symbol, and no spaces.`;
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await axios.post(`${Baseurl}/v2/cp/patient/invite`, {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient/invite`, {
                 channelPartnerUsername: type,
                 patientDetails: {
                     countryCode_primary: formData?.countryCode,
