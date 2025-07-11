@@ -33,7 +33,7 @@ export default function AvailableSession({ loading = false, patient }) {
               if (!patientSessionToken) return;
       const getTherapistDetails = async () => {
         try {
-          const response = await axios.get(`${Baseurl}/v2/cp/patient?type=therapist`, {
+          const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient?type=therapist`, {
             headers: {
               accesstoken: patientSessionToken,
               "Content-Type": "application/json",

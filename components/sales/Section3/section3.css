@@ -1,0 +1,46 @@
+
+.section3-li{
+    font-family: 'Roboto Serif';
+    font-weight: 700;
+    color: #2F2F2F;
+    font-size: 19.2px;
+    line-height: 1.6;
+}
+
+#section3-subtext{
+    width: 50%;
+}
+
+#custom-bold{
+    font-weight: 700;
+}
+
+#custom-color{
+    color: #3B326B;
+}
+
+
+@media (min-width: 768px) {
+    /* Tablet styles */
+
+    #section3-subtext{
+        width: 80%;
+    }   
+      #section3-list{
+        list-style: disc !important;
+    } 
+}
+
+
+@media (max-width: 480px) {
+    /* Mobile styles */
+
+    #section3-subtext{
+        width: 95%;
+    }
+    #section3-list{
+        line-height: 70%;
+        padding-left: 32px;
+        list-style: disc;
+    }
+}

@@ -110,7 +110,7 @@ const Schedule_Session = () => {
       };
       setCalenderLoading(true);
       const response = await axios.post(
-        Baseurl + `/v2/cp/patient/session/available/dates`,
+        process.env.NEXT_PUBLIC_BASE_URL + `/v2/cp/patient/session/available/dates`,
         bodyData,
         headers
       );
@@ -212,7 +212,7 @@ const Schedule_Session = () => {
       };
 
       const response = await axios.post(
-        `${Baseurl}/v2/cp/patient/session`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient/session`,
         payload,
         headers
       );
@@ -270,7 +270,7 @@ const Schedule_Session = () => {
         };
         setTimeSlogLoading(true);
         const response = await axios.post(
-          Baseurl + `/v2/cp/patient/session/available/slots`,
+          process.env.NEXT_PUBLIC_BASE_URL + `/v2/cp/patient/session/available/slots`,
           bodyData,
           headers
         );

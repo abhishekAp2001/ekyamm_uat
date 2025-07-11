@@ -184,7 +184,7 @@ const Emergency_Details = ({ type }) => {
     // router.push(`/patient/dashboard`);
     try {
       const response = await axios.post(
-        Baseurl + "/v2/cp/patient/familyMember",
+        process.env.NEXT_PUBLIC_BASE_URL + "/v2/cp/patient/familyMember",
         payload,
         {
           headers: { accesstoken: token },

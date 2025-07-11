@@ -450,9 +450,9 @@ const P_Mobile_Verification = ({ type }) => {
                     )}
                   </Button>
                 </div>
-                <div className="text-end">
+                <div className="flex justify-center ml-37">
                   {otpSendStatus && (
-                    <div className="text-xs text-gray-500 font-medium text-center text-end">
+                    <div className="text-xs text-gray-500 font-medium">
                       {resendTimer > 0 ? (
                         `Resend OTP in ${formatTime(resendTimer)}`
                       ) : (

@@ -18,14 +18,21 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Dashboard_card from "../Dashboard_card/Dashboard_card";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
- 
+import Sidebar from "@/components/patient/Sidebar/Sidebar";
 const SalesDashboard = () => {
+  const [showSidebar, setShowSidebar] = useState(false);
   const greeting = new Date().getHours() < 12 ? "Morning" : (new Date().getHours() < 16 || (new Date().getHours() === 16 && new Date().getMinutes() === 0)) ? "Afternoon" : "Evening";
   return (
     <>
       <div className="bg-gradient-to-r  from-[#B0A4F5] to-[#EDA197] rounded-bl-3xl rounded-br-3xl px-3 py-5 mb-0 fixed top-0 left-0 right-0 max-w-[576px] mx-auto">
         <div className="flex justify-between items-center">
-          <Menu color="white" width={24} className="mr-5" />
+          <Menu color="white" width={24} className="mr-5" 
+          onClick={() => setShowSidebar(true)}/>
+          {showSidebar && (
+          <div className="absolute inset-0 z-50">
+            <Sidebar onClose={() => setShowSidebar(false)} />
+          </div>
+        )}
           <Image
             src="/images/ekyamm.png"
             width={100}

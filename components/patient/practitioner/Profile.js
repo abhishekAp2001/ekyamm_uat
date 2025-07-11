@@ -9,12 +9,25 @@ import axios from "axios";
 import { showErrorToast } from "@/lib/toast";
 import { Baseurl } from "@/lib/constants";
 import { useState, useEffect } from "react";
+import { setCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 const Profile = ({
+  patient,
   setShowCounsellorProfile,
   setShowCertifications,
   setShowClientTestimonials,
   doc,
 }) => {
+  const router = useRouter()
+    const handleBookNowClick = () => {
+    setCookie("selectedCounsellor", JSON.stringify(doc));
+    if (patient.availableCredits === 0) {
+      router.push("/patient/select-package")
+    }
+    else {
+      router.push("/patient/schedule-session");
+    }
+  }
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] relative max-w-[576px] mx-auto">
           <div className="fixed top-0 left-0 right-0 w-full h-[64px] z-50 flex items-center justify-between px-4 bg-[#eeecfb] max-w-[576px] mx-auto">
@@ -151,8 +164,7 @@ const Profile = ({
       <div className="fixed bottom-0 left-0 right-0 bg-[#fce8e5] flex justify-center py-4 max-w-[576px] mx-auto px-6">
         <Button
           onClick={() => {
-            setCookie("selectedCounsellor", JSON.stringify(doc));
-            router.push("/patient/schedule-session");
+            handleBookNowClick()
           }}
           className="w-full h-[45px] bg-gradient-to-r from-[#E7A1A0] to-[#BBA3E4] text-white text-[15px] font-semibold rounded-[8px]"
         >

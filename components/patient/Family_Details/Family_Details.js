@@ -182,7 +182,7 @@ const Family_Details = ({ type }) => {
 
     try {
       const response = await axios.post(
-        Baseurl + "/v2/cp/patient/familyMember",
+        process.env.NEXT_PUBLIC_BASE_URL + "/v2/cp/patient/familyMember",
         payload,
         { headers: { accesstoken: token } }
       );

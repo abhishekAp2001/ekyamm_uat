@@ -107,7 +107,7 @@ useEffect(() => {
 
   const getQrString = async (ip, literalDeviceInfo) => {
     try {
-      const response = await axios.post(`${Baseurl}/v2/cp/patient/sessionCredits`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient/sessionCredits`, {
         channelPartnerUsername: type,
         cp_patientId: invitePatientInfo?._id,
         sessionCreditCount: sessions_selection?.sessionCreditCount,
@@ -154,7 +154,7 @@ useEffect(() => {
 
     async function checkStatus(orderId) {
       try {
-        const response = await axios.post(`${Baseurl}/v2/order/${orderId}/status`, {
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/order/${orderId}/status`, {
           channelPartnerUsername: type,
           cp_patientId: invitePatientInfo?._id,
         });

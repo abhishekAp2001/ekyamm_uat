@@ -1,0 +1,108 @@
+/* The popup form - hidden by default */
+.form-popup {
+    overflow-y: scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+
+    font-family: 'Roboto Flex';
+    display: none;
+    position: fixed;
+    /* top: 70px;
+    right: 15px;
+    border: 3px solid #f1f1f1;
+    z-index: 99; */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 12;
+    background-color: #EFEDFD;
+    padding: 30px;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    width: max-content;
+    height: min-content;
+}
+/* Add styles to the form container */
+.form-container {
+    max-width: 530px;
+    padding: 10px;
+    padding-left: 50px;
+    padding-right: 50px;
+    background-color: #EFEDFD;
+    display: flex;
+    flex-direction: column;
+}
+#close-contactForm{
+    position: relative;
+    left: 10px;
+    bottom: 10px;
+    cursor: pointer;
+}
+.form-container h1{
+    font-size: 40px;
+    font-family: 'Roboto Serif';
+    color: #776EA5;
+    font-weight: 600;
+}
+.form-container .btn{
+    font-family: 'Roboto Flex';
+    font-size: 17px;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    background-color: #776EA5;
+    color: #FFFFFF;
+    padding: 16px;
+    border-radius: 8px;
+}
+.form-container label{
+    font-family: 'Roboto Flex';
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 15px;
+    letter-spacing: 0.5px;
+    color: rgba(109, 106, 93, 1);
+}
+.form-container input, .form-container textarea{
+    font-family: 'Roboto Flex';
+    padding: 16px;
+    border: 1px solid #fff;
+    outline: none;
+    border-radius: 8px;
+    letter-spacing: 0.5px;
+}
+.form-container input::placeholder, .form-container textarea::placeholder{
+    font-family: 'Roboto Flex';
+    font-size: 16px;
+    font-weight: 400;
+    color: #666666;
+}
+.form-container input:focus, .form-container textarea:focus{
+    border: 1px solid #776EA5;
+}
+#form-footer, #form-footer a{
+    font-family: 'Roboto Flex';
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 0em;
+    text-align: center;
+    text-decoration: none;
+    color: #666666;
+}
+
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 11;
+}
+
+.compulsory-fields{
+    color: red;
+}

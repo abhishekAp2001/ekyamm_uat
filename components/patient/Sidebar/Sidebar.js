@@ -5,6 +5,7 @@ import { useState } from "react";
 import SignOutModal from "../SignOutModal/SignOutModal"; // adjust path as needed
 import { useRouter } from "next/navigation";
 import { whatsappUrl } from "@/lib/constants";
+
 const Sidebar = ({ onClose }) => {
   const router = useRouter();
   const [showSignOutModal, setShowSignOutModal] = useState(false);
@@ -18,9 +19,12 @@ const Sidebar = ({ onClose }) => {
   };
 
   const handleConfirmSignOut = () => {
-    // Add actual sign-out logic here
-    console.log("Signed out");
-    setShowSignOutModal(false);
+    document.cookie.split(";").forEach((c) => {
+      document.cookie = c
+        .replace(/^ +/, "") // Trim leading spaces
+        .replace(/=.*/, "=;expires=" + new Date(0).toUTCString() + ";path=/");
+    });
+    localStorage.clear();
     router.push(`/patient/login`);
   };
 
@@ -128,15 +132,15 @@ const Sidebar = ({ onClose }) => {
               Support
             </p>
             <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-            <div className="flex items-center gap-[4px] px-2 py-1 rounded-[6px] bg-[#0000000D]">
-              <Image
-                src="/images/headphones.png"
-                alt="chat"
-                width={13}
-                height={12}
-              />
-              <span className="text-[14px] font-[600] text-black">Chat</span>
-            </div>
+              <div className="flex items-center gap-[4px] px-2 py-1 rounded-[6px] bg-[#0000000D]">
+                <Image
+                  src="/images/headphones.png"
+                  alt="chat"
+                  width={13}
+                  height={12}
+                />
+                <span className="text-[14px] font-[600] text-black">Chat</span>
+              </div>
             </a>
           </div>
         </div>

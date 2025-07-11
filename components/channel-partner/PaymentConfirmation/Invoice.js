@@ -1,8 +1,14 @@
 import React from 'react'
 import { hasCookie, getCookie } from 'cookies-next';
 const Invoice = () => {
-    const sessions_selection = hasCookie("sessions_selection")
-        ? JSON.parse(getCookie("sessions_selection"))
+    const sessions_selection = hasCookie("session_selection")
+        ? JSON.parse(getCookie("session_selection"))
+        : null;
+    const selectedCounsellor = hasCookie("selectedCounsellor")
+        ? JSON.parse(getCookie("selectedCounsellor"))
+        : null;
+    const patientInfo = hasCookie("PatientInfo")
+        ? JSON.parse(getCookie("PatientInfo"))
         : null;
     const invitePatientInfo = hasCookie("invitePatientInfo")
         ? JSON.parse(getCookie("invitePatientInfo"))
@@ -21,10 +27,11 @@ const Invoice = () => {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return today.toLocaleDateString('en-US', options);
     }
-    const calculateGST = (total)=>{
-        const tax = total*0.18
+    const calculateGST = (total) => {
+        const tax = total * 0.18
         return tax
     }
+    const totalAmount = sessions_selection?.session_count * sessions_selection?.total
     return (
         <div className='print-only'>
             <div className="invoice-box" id="invoice">
@@ -42,7 +49,8 @@ const Invoice = () => {
                                 <table>
                                     <tbody><tr>
                                         <td>
-                                            <b>Invoice Number:</b>{paymentStatusInfo?.invoiceId}<br />
+                                            <b>Invoice Number:</b>{paymentStatusInfo?.invoiceId?.trim() ? paymentStatusInfo.invoiceId : sessions_selection?.txnId}
+                                            <br />
                                             <b>Created:</b>{getFormattedDate()}<br />
                                         </td>
                                     </tr>
@@ -59,9 +67,26 @@ const Invoice = () => {
                                             john@example.com
                                         </td>
                                         <td>
-                                            {channelPartnerData?.clinicName}<br />
-                                            {channelPartnerData?.area}, {channelPartnerData?.city}<br />
-                                            {channelPartnerData?.state}, {channelPartnerData?.pincode}
+                                            {/* NAME */}
+                                            {channelPartnerData?.clinicName
+                                                || (selectedCounsellor?.generalInformation?.firstName
+                                                    ? `${selectedCounsellor.generalInformation.firstName} ${selectedCounsellor.generalInformation.lastName}`
+                                                    : null)
+                                            }
+                                            <br />
+
+                                            {/* ADDRESS */}
+                                            {channelPartnerData?.area && channelPartnerData?.city
+                                                ? `${channelPartnerData.area}, ${channelPartnerData.city}`
+                                                : selectedCounsellor?.practiceDetails?.address
+                                            }<br />
+
+                                            {/* CITY, STATE, PINCODE */}
+                                            {channelPartnerData?.state && channelPartnerData?.pincode
+                                                ? `${channelPartnerData.state}, ${channelPartnerData.pincode}`
+                                                : `${selectedCounsellor?.practiceDetails?.city}, ${selectedCounsellor?.practiceDetails?.state}, ${selectedCounsellor?.practiceDetails?.pincode}`
+                                            }
+
                                         </td>
                                     </tr>
                                     </tbody></table>
@@ -104,29 +129,71 @@ const Invoice = () => {
                     </tr>
                         <tr className="item">
                             <td>1</td>
-                            <td style={{ fontWeight: 'bold' }}>Patient Name: {invitePatientInfo?.firstName} {invitePatientInfo?.lastName} <br /> Has booked session with Ms. Sushma Trivedi on 10 April, 2025</td>
-                            <td>{paymentStatusInfo?.sessionCount}</td>
-                            <td>₹{paymentStatusInfo?.sessionPrice}</td>
-                            <td>{paymentStatusInfo?.totalAmount}</td>
+                            <td style={{ fontWeight: 'bold' }}>
+                                Patient Name: {invitePatientInfo?.firstName
+                                    ? `${invitePatientInfo.firstName} ${invitePatientInfo.lastName}`
+                                    : `${patientInfo?.firstName} ${patientInfo?.lastName}`
+                                }
+                                <br />
+                                Has booked session with {selectedCounsellor?.generalInformation?.firstName
+                                    ? `${selectedCounsellor.generalInformation.firstName} ${selectedCounsellor.generalInformation.lastName}`
+                                    : "Ms. Sushma Trivedi"
+                                } on 10 April, 2025
+                            </td>
+
+                            <td>{paymentStatusInfo?.sessionCount ?? sessions_selection?.session_count}</td>
+                            <td>₹{paymentStatusInfo?.sessionPrice ?? sessions_selection?.total}</td>
+                            <td>{paymentStatusInfo?.totalAmount ?? totalAmount}</td>
                             <td>18%</td>
-                            <td>₹{calculateGST(paymentStatusInfo?.totalAmount)}</td>
+                            <td>₹{paymentStatusInfo?.totalAmount
+                                ? calculateGST(paymentStatusInfo.totalAmount)
+                                : calculateGST(totalAmount)
+                            }</td>
                             <td>₹0</td>
-                            <td>₹{paymentStatusInfo?.totalAmount+calculateGST(paymentStatusInfo?.totalAmount)}</td>
+                            <td>₹{
+                                paymentStatusInfo?.totalAmount
+                                    ? paymentStatusInfo.totalAmount + calculateGST(paymentStatusInfo.totalAmount)
+                                    : totalAmount + calculateGST(totalAmount)
+                            }</td>
+
                         </tr>
                         <tr className="item">
                             <td>2</td>
-                            <td style={{ fontWeight: 'bold' }}>Patient Name: Roshan Singh <br /> Has booked session with Ms. Sushma Trivedi on 17 April, 2025</td>
-                            <td>{paymentStatusInfo?.sessionCount}</td>
-                            <td>₹{paymentStatusInfo?.sessionPrice}</td>
-                            <td>{paymentStatusInfo?.totalAmount}</td>
+                            <td style={{ fontWeight: 'bold' }}>
+                                Patient Name: {invitePatientInfo?.firstName
+                                    ? `${invitePatientInfo.firstName} ${invitePatientInfo.lastName}`
+                                    : `${patientInfo?.firstName} ${patientInfo?.lastName}`
+                                }
+                                <br />
+                                Has booked session with {selectedCounsellor?.generalInformation?.firstName
+                                    ? `${selectedCounsellor.generalInformation.firstName} ${selectedCounsellor.generalInformation.lastName}`
+                                    : "Ms. Sushma Trivedi"
+                                } on 10 April, 2025
+                            </td>
+
+                            <td>{paymentStatusInfo?.sessionCount ?? sessions_selection?.session_count}</td>
+                            <td>₹{paymentStatusInfo?.sessionPrice ?? sessions_selection?.total}</td>
+                            <td>{paymentStatusInfo?.totalAmount ?? totalAmount}</td>
                             <td>18%</td>
-                            <td>₹{calculateGST(paymentStatusInfo?.totalAmount)}</td>
+                            <td>₹{paymentStatusInfo?.totalAmount
+                                ? calculateGST(paymentStatusInfo.totalAmount)
+                                : calculateGST(totalAmount)
+                            }</td>
                             <td>₹0</td>
-                            <td>₹{paymentStatusInfo?.totalAmount + calculateGST(paymentStatusInfo?.totalAmount)}</td>
+                            <td>₹{
+                                paymentStatusInfo?.totalAmount
+                                    ? paymentStatusInfo.totalAmount + calculateGST(paymentStatusInfo.totalAmount)
+                                    : totalAmount + calculateGST(totalAmount)
+                            }</td>
+
                         </tr>
                         <tr className="total">
                             <td colSpan={8} style={{ textAlign: 'right' }}>Grand Total:</td>
-                            <td>₹{paymentStatusInfo?.totalAmount + calculateGST(paymentStatusInfo?.totalAmount)}</td>
+                            <td>₹{
+                                paymentStatusInfo?.totalAmount
+                                    ? paymentStatusInfo.totalAmount + calculateGST(paymentStatusInfo.totalAmount)
+                                    : totalAmount + calculateGST(totalAmount)
+                            }</td>
                         </tr>
                     </tbody></table>
                 <footer>

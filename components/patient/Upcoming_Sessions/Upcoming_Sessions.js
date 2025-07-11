@@ -67,7 +67,7 @@ useEffect(() => {
           const getPatientSession = async () => {
             try {
               setLoading(true);
-              const response = await axios.get(`${Baseurl}/v2/cp/patient?type=sessions`, {
+              const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient?type=sessions`, {
                 headers: {
                   accesstoken: patientSessionToken,
                   "Content-Type": "application/json",

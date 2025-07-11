@@ -140,7 +140,7 @@ const Edit_Patient = ({ type }) => {
             try {
                 const userData = JSON.parse(getCookie("patientSessionData"));
                 const token = userData?.token;
-                const response = await axios.get(`${Baseurl}/v2/cp/patient/`, {
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient/`, {
                     headers: {
                         accesstoken: token,
                         "Content-Type": "application/json",
@@ -387,7 +387,7 @@ const Edit_Patient = ({ type }) => {
             }
             const { profileImageBase64, ...payload } = updatedFormData;
             const response = await axios.put(
-                Baseurl + `/v2/cp/patient/update`,
+                `${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient/update`,
                 {
                     patientDetails: payload,
                 },
@@ -415,7 +415,7 @@ const Edit_Patient = ({ type }) => {
             const form = new FormData();
             form.append("filename", file);
             const response = await axios.post(
-                Baseurl + `/v2/psychiatrist/uploadImage`,
+                `${process.env.NEXT_PUBLIC_BASE_URL}/v2/psychiatrist/uploadImage`,
                 form,
                 {
                     headers: {

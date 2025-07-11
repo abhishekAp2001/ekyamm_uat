@@ -1,13 +1,16 @@
 'use client';
-import React, {useState,useEffect} from 'react'
-import { getCookie } from 'cookies-next'
+import React, { useState, useEffect, useRef } from 'react'
+import { getCookie, setCookie } from 'cookies-next'
 import BackNav from '@/components/BackNav';
 import { Button } from '@/components/ui/button';
 import { selectedCounsellorData as getSelectedCounsellorData } from '@/lib/utils';
 import { calculatePaymentDetails, formatAmount } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
+import { useReactToPrint } from "react-to-print";
+import Invoice from '@/components/channel-partner/PaymentConfirmation/Invoice';
 const PaymentConfirmation = () => {
+  const targetRef = useRef()
   const router = useRouter()
   const searchParams = useSearchParams()
   const transactionId = searchParams.get("txnid")
@@ -18,11 +21,15 @@ const PaymentConfirmation = () => {
   const [PatientInfo, setPatientInfo] = useState(null);
   const [total, setTotal] = useState(0);
   const [secondsLeft, setSecondsLeft] = useState(30);
+
   useEffect(() => {
     const cookie = getCookie("session_selection");
     if (cookie) {
       try {
-        setSession(JSON.parse(cookie));
+        const cookieObj = JSON.parse(cookie);
+        cookieObj.txnId = transactionId;
+        setCookie("session_selection", JSON.stringify(cookieObj));
+        setSession(cookieObj);
       } catch (err) {
         console.error("Error parsing cookie", err);
       }
@@ -39,20 +46,20 @@ const PaymentConfirmation = () => {
     }
   }, []);
 
-    useEffect(() => {
-      const calculatePrice = () => {
-        const result = calculatePaymentDetails(
-          price,
-          sessions,
-          10,
-        );
-        setTotal(result?.total || 0);
-      };
-      calculatePrice();
-    }, [
-      price,
-      sessions
-    ]);
+  useEffect(() => {
+    const calculatePrice = () => {
+      const result = calculatePaymentDetails(
+        price,
+        sessions,
+        10,
+      );
+      setTotal(result?.total || 0);
+    };
+    calculatePrice();
+  }, [
+    price,
+    sessions
+  ]);
 
   useEffect(() => {
     if (secondsLeft === 0) {
@@ -64,6 +71,15 @@ const PaymentConfirmation = () => {
     }, 1000);
     return () => clearTimeout(timer);
   }, [secondsLeft, router]);
+
+  const handlePrint = useReactToPrint({
+    contentRef: targetRef,
+    pageStyle: `
+      @page { size: A4; margin: 10mm; }
+      body { font-size: 14px; color: red; }
+      .no-print { display: none; }
+    `,
+  });
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
@@ -75,24 +91,24 @@ const PaymentConfirmation = () => {
         </div>
         <div className="h-full flex flex-col overflow-auto px-[13px]  bg-gradient-to-b from-[#DFDAFB] to-[#F9CCC5]">
           <div className="mt-3 mb-3 bg-[#FFFFFF] rounded-[9px] flex flex-col p-2 justify-center">
-              <div className=" flex  justify-between">
-                <span className="text-[15px] font-[400] text-[#000000] ml-1">
-                  Payment Status:
-                </span>
-                <span className="text-[15px] font-[400] text-black mr-1">
-                  Transaction ID:
-                </span>
-              </div>
-
-              <div className=" flex justify-between ">
-                <span className="text-[15px] font-[600] text-[#000000] ml-1">
-                  Paid
-                </span>
-                <span className="text-[15px] font-[600] text-black mr-1">
-                  {transactionId}
-                </span>
-              </div>
+            <div className=" flex  justify-between">
+              <span className="text-[15px] font-[400] text-[#000000] ml-1">
+                Payment Status:
+              </span>
+              <span className="text-[15px] font-[400] text-black mr-1">
+                Transaction ID:
+              </span>
             </div>
+
+            <div className=" flex justify-between ">
+              <span className="text-[15px] font-[600] text-[#000000] ml-1">
+                Paid
+              </span>
+              <span className="text-[15px] font-[600] text-black mr-1">
+                {transactionId}
+              </span>
+            </div>
+          </div>
           <div className="bg-[#FFFFFF] rounded-[9px] p-5 relative">
             <strong className=" flex text-[20px] font-[600] text-black items-center justify-center">
               Session
@@ -172,21 +188,25 @@ const PaymentConfirmation = () => {
                 {total}
               </span>
             </div>
-            <Button className="w-full bg-[#776EA5] rounded-[8px] h-[40px] text-[15px]">
+            <Button className="w-full bg-[#776EA5] rounded-[8px] h-[40px] text-[15px]"
+              onClick={() => { handlePrint() }}>
               Download Receipt
             </Button>
             <Button className="w-full bg-white rounded-[8px] mt-2 h-[40px] text-[17px] border-1 border-[#776EA5] text-[#776EA5] font-bold"
-              onClick={() => {router.push('/patient/dashboard')}}>
+              onClick={() => { router.push('/patient/dashboard') }}>
               Dashboard
             </Button>
             <div className="flex justify-center mt-2 text-[12px] text-[#000000] opacity-30 font-[500]">
-                Moving to homepage in {secondsLeft} seconds
+              Moving to homepage in {secondsLeft} seconds
             </div>
           </div>
           {/* <div className="bg-gradient-to-b from-[#fce8e5] to-[#fce8e5] flex flex-col items-center gap-3  py-[23px] px-[17px] left-0 right-0 ">
             <Footer_bar />
           </div> */}
         </div>
+      </div>
+      <div ref={targetRef}>
+        <Invoice />
       </div>
     </>
   );

@@ -19,7 +19,7 @@ const PaymentSuccess = () => {
         const payu = async () => {
             try {
                 const response = await axios.post(
-                    `${Baseurl}/v2/webhook/payu`,
+                    `${process.env.NEXT_PUBLIC_BASE_URL}/v2/webhook/payu`,
                     {...queryObj,isPayuHosted:true}
                 );
                 console.log('Webhook response data:', response.data);

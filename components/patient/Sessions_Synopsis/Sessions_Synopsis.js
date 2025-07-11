@@ -51,7 +51,7 @@ const Sessions_Synopsis = () => {
     const getPatientSynopsis = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${Baseurl}/v2/cp/patient?type=synopsis`, {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient?type=synopsis`, {
           headers: {
             accesstoken: patientSessionToken,
             "Content-Type": "application/json",
