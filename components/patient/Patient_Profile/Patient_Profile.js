@@ -32,7 +32,7 @@ import Certifications from "../Certifications/Certifications";
 import axios from "axios";
 import { patientSessionToken as getPatientSessionToken } from "@/lib/utils";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
-import { Baseurl } from "@/lib/constants";
+import { Baseurl, whatsappUrl } from "@/lib/constants";
 import { setCookie } from "cookies-next";
 import { base64ToFile } from "@/lib/utils";
 const sessionData = [
@@ -1144,7 +1144,8 @@ const Patient_Profile = () => {
       <div className="flex flex-col justify-center items-center ">
         {/* <span className="text-[10px] font-[500] text-black mr-1">Powered by</span> */}
         <Image src="/images/ekyamm.png" width={114} height={24} alt="ekyamm" />
-        <div className="flex justify-center items-center mb-[26px]">
+        <div className="flex justify-center items-center mb-[26px]"
+        onClick = {()=>{router.push(`${whatsappUrl}`)}}>
           <span className="text-[12px] font-[500] text-gray-500 mr-1">
             Powered by
           </span>

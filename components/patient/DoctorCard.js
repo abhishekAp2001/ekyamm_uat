@@ -19,7 +19,7 @@ const DoctorCard = ({
   const router = useRouter();
   const handleBookNowClick = () => {
     setCookie("selectedCounsellor", JSON.stringify(doc));
-    if (!patient.practitionerTagged && patient.availableCredits === 0) {
+    if (patient.availableCredits === 0) {
       router.push("/patient/select-package")
     }
     else {
