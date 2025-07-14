@@ -3,7 +3,7 @@ import React, { useRef } from 'react'
 import "./navbar.css";
 import Link from 'next/link';
 
-const Navbar = (onStartClick) => {
+const Navbar = ({onStartClick}) => {
   const formRef = useRef();
     
       const handleButtonClick = () => {
@@ -43,7 +43,8 @@ const Navbar = (onStartClick) => {
           <button id="contactUs" className="hidden md:block bg-[#776EA5] text-white border-none px-2 py-2 rounded-[11px] font-quicksand font-medium" onClick={onStartClick}>
             Contact Us
           </button>
-          <button id="chatNow" className=" md:hidden bg-[#776EA5] text-white border-none px-2 py-1 rounded-[11px] font-quicksand font-medium text-[12px] ml-2">
+          <button id="chatNow" className=" md:hidden bg-[#776EA5] text-white border-none px-2 py-1 rounded-[11px] font-quicksand font-medium text-[12px] ml-2"
+          onClick={onStartClick}>
             Chat Now
           </button>
         </div>

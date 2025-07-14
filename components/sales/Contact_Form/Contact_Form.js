@@ -5,7 +5,8 @@ import "./contact-form.css";
 import { X } from "lucide-react";
 import Link from "next/link";
 
-const Contact_Form = forwardRef((props, ref) => {
+const Contact_Form = forwardRef((props,ref) => {
+  const { mobile_field = true } = props;
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -46,7 +47,58 @@ const Contact_Form = forwardRef((props, ref) => {
       return () => document.removeEventListener("gesturestart", preventZoom);
     }
   }, []);
-
+   const [formData, setFormData] = useState({
+      name: "",
+      email: "",
+      mobile: "",
+      message: "",
+    })
+    const [errors, setErrors] = useState({
+      email: '',
+      mobile: '',
+      name: '',
+      message: '',
+    });
+    const isEmailValid = (email) => /\S+@\S+\.\S+/.test(email);
+    const isMobileValid = (mobile) => /^\d{10}$/.test(mobile);
+  
+    const isFormValid = () => {
+      let valid = true;
+      if(!formData.name){
+        valid = false;
+        setErrors({...errors,name:'Name is required'})
+      }
+      if(!formData.message){
+      valid = false;
+      setErrors({...errors,message:'Message is required'})
+    }
+      if (!isEmailValid(formData.email)) {
+        valid = false;
+        setErrors({ ...errors, email: 'Invalid Email' });
+      }
+      if (!isMobileValid(formData.mobile)) {
+        valid = false;
+        setErrors({ ...errors, mobile: 'Invalid Mobile Number' });
+      }
+      return valid;
+    }
+    const handleContactFormSubmit = () => {
+      if (isFormValid()) {
+        setIsFormOpen(false);
+        setFormData({
+          name: "",
+          email: "",
+          mobile: "",
+          message: "",
+        })
+        setErrors({
+          email: '',
+          mobile: '',
+          name: '',
+          message: '',
+        });
+      }
+    }
   return (
     <>
       {/* <button onClick={handleButtonClick} className="brand-btn schedule-btn">
@@ -74,24 +126,85 @@ const Contact_Form = forwardRef((props, ref) => {
           <label>
             <b>Name</b> <span className="compulsory-fields">*</span>
           </label>
-          <input type="text" placeholder="Enter your Name" name="name" required className="w-full border p-2 mb-2" />
-
+          <input
+            className="w-full border p-2 mb-2"
+            type="text"
+            placeholder="Enter your Name"
+            name="name"
+            value={formData.name}
+            onChange={(e) => setFormData({
+              ...formData,
+              name: e.target.value
+            })}
+            required
+          />
+          {errors.name && (
+            <p style={{ color: 'red', fontSize: '14px' }}>{errors.name}</p>
+          )}
           <label>
             <b>Email</b> <span className="compulsory-fields">*</span>
           </label>
-          <input type="email" placeholder="Enter your Email" name="email" required className="w-full border p-2 mb-2" />
-
-          <label>
+          <input
+          className="w-full border p-2 mb-2"
+            value={formData.email}
+            onChange={(e) => {
+              e.target.value = e.target.value.toLowerCase();
+              setFormData(
+              { ...formData, email: e.target.value.toLocaleLowerCase() }
+            )}}
+            type="email"
+            placeholder="Enter your Email"
+            name="email"
+            required
+          />
+          {errors.email && (
+            <p style={{ color: 'red', fontSize: '14px' }}>{errors.email}</p>
+          )}
+          {
+            mobile_field && (
+              <div>
+            <label>
             <b>Mobile</b> <span className="compulsory-fields">*</span>
           </label>
-          <input type="number" placeholder="Enter your Mobile" name="number" required className="w-full border p-2 mb-2" />
-
+          <input
+          className="w-full border p-2 mb-2"
+            value={formData.mobile}
+            onChange={(e) => setFormData(
+              { ...formData, mobile: e.target.value }
+            )}
+            type="text"
+            placeholder="Enter your Mobile"
+            name="number"
+            required
+            maxLength={10}
+            pattern="[0-9]*"
+            inputMode="numeric"
+          />
+          {errors.mobile && (
+            <p style={{ color: 'red', fontSize: '14px' }}>{errors.mobile}</p>
+          )}
+          </div>
+            )
+          }
           <label>
             <b>Message</b>
           </label>
-          <textarea name="msg" placeholder="Enter your message" rows="4" required className="w-full border p-2 mb-4"></textarea>
-
-          <button type="submit" className="btn w-full bg-blue-600 text-white py-2 rounded">
+          <textarea
+          className="w-full border p-2 mb-4"
+            value={formData.message}
+            onChange={(e) => setFormData({
+              ...formData, message: e.target.value
+            })}
+            name="msg"
+            placeholder="Enter your message"
+            rows="4"
+            required
+          ></textarea>
+          {errors.message && (
+            <p style={{ color: 'red', fontSize: '14px' }}>{errors.message}</p>
+          )}
+          <button type="submit" className="btn w-full bg-blue-600 text-white py-2 rounded"
+          onClick={()=>{handleContactFormSubmit()}}>
             Submit
           </button>
 

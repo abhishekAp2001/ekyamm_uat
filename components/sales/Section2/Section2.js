@@ -27,7 +27,8 @@ const Section2 = ({ onStartClick }) => {
           <p className="lead section1-p mt-3">
             Empower your patients experience <br /> with Your Clinic Companion
           </p>
-          <button className="custom-btn section2-btn">
+          <button className="custom-btn section2-btn"
+          onClick={onStartClick}>
             Partner Now{" "}
             <Image
               src="/images/Arrow.svg"

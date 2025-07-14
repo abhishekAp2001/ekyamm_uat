@@ -8,16 +8,67 @@ import "../CSS/styles.css"
 import "./mh-practitioner.css";
 import Footer from "@/components/sales/Footer/Footer";
 import Carousel from "@/components/Carousel/Carousel";
-import Navbar from "@/components/sales/Navbar/Navbar";
+
 import { X } from "lucide-react";
-const page = () => {
-    
+const Page = () => {
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-  //   const [winnerImageSrc, setWinnerImageSrc] = useState('/images/hand&UIComp.png');
+  const [winnerImageSrc, setWinnerImageSrc] = useState('/images/hand&UIComp.png');
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    message: "",
+  })
+  const [errors, setErrors] = useState({
+    email: '',
+    mobile: '',
+    name: '',
+    message: '',
+  });
+  const isEmailValid = (email) => /\S+@\S+\.\S+/.test(email);
+  const isMobileValid = (mobile) => /^\d{10}$/.test(mobile);
 
+  const isFormValid = () => {
+    let valid = true;
+    if(!formData.name){
+      valid = false;
+      setErrors({...errors,name:'Name is required'})
+    }
+    if(!formData.message){
+      valid = false;
+      setErrors({...errors,message:'Message is required'})
+    }
+    if (!isEmailValid(formData.email)) {
+      valid = false;
+      setErrors({ ...errors, email: 'Invalid Email' });
+    }
+    if (!isMobileValid(formData.mobile)) {
+      valid = false;
+      setErrors({ ...errors, mobile: 'Invalid Mobile Number' });
+    }
+    return valid;
+  }
+  const handleContactFormSubmit = () => {
+    if (isFormValid()) {
+      setIsFormOpen(false);
+      setFormData({
+        name: "",
+        email: "",
+        mobile: "",
+        message: "",
+      })
+      setErrors({
+        email: '',
+        mobile: '',
+        name: '',
+        message: '',
+      });
+    }
+  }
   // Mobile detection
   useEffect(() => {
     const mobileCheck = () => {
@@ -35,15 +86,15 @@ const page = () => {
 
     setIsMobile(mobileCheck());
 
-    // const handleResize = () => {
-    //   setWinnerImageSrc(
-    //     window.innerWidth <= 768 ? '/images/handUI.png' : '/images/hand&UIComp.png'
-    //   );
-    //   setIsMobile(mobileCheck());
-    // };
+    const handleResize = () => {
+      setWinnerImageSrc(
+        window.innerWidth <= 768 ? '/images/handUI.png' : '/images/hand&UIComp.png'
+      );
+      setIsMobile(mobileCheck());
+    };
 
-    // window.addEventListener('resize', handleResize);
-    // handleResize();
+    window.addEventListener('resize', handleResize);
+    handleResize();
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -78,6 +129,8 @@ const page = () => {
       document.addEventListener("gesturestart", (e) => e.preventDefault());
     }
   }, []);
+
+
   return (
     <>
       <Head>
@@ -109,13 +162,13 @@ const page = () => {
         <div className="flex justify-between items-center">
           {/* Company Logo */}
           <Link href='./'>
-          <Image
-            src="/images/ekyamm.png"
-            alt="Company Logo"
-            width={250}
-            height={60}
-            className="cursor-pointer max-w-[142px] h-auto md:max-w-[240px]"
-          /></Link>
+            <Image
+              src="/images/ekyamm.png"
+              alt="Company Logo"
+              width={250}
+              height={60}
+              className="cursor-pointer max-w-[142px] h-auto md:max-w-[240px]"
+            /></Link>
 
           {/* Right side */}
           <div className="flex items-center nav-right">
@@ -124,7 +177,7 @@ const page = () => {
               id="menu-desktop"
               className="hidden md:flex list-none flex-row m-0 p-0"
             >
-              <li className="mr-[35px] font-light text-[18px] leading-none">
+              <li  className="mr-[35px] font-bold text-[18px] leading-none text-[#776EA5]">
                 <a
                   href="./mh-practitioner"
                   className="no-underline text-inherit text-[16px]"
@@ -132,7 +185,7 @@ const page = () => {
                   MH Practitioner
                 </a>
               </li>
-              <li className="mr-[35px] font-bold text-[18px] leading-none text-[#776EA5]">
+              <li className="mr-[35px] font-light text-[18px] leading-none">
                 <a href="./" className="no-underline text-inherit text-[16px]">
                   Fertility
                 </a>
@@ -142,14 +195,14 @@ const page = () => {
             {/* Desktop buttons */}
             <button
               id="contactUs"
-              className="hidden md:block bg-[#776EA5] text-white border-none px-2 py-2 rounded-[11px] font-quicksand font-medium"  onClick={handleButtonClick}
+              className="hidden md:block bg-[#776EA5] text-white border-none px-2 py-2 rounded-[11px] font-quicksand font-medium" onClick={handleButtonClick}
             >
               Contact Us
             </button>
             <button
               id="chatNow"
               className=" md:hidden bg-[#776EA5] text-white border-none px-2 py-1 rounded-[11px] font-quicksand font-medium text-[12px] ml-2"
-            >
+              onClick={handleButtonClick}>
               Chat Now
             </button>
           </div>
@@ -161,24 +214,24 @@ const page = () => {
           className="flex md:hidden list-none flex-row p-0 px-[2.5%]"
         >
           <li className="mr-[35px] font-light text-[18px] leading-none">
-            <a
-              href="mh-practitioner.html"
+            <Link
+              href="/mh-practitioner"
               className="no-underline text-inherit text-[14px]"
             >
               MH Practitioner
-            </a>
+            </Link>
           </li>
           <li className="mr-[35px] font-bold text-[18px] leading-none text-[#776EA5]">
-            <a
-              href="fertility.html"
+            <Link
+              href="/"
               className="no-underline text-inherit text-[14px]"
             >
               Fertility
-            </a>
+            </Link>
           </li>
         </ul>
       </div>
-      <Carousel />
+      <Carousel onStartClick={handleButtonClick} />
       {/* Carousel */}
       {/* <div id="carouselEkyammIndicators" className="carousel slide" style={{ zIndex: 6 }} data-ride="carousel" data-interval="400">
         <ol className="carousel-indicators" style={{ zIndex: 11 }}>
@@ -441,30 +494,61 @@ const page = () => {
             type="text"
             placeholder="Enter your Name"
             name="name"
+            value={formData.name}
+            onChange={(e) => setFormData({
+              ...formData,
+              name: e.target.value
+            })}
             required
           />
+          {errors.name && (
+            <p style={{ color: 'red', fontSize: '14px' }}>{errors.name}</p>
+          )}
           <label htmlFor="email">
             <b>Email</b> <span className="compulsory-fields">*</span>
           </label>
           <input
+            value={formData.email}
+            onChange={(e) => {
+              e.target.value = e.target.value.toLowerCase();
+              setFormData(
+              { ...formData, email: e.target.value.toLocaleLowerCase() }
+            )}}
             type="email"
             placeholder="Enter your Email"
             name="email"
             required
           />
+          {errors.email && (
+            <p style={{ color: 'red', fontSize: '14px' }}>{errors.email}</p>
+          )}
           <label htmlFor="number">
             <b>Mobile</b> <span className="compulsory-fields">*</span>
           </label>
           <input
-            type="number"
+            value={formData.mobile}
+            onChange={(e) => setFormData(
+              { ...formData, mobile: e.target.value }
+            )}
+            type="text"
             placeholder="Enter your Mobile"
             name="number"
             required
+            maxLength={10}
+            pattern="[0-9]*"
+            inputMode="numeric"
           />
+          {errors.mobile && (
+            <p style={{ color: 'red', fontSize: '14px' }}>{errors.mobile}</p>
+          )}
           <label htmlFor="msg">
             <b>Message</b>
           </label>
           <textarea
+            value={formData.message}
+            onChange={(e) => setFormData({
+              ...formData, message: e.target.value
+            })}
             name="msg"
             id="msg"
             placeholder="Enter your message"
@@ -472,7 +556,11 @@ const page = () => {
             rows="5"
             required
           ></textarea>
-          <button type="submit" className="btn" onClick={handleButtonClick}>
+          {errors.message && (
+            <p style={{ color: 'red', fontSize: '14px' }}>{errors.message}</p>
+          )}
+          <button type="submit" className="btn"
+            onClick={() => { handleContactFormSubmit() }}>
             Submit
           </button>
           <div align="center" id="form-footer">
@@ -503,4 +591,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

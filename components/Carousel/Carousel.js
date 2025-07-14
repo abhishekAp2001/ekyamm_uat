@@ -6,7 +6,9 @@ function cn(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const images = [
+
+// Put this outside the component
+const getImages = (onStartClick) => [
   {
     id: 1,
     content: (
@@ -40,6 +42,7 @@ const images = [
             <button
               id="schedule-demo2"
               className="schedule-btn md:mt-4 flex items-center gap-2 text-[24px] p-[10px]"
+              onClick={onStartClick} // ✅ Call the prop
             >
               Schedule Demo
               <Image
@@ -70,7 +73,10 @@ const images = [
               controlled and confidential data management
             </span>
           </p>
-          <button className="brand-btn schedule-btn mt-4 flex items-center gap-2">
+          <button
+            className="brand-btn schedule-btn mt-4 flex items-center gap-2"
+            onClick={onStartClick} // ✅ Call the prop
+          >
             Schedule Demo
             <Image src="/images/Arrow.svg" alt="" width={20} height={20} />
           </button>
@@ -88,8 +94,10 @@ const images = [
   },
 ];
 
-const Carousel = () => {
+
+const Carousel = ({ onStartClick }) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const images = getImages(onStartClick);
   return (
     <>
       <div className="relative overflow-hidden" id="carousel1">

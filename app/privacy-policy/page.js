@@ -1,7 +1,7 @@
 "use client";
 
 import Head from "next/head";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Navbar from "../../components/sales/Navbar/Navbar";
 import Footer from "../../components/sales/Footer/Footer";
 import Contact_Form from "../../components/sales/Contact_Form/Contact_Form";
@@ -31,6 +31,22 @@ const Page = () => {
     }
   };
 
+  const formRef = useRef();
+  
+    useEffect(() => {
+      const checkMobile = () => setIsMobile(window.innerWidth <= 767);
+      checkMobile(); 
+      window.addEventListener("resize", checkMobile);
+      return () => window.removeEventListener("resize", checkMobile);
+    }, []);
+  
+      const handleButtonClick = () => {
+        if (isMobile) {
+          window.open("https://api.whatsapp.com/send/?phone=9920934198&text&type=phone_number&app_absent=0", "_blank");
+        } else {
+          formRef.current?.openForm();
+        }
+      };
   return (
     <>
       <Head>
@@ -43,7 +59,7 @@ const Page = () => {
         />
       </Head>
 
-      <Navbar />
+      <Navbar onStartClick={handleButtonClick}/>
 
       {isFormOpen && (
         <div
@@ -445,7 +461,9 @@ const Page = () => {
       </section>
       <Footer />
 
-      <Contact_Form isOpen={isFormOpen} onClose={() => setFormOpen(false)} />
+            <div id="contact-form-placeholder" className='m-0'>
+             <Contact_Form  ref={formRef}/>
+            </div>
     </>
   );
 };

@@ -14,7 +14,7 @@ import Contact_Form from '@/components/sales/Contact_Form/Contact_Form'
  
  
  
-const page = () => {
+const Page = () => {
      const formRef = useRef();
   const [isMobile, setIsMobile] = useState(false);
 
@@ -52,7 +52,7 @@ const page = () => {
  
       {/* Navbar placeholder */}
       <div id="navbar-placeholder" style={{ padding: 0, margin: 0 }}></div>
-      <Navbar/>
+      <Navbar onStartClick={handleButtonClick}/>
       {/* Sections */}
       <div id="section1-placeholder" className='m-0' style={{ backgroundColor: "#B0A4F5" }}>
       <Section onStartClick={handleButtonClick}/>
@@ -82,4 +82,4 @@ const page = () => {
   )
 }
  
-export default page
+export default Page
