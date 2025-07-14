@@ -1,6 +1,9 @@
  @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300;8..144,400;8..144,500;8..144,600&family=Quicksand:wght@500;700&family=Roboto+Serif:opsz,wght@8..144,600;8..144,700&display=swap');
  
 .box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+body{
+  font-family: Arial, sans-serif;
+}
 
 .flex-equal > * {
   -ms-flex: 1;
@@ -13,19 +16,17 @@
 
 .custom-btn {
     display: flex;
-    justify-content: center;
     align-items: center;
     gap: 7px;
-    margin: auto;
     /* padding: 10px 20px 12px 20px; */
-    padding-top: 10px;
-    padding-right: 12.42px;
-    padding-bottom: 11px;
-    padding-left: 12.42px;
+    padding-top: clamp(7px, 3vw, 10px);
+    padding-right: clamp(10px, 3vw, 20px);
+    padding-bottom: clamp(7px, 3vw, 11px);
+    padding-left: clamp(10px, 3vw, 20px);
     font-family: 'Quicksand';
     font-weight: 500;
     border-radius: 14px; /*  */
-    font-size:15px;
+    font-size: clamp(15px, 3vw, 24px);
     line-height: 1;
     letter-spacing: 0;
     text-align: center;
@@ -39,18 +40,21 @@
 .section1-h1{
     font-family: 'Quicksand';
     /* font-size: 3rem; */
-    font-size: 32px;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: #212529;
     font-weight: 700;
     line-height: 110%;
     letter-spacing: 0%;
 }
 
 .section1-p{
-    font-family: 'Quicksand';
-    font-size: 16px;
-    font-weight: 400;
+    /* font-family: 'Roboto Flex'; */
+    font-size: clamp(16px, 3vw, 30px);
+    font-weight: 300;
     line-height: 120%;
     letter-spacing: 0%;
+    color: #212529;
+    margin-bottom: 16px;
 }
 
 

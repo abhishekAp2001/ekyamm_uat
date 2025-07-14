@@ -1,19 +1,21 @@
 import Image from 'next/image'
-import React from 'react'
+import React, { useRef } from 'react'
 import "../Section1/section1.css";
 import "./section4.css";
 
-
-
-
-const Section4 = () => {
+const Section4 = ({ onStartClick }) => {
+  const formRef = useRef();
+    
+      const handleButtonClick = () => {
+        formRef.current?.openForm();
+      };
   return (
     <>
    <div className="flex flex-row w-full items-center">
       {/* Text container */}
       <div
         id="section5-text-container"
-        className="mx-0 px-0 mr-0  ml-0  text-center md:text-start overflow-hidden text-responsive"
+        className="mx-0 px-0 mr-0  ml-0  text-center md:text-start overflow-hidden text-responsive md:w-[58%]"
       >
         {/* Desktop content (md and up) */}
         {/* <div className="my-3 hidden md:block">
@@ -35,7 +37,7 @@ const Section4 = () => {
           </p>
         </div>
 
-        <button className="custom-btn">
+        <button className="custom-btn m-auto md:ml-0" onClick={onStartClick}>
           Redefine Care Today !{" "}
           <Image
             src="/images/Arrow.svg"
@@ -49,11 +51,11 @@ const Section4 = () => {
       {/* Image container */}
       <div
         id="section5-img-container"
-        className="mr-0 pr-0 text-center text-white overflow-hidden w-3/4">
+        className="mr-0 pr-0 text-center text-white overflow-hidden md:w-[42%] flex md:justify-end items-end">
         <Image
           id="section5-img"
-          className="custom-img img-fluid"
-          src="/images/physician-medical-robe.png"
+          className="custom-img img-fluid md:w-[280px] h-auto"
+          src="/images/physician-medical-robe.webp"
           alt="Patient Doctor"
           width={400}
           height={400}

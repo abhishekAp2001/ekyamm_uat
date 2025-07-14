@@ -1,4 +1,5 @@
-
+ @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300;8..144,400;8..144,500;8..144,600&family=Quicksand:wght@500;700&family=Roboto+Serif:opsz,wght@8..144,600;8..144,700&display=swap');
+ 
 footer section{
     display: flex;
     align-items: center;
@@ -6,15 +7,15 @@ footer section{
     padding: 20px 6%;
     padding-bottom: 12px;
 }
-/* footer #store img{
+footer #store img{
     height: 41px;
-} */
+}
 a{
     text-decoration: none;
 }
 footer #copyright{
     color: rgba(109, 106, 93, 1);
-    font-size: 12px;
+    font-size: 18px;
     font-weight: 300;
     padding: 0 17px 20px 17px;
 }

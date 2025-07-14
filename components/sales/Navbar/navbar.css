@@ -1,22 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300;8..144,400;8..144,500;8..144,600&family=Quicksand:wght@500;700&family=Roboto+Serif:opsz,wght@8..144,600;8..144,700&display=swap');
-
-body {
-    padding: 0;
-    margin: 0;
-    /* font-family: Arial, sans-serif; */
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
-    overflow-x: hidden;
-}
-
-/* Ensure the root element defines the variable */
-:root {
-    --nav-height: 0px;
-}
-  
-#section1-placeholder {
-    padding-top: var(--nav-height);
-    padding-top: 105px;
-}
 
 /* Navbar styles - START */
 .navbar-main {
