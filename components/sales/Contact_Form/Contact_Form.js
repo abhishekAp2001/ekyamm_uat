@@ -16,7 +16,33 @@ const Contact_Form = forwardRef((props,ref) => {
     closeForm: () => setIsFormOpen(false),
   }));
 
-  const closeForm = () => setIsFormOpen(false);
+  const closeForm = () => {
+    setIsFormOpen(false);
+        setFormData({
+          name: "",
+          email: "",
+          mobile: "",
+          message: "",
+        })
+        setErrors({
+          email: '',
+          mobile: '',
+          name: '',
+          message: '',
+        });setIsFormOpen(false);
+        setFormData({
+          name: "",
+          email: "",
+          mobile: "",
+          message: "",
+        })
+        setErrors({
+          email: '',
+          mobile: '',
+          name: '',
+          message: '',
+        });
+  }
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 767);
@@ -167,19 +193,20 @@ const Contact_Form = forwardRef((props,ref) => {
             <b>Mobile</b> <span className="compulsory-fields">*</span>
           </label>
           <input
-          className="w-full border p-2 mb-2"
-            value={formData.mobile}
-            onChange={(e) => setFormData(
-              { ...formData, mobile: e.target.value }
-            )}
-            type="text"
-            placeholder="Enter your Mobile"
-            name="number"
-            required
-            maxLength={10}
-            pattern="[0-9]*"
-            inputMode="numeric"
-          />
+  className="w-full border p-2 mb-2"
+  value={formData.mobile}
+  onChange={(e) =>
+    setFormData({
+      ...formData,
+      mobile: e.target.value.replace(/\D/g, '').slice(0, 10)
+    })
+  }
+  type="tel"
+  placeholder="Enter your Mobile"
+  name="number"
+  required
+  inputMode="numeric"
+/>
           {errors.mobile && (
             <p style={{ color: 'red', fontSize: '14px' }}>{errors.mobile}</p>
           )}
