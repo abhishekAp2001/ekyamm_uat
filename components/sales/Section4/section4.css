@@ -1,3 +1,5 @@
+ @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300;8..144,400;8..144,500;8..144,600&family=Quicksand:wght@500;700&family=Roboto+Serif:opsz,wght@8..144,600;8..144,700&display=swap');
+ 
 .custom-img{
     position: relative;
     right: 0;
@@ -10,7 +12,7 @@
 .section5-h1{
     font-family: 'Roboto Serif';
     color: #3B326B;
-    font-size: 27.2px !important;
+    font-size: clamp(2rem, 5vw, 3rem);
 }
 
 #section5-img-container{
@@ -27,7 +29,7 @@
     transform: translateX(30%);
 }
 #section5-text-container{
-    padding-left: 10% !important;
+    padding-left: 8% !important;
 }
 
 

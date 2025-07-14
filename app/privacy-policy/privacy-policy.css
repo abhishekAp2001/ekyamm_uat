@@ -1,0 +1,358 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300;8..144,400;8..144,500;8..144,600&family=Quicksand:wght@500;700&family=Roboto+Serif:opsz,wght@8..144,600;8..144,700&display=swap");
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(180deg, #b0a4f5 0%, #eda197 100%);
+
+  /* To disable pinch zoom gestures and and double-tap to zoom on iOS */
+  touch-action: pan-x pan-y;
+}
+
+/* Navbar styles */
+.navbar {
+  background-color: #ffffff; /* White background */
+  padding: 20px 6% 20px 6%;
+  /* padding-left: 6%; */
+  /* padding-right: 6%; */
+  position: fixed;
+  width: 100%;
+  /* height: 15%; */
+  /* top: 0;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+            align-items: center; */
+}
+
+/* Logo styles */
+.logo {
+  max-width: 250px;
+  cursor: pointer;
+}
+
+.brand-btn {
+  background-color: #776ea5;
+  color: #ffffff;
+  border: none;
+  padding: 10px;
+  border-radius: 11px;
+  cursor: pointer;
+  font-family: "Quicksand";
+  font-weight: 500;
+}
+
+/* Contact button styles */
+.contact-button {
+  /* padding: 8px 16px; */
+  font-size: 14px;
+  position: relative;
+  /* right: 10%; */
+}
+
+#header-section {
+  /* margin-top: 75px; */
+  margin-top: 70px;
+  padding: 30px;
+  padding-bottom: 15px;
+  /* Transparent background */
+  /* background-color: #e9e5fb;  */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#header-section h1 {
+  font-family: "Quicksand";
+  font-weight: 600;
+  font-size: 50px;
+  color: rgba(119, 110, 165, 1);
+  line-height: 75px;
+}
+#header-section p {
+  font-family: "Quicksand";
+  font-weight: 500;
+  font-size: 20px;
+  color: rgba(119, 110, 165, 1);
+  line-height: 25px;
+  margin-bottom: 0;
+}
+#header-section span {
+  /* height: auto; */
+  width: 86px;
+  border: 5px solid rgba(204, 98, 123, 1);
+  border-radius: 50px;
+  /* margin-top: 12px; */
+  margin-bottom: 18px;
+}
+
+#content {
+  color: #000000;
+  /* Transparent background */
+  /* background:linear-gradient(#e2def9 0%, #eda1973d 100%);  */
+}
+#content ul {
+  list-style: disc;
+  margin-left: 29px;
+}
+#content p,
+#content li {
+  font-family: "Quicksand";
+  font-size: 600;
+  /* font-size: 30px; */
+  font-size: 20px;
+}
+#content h1 {
+  font-family: "Quicksand";
+  font-size: 600;
+  font-weight: 500;
+  font-size: 40px;
+}
+#content h2 {
+  font-family: "Quicksand";
+  font-size: 600;
+  font-weight: 500;
+  font-size: 33px;
+}
+
+footer section {
+  display: flex;
+  /* flex-direction: row; */
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 6%;
+  padding-bottom: 12px;
+}
+footer #store img {
+  height: 41px !important;
+}
+a {
+  text-decoration: none !important;
+}
+p {
+  margin-bottom: 0;
+}
+footer #copyright {
+  color: rgba(109, 106, 93, 1);
+  /* font-size: 30px; */
+  font-size: 18px !important;
+  font-weight: 300 !important;
+  padding: 0 17px 20px 17px;
+}
+
+#chatNow {
+  display: none;
+}
+#contactUs {
+  display: block;
+}
+
+/* Responsive styles for tablets */
+@media (min-width: 768px) and (max-width: 991px) {
+  footer #copyright {
+    /* font-size: 19px; */
+    font-size: 9px;
+  }
+}
+
+/* Media query for screens with a maximum width of 767px (typical mobile devices) */
+@media (max-width: 767px) {
+  .navbar {
+    max-height: 65px;
+  }
+  .logo {
+    max-width: 112px;
+  }
+  .contact-button {
+    font-size: 9px;
+    height: 24px;
+    align-items: center;
+    display: flex;
+    border-radius: 6px;
+  }
+  #store-img-section {
+    position: relative;
+    bottom: 8px;
+  }
+
+  #header-section {
+    margin-top: 55px;
+    padding: 20px;
+  }
+  #header-section h1 {
+    font-size: 28px;
+    line-height: 30px;
+  }
+  #header-section p {
+    font-size: 11px;
+    line-height: 16px;
+  }
+  #header-section span {
+    width: 50px;
+    border: 3px solid rgba(204, 98, 123, 1);
+    border-radius: 7px;
+    margin-top: 8px;
+    margin-bottom: 14px;
+  }
+
+  #content p,
+  #content li,
+  #content h1,
+  #content h2 {
+    font-size: 12px;
+    line-height: 15px;
+    font-weight: 500;
+  }
+  #content p,
+  #content li {
+    font-weight: 400;
+  }
+  #content h1,
+  #content h2 {
+    font-weight: 600;
+  }
+
+  footer section {
+    padding: 20px;
+  }
+  footer #store img {
+    height: 17px !important;
+  }
+  footer #copyright {
+    /* font-size: 14px; */
+    font-size: 7px;
+    padding-bottom: 17px;
+  }
+
+  #chatNow {
+    display: flex;
+  }
+  #contactUs {
+    display: none;
+  }
+
+  footer #copyright {
+    font-size: 7px !important;
+    padding-bottom: 17px;
+  }
+}
+
+/* The popup form - hidden by default */
+.form-popup {
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  font-family: "Roboto Flex";
+  display: none;
+  position: fixed;
+  /* top: 70px;
+            right: 15px;
+            border: 3px solid #f1f1f1;
+            z-index: 99; */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 12;
+  background-color: #efedfd;
+  padding: 30px;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  width: max-content;
+  height: min-content;
+}
+/* Add styles to the form container */
+.form-container {
+  max-width: 530px;
+  padding: 10px;
+  padding-left: 50px;
+  padding-right: 50px;
+  background-color: #efedfd;
+  display: flex;
+  flex-direction: column;
+}
+#close-contactForm {
+  position: relative;
+  left: 10px;
+  bottom: 10px;
+  cursor: pointer;
+}
+.form-container h1 {
+  font-size: 40px;
+  font-family: "Roboto Serif";
+  color: #776ea5;
+  font-weight: 600;
+}
+.form-container .btn {
+  font-family: "Roboto Flex";
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  background-color: #776ea5;
+  color: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+}
+.form-container label {
+  font-family: "Roboto Flex";
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 15px;
+  letter-spacing: 0.5px;
+  color: rgba(109, 106, 93, 1);
+}
+.form-container input,
+.form-container textarea {
+  font-family: "Roboto Flex";
+  padding: 16px;
+  border: 1px solid #fff;
+  outline: none;
+  border-radius: 8px;
+  letter-spacing: 0.5px;
+}
+.form-container input::placeholder,
+.form-container textarea::placeholder {
+  font-family: "Roboto Flex";
+  font-size: 16px;
+  font-weight: 400;
+  color: #666666;
+}
+.form-container input:focus,
+.form-container textarea:focus {
+  border: 1px solid #776ea5;
+}
+#form-footer,
+#form-footer a {
+  font-family: "Roboto Flex";
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0em;
+  text-align: center;
+  text-decoration: none;
+  color: #666666;
+}
+
+#overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(#e2def9 0%, #eda1973d 100%);
+  z-index: 11;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(#e2def9 0%, #eda1973d 100%) !important;
+  z-index: -1;
+}

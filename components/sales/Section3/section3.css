@@ -1,10 +1,10 @@
-
+ @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300;8..144,400;8..144,500;8..144,600&family=Quicksand:wght@500;700&family=Roboto+Serif:opsz,wght@8..144,600;8..144,700&display=swap');
+ 
 .section3-li{
     font-family: 'Roboto Serif';
     font-weight: 700;
     color: #2F2F2F;
-    font-size: 19.2px;
-    line-height: 1.6;
+    font-size: clamp(1.2rem, 3.5vw, 2.5rem);
 }
 
 #section3-subtext{
@@ -25,9 +25,10 @@
 
     #section3-subtext{
         width: 80%;
-    }   
-      #section3-list{
+    }    
+         #section3-list{
         list-style: disc !important;
+         padding-left: 15px;
     } 
 }
 
@@ -40,7 +41,7 @@
     }
     #section3-list{
         line-height: 70%;
-        padding-left: 32px;
-        list-style: disc;
+        list-style: disc !important;
+        padding-left: 15px;
     }
 }
