@@ -158,7 +158,7 @@ const Page = () => {
       ></div>
 
       {/* Navbar */}
-      <div className="fixed left-0 right-0 z-50 bg-white shadow-md py-2 md:py-5 px-[17px] md:px-[6%] flex flex-col ">
+      <div className="fixed left-0 right-0 z-50 bg-white shadow-md py-2 md:py-5 px-[17px] md:px-[6%] flex flex-col navbar_sec">
         <div className="flex justify-between items-center">
           {/* Company Logo */}
           <Link href='./'>
@@ -213,7 +213,7 @@ const Page = () => {
           id="menu-mobile"
           className="flex md:hidden list-none flex-row p-0 px-[2.5%]"
         >
-          <li className="mr-[35px] font-light text-[18px] leading-none">
+          <li  className="mr-[35px] font-bold text-[18px] leading-none text-[#776EA5]">
             <Link
               href="/mh-practitioner"
               className="no-underline text-inherit text-[14px]"
@@ -221,7 +221,7 @@ const Page = () => {
               MH Practitioner
             </Link>
           </li>
-          <li className="mr-[35px] font-bold text-[18px] leading-none text-[#776EA5]">
+          <li className="mr-[35px] font-light text-[18px] leading-none">
             <Link
               href="/"
               className="no-underline text-inherit text-[14px]"
@@ -337,7 +337,7 @@ const Page = () => {
           />
         </div>
         <div className="hero-text-column">
-          <h1 className="fontW-H1 leading-[1.1]">
+          <h1 className="fontW-H1 leading-[1.1] mb-2">
             Focus on <br />
             <span className="brand-text">helping patients</span>
           </h1>
@@ -387,7 +387,7 @@ const Page = () => {
             />
           </div>
           <div className="hero-text-column">
-            <h1 className="fontW-H1">
+            <h1 className="fontW-H1 leading-[1.1]">
               Authorised
               Private
               Secure
@@ -425,7 +425,7 @@ const Page = () => {
         </div>
         <div className="hero-text-column">
           <p>Upload or Create</p>
-          <h1>
+          <h1 className="leading-[1.1]">
             <span className="brand-text fontW-H1">Prescriptions</span>
           </h1>
           <p>in less than 30 seconds</p>

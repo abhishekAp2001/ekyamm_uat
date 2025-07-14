@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import "../CSS/styles.css";
 import "./request-account-delete-success.css";
 import Contact_Form from "@/components/sales/Contact_Form/Contact_Form";
 import { getCookie } from "cookies-next";

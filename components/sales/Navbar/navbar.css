@@ -10,7 +10,10 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
     align-items: center;
 }
-
+.navbar_sec{
+     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto flex, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+    overflow-x: hidden;
+}
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -42,6 +45,7 @@
     text-decoration: none;
     color: inherit; /* or a specific color */
     font-size: 16px; /* Adjust as needed */
+     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto flex, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
 }
 
 /* Highlight the active menu item */

@@ -2,9 +2,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Head from "next/head";
 import Image from "next/image";
-import Footer from "@/components/sales/Footer/Footer";
+import "../CSS/styles.css";
 import "./request-account-delete.css";
-import Navbar from "@/components/sales/Navbar/Navbar";
 import Contact_Form from "@/components/sales/Contact_Form/Contact_Form";
 import Link from "next/link";
 import axios from "axios";

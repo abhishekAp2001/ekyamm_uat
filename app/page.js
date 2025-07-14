@@ -5,7 +5,6 @@ import Head from 'next/head'
 import Link from 'next/link'
 import React, { useEffect, useRef, useState } from 'react'
 import "./CSS/styles.css"
-// import "./CSS/bootstrap.min.css"
 import Section2 from '@/components/sales/Section2/Section2'
 import Section3 from '@/components/sales/Section3/Section3'
 import Section4 from '@/components/sales/Section4/Section4'

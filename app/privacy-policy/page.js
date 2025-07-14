@@ -5,6 +5,7 @@ import React, { useEffect, useState, useRef } from "react";
 import Navbar from "../../components/sales/Navbar/Navbar";
 import Footer from "../../components/sales/Footer/Footer";
 import Contact_Form from "../../components/sales/Contact_Form/Contact_Form";
+import "../CSS/styles.css";
 import "./privacy-policy.css";
 import Link from "next/link";
 

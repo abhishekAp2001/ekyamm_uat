@@ -11,7 +11,7 @@ const Navbar = ({onStartClick}) => {
       };
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 z-10 bg-white shadow-md py-2 md:py-5 px-[17px] md:px-[6%] flex flex-col ">
+      <div className="fixed top-0 left-0 right-0 z-10 bg-white shadow-md py-2 md:py-5 px-[17px] md:px-[6%] flex flex-col navbar_sec">
       <div className="flex justify-between items-center">
         {/* Company Logo */}
         <Link href='./'>
