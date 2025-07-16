@@ -1,20 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap');
 
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap");
+ 
 body {
   margin: 0;
   padding: 0;
-   font-family: Arial, sans-serif;
-   font-optical-sizing: auto; 
+  font-family: Arial, sans-serif;
+  font-optical-sizing: auto;
   background-image: linear-gradient(
     to bottom,
     rgba(176, 164, 245, 0.9),
     rgba(237, 161, 151, 0.9)
   );
-
+ 
   /* To disable pinch zoom gestures and and double-tap to zoom on iOS */
   touch-action: pan-x pan-y;
 }
-
+ 
 /* Navbar styles */
 .navbar-main {
   background-color: #ffffff; /* White background */
@@ -31,31 +32,33 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   align-items: center;
 }
-
-.navbar_sec{
-     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto flex, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
-    overflow-x: hidden;
+ 
+.navbar_sec {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto flex,
+    Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
+    Segoe UI Symbol;
+  overflow-x: hidden;
 }
-
+ 
 .navbar {
   display: flex;
   justify-content: space-between;
   /* align-items: center; */
   /* vertical-align: middle; */
 }
-
+ 
 .nav-right {
   display: flex;
   align-items: center;
 }
-
+ 
 .menu {
   list-style: none;
   display: flex;
   margin: 0;
   padding: 0;
 }
-
+ 
 .menu li {
   margin-right: 35px; /* Spacing between menu options */
   font-family: "Roboto Flex";
@@ -64,27 +67,29 @@ body {
   line-height: 100%;
   letter-spacing: 0%;
 }
-
+ 
 .menu li a {
   text-decoration: none;
   color: inherit; /* or a specific color */
   font-size: 16px; /* Adjust as needed */
-   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto flex, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto flex,
+    Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
+    Segoe UI Symbol;
 }
-
+ 
 /* Highlight the active menu item */
 .menu li.active a {
   font-weight: 700;
   color: #776ea5;
 }
-
+ 
 /* Logo styles */
 .logo {
   /* height: 45px; */
   max-width: 250px;
   cursor: pointer;
 }
-
+ 
 .brand-btn {
   background-color: #776ea5;
   color: #ffffff;
@@ -95,7 +100,7 @@ body {
   font-family: "Quicksand";
   font-weight: 500;
 }
-
+ 
 /* Contact button styles */
 .contact-button {
   /* padding: 8px 16px; */
@@ -103,7 +108,7 @@ body {
   position: relative;
   /* right: 10%; */
 }
-
+ 
 /* Media query for screens with a maximum width of 767px (typical mobile devices) */
 /* @media (max-width: 767px) {
     .navbar{
@@ -135,7 +140,7 @@ body {
         padding-right: 5px;
     }
 } */
-
+ 
 /* Hero section styles */
 .knowMore-section,
 .prescription-section {
@@ -143,12 +148,12 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 50px 90px;
-
+ 
   /* Transparent background */
   background-color: rgba(255, 255, 255, 0.048);
   margin-top: 35px;
 }
-.hero-section{
+.hero-section {
   display: flex;
   /* justify-content: space-between; */
   padding: 0px 0px;
@@ -156,15 +161,15 @@ body {
   /* background-color: rgba(255, 255, 255, 0.048); */
   /* margin-top: 35px; */
 }
-.hero-section .image-column{
-    margin-left: 0px !important;
+.hero-section .image-column {
+  margin-left: 0px !important;
 }
 .carousel-item {
   /* height: 75%; */
   height: 800px;
   max-height: fit-content;
 }
-
+ 
 .knowMore-section {
   margin-top: 0;
   padding-top: 25px;
@@ -188,7 +193,7 @@ body {
   padding-top: 0;
   padding-bottom: 0;
 }
-
+ 
 /* Text column styles */
 .hero-text-column {
   width: 50vw;
@@ -201,7 +206,7 @@ body {
 .hero-text-column h1,
 .form-container h1 {
   font-size: 60px;
-  font-family: "Roboto Serif";
+  /* font-family: "Roboto Serif"; */
   /* color: rgba(0, 0, 0, 1); */
   color: rgba(47, 47, 47, 1);
 }
@@ -232,7 +237,7 @@ body {
 .brand-text-bold {
   font-weight: 600;
 }
-
+ 
 /* Image column styles */
 .image-column,
 .image-column2 {
@@ -245,8 +250,8 @@ body {
   /* width: 550px; */
   width: 100%;
 }
-
- .image-column {
+ 
+.image-column {
   /* width: 50vw; */
   display: flex;
   align-items: center;
@@ -255,7 +260,7 @@ body {
   /* background-color: tomato; */
   /* width: 50%; */
 }
- #schedule-demo2 {
+#schedule-demo2 {
   width: fit-content;
   color: #eda197;
   /* Transparent background */
@@ -267,7 +272,7 @@ body {
   font-family: "Quicksand";
   font-weight: 500;
 }
-
+ 
 #winnerMobile {
   /* background-color: yellow; */
   /* padding: 0 60px; */
@@ -306,7 +311,7 @@ body {
   left: 200px;
   bottom: -24px;
 }
- #winnerImg {
+#winnerImg {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -314,14 +319,14 @@ body {
   width: fit-content;
   padding-top: 50px;
 }
- #winnerImg p {
+#winnerImg p {
   font-family: "Roboto Flex";
   font-size: 30px;
   font-weight: 500;
   line-height: 35px;
   letter-spacing: 0em;
   text-align: center;
-
+ 
   /* font-family: 'Quicksand';
             font-size: 25px; */
   margin: 30px;
@@ -331,17 +336,17 @@ body {
   align-items: center;
   flex-direction: column;
 }
- #winnerImg #winnerLogo {
+#winnerImg #winnerLogo {
   width: 45%;
 }
- /* .image-column:nth-child(2) img {
+/* .image-column:nth-child(2) img {
   width: 40%;
 } */
 #sharkTankWinner-section img {
   padding-left: 1rem;
   margin-right: 2.5rem;
 }
-
+ 
 .hero-section .image-column,
 .hero-text-column {
   z-index: 5;
@@ -354,7 +359,7 @@ body {
   z-index: 3;
   /* bottom: -130px; */
   /* bottom: -1px; */
-
+ 
   /* Now Fixed */
   bottom: -90px;
   /* New */
@@ -371,7 +376,7 @@ body {
   /* padding-bottom: 70px; */
   background-clip: padding-box;
 }
-
+ 
 #introSection1 .svgs img {
   position: absolute;
   left: 0;
@@ -406,7 +411,7 @@ body {
   margin-left: 7px;
   width: 20px;
 }
-
+ 
 #secure-section-part1 {
   display: flex;
   align-items: center;
@@ -418,12 +423,12 @@ body {
   width: 30%;
   /* background-color: chartreuse; */
 }
-
+ 
 .secure-section .hero-text-column {
   width: 30%;
   /* background-color: blueviolet; */
 }
-
+ 
 .secure-section {
   /* background-color: rgba(255, 255, 255, 0.048); */
   padding: 50px;
@@ -448,7 +453,7 @@ body {
 #section4 .image-column img {
   width: 70%;
 }
-
+ 
 .prescription-section #request-btn {
   margin-top: 25px;
 }
@@ -459,6 +464,9 @@ footer section {
   justify-content: space-between;
   padding: 20px 6%;
   padding-bottom: 12px;
+}
+footer #store img {
+  height: 41px !important;
 }
 a {
   text-decoration: none !important;
@@ -471,14 +479,14 @@ footer #copyright {
   font-weight: 300;
   padding: 0 17px 20px 17px;
 }
-
+ 
 #chatNow {
   display: none;
 }
 #contactUs {
   display: block;
 }
-
+ 
 #section3-t1 {
   /* color: rgba(20, 20, 20, 1); */
   color: rgba(47, 47, 47, 1);
@@ -495,7 +503,7 @@ footer #copyright {
   color: rgba(47, 47, 47, 1);
   font-weight: 500;
 }
-
+ 
 /* Responsive styles for tablets */
 @media (min-width: 768px) and (max-width: 991px) {
   .hero-text-column h1 {
@@ -508,15 +516,15 @@ footer #copyright {
     font-size: 19px;
     border-radius: 16px;
   }
-
+ 
   .hero-section .svgs svg:nth-child(2) {
     display: none;
   }
-
+ 
   .hero-section .svgs span {
     display: none;
   }
-
+ 
   /* #know-more{
                 font-size: 13px;
             } */
@@ -532,27 +540,27 @@ footer #copyright {
     font-size: 9px;
   }
 }
-
+ 
 /* Responsive styles for smaller screens */
 @media (max-width: 767px) {
-    .section1-leftcol {
-  padding-top: 0;
-}
-.hand_img{
+  .section1-leftcol {
+    padding-top: 0;
+  }
+  .hand_img {
     margin-top: 0px !important;
-}
- .section1-leftcol{
+  }
+  .section1-leftcol {
     margin-top: 70px;
- }
- .section1-leftcol {
- margin-left: 0;
-}
- .hero-section{
+  }
+  .section1-leftcol {
+    margin-left: 0;
+  }
+  .hero-section {
     height: 100%;
- }
- #carousel1 {
+  }
+  #carousel1 {
     padding-top: 0px;
- }
+  }
   .navbar-main {
     max-height: 65px;
   }
@@ -583,30 +591,27 @@ footer #copyright {
     padding-right: 5px;
     margin-top: 0;
   }
-
+ 
   .fontW-H1 {
     font-weight: 600;
   }
-
-
+ 
   .knowMore-section,
-  .prescription-section
- {
+  .prescription-section {
     flex-direction: column; /* Stack columns on small screens */
     text-align: center; /* Center-align text on small screens */
     padding: 0;
   }
-
-
+ 
   .image-column {
     margin-left: 0; /* Remove margin for image on small screens */
     margin-top: 20px; /* Add space between text and image on small screens */
   }
-
+ 
   .knowMore-section .hero-text-column {
     margin: 20px 90px;
   }
-
+ 
   .hero-text-column {
     width: 80vw;
     margin: 25px;
@@ -647,14 +652,13 @@ footer #copyright {
     padding-bottom: 10.5% !important;
     /* padding-bottom: 27px; */
   }
-
+ 
   .carousel-item {
     height: 600px;
     max-height: fit-content;
   }
-
-
- #schedule-demo2 {
+ 
+  #schedule-demo2 {
     /* Button */
     font-size: 15px;
     border-radius: 16px;
@@ -663,8 +667,8 @@ footer #copyright {
     margin-right: auto;
     width: fit-content;
   }
- #schedule-demo2 img {
-    min-width:20px !important;
+  #schedule-demo2 img {
+    min-width: 20px !important;
     width: 20px;
     margin-left: 4px;
     height: 10px;
@@ -682,12 +686,12 @@ footer #copyright {
                 align-items: center;
                 justify-content: center; */
   }
- #winnerImg img {
+  #winnerImg img {
     width: 100%;
     padding-bottom: 0;
     /* background-color: tomato; */
   }
- #winnerImg #winnerLogo {
+  #winnerImg #winnerLogo {
     /* width: 83%; */
     width: 43%;
   }
@@ -703,7 +707,7 @@ footer #copyright {
     bottom: -38px;
     bottom: -2vh;
   }
- #winnerImg p {
+  #winnerImg p {
     font-family: "Roboto Flex";
     font-size: 12px;
     font-weight: 500;
@@ -713,17 +717,16 @@ footer #copyright {
     width: 100%;
     margin: 15px;
   }
- .image-column:nth-child(2) {
+  .image-column:nth-child(2) {
     width: 100%;
     margin-top: 100px;
     /* background-color: yellow; */
   }
-/* .image-column:nth-child(2) img {
+  /* .image-column:nth-child(2) img {
     width: 35%;
     padding-bottom: 0;
   } */
  
-  
   .hero-section .svgs svg:nth-child(2),
   #introSection1 .svgs svg:nth-child(2) {
     display: block;
@@ -733,7 +736,7 @@ footer #copyright {
     width: 100%;
     left: 0;
   }
-
+ 
   .hero-section .svgs span {
     display: block;
     position: absolute;
@@ -757,13 +760,13 @@ footer #copyright {
     padding-left: 0.7rem;
     margin-right: 0.7rem;
   }
-
+ 
   #introSection1 {
     /* margin-top: 85px; */
     margin-top: 65px;
     padding-top: 20px;
   }
-
+ 
   #know-more {
     /* font-size: 24px; */
     font-size: 14px;
@@ -771,7 +774,7 @@ footer #copyright {
   .knowMore-section .hero-text-column img {
     width: 71px;
   }
-
+ 
   .secure-section {
     padding-left: 20px;
     padding-top: 30px;
@@ -848,7 +851,7 @@ footer #copyright {
   #section5 .hero-text-column h1 {
     padding-bottom: 10px;
   }
-
+ 
   footer section {
     padding: 20px 6%;
   }
@@ -860,7 +863,7 @@ footer #copyright {
     font-size: 7px;
     padding-bottom: 17px;
   }
-
+ 
   #chatNow {
     display: flex;
     font-size: 12px;
@@ -868,30 +871,25 @@ footer #copyright {
   #contactUs {
     display: none;
   }
-  .ekyamm_awards{
+  .ekyamm_awards {
     width: 100% !important;
   }
 }
-
+ 
 /* The popup form - hidden by default */
 .form-popup {
   overflow-y: scroll;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
-
-  font-family: "Roboto Flex";
+  /* font-family: "Roboto Flex"; */
   display: none;
   position: fixed;
-  /* top: 70px;
-            right: 15px;
-            border: 3px solid #f1f1f1;
-            z-index: 99; */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 12;
   background-color: #efedfd;
-  padding: 30px;
+  padding: 24px;
   border: 1px solid #ccc;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
@@ -901,19 +899,18 @@ footer #copyright {
 }
 /* Add styles to the form container */
 .form-container {
-  max-width: 530px;
-  padding: 10px;
-  padding-left: 50px;
-  padding-right: 50px;
   background-color: #efedfd;
-  display: flex;
   flex-direction: column;
+  max-width: 530px;
+  padding: 10px 50px;
+  display: flex;
 }
 #close-contactForm {
-  position: relative;
-  left: 10px;
-  bottom: 10px;
-  cursor: pointer;
+     cursor: pointer;
+    position: absolute;
+    top: 28px;
+    left: auto;
+    right: 28px;
 }
 .form-container h1 {
   font-size: 40px;
@@ -935,14 +932,17 @@ footer #copyright {
 .form-container label {
   /* font-family: "Roboto Flex"; */
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 400;
   margin-top: 15px;
+  margin-bottom: 7px;
   letter-spacing: 0.5px;
   color: rgba(109, 106, 93, 1);
 }
 .form-container input,
 .form-container textarea {
-  font-family: "Roboto Flex";
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
+    Segoe UI Symbol;
   padding: 16px;
   border: 1px solid #fff;
   outline: none;
@@ -952,7 +952,9 @@ footer #copyright {
 }
 .form-container input::placeholder,
 .form-container textarea::placeholder {
-  font-family: "Roboto Flex";
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
+    Segoe UI Symbol;
   font-size: 16px;
   font-weight: 400;
   color: #666666;
@@ -963,7 +965,9 @@ footer #copyright {
 }
 #form-footer,
 #form-footer a {
-  font-family: "Roboto Flex";
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
+    Segoe UI Symbol;
   font-size: 12px;
   font-weight: 400;
   line-height: 18px;
@@ -972,7 +976,7 @@ footer #copyright {
   text-decoration: none;
   color: #666666;
 }
-
+ 
 #overlay {
   display: none;
   position: fixed;
@@ -983,32 +987,32 @@ footer #copyright {
   background: rgba(0, 0, 0, 0.8);
   z-index: 52;
 }
-
+ 
 /* Responsive styles for tablets */
-
+ 
 /* NEW CODE FOR FERTILITY */
-
+ 
 #menu-desktop {
   display: flex;
 }
 #menu-mobile {
   display: none;
 }
-
+ 
 /* For Desktop View */
 @media screen and (min-width: 1024px) {
   .navbar-main {
     padding: 20px 6% 20px 6%;
   }
 }
-
+ 
 /* For Tablet View */
 @media screen and (min-device-width: 768px) and (max-device-width: 1024px) {
   .navbar-main {
     padding: inherit;
   }
 }
-
+ 
 /* For Mobile Portrait View */
 @media screen and (max-device-width: 480px) and (orientation: portrait) {
   .gfg-div {
@@ -1018,7 +1022,7 @@ footer #copyright {
     color: #fff;
   }
 }
-
+ 
 /* For Mobile Landscape View */
 @media screen and (max-device-width: 640px) and (orientation: landscape) {
   .gfg-div {
@@ -1028,7 +1032,7 @@ footer #copyright {
     color: black;
   }
 }
-
+ 
 /* For Mobile Phones Portrait or Landscape View */
 @media screen and (max-device-width: 640px) {
   #introSection1 {
@@ -1050,13 +1054,15 @@ footer #copyright {
     padding: 0 2%;
   }
 }
-
+ 
 .navbar {
   display: flex;
   justify-content: space-between;
   padding: 0 !important;
 }
-
+ 
 .compulsory-fields {
   color: red;
 }
+ 
+ 

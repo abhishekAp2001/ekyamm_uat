@@ -1,10 +1,12 @@
+
+ 
 /* The popup form - hidden by default */
 .form-popup {
     overflow-y: scroll;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
-
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+ 
+    /* font-family: 'Roboto Flex'; */
     display: none;
     position: fixed;
     /* top: 70px;
@@ -65,7 +67,7 @@
     color: rgba(109, 106, 93, 1);
 }
 .form-container input, .form-container textarea{
-    font-family: 'Roboto Flex';
+    /* font-family: 'Roboto Flex'; */
     padding: 16px;
     border: 1px solid #fff;
     outline: none;
@@ -73,7 +75,7 @@
     letter-spacing: 0.5px;
 }
 .form-container input::placeholder, .form-container textarea::placeholder{
-    font-family: 'Roboto Flex';
+    /* font-family: 'Roboto Flex'; */
     font-size: 16px;
     font-weight: 400;
     color: #666666;
@@ -91,7 +93,7 @@
     text-decoration: none;
     color: #666666;
 }
-
+ 
 #overlay {
     display: none;
     position: fixed;
@@ -102,11 +104,11 @@
     background: rgba(0, 0, 0, 0.8);
     z-index: 11;
 }
-
+ 
 .compulsory-fields{
     color: red;
 }
-
+ 
 /* The popup form - hidden by default */
 .form-popup {
   overflow-y: scroll;
@@ -140,7 +142,7 @@
     position: absolute;
     right: 0px;
     top: 0px;
-    left:100%
+    left:auto;
 }
 .form-container h1 {
   font-size: 40px;
@@ -160,17 +162,16 @@
   border-radius: 8px;
 }
 .form-container label {
-  /* font-family: "Roboto Flex"; */
-  font-size: 12px;
-  font-weight: 400;
-  margin-top: 15px;
-  margin-bottom: 7px;
-  letter-spacing: 0.5px;
-  color: rgba(109, 106, 93, 1);
+     letter-spacing: .5px;
+    color: #6d6a5d;
+    margin-top: 15px;
+    font-size: 12px;
+    font-weight: 400 !important;
+    margin-bottom: 6px;
 }
 .form-container input,
 .form-container textarea {
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  /* font-family: "Roboto Flex"; */
   padding: 16px;
   border: 1px solid #fff;
   outline: none;
@@ -180,7 +181,7 @@
 }
 .form-container input::placeholder,
 .form-container textarea::placeholder {
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  /* font-family: "Roboto Flex"; */
   font-size: 16px;
   font-weight: 400;
   color: #666666;
@@ -191,7 +192,7 @@
 }
 #form-footer,
 #form-footer a {
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  font-family: "Roboto Flex";
   font-size: 12px;
   font-weight: 400;
   line-height: 18px;
@@ -200,7 +201,7 @@
   text-decoration: none;
   color: #666666;
 }
-
+ 
 #overlay {
   display: none;
   position: fixed;
@@ -211,4 +212,6 @@
   background: rgba(0, 0, 0, 0.8);
   z-index: 11;
 }
-
+ 
+ 
+ 

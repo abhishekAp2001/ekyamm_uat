@@ -1,15 +1,16 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300;8..144,400;8..144,500;8..144,600&family=Quicksand:wght@500;700&family=Roboto+Serif:opsz,wght@8..144,600;8..144,700&display=swap");
 
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300;8..144,400;8..144,500;8..144,600&family=Quicksand:wght@500;700&family=Roboto+Serif:opsz,wght@8..144,600;8..144,700&display=swap");
+ 
 body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
   background: linear-gradient(180deg, #b0a4f5 0%, #eda197 100%);
-
+ 
   /* To disable pinch zoom gestures and and double-tap to zoom on iOS */
   touch-action: pan-x pan-y;
 }
-
+ 
 /* Navbar styles */
 .navbar {
   background-color: #ffffff; /* White background */
@@ -23,16 +24,16 @@ body {
             z-index: 10;
             display: flex;
             justify-content: space-between;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             align-items: center; */
 }
-
+ 
 /* Logo styles */
 .logo {
   max-width: 250px;
   cursor: pointer;
 }
-
+ 
 .brand-btn {
   background-color: #776ea5;
   color: #ffffff;
@@ -43,7 +44,7 @@ body {
   font-family: "Quicksand";
   font-weight: 500;
 }
-
+ 
 /* Contact button styles */
 .contact-button {
   /* padding: 8px 16px; */
@@ -51,7 +52,7 @@ body {
   position: relative;
   /* right: 10%; */
 }
-
+ 
 #header-section {
   /* margin-top: 75px; */
   margin-top: 70px;
@@ -86,7 +87,7 @@ body {
   /* margin-top: 12px; */
   margin-bottom: 18px;
 }
-
+ 
 #content {
   color: #000000;
   /* Transparent background */
@@ -115,7 +116,7 @@ body {
   font-weight: 500;
   font-size: 33px;
 }
-
+ 
 footer section {
   display: flex;
   /* flex-direction: row; */
@@ -124,7 +125,9 @@ footer section {
   padding: 20px 6%;
   padding-bottom: 12px;
 }
-
+footer #store img {
+  height: 41px !important;
+}
 a {
   text-decoration: none !important;
 }
@@ -138,14 +141,14 @@ footer #copyright {
   font-weight: 300 !important;
   padding: 0 17px 20px 17px;
 }
-
+ 
 #chatNow {
   display: none;
 }
 #contactUs {
   display: block;
 }
-
+ 
 /* Responsive styles for tablets */
 @media (min-width: 768px) and (max-width: 991px) {
   footer #copyright {
@@ -153,7 +156,7 @@ footer #copyright {
     font-size: 9px;
   }
 }
-
+ 
 /* Media query for screens with a maximum width of 767px (typical mobile devices) */
 @media (max-width: 767px) {
   .navbar {
@@ -173,7 +176,7 @@ footer #copyright {
     position: relative;
     bottom: 8px;
   }
-
+ 
   #header-section {
     margin-top: 55px;
     padding: 20px;
@@ -193,7 +196,7 @@ footer #copyright {
     margin-top: 8px;
     margin-bottom: 14px;
   }
-
+ 
   #content p,
   #content li,
   #content h1,
@@ -210,7 +213,7 @@ footer #copyright {
   #content h2 {
     font-weight: 600;
   }
-
+ 
   footer section {
     padding: 20px;
   }
@@ -222,33 +225,26 @@ footer #copyright {
     font-size: 7px;
     padding-bottom: 17px;
   }
-
+ 
   #chatNow {
     display: flex;
   }
   #contactUs {
     display: none;
   }
-
+ 
   footer #copyright {
     font-size: 7px !important;
     padding-bottom: 17px;
   }
 }
-
+ 
 /* The popup form - hidden by default */
 .form-popup {
   overflow-y: scroll;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-
-  font-family: "Roboto Flex";
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   display: none;
-  position: fixed;
-  /* top: 70px;
-            right: 15px;
-            border: 3px solid #f1f1f1;
-            z-index: 99; */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -271,15 +267,15 @@ footer #copyright {
   display: flex;
   flex-direction: column;
 }
-#close-contactForm {
-  position: relative;
+/* #close-contactForm {
+  position: absol;
   left: 10px;
   bottom: 10px;
   cursor: pointer;
-}
+} */
 .form-container h1 {
   font-size: 40px;
-  font-family: "Roboto Serif";
+  /* font-family: "Roboto Serif"; */
   color: #776ea5;
   font-weight: 600;
 }
@@ -304,7 +300,7 @@ footer #copyright {
 }
 .form-container input,
 .form-container textarea {
-  font-family: "Roboto Flex";
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
   padding: 16px;
   border: 1px solid #fff;
   outline: none;
@@ -313,7 +309,7 @@ footer #copyright {
 }
 .form-container input::placeholder,
 .form-container textarea::placeholder {
-  font-family: "Roboto Flex";
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
   font-size: 16px;
   font-weight: 400;
   color: #666666;
@@ -324,7 +320,7 @@ footer #copyright {
 }
 #form-footer,
 #form-footer a {
-  font-family: "Roboto Flex";
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
   font-size: 12px;
   font-weight: 400;
   line-height: 18px;
@@ -333,7 +329,7 @@ footer #copyright {
   text-decoration: none;
   color: #666666;
 }
-
+ 
 #overlay {
   display: none;
   position: fixed;
@@ -341,10 +337,10 @@ footer #copyright {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(#e2def9 0%, #eda1973d 100%);
+  /* background: linear-gradient(#e2def9 0%, #eda1973d 100%); */
   z-index: 11;
 }
-
+ 
 .overlay {
   position: fixed;
   top: 0;
