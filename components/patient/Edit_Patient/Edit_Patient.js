@@ -371,7 +371,7 @@ const Edit_Patient = ({ type }) => {
         setToken(token);
         if (!token) {
             showErrorToast("Authentication required. Please log in.");
-            router.push("/create");
+            router.push("/patient/login");
             return;
         }
     }, []);

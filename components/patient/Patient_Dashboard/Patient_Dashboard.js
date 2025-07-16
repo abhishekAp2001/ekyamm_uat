@@ -64,6 +64,7 @@ const Patient_Dashboard = () => {
           },
         });
         if (response?.data?.success) {
+          console.log("setting cookie")
           setCookie("PatientInfo", JSON.stringify(response?.data?.data));
           setPatient(response?.data?.data);
         }
@@ -107,7 +108,7 @@ const Patient_Dashboard = () => {
     };
     getCounsellors();
     getPatient();
-  }, [filterParams]);
+  }, [filterParams,patientSessionToken]);
 
   useEffect(() => {
     let count = 0;
@@ -134,7 +135,7 @@ const Patient_Dashboard = () => {
           </div>
 
           {/* Scrollable Body */}
-          {!practitioner? (<div className="mt-[192px] flex-1 overflow-y-auto px-3 pb-5">
+          {!practitioner || practitioner.length === 0 ? (<div className="mt-[192px] flex-1 overflow-y-auto px-3 pb-5">
             {/* Filter Row */}
             <div className="flex justify-between items-center my-2">
               <strong className="text-sm text-black font-semibold">
@@ -237,9 +238,10 @@ const Patient_Dashboard = () => {
       )}
 
       {showFilter ? (
-        <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90">
+        <div className="fixed top-0 left-0 right-0 z-50 flex flex-col gap-8 bg-[#e7d6ec] max-w-[576px] mx-auto">
           <div className="relative h-screen overflow-y-auto">
             <Filter
+              token = {patientSessionToken}
               setShowFilter={setShowFilter}
               onApplyFilter={handleApplyFilter}
               initialParams={filterParams}

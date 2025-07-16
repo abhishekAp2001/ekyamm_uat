@@ -11,9 +11,10 @@ import {
 } from "@/components/ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
     const [patient, setPatient] = useState(null);
-  
+    const router = useRouter()
   useEffect(() => {
     const cookie = getCookie("PatientInfo");
     if (cookie) {
@@ -22,6 +23,9 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
       } catch (err) {
         console.error("Error parsing cookie", err);
       }
+    }
+    else if(!cookie){
+      router.push('/patient/login')
     }
   }, []);
   function convertUTCtoIST(utcDateStr) {
@@ -81,14 +85,14 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
                   <div className="flex items-center space-x-3">
                     <Avatar className="w-[42px] h-[42px]">
                       <AvatarImage
-                        src={patient?.practitionerTagged?.generalInformation?.profileImageUrl}
-                        alt={patient?.practitionerTagged?.generalInformation?.profileImageUrl}
+                        src={patient?.practitionerTagged[0]?.generalInformation?.profileImageUrl}
+                        alt={patient?.practitionerTagged[0]?.generalInformation?.profileImageUrl}
                       />
                       <AvatarFallback>
-                        {patient?.practitionerTagged?.generalInformation?.firstName
+                        {patient?.practitionerTagged[0]?.generalInformation?.firstName
                           .charAt(0)
                           .toUpperCase() +
-                          patient?.practitionerTagged?.generalInformation?.lastName
+                          patient?.practitionerTagged[0]?.generalInformation?.lastName
                           .charAt(0)
                           .toUpperCase()
                           }
@@ -96,7 +100,7 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
                     </Avatar>
                     <div className="flex flex-col">
                       <p className="text-[14px] font-bold text-gray-800">
-                        {patient?.practitionerTagged?.generalInformation?.firstName} {patient?.practitionerTagged?.generalInformation?.lastName}
+                        {patient?.practitionerTagged[0]?.generalInformation?.firstName} {patient?.practitionerTagged[0]?.generalInformation?.lastName}
                       </p>
                       <Phone
                         size={28}
@@ -135,6 +139,7 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
                       <Button
                         variant="outline"
                         className="border-[#E7A1A0] text-[#E7A1A0] font-semibold text-[14px] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center w-[160px] "
+                        onClick={()=>{router.push('/patient/schedule-session')}}
                       >
                         Reschedule Session
                       </Button>

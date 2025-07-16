@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import CP_buttons from "@/components/sales/channel_partner/CP_buttons/CP_buttons";
 import axiosInstance from "@/lib/axiosInstance";
 import { toast } from "react-toastify";
-import { getCookie, setCookie } from "cookies-next";
+import { getCookie, hasCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { showErrorToast } from "@/lib/toast";
@@ -137,6 +137,16 @@ const CP_clinic_details = () => {
     }
   };
 
+    useEffect(()=>{
+      const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
+      const cp_type_token = hasCookie("cp_type") ? JSON.parse(getCookie("cp_type")) : null
+      if(!token){
+        router.push('/login')
+      }
+      else if(!cp_type_token){
+        router.push('/sales/cp_type')
+      }
+    },[])
   return (
     <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col max-w-[576px] mx-auto">
       <CP_Header />

@@ -10,7 +10,7 @@ import CreatableSelect from "react-select/creatable";
 import Select from "react-select";
 import axiosInstance from "@/lib/axiosInstance";
 import { toast } from "react-toastify";
-import { getCookie, setCookie } from "cookies-next";
+import { getCookie, hasCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
@@ -168,6 +168,12 @@ const CP_type = () => {
     }
   };
 
+    useEffect(()=>{
+      const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
+      if(!token){
+        router.push('/login')
+      }
+    })
   const getCountryList = async () => {
     try {
       const response = await axios.get(`v2/country?search=${countrySearch}`);

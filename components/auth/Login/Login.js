@@ -148,7 +148,8 @@ const Login = () => {
                   </Link>
                 </div>
                 <Button
-                  className="mt-6 bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] h-[45px] w-full rounded-[8px] flex items-center justify-center cursor-pointer"
+                disabled={!userName || !password}
+                  className="mt-6 bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] h-[45px] w-full rounded-[8px] flex items-center justify-center cursor-pointer disabled:opacity-60"
                   onClick={() => {
                     handleLogin();
                   }}

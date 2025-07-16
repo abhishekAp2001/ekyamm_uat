@@ -7,13 +7,14 @@ import axiosInstance from "@/lib/axiosInstance";
 import { showErrorToast } from "@/lib/toast";
 import { getCookie, setCookie } from "cookies-next";
 import { MapPin } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const CP_landing = ({ type }) => {
   const [channelPartnerData, setChannelPartnerData] = useState(null);
   const [loading, setLoading] = useState(null);
   const [error, setError] = useState(null);
   const axios = axiosInstance();
-
+  const router = useRouter()
   useEffect(() => {
     const verifyChannelPartner = async (username) => {
       setLoading(true);
@@ -27,10 +28,14 @@ const CP_landing = ({ type }) => {
         if (response?.data?.success === true) {
           setCookie("channelPartnerData", JSON.stringify(response.data.data));
           setChannelPartnerData(response.data.data);
+          if(response?.data?.data?.billingType == "patientPays"){
+            router.push(`/channel-partner/${type}/patient-pay-landing`)
+          }
         } else {
           showErrorToast(
             response?.data?.error?.message || "Verification failed"
           );
+          router.push('/')
         }
       } catch (err) {
         // console.log(err);
@@ -38,6 +43,7 @@ const CP_landing = ({ type }) => {
           err?.response?.data?.error?.message ||
             "An error occurred while verifying"
         );
+        router.push('/')
       } finally {
         setLoading(false);
       }

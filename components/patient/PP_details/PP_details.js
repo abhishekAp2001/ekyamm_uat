@@ -44,7 +44,7 @@ const PP_Details = ({ type }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [token, setToken] = useState("");
   const [show, setShow] = useState(false);
-
+  
   const [formData, setFormData] = useState({
     profileImageBase64: "",
     firstName: "",
@@ -427,7 +427,7 @@ const PP_Details = ({ type }) => {
     setToken(token);
     if (!token) {
       showErrorToast("Authentication required. Please log in.");
-      router.push("/create");
+      router.push(`/patient/${type}/create/password`);
       return;
     }
   }, []);

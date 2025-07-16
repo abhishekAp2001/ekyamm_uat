@@ -6,8 +6,10 @@ import { ChevronLeft } from "lucide-react";
 import axiosInstance from "@/lib/axiosInstance";
 import Link from "next/link";
 import IPList from "./IPList";
-
+import { useRouter } from "next/navigation";
+import { hasCookie,getCookie } from "cookies-next";
 const IP_List = () => {
+  const router = useRouter()
   const axios = axiosInstance()
   const [individualPractitionerList, setIndividualPractitionerList] = useState([]);
   const fectchAllList = async () => {
@@ -26,6 +28,12 @@ const IP_List = () => {
     useEffect(() => {
       fectchAllList();
     }, []);
+      useEffect(()=>{
+        const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
+        if(!token){
+          router.push('/login')
+        }
+      })
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col">

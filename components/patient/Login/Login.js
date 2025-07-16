@@ -49,9 +49,14 @@ const Login = () => {
       setLoading(true);
       const encodedPassword = customEncodeString(password);
       const encryptedPassword = encryptData(encodedPassword);
+      const trimmedUserName = userName.trim();
+
       const payload = {
-        mobileNumber: userName,
-        password: encryptedPassword,
+        ...(/^\d{10}$/.test(trimmedUserName)
+          ? { mobileNumber: trimmedUserName }
+          : { email: trimmedUserName }
+        ),
+        password: encryptedPassword
       };
       const response = await axios.post("/v2/cp/user/signin", payload);
       if (response?.data?.success === true) {
@@ -132,8 +137,8 @@ const Login = () => {
                   </Link>
                 </div>
                 <Button
-                  disabled={loading}
-                  className="mt-6 bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] h-[45px] w-full rounded-[8px] flex items-center justify-center cursor-pointer"
+                  disabled={loading || !userName || !password}
+                  className="mt-6 bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] h-[45px] w-full rounded-[8px] flex items-center justify-center cursor-pointer disabled:opacity-60"
                   onClick={() => {
                     handleLogin();
                   }}

@@ -50,6 +50,7 @@ const Patient_Registration = ({ type }) => {
   const isMobileValid = (mobile) => /^\d{10}$/.test(mobile);
   const isFormValid = () => {
     return (
+      formData.email && isEmailValid(formData.email) &&
       formData.firstName &&
       formData.lastName &&
       formData.countryCode_primary &&

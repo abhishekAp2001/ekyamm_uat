@@ -25,33 +25,33 @@ export default function AvailableSession({ loading = false, patient }) {
     setCookie("selectedCounsellor", JSON.stringify(therapist));
     router.push("/patient/select-package");
   };
-    useEffect(() => {
-      const token = getPatientSessionToken();
-      setPatientSessionToken(token);
-    }, []);
-        useEffect(() => {
-              if (!patientSessionToken) return;
-      const getTherapistDetails = async () => {
-        try {
-          const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient?type=therapist`, {
-            headers: {
-              accesstoken: patientSessionToken,
-              "Content-Type": "application/json",
-            },
-          });
-          if (response?.data?.success) {
-            setTherapist(response?.data?.data.practitionerTagged);
-          }
-        } catch (err) {
-          console.log("err", err);
-          showErrorToast(
-            err?.response?.data?.error?.message || "Error fetching patient data"
-          );
-        } finally {
+  useEffect(() => {
+    const token = getPatientSessionToken();
+    setPatientSessionToken(token);
+  }, []);
+  useEffect(() => {
+    if (!patientSessionToken) return;
+    const getTherapistDetails = async () => {
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient?type=therapist`, {
+          headers: {
+            accesstoken: patientSessionToken,
+            "Content-Type": "application/json",
+          },
+        });
+        if (response?.data?.success) {
+          setTherapist(response?.data?.data?.practitionerTagged[0]);
         }
-      };
-      getTherapistDetails();
-    }, [patientSessionToken]);
+      } catch (err) {
+        console.log("err", err);
+        showErrorToast(
+          err?.response?.data?.error?.message || "Error fetching patient data"
+        );
+      } finally {
+      }
+    };
+    getTherapistDetails();
+  }, [patientSessionToken]);
   const containerClasses =
     "bg-[#FFFFFF80] px-3 py-2 border border-[#FFFFFF33] rounded-[10px] mx-3 -mt-5 z-20 relative";
 
@@ -85,32 +85,32 @@ export default function AvailableSession({ loading = false, patient }) {
         <div className="rounded-full bg-gradient-to-r from-[#B0A4F5] to-[#EDA197] p-[1px] h-6">
           {availableCredits > 0 ? (
             <Button
-            onClick={onBookSession}
-            className={
-              `text-[11px] rounded-full h-full flex items-center gap-1 px-2 py-1 transition-colors ` +
-              (patient?.practitionerTagged
-                ? "bg-white text-black"
-                : "bg-gray-200 text-gray-400 cursor-not-allowed")
-            }
-            disabled={!patient?.practitionerTagged}
-          >
-            <Plus className="w-[10px] text-[#776EA5]" />
-            Book Session
-          </Button>
-          ):(
-                      <Button
-            onClick={onAddPackage}
-            className={
-              `text-[11px] rounded-full h-full flex items-center gap-1 px-2 py-1 transition-colors ` +
-              (patient?.practitionerTagged
-                ? "bg-white text-black"
-                : "bg-gray-200 text-gray-400 cursor-not-allowed")
-            }
-            disabled={!patient?.practitionerTagged}
-          >
-            <Plus className="w-[10px] text-[#776EA5]" />
-            Add Package
-          </Button>
+              onClick={onBookSession}
+              className={
+                `text-[11px] rounded-full h-full flex items-center gap-1 px-2 py-1 transition-colors ` +
+                (patient?.practitionerTagged && patient?.practitionerTagged.length !== 0
+                  ? "bg-white text-black"
+                  : "bg-gray-200 text-gray-400 cursor-not-allowed")
+              }
+              disabled={!patient?.practitionerTagged || patient?.practitionerTagged.length === 0}
+            >
+              <Plus className="w-[10px] text-[#776EA5]" />
+              Book Session
+            </Button>
+          ) : (
+            <Button
+              onClick={onAddPackage}
+              className={
+                `text-[11px] rounded-full h-full flex items-center gap-1 px-2 py-1 transition-colors ` +
+                (patient?.practitionerTagged && patient?.practitionerTagged.length !== 0
+                  ? "bg-white text-black"
+                  : "bg-gray-200 text-gray-400 cursor-not-allowed")
+              }
+              disabled={!patient?.practitionerTagged || patient?.practitionerTagged.length === 0}
+            >
+              <Plus className="w-[10px] text-[#776EA5]" />
+              Add Package
+            </Button>
           )}
         </div>
       </div>

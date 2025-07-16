@@ -18,6 +18,7 @@ const SS_Header = () => {
           </div>
           {/* Right Side Image */}
           <Image
+          onClick={()=>{router.push('/patient/dashboard')}}
             src="/images/box.png"
             width={28}
             height={18}

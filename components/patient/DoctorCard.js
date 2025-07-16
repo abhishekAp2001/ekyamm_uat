@@ -34,7 +34,11 @@ const DoctorCard = ({
       <AccordionTrigger className="flex items-center justify-between bg-white rounded-xl p-[12px] pb-[10px] no-underline hover:no-underline focus:no-underline active:no-underline focus-visible:no-underline">
         <div className="flex items-center space-x-3">
           {}
-          <Avatar>
+          <Avatar
+          onClick={() => {
+                  setSelectedCounsellors(doc);
+                  setShowCounsellorProfile(true);
+                }}>
             <AvatarImage
               src={doc?.generalInformation?.profileImageUrl}
               alt={`${doc?.generalInformation?.firstName} ${doc?.generalInformation?.lastName}`}

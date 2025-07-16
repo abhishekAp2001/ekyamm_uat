@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -7,10 +7,12 @@ import Link from "next/link";
 import NP_Header from "@/components/channel-partner/NP_Header/NP_Header";
 import Image from "next/image";
 import Footer_bar from "@/components/Footer_bar/Footer_bar";
-import { getCookie, hasCookie } from "cookies-next";
+import { getCookie, hasCookie, deleteCookie } from "cookies-next";
 import { MapPin } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-const NP_Registration = () => {
+const NP_Registration = ({type}) => {
+  const router = useRouter()
   const sessions_selection = hasCookie("sessions_selection")
     ? JSON.parse(getCookie("sessions_selection"))
     : null;
@@ -20,7 +22,17 @@ const NP_Registration = () => {
   const invitePatientInfo = hasCookie("invitePatientInfo")
     ? JSON.parse(getCookie("invitePatientInfo"))
     : null;
-
+  useEffect(()=>{
+    if(!sessions_selection || !channelPartnerData || !invitePatientInfo){
+    router.push('/login')
+  }
+  },[sessions_selection,channelPartnerData,invitePatientInfo,router])
+  const handleClick=()=>{
+    deleteCookie("sessions_selection");
+    deleteCookie("channelPartnerData");
+    deleteCookie("invitePatientInfo");
+    router.push(`/channel-partner/${type}`)
+  }
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
@@ -81,7 +93,8 @@ const NP_Registration = () => {
                   Number(sessions_selection?.sessionCreditCount)}
               </span>
             </div>
-            <Button className=" bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white py-[14.5px] h-[45px]  rounded-[8px] flex items-center justify-center w-[198px] mx-auto text-center mt-3">
+            <Button className=" bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white py-[14.5px] h-[45px]  rounded-[8px] flex items-center justify-center w-[198px] mx-auto text-center mt-3"
+            onClick={() => {handleClick()}}>
               Add Patient
             </Button>
           </div>

@@ -15,6 +15,7 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { showErrorToast } from "@/lib/toast";
+import { getCookie, hasCookie } from "cookies-next";
 
 const IP_Single_Session_Fees = () => {
   const router = useRouter();
@@ -160,7 +161,17 @@ const IP_Single_Session_Fees = () => {
     }
   };
 
-  return (
+      useEffect(() => {
+        const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+        const ip_type_token = localStorage.getItem("ip_medical_association_details") ? JSON.parse(localStorage.getItem("ip_medical_association_details")) : null
+        if (!token) {
+          router.push('/login')
+        }
+        else if (!ip_type_token) {
+          router.push('/sales/ip_medical_association_details')
+        }
+      }, [])
+  return (  
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
       <IP_Header text="Add Individual Practitioner Details" />
       <div className="h-full pb-[22%] overflow-auto px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb]">
@@ -212,6 +223,7 @@ const IP_Single_Session_Fees = () => {
               <div key={index} className="flex items-center justify-between">
                 <div className="flex gap-2 items-center">
                   <Checkbox
+                  id={index}
                     className="w-4 h-4 border-[1.5px] border-[#776EA5] rounded-[1.8px] ms-1"
                     checked={pkg.enabled}
                     onCheckedChange={(checked) =>
@@ -219,7 +231,8 @@ const IP_Single_Session_Fees = () => {
                     }
                     disabled={!isAmountValid(formData.singleSession)}
                   />
-                  <label className="text-[16px] text-gray-500 font-semibold">
+                  <label className="text-[16px] text-gray-500 font-semibold"
+                  htmlFor={index}>
                     {pkg.sessions} Sessions
                   </label>
                 </div>

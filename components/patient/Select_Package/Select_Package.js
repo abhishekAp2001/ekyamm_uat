@@ -90,17 +90,10 @@ const Select_Package = () => {
                 <Avatar>
                   <AvatarImage
                     className="rounded-full object-cover w-[42px] h-[42px]"
-                    src={patientSessionData?.profileImageUrl}
+                    src={patientSessionData?.profileImageUrl||"/images/profile.png"}
                     alt={`${patientSessionData?.firstName || ""} ${patientSessionData?.lastName || ""
                       }`}
                   />
-                  <AvatarFallback>
-                    {`${patientSessionData?.firstName || ""} ${patientSessionData?.lastName || ""
-                      }`
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
-                  </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col gap-1">
                   <p className="font-semibold text-sm text-black">

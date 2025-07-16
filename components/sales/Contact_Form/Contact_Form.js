@@ -148,7 +148,7 @@ const Contact_Form = forwardRef((props,ref) => {
           >
             <X width={23} height={23} />
           </div>
-          <h1 className="text-xl font-semibold mb-4">Get In Touch!</h1>
+          <h1 className="text-xl font-semibold ">Get In Touch!</h1>
           <label>
             <b>Name</b> <span className="compulsory-fields">*</span>
           </label>
@@ -217,7 +217,7 @@ const Contact_Form = forwardRef((props,ref) => {
             <b>Message</b>
           </label>
           <textarea
-          className="w-full border p-2 mb-4"
+          className="w-full border p-2"
             value={formData.message}
             onChange={(e) => setFormData({
               ...formData, message: e.target.value

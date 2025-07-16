@@ -224,9 +224,7 @@
             padding: 20px 6%;
             padding-bottom: 12px;
         }
-        footer #store img{
-            height: 41px !important;
-        }
+        
         a{
             text-decoration: none !important;
         }
@@ -456,7 +454,7 @@
             border-radius: 8px;
         }
         .form-container label{
-            font-family: 'Roboto Flex';
+            /* font-family: 'Roboto Flex'; */
             font-size: 12px;
             font-weight: 600;
             margin-top: 15px;

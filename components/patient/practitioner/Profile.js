@@ -38,7 +38,8 @@ const Profile = ({
             setShowCounsellorProfile(false);
           }}
         />
-        <div className="cursor-pointer">
+        <div className="cursor-pointer"
+        onClick={()=>{router.push('/patient/dashboard')}}>
           <Image src="/images/Chats.png" alt="Chats" width={40} height={43} />
         </div>
       </div>

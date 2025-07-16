@@ -12,12 +12,13 @@ import {
   formatAmount,
 } from "@/lib/utils";
 import Confirm_Header from "../../Confirm_Header";
+import { useRouter } from "next/navigation";
 
 const PayForSessions = ({ type }) => {
   const [total, setTotal] = useState(0);
   const [clinicShare, setClinicShare] = useState(0);
   const [totalPayable, setTotalPayable] = useState(0);
-
+  const router = useRouter()
   const sessions_selection = hasCookie("sessions_selection")
     ? JSON.parse(getCookie("sessions_selection"))
     : null;
@@ -27,7 +28,11 @@ const PayForSessions = ({ type }) => {
   const invitePatientInfo = hasCookie("invitePatientInfo")
     ? JSON.parse(getCookie("invitePatientInfo"))
     : null;
-
+    useEffect(()=>{
+      if(!sessions_selection || !channelPartnerData || !invitePatientInfo){
+      router.push('/login')
+    }
+    },[sessions_selection,channelPartnerData,invitePatientInfo,router])
   useEffect(() => {
     const calculatePrice = () => {
       const result = calculatePaymentDetails(
@@ -127,7 +132,7 @@ const PayForSessions = ({ type }) => {
               </span>
             </div>
             <Link href={`/channel-partner/${type}/payment`}>
-              <Button className="w-full bg-[#776EA5]">
+              <Button className="w-full bg-[#776EA5] rounded-[8px]">
                 Pay {totalPayable}
               </Button>
             </Link>

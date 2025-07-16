@@ -26,12 +26,18 @@ const Payment = ({ type }) => {
   // const [billingType, setBillingType] = useState("");
   const [orderId, setOrderId] = useState("");
   const [totalPayable, setTotalPayable] = useState(0);
+  
   const sessions_selection = hasCookie("sessions_selection")
     ? JSON.parse(getCookie("sessions_selection"))
     : null;
   const invitePatientInfo = hasCookie("invitePatientInfo")
     ? JSON.parse(getCookie("invitePatientInfo"))
     : null;
+      useEffect(()=>{
+        if(!sessions_selection || !invitePatientInfo){
+        router.push(`/channel-partner/${type}`)
+      }
+      },[sessions_selection,type,invitePatientInfo,router])
   useEffect(() => {
     const cookieData = getCookie("channelPartnerData");
     const patientData = getCookie("invitePatientInfo");
@@ -47,7 +53,7 @@ const Payment = ({ type }) => {
       setChannelPartnerData(null);
       router.push(`/channel-partner/${type}`);
     }
-  }, [type]);
+  }, [type,router]);
 
   useEffect(() => {
     const calculatePrice = () => {
@@ -112,10 +118,14 @@ useEffect(() => {
         cp_patientId: invitePatientInfo?._id,
         sessionCreditCount: sessions_selection?.sessionCreditCount,
         sessionPrice: String(sessions_selection?.sessionPrice+(sessions_selection?.sessionPrice*0.1)),
+        // sessionCreditCount: "1",
+        // sessionPrice: "1",
         clientDetails: {
           ip: String(ip),
           deviceInfo: literalDeviceInfo
         },
+        flow:channelPartnerData?.billingType,
+        // practitionerId: "",
       });
       if (response?.data?.success) {
         setCookie("qrCodeInfo", JSON.stringify(response?.data?.data));
@@ -134,7 +144,7 @@ useEffect(() => {
   };
 
   doFlow();
-}, []);
+},[]);
 
   const generateQrCode = async (upiIntent) => {
     try {
@@ -176,7 +186,7 @@ useEffect(() => {
     }
 
     return () => clearInterval(interval);
-  }, [orderId, type, invitePatientInfo?._id]);
+  }, [orderId, type, invitePatientInfo?._id,router]);
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">

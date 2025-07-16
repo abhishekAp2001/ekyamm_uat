@@ -77,6 +77,7 @@ const Cloudnine_Hospital = ({ type }) => {
         cp_patientId: formData?.cp_patientId,
         sessionCreditCount: formData?.sessionCreditCount,
         sessionPrice: String(formData?.sessionPrice),
+        practitionerId:""
       };
 
       if (billingType === "onSpot") {

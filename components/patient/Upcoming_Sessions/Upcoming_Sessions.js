@@ -57,6 +57,9 @@ useEffect(() => {
       const parsed = JSON.parse(cookie);
       if (parsed?.token) setPatientSessionToken(parsed.token);
     }
+    else {
+      router.push('/patient/login')
+    }
   } catch (err) {
     console.error("Parse failed", err);
   }
@@ -171,6 +174,7 @@ useEffect(() => {
           onClick={()=>{router.push("/patient/patient-profile")}}/>
           {/* Right Side Image */}
           <Image
+          onClick={()=>{router.push('/patient/dashboard')}}
             src="/images/box.png"
             width={28}
             height={18}

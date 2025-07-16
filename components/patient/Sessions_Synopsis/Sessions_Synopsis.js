@@ -28,12 +28,14 @@ import axios from "axios";
 import { patientSessionToken as getPatientSessionToken } from "@/lib/utils";
 import { showErrorToast } from "@/lib/toast";
 import { Baseurl } from "@/lib/constants";
+import { useRouter } from "next/navigation";
 const Sessions_Synopsis = () => {
   const [patientSessionToken, setPatientSessionToken] = useState(null);
   const [loading, setLoading] = useState(false);
   const [synopsis, setSynopsis] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const router = useRouter()
   const sessionDates = [
     "21 March 2022",
     "21 March 2022",
@@ -91,6 +93,9 @@ useEffect(() => {
       console.error("Error parsing cookie", err);
     }
   }
+  else if(!cookie){
+    router.push('/login')
+  }
 }, []);
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
@@ -101,16 +106,10 @@ useEffect(() => {
           <div className="flex items-center gap-4">
             <Avatar className="w-[42px] h-[42px]">
               <AvatarImage
-                src={patient?.profileImageUrl}
+                src={patient?.profileImageUrl||"/images/profile.png"}
                 alt={`${patient?.firstName} ${patient?.lastName}`}
                 className="rounded-full object-cover"
               />
-              <AvatarFallback>
-                {`${patient?.firstName} ${patient?.lastName}`
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")}
-              </AvatarFallback>
             </Avatar>
             <div>
               <p className="text-[14px] font-[600] text-black">{patient?.firstName} {patient?.lastName}</p>
@@ -145,11 +144,8 @@ useEffect(() => {
             </AccordionItem>
           ))
           ):(
-            <>
-            <div className="text-center text-gray-500 py-8">
-              No synopsis available.
+            <div>
             </div>
-            </>
           )}
         </Accordion>
         )}

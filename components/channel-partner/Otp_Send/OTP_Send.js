@@ -168,6 +168,7 @@ const OTP_Send = ({ type }) => {
         mobile: mobileNumber,
         type: "cpLoginOTP",
         verificationToken: channelPartnerData?.verificationToken,
+        channelPartnerUsername: type
       });
       // if (result.data.result === "success")
       if (response?.data?.success) {
@@ -309,9 +310,7 @@ const OTP_Send = ({ type }) => {
             </div>
             <div className="border-2 bg-[#FFFFFF80] border-[#FFFFFF4D] rounded-4xl py-[17px] text-center w-full my-[64px]  px-5">
               <strong className="text-[15px] text-black font-[600] text-center">
-                {otpSendStatus
-                  ? "Enter OTP"
-                  : selectedMethod === "mobile"
+                {selectedMethod === "mobile" || selectedMethod === "email"
                     ? "Send OTP to"
                     : "Send OTP to Verified ID"}
                 
@@ -361,7 +360,10 @@ const OTP_Send = ({ type }) => {
                 {otpSendStatus ? (
                   <>
                     <div className="my-[15px]">
-                      <div className="relative flex items-center">
+                      <div className="text-[12px] text-gray-500 font-medium text-left mb-1 relative ">
+                      Enter OTP 
+                    </div>
+                      <div className="relative flex items-center mt-2">
                         <OTPInput
                           type="text"
                           inputType="number"

@@ -87,7 +87,7 @@ const CP_bank_details = () => {
       } else {
         showErrorToast(
           error?.response?.data?.error?.message ||
-            "Failed to fetch bank details"
+          "Failed to fetch bank details"
         );
       }
     }
@@ -149,13 +149,16 @@ const CP_bank_details = () => {
       const cp_billing_details = hasCookie("cp_billing_details")
         ? JSON.parse(getCookie("cp_billing_details"))
         : "";
-
+        
+      if (!cp_type || !cp_doctor_details || !cp_clinic_details || !cp_billing_details) {
+        router.push('/login')
+      }
       const payload = {
         channelPartnerDetails: {
           type: cp_type?.type, // "IVF" / "Fertility Clinic"
-          clinicName: cp_type?.clinicName ,
+          clinicName: cp_type?.clinicName,
           generalInformation: {
-            userName: cp_type?.userName ,
+            userName: cp_type?.userName,
             // "profileImageUrl": "",
             // "firstName": "Channel2",
             // "lastName": "Partner2",
@@ -194,14 +197,14 @@ const CP_bank_details = () => {
           gstNumber: cp_billing_details?.gstNumber,
         },
         bankDetails: {
-          accountHolderName: formData?.accountHolderName ,
+          accountHolderName: formData?.accountHolderName,
           accountNumber: formData?.accountNumber,
           ifscCode: formData?.ifscCode,
           bankName: formData?.bankName,
         },
       };
-      const response = await axios.post(`v2/cp/channelPartner/invite`,payload)
-      if(response?.data?.success){
+      const response = await axios.post(`v2/cp/channelPartner/invite`, payload)
+      if (response?.data?.success) {
         router.push("/sales")
         showSuccessToast("Profile Created with Unique URL");
         deleteCookie("cp_type");
@@ -220,6 +223,16 @@ const CP_bank_details = () => {
     }
   };
 
+          useEffect(()=>{
+            const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
+            const cp_type_token = hasCookie("cp_billing_details") ? JSON.parse(getCookie("cp_billing_details")) : null
+            if(!token){
+              router.push('/login')
+            }
+            else if(!cp_type_token){
+              router.push('/sales/cp_billing_details')
+            }
+          },[])
   return (
     <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col max-w-[576px] mx-auto">
       <CP_Header />
@@ -260,11 +273,10 @@ const CP_bank_details = () => {
           <div>
             <Label
               htmlFor="bankName"
-              className={`text-[15px] mb-[7.59px] mt-[22px] ${
-                isIfscValid(formData.ifscCode)
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${isIfscValid(formData.ifscCode)
                   ? "text-gray-500"
                   : "text-[#00000040]"
-              }`}
+                }`}
             >
               Bank Name *
             </Label>
@@ -274,11 +286,10 @@ const CP_bank_details = () => {
               placeholder="Add Bank Name"
               value={formData.bankName}
               disabled
-              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px]py-3 px-4 h-[39px] ${
-                isIfscValid(formData.ifscCode)
+              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px]py-3 px-4 h-[39px] ${isIfscValid(formData.ifscCode)
                   ? "bg-white placeholder:text-gray-500"
                   : "bg-[#ffffff90] placeholder:text-[#00000040]"
-              }`}
+                }`}
             />
             {touched.bankName && !formData.bankName && (
               <span className="text-red-500 text-sm mt-1 block">
@@ -289,9 +300,8 @@ const CP_bank_details = () => {
           <div>
             <Label
               htmlFor="accountNumber"
-              className={`text-[15px] mb-[7.59px] mt-[22px] ${
-                formData.bankName ? "text-gray-500" : "text-[#00000040]"
-              }`}
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${formData.bankName ? "text-gray-500" : "text-[#00000040]"
+                }`}
             >
               Account Number *
             </Label>
@@ -304,11 +314,10 @@ const CP_bank_details = () => {
                 onChange={(e) => handleInputChange(e, "accountNumber")}
                 onBlur={() => handleBlur("accountNumber")}
                 disabled={!formData.bankName}
-                className={`rounded-[7.26px] text-[15px]text-black font-semibold placeholder:text-[15px]py-3 px-4 h-[39px] ${
-                  formData.bankName
+                className={`rounded-[7.26px] text-[15px]text-black font-semibold placeholder:text-[15px]py-3 px-4 h-[39px] ${formData.bankName
                     ? "bg-white placeholder:text-gray-500"
                     : "bg-[#ffffff90] placeholder:text-[#00000040]"
-                }`}
+                  }`}
               />
               {touched.accountNumber &&
                 isAccountNumberValid(formData.accountNumber) && (
@@ -337,11 +346,10 @@ const CP_bank_details = () => {
           <div>
             <Label
               htmlFor="confirmAccountNumber"
-              className={`text-[15px] mb-[7.59px] mt-[22px] ${
-                isAccountNumberValid(formData.accountNumber)
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${isAccountNumberValid(formData.accountNumber)
                   ? "text-gray-500"
                   : "text-[#00000040]"
-              }`}
+                }`}
             >
               Confirm Account Number *
             </Label>
@@ -354,11 +362,10 @@ const CP_bank_details = () => {
                 onChange={(e) => handleInputChange(e, "confirmAccountNumber")}
                 onBlur={() => handleBlur("confirmAccountNumber")}
                 disabled={!isAccountNumberValid(formData.accountNumber)}
-                className={`rounded-[7.26px] text-[15px]text-black font-semibold placeholder:text-[15px]py-3 px-4 h-[39px] ${
-                  isAccountNumberValid(formData.accountNumber)
+                className={`rounded-[7.26px] text-[15px]text-black font-semibold placeholder:text-[15px]py-3 px-4 h-[39px] ${isAccountNumberValid(formData.accountNumber)
                     ? "bg-white placeholder:text-gray-500"
                     : "bg-[#ffffff90] placeholder:text-[#00000040]"
-                }`}
+                  }`}
               />
               {touched.confirmAccountNumber &&
                 isConfirmAccountNumberValid() && (
@@ -398,11 +405,10 @@ const CP_bank_details = () => {
           <div>
             <Label
               htmlFor="accountHolderName"
-              className={`text-[15px] mb-[7.59px] mt-[22px] ${
-                isConfirmAccountNumberValid()
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${isConfirmAccountNumberValid()
                   ? "text-gray-500"
                   : "text-[#00000040]"
-              }`}
+                }`}
             >
               Account Holder Name *
             </Label>
@@ -419,11 +425,10 @@ const CP_bank_details = () => {
                   isConfirmAccountNumberValid()
                 )
               }
-              className={`rounded-[7.26px] text-[15px]text-black font-semibold placeholder:text-[15px]py-3 px-4 h-[39px] ${
-                isConfirmAccountNumberValid()
+              className={`rounded-[7.26px] text-[15px]text-black font-semibold placeholder:text-[15px]py-3 px-4 h-[39px] ${isConfirmAccountNumberValid()
                   ? "bg-white placeholder:text-gray-500"
                   : "bg-[#ffffff90] placeholder:text-[#00000040]"
-              }`}
+                }`}
             />
             {touched.accountHolderName && !formData.accountHolderName && (
               <span className="text-red-500 text-sm mt-1 block">

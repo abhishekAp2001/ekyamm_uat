@@ -367,16 +367,7 @@ const EP_registration = ({ type }) => {
                   >
                     <div className="flex items-center gap-[12px]">
                       <Avatar>
-                        <AvatarImage src={profile.image} />
-                        <AvatarFallback>{` ${
-                          profile.firstName
-                            ? profile.firstName?.charAt(0).toUpperCase()
-                            : ""
-                        }${
-                          profile.lastName
-                            ? profile.lastName.charAt(0).toUpperCase()
-                            : ""
-                        }`}</AvatarFallback>
+                        <AvatarImage src={profile.image||"/images/profile.png"} />
                       </Avatar>
 
                       <div className="flex flex-col justify-center gap-[5px]">

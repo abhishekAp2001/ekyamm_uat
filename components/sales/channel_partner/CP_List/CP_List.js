@@ -6,9 +6,12 @@ import axiosInstance from "@/lib/axiosInstance";
 import Link from "next/link";
 import List from "./CPList";
 import CPList from "./CPList";
+import { useRouter } from "next/navigation";
+import { getCookie, hasCookie } from "cookies-next";
 
 const CP_List = () => {
   const axios = axiosInstance();
+  const router = useRouter()
   const [channelPartnerList, setChannelPartnerList] = useState([]);
   const fetchAllList = async () => {
     try {
@@ -26,6 +29,13 @@ const CP_List = () => {
   useEffect(() => {
     fetchAllList();
   }, []);
+
+    useEffect(()=>{
+      const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
+      if(!token){
+        router.push('/login')
+      }
+    })
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
