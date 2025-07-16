@@ -17,12 +17,16 @@ import axiosInstance from "@/lib/axiosInstance";
 import { Input } from "@/components/ui/input";
 
 const Filter = ({
+  token,
   setShowFilter,
   onApplyFilter,
   initialParams,
   loading = false,
 }) => {
   const axios = axiosInstance();
+  const [min, setMin] = useState(0)
+  const [max,setMax] = useState(0)
+  const [fees, setFees] = useState([])
   const [selectedGender, setSelectedGender] = useState(
     initialParams.gender || ""
   );
@@ -86,6 +90,29 @@ const Filter = ({
     onApplyFilter(params);
   };
 
+  useEffect(()=>{
+    const getSliderValue = async()=>{
+      try {
+        const response = await axios.get(`/v2/cp/counsellors/fees`,{
+          headers: {
+            accesstoken:token
+          }
+        })
+      if(response?.data?.success){
+        setMin(response?.data?.data?.min)
+        setMax(response?.data?.data?.max)
+        setFees(response?.data?.data?.fees)
+      }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    getSliderValue()
+  },[token])
+  const currentIndex = sessionFee === ""
+  ? 0
+  : fees.findIndex(fee => fee === Number(sessionFee));
+const indexValue = currentIndex === -1 ? 0 : currentIndex;
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] min-h-screen flex flex-col max-w-[576px] mx-auto">
       <>
@@ -112,15 +139,19 @@ const Filter = ({
             Session Fee
           </div>
           <Slider
-            value={[sessionFee === "" ? 150 : Number(sessionFee)]}
-            onValueChange={(value) => setSessionFee(value[0] === 150 ? "" : value[0])}
-            max={1500}
-            min={150}
-            step={10}
+            value={[indexValue]}
+            onValueChange={(value) => {
+              const fee = fees[value[0]];
+              setSessionFee(fee === fees[0] ? "" : fee);
+            }}
+            max={fees.length - 1}
+            min={0}
+            step={1}
+            fees = {fees}
           />
           <div className="flex justify-between mt-2 text-[12px] text-[#6D6A5D] font-[500]">
-            <span>₹150/-</span>
-            <span>₹1,500/-</span>
+            <span>₹{min}/-</span>
+            <span>₹{max}/-</span>
           </div>
         </div>
 

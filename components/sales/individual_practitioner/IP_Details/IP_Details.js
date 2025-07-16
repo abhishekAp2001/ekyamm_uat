@@ -30,6 +30,7 @@ import Select from "react-select";
 import axiosInstance from "@/lib/axiosInstance";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { showErrorToast } from "@/lib/toast";
+import { getCookie, hasCookie } from "cookies-next";
 polyfillCountryFlagEmojis();
 
 const IP_Details = () => {
@@ -270,6 +271,12 @@ const IP_Details = () => {
     setDrawerOpen(false);
   };
 
+  useEffect(() => {
+    const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+    if (!token) {
+      router.push('/login')
+    }
+  }, [])
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
       <IP_Header text="Add Individual Practitioner Details" />
@@ -569,6 +576,7 @@ const IP_Details = () => {
               </Label>
               <div className="flex gap-[6px] items-center w-[45%]">
                 <Checkbox
+                id='same_as_mobile'
                   className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"
                   checked={sameAsMobile}
                   onCheckedChange={(checked) => {
@@ -593,7 +601,7 @@ const IP_Details = () => {
                       ? "text-gray-500"
                       : "text-[#00000040]"
                   }`}
-                >
+                htmlFor="same_as_mobile">
                   Same as Mobile Number
                 </label>
               </div>

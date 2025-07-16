@@ -61,7 +61,7 @@ const Psychiatrist_profile = () => {
         <ChevronLeft size={28} className="text-black cursor-pointer"
           onClick={()=>{router.push("/patient/patient-profile")}}/>
      
-          <Image src="/images/Chats.png" alt="Chats" width={40} height={43} />
+          <Image src="/images/Chats.png" alt="Chats" width={40} height={43} onClick={()=>{router.push('/patient/dashboard')}}/>
       </div>
       </div>
 
@@ -90,15 +90,7 @@ const Psychiatrist_profile = () => {
               {clinic?.clinicName}
             </p>
             <p className="text-[15px] font-normal text-center m-0 leading-tight opacity-70">
-              {clinic?.doctorDetails?.doNotDisplay?(
-                <>
-                <span className="text-[#8F8F8F]">Doctor details not available</span>
-                </>
-              ) : (
-                <>
-                {clinic?.doctorDetails?.firstName} {clinic?.doctorDetails?.lastName}
-                </>
-              )}
+              {clinic?.generalInformation?.area}, {clinic?.generalInformation?.city}
             </p>
 
             {/* Icons + Emergency */}

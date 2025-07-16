@@ -249,6 +249,13 @@ const Emergency_Details = ({ type }) => {
   const handleClose = () => {
     setShow(false);
   };
+
+    useEffect(()=>{
+      const cookie = getCookie("completeUserData")
+      if(!cookie){
+        router.push(`/patient/${type}/create`)
+      }
+    },[])
   return (
     <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col max-w-[576px] mx-auto">
       <Emergency_Header />
@@ -463,6 +470,7 @@ const Emergency_Details = ({ type }) => {
               </Label>
               <div className="flex gap-[6px] items-center w-[45%]">
                 <Checkbox
+                id="same_as_mobile"
                   checked={sameAsMobile}
                   onCheckedChange={(checked) => {
                     setSameAsMobile(checked);
@@ -477,7 +485,8 @@ const Emergency_Details = ({ type }) => {
                   disabled={!isMobileValid(formData.primaryMobileNumber)}
                   className="w-4 h-4 border border-[#776EA5] rounded-[1.8px]"
                 />
-                <label className="text-[12px] text-gray-500 font-medium">
+                <label className="text-[12px] text-gray-500 font-medium"
+                htmlFor="same_as_mobile">
                   Same as Mobile Number
                 </label>
               </div>

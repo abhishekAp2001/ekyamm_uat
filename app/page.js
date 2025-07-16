@@ -36,7 +36,6 @@ const Page = () => {
    <div className="flex flex-col w-full h-screen bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5] ">
       <Head>
         <title>Ekyamm</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <Link rel="icon" href="/images/logo-circle-hands.svg" type="image/png" />
         {/* If you **really** need Bootstrap, keep this: */}
         {/* Or remove if you use Tailwind */}

@@ -8,6 +8,7 @@ import IP_Header from "../IP_Header/IP_Header";
 import { toast } from "react-toastify";
 import { DrawerTitle } from "../../../ui/drawer";
 import { showErrorToast } from "@/lib/toast";
+import { getCookie, hasCookie } from "cookies-next";
 
 const IP_Medical_Association_Certificate = () => {
   const [formData, setFormData] = useState({
@@ -41,6 +42,16 @@ const IP_Medical_Association_Certificate = () => {
     }
   }, []);
 
+    useEffect(() => {
+      const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+      const ip_type_token = localStorage.getItem("ip_medical_association_details") ? JSON.parse(localStorage.getItem("ip_medical_association_details")) : null
+      if (!token) {
+        router.push('/login')
+      }
+      else if (!ip_type_token) {
+        router.push('/sales/ip_medical_association_details')
+      }
+    }, [])
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
       <IP_Header text="Medical Association Details" />

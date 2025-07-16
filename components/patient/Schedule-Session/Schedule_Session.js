@@ -132,6 +132,17 @@ const Schedule_Session = () => {
     }
   };
 
+  const canSubmit = 
+  patientSessionData?.firstName && 
+  patientSessionData?.lastName &&
+  selectedCounsellorData?.loginId &&
+  selectedCounsellorData?.generalInformation?.firstName &&
+  selectedCounsellorData?.generalInformation?.lastName &&
+  selectedCounsellorData?.generalInformation?.email &&
+  selectedFromTime &&
+  selectedToTime &&
+  !loading;
+
   const validateForm = () => {
     if (!patientSessionData?.firstName || !patientSessionData?.lastName) {
       showErrorToast("Missing patient first or last name.");
@@ -152,7 +163,8 @@ const Schedule_Session = () => {
     }
 
     if (!selectedDate || !selectedFromTime || !selectedToTime) {
-      return false;
+      showErrorToast("Please select a date and time.");
+      return false
     }
 
     return true;
@@ -177,8 +189,7 @@ const Schedule_Session = () => {
     const isValid = validateForm();
 
     if (!isValid) {
-      showErrorToast("All fields are required.");
-      return;
+      return null;
     }
 
     const payload = {
@@ -351,19 +362,11 @@ const Schedule_Session = () => {
                 <Avatar>
                   <AvatarImage
                     className="rounded-full object-cover w-[42px] h-[42px]"
-                    src={patientSessionData?.profileImageUrl}
+                    src={patientSessionData?.profileImageUrl||"/images/profile.png"}
                     alt={`${patientSessionData?.firstName || ""} ${
                       patientSessionData?.lastName || ""
                     }`}
                   />
-                  <AvatarFallback>
-                    {`${patientSessionData?.firstName || ""} ${
-                      patientSessionData?.lastName || ""
-                    }`
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
-                  </AvatarFallback>
                 </Avatar>
                 <div>
                   <Label className="text-[16px] text-black font-[600] font-['Quicksand']">
@@ -695,8 +698,7 @@ const Schedule_Session = () => {
             <button
               onClick={handleConfirmBooking}
               type="button"
-              disabled={!validateForm() || loading}
-              className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white rounded-[8px] text-[15px] font-[600] w-[48%] h-[45px] flex items-center justify-center cursor-pointer"
+              className={`bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white rounded-[8px] text-[15px] font-[600] w-[48%] h-[45px] flex items-center justify-center cursor-pointer ${!canSubmit ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
             >
               {loading ? (
                 <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />

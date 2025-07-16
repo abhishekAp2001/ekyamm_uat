@@ -6,7 +6,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { greeting } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { useRouter } from "next/navigation";
-import { patientSessionData as getPatientSessionData } from "@/lib/utils";
 
 /**
  * Header component displays hospital info, greeting, user avatar and name.
@@ -16,7 +15,6 @@ import { patientSessionData as getPatientSessionData } from "@/lib/utils";
 const Header = ({ loading = false, patient }) => {
   const router = useRouter();
   const [showSidebar, setShowSidebar] = useState(false);
-  const patientSessionData = getPatientSessionData();
 
   const {
     firstName = "",
@@ -30,7 +28,7 @@ const Header = ({ loading = false, patient }) => {
     <div className="bg-gradient-to-r from-[#B0A4F5] to-[#EDA197] rounded-bl-3xl rounded-br-3xl px-3 py-5 h-[128px]">
       <div className="flex flex-col">
         <div className="flex flex-col justify-center items-center">
-          <h1 className="text-[18px] text-white font-semibold">{patientSessionData?.clinicDetails?.clinicName}</h1>
+          <h1 className="text-[18px] text-white font-semibold">{patient?.clinicDetails?.clinicName}</h1>
           <div className="flex items-center gap-[2px]">
             <div className="bg-[#FFFFFF80] rounded-full w-[12px] h-[12px] flex items-center justify-center">
               <MapPin className="w-2 h-2 text-[#9f99bebd]" />
@@ -49,19 +47,13 @@ const Header = ({ loading = false, patient }) => {
 
         <div className="flex justify-between items-center mt-2 relative">
           <div className="flex items-center gap-2">
-            <Avatar
+            <Avatar className='w-8 h-4 rounded-[25px] contents'
             onClick={() => router.push("/patient/patient-profile")}>
               <AvatarImage
-                className="h-[34px] w-[34px] pt-1.5 mix-blend-multiply"
-                src={patientSessionData?.profileImageUrl}
-                alt={`${patientSessionData?.firstName} ${patientSessionData?.lastName}`}
+                className="h-8 w-8 mix-blend-multiply rounded-[25px] pt-0 overflow-auto"
+                src={patient?.profileImageUrl ||"/images/profile.png"}
+                alt={`${patient?.firstName} ${patient?.lastName}`}
               />
-              <AvatarFallback>
-                {`${patientSessionData?.firstName} ${patientSessionData?.lastName}`
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")}
-              </AvatarFallback>
             </Avatar>
             {/* <Image
               src="/images/user.png"

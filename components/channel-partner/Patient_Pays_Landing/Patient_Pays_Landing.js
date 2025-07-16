@@ -18,7 +18,7 @@ const Patient_Pays_Landing = ({ type }) => {
           setError(null);
     
           try {
-            const response = await axios.post(`v2/cp/channelPartner/verify`, {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/channelPartner/verify`, {
               username: type,
             });
     
@@ -41,7 +41,7 @@ const Patient_Pays_Landing = ({ type }) => {
           }
         };
         verifyChannelPartner(type); // Replace 'apollo' with dynamic username if needed
-      }, [type]);
+      }, []);
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
       {/* Background Image on Right */}

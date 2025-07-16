@@ -162,7 +162,7 @@ const Family_Details = ({ type }) => {
 
     if (!token) {
       showErrorToast("Authentication required. Please log in.");
-      router.push("/create");
+      router.push(`/patient/${type}/create`);
       return;
     }
 
@@ -198,7 +198,7 @@ const Family_Details = ({ type }) => {
         showErrorToast(response.data.message || "Failed to add family member");
       }
     } catch (error) {
-      showErrorToast(err.response?.data?.error?.message || "Submission failed");
+      showErrorToast(error.response?.data?.error?.message || "Submission failed");
     } finally {
       setLoading(false);
     }
@@ -249,6 +249,12 @@ const Family_Details = ({ type }) => {
     setShow(false);
   };
 
+  useEffect(()=>{
+    const cookie = getCookie("PatientInfo")
+    if(!cookie){
+      router.push(`/patient/${type}/create`)
+    }
+  },[])
   return (
     <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col max-w-[576px] mx-auto">
       <Family_Header type={type} />

@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button } from "../../ui/button";
 import Link from "next/link";
 import Footer_bar from "../../Footer_bar/Footer_bar";
-import { getCookie, hasCookie } from "cookies-next";
+import { getCookie, hasCookie, setCookie } from "cookies-next";
 import { MapPin } from "lucide-react";
 import BackNav from "../../BackNav";
 import {
@@ -17,6 +17,8 @@ import { format } from "date-fns";
 import axios from "axios";
 import { Baseurl } from "@/lib/constants";
 import { string } from "i/lib/util";
+import { useRouter } from "next/navigation";
+import { showErrorToast } from "@/lib/toast";
 const P_Pay_For_Session = ({ type }) => {
   const selectedCounsellorData = getSelectedCounsellorData()
   const [session, setSession] = useState(null)
@@ -28,8 +30,9 @@ const P_Pay_For_Session = ({ type }) => {
   const [PatientInfo, setPatientInfo] = useState(null);
   const [channelPartnerData, setChannelPartnerData] = useState(null);
   const [token, setToken] = useState(null)
-    const [formFields, setFormFields] = useState(null);
-     const payuFormRef = useRef(null);
+  const [formFields, setFormFields] = useState(null);
+  const payuFormRef = useRef(null);
+  const router = useRouter()
   useEffect(() => {
     const cookie = getCookie("patientSessionData");
     if (cookie) {
@@ -38,6 +41,9 @@ const P_Pay_For_Session = ({ type }) => {
       } catch (err) {
         console.error("Error parsing cookie", err);
       }
+    }
+    else if (!cookie) {
+      router.push('/login')
     }
   }, []);
   useEffect(() => {
@@ -49,18 +55,11 @@ const P_Pay_For_Session = ({ type }) => {
         console.error("Error parsing cookie", err);
       }
     }
-  }, []);
-
-  useEffect(() => {
-    const cookie = getCookie("channelPartnerData");
-    if (cookie) {
-      try {
-        setChannelPartnerData(JSON.parse(cookie));
-      } catch (err) {
-        console.error("Error parsing cookie", err);
-      }
+    else if (!cookie) {
+      router.push('/login')
     }
   }, []);
+
   useEffect(() => {
     const cookie = getCookie("PatientInfo");
     if (cookie) {
@@ -70,7 +69,11 @@ const P_Pay_For_Session = ({ type }) => {
         console.error("Error parsing cookie", err);
       }
     }
+    else if (!cookie) {
+      router.push('/login')
+    }
   }, []);
+
 
   useEffect(() => {
     const calculatePrice = () => {
@@ -91,25 +94,27 @@ const P_Pay_For_Session = ({ type }) => {
   const handlePayment = async () => {
     try {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient/sessionCredits/refill`, {
-      "sessionCreditCount": String(session?.session_count),
-      "sessionPrice": String(session?.total)
-    },
-      { headers: { accesstoken: token.token } })
-    if (response?.data?.success) {
-      const payuPayload = response?.data?.data?.payuPayload
-      payuPayload.fields.surl = "http://localhost:3000/api/success"
-      payuPayload.fields.furl = "http://localhost:3000/api/failure"
-      setFormFields(payuPayload);
-    }
+        "practitionerId": selectedCounsellorData?.loginId,
+        "sessionCreditCount": String(session?.session_count),
+        "sessionPrice": String(session?.total),
+      },
+        { headers: { accesstoken: token.token } })
+      if (response?.data?.success) {
+        const payuPayload = response?.data?.data?.payuPayload
+        payuPayload.fields.surl = "http://localhost:3000/api/success"
+        payuPayload.fields.furl = "http://localhost:3000/api/failure"
+        setFormFields(payuPayload);
+      }
     } catch (error) {
-      console.error("Error",error)
+      console.error("Error", error)
     }
   }
   useEffect(() => {
-  if (formFields) {
-    payuFormRef.current?.submit();
-  }
-}, [formFields]);
+    if (formFields) {
+      payuFormRef.current?.submit();
+    }
+  }, [formFields]);
+  console.log("username",PatientInfo?.clinicDetails?.clinicName)
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
@@ -209,19 +214,19 @@ const P_Pay_For_Session = ({ type }) => {
           </div> */}
         </div>
         <div>
-        {formFields && (
-        <form
-          ref={payuFormRef}
-          action={formFields.action}
-          method="post"
-          style={{ display: "none" }}
-        >
-          {Object.entries(formFields.fields).map(([k, v]) => (
-            <input key={k} type="hidden" name={k} value={v} />
-          ))}
-          <input type="submit" value="Submit" />
-        </form>
-      )}
+          {formFields && (
+            <form
+              ref={payuFormRef}
+              action={formFields.action}
+              method="post"
+              style={{ display: "none" }}
+            >
+              {Object.entries(formFields.fields).map(([k, v]) => (
+                <input key={k} type="hidden" name={k} value={v} />
+              ))}
+              <input type="submit" value="Submit" />
+            </form>
+          )}
         </div>
       </div>
     </>

@@ -5,6 +5,7 @@ import { useState } from "react";
 import SignOutModal from "../SignOutModal/SignOutModal"; // adjust path as needed
 import { useRouter } from "next/navigation";
 import { whatsappUrl } from "@/lib/constants";
+import { getCookie, hasCookie } from "cookies-next";
 
 const Sidebar = ({ onClose }) => {
   const router = useRouter();
@@ -19,13 +20,20 @@ const Sidebar = ({ onClose }) => {
   };
 
   const handleConfirmSignOut = () => {
+    const patient = getCookie("patientSessionData")
+    const user = getCookie("user")
     document.cookie.split(";").forEach((c) => {
       document.cookie = c
         .replace(/^ +/, "") // Trim leading spaces
         .replace(/=.*/, "=;expires=" + new Date(0).toUTCString() + ";path=/");
     });
     localStorage.clear();
-    router.push(`/patient/login`);
+    if(patient){
+      router.push(`/patient/login`);
+    }
+    else if(user){
+      router.push(`/login`);
+    }
   };
 
   return (
@@ -55,7 +63,8 @@ const Sidebar = ({ onClose }) => {
           {/* Menu Items */}
           <div className="h-auto w-[162px] flex flex-col gap-[24px]">
             {/* Dashboard */}
-            <div className="flex flex-col gap-[8px]">
+            <div className="flex flex-col gap-[8px]"
+            onClick={onClose}>
               <div className="w-[162px] flex items-center gap-2">
                 <Image
                   src="/images/Home.png"
@@ -71,7 +80,8 @@ const Sidebar = ({ onClose }) => {
             </div>
 
             {/* Clinic Details */}
-            <div className="flex flex-col gap-[8px]">
+            <div className="flex flex-col gap-[8px]"
+            onClick={()=>{router.push('/patient/psychiatrist-profile')}}>
               <div className="w-[162px] flex items-center gap-2">
                 <Image
                   src="/images/clinic 1.png"

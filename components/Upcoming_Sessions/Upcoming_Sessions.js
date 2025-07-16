@@ -162,6 +162,7 @@ const Upcoming_Sessions = ({dashboard = false}) => {
           onClick={()=>{router.push("/patient/patient-profile")}}/>
           {/* Right Side Image */}
           <Image
+          onClick={()=>{router.push('/patient/dashboard')}}
             src="/images/box.png"
             width={28}
             height={18}

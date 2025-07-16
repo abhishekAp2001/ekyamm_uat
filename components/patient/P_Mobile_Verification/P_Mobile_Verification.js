@@ -239,6 +239,7 @@ const P_Mobile_Verification = ({ type }) => {
         mobile: mobileNumber,
         type: "cpLoginOTP",
         verificationToken: channelPartnerData?.verificationToken,
+        channelPartnerUsername: type
       });
 
       if (response?.data?.success) {
@@ -267,6 +268,9 @@ const P_Mobile_Verification = ({ type }) => {
         if (response?.data?.success == true) {
           setCookie("channelPartnerData", JSON.stringify(response.data.data));
           setChannelPartnerData(response.data.data);
+          if(response?.data?.data?.billingType == "patientPays"){
+            router.push('/patient/login')
+          }
         } else {
           showErrorToast(
             response?.data?.error?.message || "Verification failed"

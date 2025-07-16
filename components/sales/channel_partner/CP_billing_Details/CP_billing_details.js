@@ -124,6 +124,9 @@ const CP_billing_details = () => {
         ? JSON.parse(getCookie("cp_clinic_details"))
         : "";
 
+      if(!cp_type || !cp_doctor_details || !cp_clinic_details){
+        router.push('/login')
+      }
       const payload = {
         channelPartnerDetails: {
           type: cp_type?.type, // "IVF" / "Fertility Clinic"
@@ -214,6 +217,16 @@ const CP_billing_details = () => {
     }
   };
 
+        useEffect(()=>{
+          const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
+          const cp_type_token = hasCookie("cp_doctor_details") ? JSON.parse(getCookie("cp_doctor_details")) : null
+          if(!token){
+            router.push('/login')
+          }
+          else if(!cp_type_token){
+            router.push('/sales/cp_doctor_details')
+          }
+        },[])
   return (
     <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col max-w-[576px] mx-auto">
       <CP_Header />

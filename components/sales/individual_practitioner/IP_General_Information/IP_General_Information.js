@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import axiosInstance from "@/lib/axiosInstance";
 import { useRouter } from "next/navigation";
 import { showErrorToast } from "@/lib/toast";
+import { getCookie, hasCookie } from "cookies-next";
 
 const IP_General_Information = () => {
   const axios = axiosInstance();
@@ -31,7 +32,7 @@ const IP_General_Information = () => {
   });
 
   const [formData, setFormData] = useState({
-    yearsOfExperience: "",
+    yearsOfExperience: "0",
     specialization: "",
     whatIDontTreat: "",
     whatToExpectInSession: "",
@@ -154,6 +155,16 @@ const IP_General_Information = () => {
     }
   };
 
+  useEffect(() => {
+    const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+    const ip_type_token = localStorage.getItem("ip_details") ? JSON.parse(localStorage.getItem("ip_details")) : null
+    if (!token) {
+      router.push('/login')
+    }
+    else if (!ip_type_token) {
+      router.push('/sales/ip_details')
+    }
+  }, [])
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
       <IP_Header text="Add Individual Practitioner Details" />
@@ -176,7 +187,7 @@ const IP_General_Information = () => {
                   inputMode="numeric"
                   pattern="[0-9]*"
                   placeholder="0"
-                  className="bg-white rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] placeholder:text-gray-500 py-3 px-3 w-[46px] h-[38px]"
+                  className="bg-white rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] placeholder:text-gray-500 py-3 px-[7px] w-[46px] h-[38px]"
                   value={formData.yearsOfExperience}
                   onChange={(e) => handleInputChange(e, "yearsOfExperience")}
                   onBlur={() => handleBlur("yearsOfExperience")}

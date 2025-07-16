@@ -326,7 +326,16 @@ const IP_bank_details = () => {
     localStorage.removeItem("ip_medical_association_details");
     localStorage.removeItem("ip_single_session_fees");
   };
-
+  useEffect(() => {
+    const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+    const ip_type_token = localStorage.getItem("ip_single_session_fees") ? JSON.parse(localStorage.getItem("ip_single_session_fees")) : null
+    if (!token) {
+      router.push('/login')
+    }
+    else if (!ip_type_token) {
+      router.push('/sales/ip_single_session_fees')
+    }
+  }, [])
   return (
     // <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col">
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">

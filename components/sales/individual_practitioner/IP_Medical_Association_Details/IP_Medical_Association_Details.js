@@ -28,6 +28,7 @@ import { toast } from "react-toastify";
 import { isMobile } from "react-device-detect";
 import { useRouter } from "next/navigation";
 import { showErrorToast } from "@/lib/toast";
+import { getCookie, hasCookie } from "cookies-next";
 
 
 const IP_Medical_Association_Details = () => {
@@ -182,8 +183,17 @@ const IP_Medical_Association_Details = () => {
   
   const handleCloseDrawer = () =>{
     setDrawerOpen(false)
-  }
-
+  } 
+  useEffect(() => {
+    const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+    const ip_type_token = localStorage.getItem("ip_general_information") ? JSON.parse(localStorage.getItem("ip_general_information")) : null
+    if (!token) {
+      router.push('/login')
+    }
+    else if (!ip_type_token) {
+      router.push('/sales/ip_general_information')
+    }
+  }, [])
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto ">
       <IP_Header text="Medical Association Details" />

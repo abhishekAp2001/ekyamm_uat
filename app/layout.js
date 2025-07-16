@@ -11,28 +11,29 @@ const quicksand = Quicksand({
   subsets: ["latin"],
 });
 export default function RootLayout({ children }) {
+  useEffect(() => {
+  const preventMultiTouch = (e) => {
+    if (e.touches && e.touches.length > 1) {
+      e.preventDefault();
+    }
+  };
+  document.addEventListener('touchmove', preventMultiTouch, { passive: false });
+ 
+  return () => {
+    document.removeEventListener('touchmove', preventMultiTouch);
+  };
+}, []);
     const pathname = usePathname();
    const isFullWidthPage = pathname === '/' || pathname === '/mh-practitioner' || pathname === '/request-account-delete' || pathname === '/request-account-delete-success' || pathname === '/privacy-policy';
   const isPrivacyPage = pathname === '/privacy-policy';
   // useDisableBounce()
   return (
     <html lang="en">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        {/* <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
-        <meta name="apple-mobile-web-app-capable" content="yes" /> */}
-      {/* <body
-        className={`${quicksand.variable} bg-gradient-to-t from-[#eeecfb] to-[#fce8e5] md:bg-black md:bg-none md:from-transparent md:to-transparent antialiased max-w-[576px] h-screen mx-auto 
- `}
-      > */}
-       {/* <body
-        className={`
-          ${quicksand.variable} 
-          bg-gradient-to-t from-[#eeecfb] to-[#fce8e5] 
-          md:bg-black md:bg-none md:from-transparent md:to-transparent 
-          antialiased h-screen 
-          ${isFullWidthPage ? 'w-full' : 'max-w-[576px] mx-auto'}
-        `}
-      > */}
+      <head>
+        <title>Dashboard</title>
+        <link rel="icon" href="/images/logo-circle-hands.svg" type="image/png" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+      </head>
       <body
         className={`
           ${quicksand.variable} 

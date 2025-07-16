@@ -8,7 +8,7 @@ import Footer_bar from "../../Footer_bar/Footer_bar";
 import Confirm_Header from "../../Confirm_Header";
 import { MapPin } from "lucide-react";
 import { getCookie, hasCookie } from "cookies-next";
-import { showSuccessToast } from "@/lib/toast";
+import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { calculatePaymentDetails, clinicSharePercent, formatAmount } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import html2canvas from "html2canvas";
@@ -24,22 +24,39 @@ const PaymentConfirmation = ({ type }) => {
   const sessions_selection = hasCookie("sessions_selection")
     ? JSON.parse(getCookie("sessions_selection"))
     : null;
+  const payment_status_cookie = hasCookie("paymentStatusInfo")
+    ? JSON.parse(getCookie("paymentStatusInfo"))
+    : null;
   const invitePatientInfo = hasCookie("invitePatientInfo")
     ? JSON.parse(getCookie("invitePatientInfo"))
     : null;
   const qr_code_info = hasCookie("qrCodeInfo")
     ? JSON.parse(getCookie("qrCodeInfo"))
     : null;
-    useEffect(() => {
-    if (secondsLeft === 0) {
+const hasRedirected = useRef(false);
+useEffect(() => {
+  if (!sessions_selection || !qr_code_info || !invitePatientInfo || !payment_status_cookie) {
+    if (!hasRedirected.current) {
+      hasRedirected.current = true;
       router.push(`/channel-partner/${type}`);
-      return;
     }
-    const timer = setTimeout(() => {
-      setSecondsLeft((s) => s - 1);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [secondsLeft, router, type]);
+  }
+}, [sessions_selection, qr_code_info, invitePatientInfo, payment_status_cookie, router, type]);
+
+
+useEffect(() => {
+  if (secondsLeft === 0 && !hasRedirected.current) {
+    hasRedirected.current = true;
+    router.push(`/channel-partner/${type}`);
+    return;
+  }
+
+  const timer = setTimeout(() => {
+    setSecondsLeft((s) => s - 1);
+  }, 1000);
+  return () => clearTimeout(timer);
+}, [secondsLeft, router, type]);
+
   useEffect(() => {
     const cookieData = getCookie("channelPartnerData");
     const patientData = getCookie("invitePatientInfo");
@@ -73,7 +90,12 @@ const PaymentConfirmation = ({ type }) => {
     //   setPatientPreviousData(null);
     //   router.push(`/channel-partner/${type}`);
     // }
-    showSuccessToast("Patient Invited & Sessions Created");
+    if(payment_status_cookie){
+      showSuccessToast("Patient Invited & Sessions Created");
+    }
+    else if(!payment_status_cookie){
+      showErrorToast("No payment made")
+    }
   }, [type]);
 
   useEffect(() => {

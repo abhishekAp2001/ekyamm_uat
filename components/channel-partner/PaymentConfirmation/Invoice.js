@@ -1,6 +1,8 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { hasCookie, getCookie } from 'cookies-next';
+import { useRouter } from 'next/navigation';
 const Invoice = () => {
+    const router = useRouter()
     const sessions_selection = hasCookie("session_selection")
         ? JSON.parse(getCookie("session_selection"))
         : null;
@@ -22,6 +24,13 @@ const Invoice = () => {
     const channelPartnerData = hasCookie("channelPartnerData")
         ? JSON.parse(getCookie("channelPartnerData"))
         : null;
+
+    // useEffect(() => {
+    //     if (!sessions_selection || !selectedCounsellor || !patientInfo || !invitePatientInfo || !paymentStatusInfo || !channelPartnerData) {
+    //         router.push('/login')
+    //     }
+    // }, [sessions_selection, selectedCounsellor,patientInfo,invitePatientInfo,paymentStatusInfo, channelPartnerData])
+
     function getFormattedDate() {
         const today = new Date();
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -33,7 +42,7 @@ const Invoice = () => {
     }
     const totalAmount = sessions_selection?.session_count * sessions_selection?.total
     return (
-        <div className='print-only'>
+        <div className='print-only hidden'>
             <div className="invoice-box" id="invoice">
                 <table cellPadding={0} cellSpacing={0}>
                     <tbody><tr>

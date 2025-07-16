@@ -19,9 +19,18 @@ import Dashboard_card from "../Dashboard_card/Dashboard_card";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Sidebar from "@/components/patient/Sidebar/Sidebar";
+import { getCookie, hasCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 const SalesDashboard = () => {
+  const router = useRouter()
   const [showSidebar, setShowSidebar] = useState(false);
   const greeting = new Date().getHours() < 12 ? "Morning" : (new Date().getHours() < 16 || (new Date().getHours() === 16 && new Date().getMinutes() === 0)) ? "Afternoon" : "Evening";
+  useEffect(()=>{
+    const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
+    if(!token){
+      router.push('/login')
+    }
+  })
   return (
     <>
       <div className="bg-gradient-to-r  from-[#B0A4F5] to-[#EDA197] rounded-bl-3xl rounded-br-3xl px-3 py-5 mb-0 fixed top-0 left-0 right-0 max-w-[576px] mx-auto">

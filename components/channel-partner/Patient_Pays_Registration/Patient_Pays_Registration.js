@@ -400,6 +400,9 @@ const Patient_Pays_Registration = ({ type }) => {
               {emailOtpSendStatus && !emailOtpVerified ? (
                 <>
                   <div className="my-[15px]">
+                    <div className="text-[12px] text-gray-500 font-medium text-left mb-1 relative ">
+                      Enter OTP 
+                    </div>
                     <div className="relative flex items-center">
                       <OTPInput
                         type="text"
@@ -576,6 +579,9 @@ const Patient_Pays_Registration = ({ type }) => {
               {otpSendStatus && !otpVerified ? (
                 <>
                   <div className="my-[15px]">
+                    <div className="text-[12px] text-gray-500 font-medium text-left mb-1 relative ">
+                      Enter OTP 
+                    </div>
                     <div className="relative flex items-center">
                       <OTPInput
                         type="text"

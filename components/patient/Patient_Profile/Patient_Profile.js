@@ -95,7 +95,11 @@ const Patient_Profile = () => {
       state: patient?.addressDetails?.state || "",
     },
   });
-
+  useEffect(()=>{
+    if(!cookieValue){
+      router.push('/login')
+    }
+  })
   const cameraInputRef = useRef(null);
   const photoInputRef = useRef(null);
   const handleInputChange = (e, setMobile,setEmail) => {
@@ -148,7 +152,7 @@ const Patient_Profile = () => {
           },
         });
         if (response?.data?.success) {
-          setTherapist(response?.data?.data.practitionerTagged);
+          setTherapist(response?.data?.data.practitionerTagged[0]);
         }
       } catch (err) {
         console.error("err", err);
@@ -566,6 +570,7 @@ const Patient_Profile = () => {
             onClick={() => { router.push("/patient/dashboard") }} />
           {/* Right Side Image */}
           <Image
+          onClick={()=>{router.push('/patient/dashboard')}}
             src="/images/box.png"
             width={28}
             height={18}
@@ -581,24 +586,18 @@ const Patient_Profile = () => {
           <div className="flex justify-center  rounded-[17.63px] mx-auto relative mb-6 mt-[-77px]">
             <Avatar className="w-[100px] h-[100px]">
               <AvatarImage
-                src={patient?.profileImageUrl}
+                src={patient?.profileImageUrl||"/images/profile.png"}
                 alt={`${patient?.firstName} ${patient?.lastName}`}
                 className="rounded-full object-cover"
               />
-              <AvatarFallback>
-                {`${patient?.firstName} ${patient?.lastName}`
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")}
-              </AvatarFallback>
             </Avatar>
             <Drawer className="pt-[9.97px]" open={imageDrawer} onClose={() => setImageDrawer(false)}>
-              <DrawerTrigger className="">
+              <DrawerTrigger className="absolute top-[68%] md:top-[70%] right-[36%] md:right-[41%]">
                 <Image
                   src="/images/camera.png"
                   width={31}
                   height={31}
-                  className="w-[31px] h-fit absolute bottom-[-10px] right-[100px]"
+                  className="w-7 h-7"
                   alt="Camera"
                   onClick={() => setImageDrawer(true)}
                 />
@@ -704,54 +703,64 @@ const Patient_Profile = () => {
               icon: "/images/schedule_icon.png",
               bold: true,
               info: true,
+              tooltip: "View all your upcoming and past session with your therapist",
               onclick: () => {
                 router.push("/patient/upcoming-sessions");
               },
-              disabled: false
+              disabled: false,
             },
             {
               label: "Sessions Synopsis",
               icon: "/images/schedule_icon.png",
               bold: true,
               info: true,
+              tooltip:
+                "Session Notes shared by your therapists after each session",
               onclick: () => {
                 router.push("/patient/sessions-synopsis");
               },
-              disabled: false
+              disabled: false,
             },
             {
               label: "Therapist Details",
               icon: "/images/mindfulness.png",
               bold: true,
               info: true,
+              tooltip: "View your therapists profile",
               onclick: () => {
                 setShowCounsellorProfile(true);
               },
-              disabled: false
+              disabled: false,
             },
             {
               label: "Call In-Clinic Psychologist",
               icon: "/images/wifi_calling_bar_1.png",
               bold: false,
               info: false,
-              disabled: true
+              tooltip: "",
+              disabled: true,
             },
             {
               label: "Clinic Details",
               icon: "/images/medical_services.png",
               bold: true,
               info: true,
+              tooltip: "View your Clinic details",
               onclick: () => {
                 router.push("/patient/psychiatrist-profile");
               },
-              disabled: false
+              disabled: false,
             },
           ].map((item, idx) => (
             <div key={idx} className="mb-4">
-              <button className="bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[8px] p-2 h-[56px] p-3 w-full text-left flex items-center justify-between"
-                style={item.disabled ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+              <button
+                className="bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[8px] p-2 h-[56px] p-3 w-full text-left flex items-center justify-between"
+                style={
+                  item.disabled ? { opacity: 0.5, cursor: "not-allowed" } : {}
+                }
                 onClick={item.onclick}
-                disabled={item.disabled}>
+                disabled={item.disabled}
+              >
                 <span className="flex items-center text-[14px] font-[600] text-black ml-1">
                   <Image
                     src={item.icon}
@@ -762,13 +771,24 @@ const Patient_Profile = () => {
                   />
                   {item.label}
                   {item.info && (
-                    <Image
-                      src="/images/group1.png"
-                      width={13}
-                      height={13}
-                      alt="info"
-                      className="ml-1 w-[13.6px] h-[13.6px]"
-                    />
+                    <div className="relative group inline-block">
+                      <Image
+                        src="/images/group1.png"
+                        width={13}
+                        height={13}
+                        alt="info"
+                        className="ml-1 w-[13.6px] h-[13.6px]"
+                      />
+                      {item.tooltip && (
+                        <strong
+                          className="absolute bottom-full mb-1 left-[-100%] translate-[-44%_0px]
+                        px-2 py-1 rounded bg-black text-white text-xs opacity-0 group-hover:opacity-100
+                        transition whitespace-nowrap z-10 "
+                        >
+                          {item.tooltip}
+                        </strong>
+                      )}
+                    </div>
                   )}
                 </span>
                 <Image
@@ -788,10 +808,10 @@ const Patient_Profile = () => {
             Edit Profile
           </Button>
           <Drawer open={drawerOpen} onClose={() => handleVerifiedDrawerClose()}>
-            <DrawerTrigger className="w-full">
+            <DrawerTrigger className="w-full rounded-[8.62px]">
             </DrawerTrigger>
 
-            <DrawerContent className="bg-gradient-to-b from-[#e7e4f8] via-[#f0e1df] via-70% to-[#feedea] rounded-t-[16px] max-w-[576px] mx-auto bottom-drawer">
+            <DrawerContent className="bg-gradient-to-b from-[#e7e4f8] via-[#f0e1df] via-70% to-[#feedea] rounded-t-[16px] max-w-[576px] mx-auto bottom-drawer rounded-[8.62px]">
               <DrawerHeader>
                 <DrawerDescription className="flex flex-col px-4">
                   {/* Stepper Line */}
@@ -875,12 +895,12 @@ const Patient_Profile = () => {
         <div className="hidden">
           <div className="flex justify-center pt-[13px]">
             <Drawer open={verifiedDrawerOpen} onClose={() => handleVerifiedDrawerClose()}>
-              <DrawerTrigger className="w-full">
-                <Button className="border border-[#CC627B] bg-transparent text-[14px] font-[600] text-[#CC627B] rounded-[8px] w-full h-[45px]">
+              <DrawerTrigger className="w-full rounded-[8px]">
+                <Button className="border border-[#CC627B] bg-transparent text-[14px] font-[600] text-[#CC627B] rounded-[8px] w-full h-[45px] ">
                   Edit Profile
                 </Button>
               </DrawerTrigger>
-              <DrawerContent className=" bg-gradient-to-b from-[#e7e4f8] via-[#f0e1df] via-70% to-[#feedea] h-[330]">
+              <DrawerContent className=" bg-gradient-to-b from-[#e7e4f8] via-[#f0e1df] via-70% to-[#feedea] h-[330] rounded-[8px]">
                 <DrawerHeader>
                   <DrawerDescription className="flex flex-col">
                     {/* Stepper Line */}
@@ -933,7 +953,7 @@ const Patient_Profile = () => {
                           className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white py-[14.5px] mx-auto rounded-[8px] w-[172.27px] h-[45px]"
                           onClick={() => { setOtpSent(true), setNewMobileDrawer(true) }}
                         >
-                          Next
+                          Next   
                         </Button>
                       </div>
                     </div>
@@ -1148,7 +1168,7 @@ const Patient_Profile = () => {
         <div className="flex justify-center items-center mb-[26px]"
         onClick = {()=>{router.push(`${whatsappUrl}`)}}>
           <span className="text-[12px] font-[500] text-gray-500 mr-1">
-            Powered by
+            Support
           </span>
           <Image
             src="/images/chat_icon.png"

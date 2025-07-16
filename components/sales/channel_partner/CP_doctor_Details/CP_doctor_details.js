@@ -16,7 +16,7 @@ import {
 import Select from "react-select";
 import axiosInstance from "@/lib/axiosInstance";
 import { toast } from "react-toastify";
-import { getCookie, setCookie } from "cookies-next";
+import { getCookie, hasCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { showErrorToast } from "@/lib/toast";
@@ -194,6 +194,16 @@ const CP_doctor_details = () => {
       name: country.name,
     })), [countryList]);
 
+      useEffect(()=>{
+        const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
+        const cp_type_token = hasCookie("cp_clinic_details") ? JSON.parse(getCookie("cp_clinic_details")) : null
+        if(!token){
+          router.push('/login')
+        }
+        else if(!cp_type_token){
+          router.push('/sales/cp_clinic_details')
+        }
+      },[])
   return (
     <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col max-w-[576px] mx-auto">
       <CP_Header />
@@ -204,13 +214,14 @@ const CP_doctor_details = () => {
           </strong>
           <div className="flex gap-[6px] items-center mt-[8.8px]">
             <Checkbox
+            id='display_doctor_details'
               checked={formData.doNotDisplay}
               onCheckedChange={(checked) =>
                 setFormData((prev) => ({ ...prev, doNotDisplay: checked }))
               }
               className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"
             />
-            <label className="text-[12px] text-[#776EA5] font-bold">
+            <label className="text-[12px] text-[#776EA5] font-bold" htmlFor="display_doctor_details">
               Do Not Display Contact Details on Profile
             </label>
           </div>

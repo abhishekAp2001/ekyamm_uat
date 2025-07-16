@@ -5,8 +5,10 @@ import { ChevronLeft } from "lucide-react";
 import axiosInstance from "@/lib/axiosInstance";
 import { showErrorToast } from "@/lib/toast";
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
+import { hasCookie, getCookie } from "cookies-next";
 const Clinic_List = () => {
+  const router = useRouter()
   const axios = axiosInstance();
   const [clinicList, setClinicList] = useState([]);
   const fetchAllList = async () => {
@@ -25,6 +27,12 @@ const Clinic_List = () => {
   useEffect(() => {
     fetchAllList();
   }, []);
+    useEffect(()=>{
+      const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
+      if(!token){
+        router.push('/login')
+      }
+    })
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
