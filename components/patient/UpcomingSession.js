@@ -150,9 +150,13 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
         ) :
           (
             <>
-              <div className="text-center text-gray-500 py-8">
-                No upcoming sessions available.
-              </div>
+ 
+        <div className="bg-[#00000096] w-full px-3 rounded-[15px] backdrop-blur-[1px]">
+          <div className="p-10 flex justify-center items-center m-auto">
+          <Button className='bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[173px] h-[45px]'>Book Your Sessions</Button>
+          </div>
+        </div>
+ 
             </>
           )
         }

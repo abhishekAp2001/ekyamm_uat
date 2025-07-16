@@ -103,8 +103,8 @@ const P_Pay_For_Session = ({ type }) => {
         const payuPayload = response?.data?.data?.payuPayload
         // payuPayload.fields.surl = "http://localhost:3000/api/success"
         // payuPayload.fields.furl = "http://localhost:3000/api/failure"
-        payuPayload.fields.surl = "https://ekyamm-uat-git-testing-abhisheks-projects-1bbca496.vercel.app//api/success"
-        payuPayload.fields.furl = "https://ekyamm-uat-git-testing-abhisheks-projects-1bbca496.vercel.app//api/failure"
+        payuPayload.fields.surl = "https://ekyamm-uat-git-testing-abhisheks-projects-1bbca496.vercel.app/api/success"
+        payuPayload.fields.furl = "https://ekyamm-uat-git-testing-abhisheks-projects-1bbca496.vercel.app/api/failure"
         setFormFields(payuPayload);
       }
     } catch (error) {
