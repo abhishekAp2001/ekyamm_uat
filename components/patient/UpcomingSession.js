@@ -14,6 +14,7 @@ import { getCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { patientSessionToken as getPatientSessionToken } from "@/lib/utils";
+import { showErrorToast } from "@/lib/toast";
 const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
   const [patientSessionToken, setPatientSessionToken] = useState(null);
   const [patient, setPatient] = useState(null);
@@ -60,6 +61,7 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
     setPatientSessionToken(token);
   }, []);
   useEffect(() => {
+    if (!patientSessionToken) return;
     const getTherapistDetails = async () => {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient?type=therapist`, {
