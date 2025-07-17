@@ -116,7 +116,6 @@ const P_Pay_For_Session = ({ type }) => {
       payuFormRef.current?.submit();
     }
   }, [formFields]);
-  console.log("username",PatientInfo?.clinicDetails?.clinicName)
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">

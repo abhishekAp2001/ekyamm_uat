@@ -280,6 +280,7 @@ const Patient_Profile = () => {
         setDrawerOpen(false)
       }
     } catch (error) {
+      showErrorToast("Unable to send OTP")
       console.error("Error", error)
     }
   }
@@ -303,6 +304,7 @@ const Patient_Profile = () => {
         showErrorToast("Invalid OTP")
       }
     } catch (error) {
+      showErrorToast("Invalid OTP")
       setIsLoading(false)
       console.error("Error", error)
     }
@@ -342,6 +344,7 @@ const Patient_Profile = () => {
         setDrawerOpen(false)
       }
     } catch (error) {
+      showErrorToast("Unable to send OTP")
       console.error("Error", error)
     }
   }
@@ -359,6 +362,7 @@ const Patient_Profile = () => {
       setIsLoading(false)
       if (response?.data?.success) {
         setNewVerifiedDrawer(true)
+        setNewMobileDrawer(false)
         showSuccessToast("OTP Verified succesfully")
         setOtp("")
       }
@@ -366,6 +370,7 @@ const Patient_Profile = () => {
         showErrorToast("Invalid OTP")
       }
     } catch (error) {
+      showErrorToast("Invalid OTP")
       setIsLoading(false)
       console.error("Error", error)
     }
@@ -390,6 +395,7 @@ const Patient_Profile = () => {
         setDrawerOpen(false)
       }
     } catch (error) {
+      showErrorToast("Unable to send OTP")
       console.error("Error", error)
     }
   }
@@ -414,6 +420,7 @@ const Patient_Profile = () => {
         showErrorToast("Invalid OTP")
       }
     } catch (error) {
+      showErrorToast("Invalid OTP")
       setIsLoading(false)
       console.error("Error", error)
     }
@@ -431,6 +438,7 @@ const Patient_Profile = () => {
       })
       setIsLoading(false)
       if (response?.data?.success) {
+        setNewMobileDrawer(false)
         setNewVerifiedDrawer(true)
         showSuccessToast("OTP Verified succesfully")
         setOtp("")
@@ -439,6 +447,7 @@ const Patient_Profile = () => {
         showErrorToast("Invalid OTP")
       }
     } catch (error) {
+      showErrorToast("Invalid OTP")
       setIsLoading(false)
       console.error("Error", error)
     }
@@ -468,6 +477,7 @@ const Patient_Profile = () => {
         setDrawerOpen(false)
       }
     } catch (error) {
+      showErrorToast("Unable to send OTP")
       console.error("Error", error)
     }
   }
