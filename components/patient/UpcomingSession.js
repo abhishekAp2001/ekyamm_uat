@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Link2, Phone } from "lucide-react";
 import {
@@ -10,11 +10,15 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getCookie } from "cookies-next";
+import { getCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { patientSessionToken as getPatientSessionToken } from "@/lib/utils";
 const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
-    const [patient, setPatient] = useState(null);
-    const router = useRouter()
+  const [patientSessionToken, setPatientSessionToken] = useState(null);
+  const [patient, setPatient] = useState(null);
+  const router = useRouter()
+    const [therapist, setTherapist] = useState();
   useEffect(() => {
     const cookie = getCookie("PatientInfo");
     if (cookie) {
@@ -24,7 +28,7 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
         console.error("Error parsing cookie", err);
       }
     }
-    else if(!cookie){
+    else if (!cookie) {
       router.push('/patient/login')
     }
   }, []);
@@ -45,12 +49,47 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
     return { date: dateStr, time: timeStr };
   }
   function getTimeDifference(from, to) {
-  const fromDate = new Date(from);
-  const toDate = new Date(to);
-  const diffMs = toDate - fromDate;
-  const diffHours = diffMs / (1000 * 60 * 60);
-  return diffHours;
-}
+    const fromDate = new Date(from);
+    const toDate = new Date(to);
+    const diffMs = toDate - fromDate;
+    const diffHours = diffMs / (1000 * 60 * 60);
+    return diffHours;
+  }
+  useEffect(() => {
+    const token = getPatientSessionToken();
+    setPatientSessionToken(token);
+  }, []);
+  useEffect(() => {
+    const getTherapistDetails = async () => {
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient?type=therapist`, {
+          headers: {
+            accesstoken: patientSessionToken,
+            "Content-Type": "application/json",
+          },
+        });
+        if (response?.data?.success) {
+          setTherapist(response?.data?.data?.practitionerTagged[0]);
+        }
+      } catch (err) {
+        console.log("err", err);
+        showErrorToast(
+          err?.response?.data?.error?.message || "Error fetching patient data"
+        );
+      } finally {
+      }
+    };
+    getTherapistDetails();
+  }, [patientSessionToken])
+      const handleBookNowClick = () => {
+      setCookie("selectedCounsellor", JSON.stringify(therapist));
+      if (patient.availableCredits === 0) {
+        router.push("/patient/select-package")
+      }
+      else {
+        router.push("/patient/schedule-session");
+      }
+    }
   return (
     <div>
       <Accordion
@@ -93,9 +132,9 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
                           .charAt(0)
                           .toUpperCase() +
                           patient?.practitionerTagged[0]?.generalInformation?.lastName
-                          .charAt(0)
-                          .toUpperCase()
-                          }
+                            .charAt(0)
+                            .toUpperCase()
+                        }
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col">
@@ -130,30 +169,31 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
                 </div>
 
                 <div className="flex gap-4 items-center mt-2">
-                      <Button
-                        disabled
-                        className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] opacity-60 text-white text-[14px] font-[600] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center w-[138px]"
-                      >
-                        Start Call
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="border-[#E7A1A0] text-[#E7A1A0] font-semibold text-[14px] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center w-[160px] "
-                        onClick={()=>{router.push('/patient/schedule-session')}}
-                      >
-                        Reschedule Session
-                      </Button>
+                  <Button
+                    disabled
+                    className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] opacity-60 text-white text-[14px] font-[600] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center w-[138px]"
+                  >
+                    Start Call
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="border-[#E7A1A0] text-[#E7A1A0] font-semibold text-[14px] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center w-[160px] "
+                    onClick={() => { router.push('/patient/schedule-session') }}
+                  >
+                    Reschedule Session
+                  </Button>
                 </div>
               </AccordionContent>
             </AccordionItem>
           ))
         ) :
           (
-            <>
-              <div className="text-center text-gray-500 py-8">
-                No upcoming sessions available.
+            <div className="bg-[#00000096] w-full px-3 rounded-[15px] backdrop-blur-[1px]">
+              <div className="p-10 flex justify-center items-center m-auto">
+                <Button className='bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[173px] h-[45px]'
+                  onClick={() => { handleBookNowClick() }}>Book Your Sessions</Button>
               </div>
-            </>
+            </div>
           )
         }
       </Accordion>
