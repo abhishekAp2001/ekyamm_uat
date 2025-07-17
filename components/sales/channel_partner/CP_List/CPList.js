@@ -10,7 +10,7 @@ const CPList = ({ list }) => {
       .replace(/\s+/g, '')
       .trim();
   }
-    function formatDate(isoString) {
+  function formatDate(isoString) {
 
     const date = new Date(isoString);
 
@@ -59,25 +59,25 @@ const CPList = ({ list }) => {
                   <div className="flex items-start space-x-4">
                     <div className="flex-shrink-0 rounded-md bg-gray-100 p-2">
                       {/* Logo: replace src with your static logo or dynamic one */}
-                     <Avatar className="cursor-pointer">
-                                       {list?.generalInformation?.profileImageUrl ? (
-                                         <AvatarImage
-                                           src={list.generalInformation.profileImageUrl}
-                                           alt={`${list?.generalInformation?.firstName} ${list?.generalInformation?.lastName}`}
-                                         />
-                                       ) : null}
-                     
-                                       <AvatarFallback>
-                                         {list?.clinicName
-                                           ? list.clinicName
-                                             .split(" ")
-                                             .map((word) => word[0])
-                                             .join("")
-                                             .toUpperCase()
-                                           : `${list?.generalInformation?.firstName?.[0] || ""}${list?.generalInformation?.lastName?.[0] || ""}`.toUpperCase()}
-                                       </AvatarFallback>
-                                     </Avatar>
-                     
+                      <Avatar className="cursor-pointer">
+                        {list?.generalInformation?.profileImageUrl ? (
+                          <AvatarImage
+                            src={list.generalInformation.profileImageUrl}
+                            alt={`${list?.generalInformation?.firstName} ${list?.generalInformation?.lastName}`}
+                          />
+                        ) : null}
+
+                        <AvatarFallback>
+                          {list?.clinicName
+                            ? list.clinicName
+                              .split(" ")
+                              .map((word) => word[0])
+                              .join("")
+                              .toUpperCase()
+                            : `${list?.generalInformation?.firstName?.[0] || ""}${list?.generalInformation?.lastName?.[0] || ""}`.toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+
                     </div>
                     <div className="flex flex-col space-y-1 text-sm">
                       <span className="font-semibold text-base">
@@ -118,9 +118,19 @@ const CPList = ({ list }) => {
                       <span className="text-gray-700 font-medium">
                         <b>Date of Birth - </b>
                         <span className="font-normal">{list?.generalInformation?.dateOfBirth
-                            ? formatDate(list?.generalInformation?.dateOfBirth)
-                            : "Not added"
-                          }</span>
+                          ? formatDate(list?.generalInformation?.dateOfBirth)
+                          : "Not added"
+                        }</span>
+                      </span>
+                      <span className="text-gray-700 font-medium">
+                        <b>Number of patients </b>
+                        <span className="font-normal">
+                          {list?.patients
+                            ? list?.patients
+                            : 0
+                          }
+
+                        </span>
                       </span>
                     </div>
                   </div>
@@ -144,7 +154,15 @@ const CPList = ({ list }) => {
                   <div className="text-sm">
                     <div className="font-medium text-base">Address</div>
                     <div className="flex items-center text-gray-500">
-                      <MapPin className="w-4 h-4 mr-1" /> {list?.generalInformation?.residentialAddress || "Not added"}
+                      <MapPin className="w-4 h-4 mr-1" />
+                      {
+                        list?.generalInformation?.area &&
+                          list?.generalInformation?.city &&
+                          list?.generalInformation?.state &&
+                          list?.generalInformation?.pincode
+                          ? `${list.generalInformation.area}, ${list.generalInformation.city}, ${list.generalInformation.state}, ${list.generalInformation.pincode}`
+                          : "Not added"
+                      }
                     </div>
                   </div>
                 </div>

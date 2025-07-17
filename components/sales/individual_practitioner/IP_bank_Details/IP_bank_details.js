@@ -234,8 +234,8 @@ const IP_bank_details = () => {
             whatsappNumber: ip_details?.whatsappNumber,
             countryCode_emergency: ip_details?.countryCode_emergency,
             emergencyNumber: ip_details?.emergencyNumber,
-            residentialAddress: "", // Optional
-            googleMapAddress: "", // Optional
+            residentialAddress: ip_general_information?.address||"", // Optional
+            googleMapAddress: ip_general_information?.googleMapAddress||"", // Optional
           },
           practiceDetails: {
             logoUrl: profileImageUrl,

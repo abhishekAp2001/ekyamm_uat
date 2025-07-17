@@ -103,6 +103,8 @@ const P_Pay_For_Session = ({ type }) => {
         const payuPayload = response?.data?.data?.payuPayload
         payuPayload.fields.surl = "http://localhost:3000/api/success"
         payuPayload.fields.furl = "http://localhost:3000/api/failure"
+        // payuPayload.fields.surl = "https://hmfbknn3-3000.inc1.devtunnels.ms/api/success"
+        // payuPayload.fields.furl = "https://hmfbknn3-3000.inc1.devtunnels.ms/api/failure"
         setFormFields(payuPayload);
       }
     } catch (error) {
