@@ -129,6 +129,26 @@ const All_clinics = ({ list }) => {
 
                         </span>
                       </span>
+                      <span className="text-gray-700 font-medium">
+                        <b>Number of therapists </b>
+                        <span className="font-normal">
+                          {list?.therapistDetails?.numberOfTherapist
+                            ? list?.therapistDetails?.numberOfTherapist
+                            : 0
+                          }
+
+                        </span>
+                      </span>
+                      <span className="text-gray-700 font-medium">
+                        <b>Number of patients </b>
+                        <span className="font-normal">
+                          {list?.patients
+                            ? list?.patients
+                            : 0
+                          }
+
+                        </span>
+                      </span>
                     </div>
                   </div>
 
@@ -151,11 +171,11 @@ const All_clinics = ({ list }) => {
                   <div className="text-sm">
                     <div className="font-medium text-base">Address</div>
                     <div className="flex items-center text-gray-500">
-                      <MapPin className="w-4 h-4 mr-1" /> {list?.generalInformation?.residentialAddress &&
+                      <MapPin className="w-4 h-4 mr-1" /> {
                         list?.generalInformation?.city &&
                         list?.generalInformation?.state &&
                         list?.generalInformation?.pincode ? (
-                        `${list.generalInformation.residentialAddress}, ${list.generalInformation.city}, ${list.generalInformation.state}, ${list.generalInformation.pincode}`
+                        ` ${list.generalInformation.city}, ${list.generalInformation.state}, ${list.generalInformation.pincode}`
                       ) : (
                         "Not added"
                       )}

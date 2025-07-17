@@ -8,48 +8,48 @@ import { showSuccessToast } from '@/lib/toast';
 import axios from 'axios';
 import { Baseurl } from '@/lib/constants';
 const PaymentSuccess = () => {
-    const router = useRouter()
-    const searchParams = useSearchParams()
-    useEffect(() => {
-        const queryObj = {};
-        searchParams.forEach((value, key) => {
-            queryObj[key] = value;
-        });
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  useEffect(() => {
+    const queryObj = {};
+    searchParams.forEach((value, key) => {
+      queryObj[key] = value;
+    });
 
-        const payu = async () => {
-            try {
-                const response = await axios.post(
-                    `${process.env.NEXT_PUBLIC_BASE_URL}/v2/webhook/payu`,
-                    {...queryObj,isPayuHosted:true}
-                );
-                console.log('Webhook response data:', response.data);
-                console.log('Webhook response:', response);
-                
-        if (response?.data==="OK") {
-            showSuccessToast("Payment Successful")
-            setTimeout(() => {
-                router.push(`/patient/payment-confirmation?txnid=${queryObj?.txnid}`);
-            }, 1000);
+    const payu = async () => {
+      try {
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/v2/webhook/payu`,
+          { ...queryObj, isPayuHosted: true }
+        );
+        console.log('Webhook response data:', response.data);
+        console.log('Webhook response:', response);
+
+        if (response?.data === "OK") {
+          showSuccessToast("Payment Successful")
+          setTimeout(() => {
+            router.push(`/patient/payment-confirmation?txnid=${queryObj?.txnid}`);
+          }, 1000);
         }
-            } catch (error) {
-                console.error('Error calling webhook:', error);
-            }
-        };
+      } catch (error) {
+        console.error('Error calling webhook:', error);
+      }
+    };
 
-        payu();
-    }, [searchParams, router]);
+    payu();
+  }, [searchParams, router]);
 
   return (
     <div>
-        <div className="flex flex-col items-center justify-center min-h-screen bg-green-50 px-4">
-    <CheckCircle className="w-24 h-24 text-green-600 mb-6" />
-    <h1 className="text-3xl font-bold text-green-700 mb-2">
-      Payment Successful!
-    </h1>
-    <p className="text-green-800 text-lg">
-      Thank you.
-    </p>
-  </div>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-green-50 px-4">
+        <CheckCircle className="w-24 h-24 text-green-600 mb-6" />
+        <h1 className="text-3xl font-bold text-green-700 mb-2">
+          Payment Successful!
+        </h1>
+        <p className="text-green-800 text-lg">
+          Thank you.
+        </p>
+      </div>
     </div>
   )
 }
