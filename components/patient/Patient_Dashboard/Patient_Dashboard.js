@@ -82,7 +82,7 @@ const Patient_Dashboard = () => {
       try {
         setCounsellorsLoading(true);
 
-        
+
         const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/counsellors`, {
           params: filterParams,
           headers: {
@@ -108,7 +108,7 @@ const Patient_Dashboard = () => {
     };
     getCounsellors();
     getPatient();
-  }, [filterParams,patientSessionToken]);
+  }, [filterParams, patientSessionToken]);
 
   useEffect(() => {
     let count = 0;
@@ -180,9 +180,9 @@ const Patient_Dashboard = () => {
                 </Accordion>
               </>
             )}
-          </div>):(<div className="mt-[192px]">
-          <Upcoming_Sessions
-          dashboard = {true}/>
+          </div>) : (<div className="mt-[192px]">
+            <Upcoming_Sessions
+              dashboard={true} />
           </div>)}
 
           {/* Session Booking Drawer */}
@@ -194,12 +194,12 @@ const Patient_Dashboard = () => {
           />
         </div>
       </div>
-      
+
       {showCounsellorProfile ? (
         <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90">
           <div className="relative h-screen overflow-y-auto">
             <Profile
-              patient = {patient}
+              patient={patient}
               setShowCounsellorProfile={setShowCounsellorProfile}
               setShowCertifications={setShowCertifications}
               setShowClientTestimonials={setShowClientTestimonials}
@@ -229,7 +229,7 @@ const Patient_Dashboard = () => {
           <div className="relative h-screen overflow-y-auto">
             <Client_Testimonial
               setShowClientTestimonials={setShowClientTestimonials}
-              doc = {selectedCounsellors}
+              doc={selectedCounsellors}
             />
           </div>
         </div>
@@ -241,7 +241,7 @@ const Patient_Dashboard = () => {
         <div className="fixed top-0 left-0 right-0 z-50 flex flex-col gap-8 bg-[#e7d6ec] max-w-[576px] mx-auto">
           <div className="relative h-screen overflow-y-auto">
             <Filter
-              token = {patientSessionToken}
+              token={patientSessionToken}
               setShowFilter={setShowFilter}
               onApplyFilter={handleApplyFilter}
               initialParams={filterParams}

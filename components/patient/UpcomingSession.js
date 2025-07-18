@@ -72,6 +72,7 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
         });
         if (response?.data?.success) {
           setTherapist(response?.data?.data?.practitionerTagged[0]);
+          setCookie("selectedCounsellor", JSON.stringify(response?.data?.data?.practitionerTagged[0]));
         }
       } catch (err) {
         console.log("err", err);

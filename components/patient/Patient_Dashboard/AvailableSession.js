@@ -76,7 +76,7 @@ export default function AvailableSession({ loading = false, patient }) {
             alt="History"
           />
           <span className="text-2xl font-semibold text-black">
-            {availableCredits}/{totalCredits}
+            {availableCredits}
           </span>
           <span className="max-[376px]:text-[10px] text-xs font-medium text-[#6D6A5D]">
             Available Sessions
