@@ -108,9 +108,9 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
               className="rounded-[12px] bg-[#ffffff80] opacity-80 relative mb-1"
               key={index}
             >
-              <AccordionTrigger className="flex items-center p-4">
-                <div className="flex items-center gap-3">
-                  <div className="flex flex-col">
+              <AccordionTrigger className="flex items-center p-4 dashboard_accordion gap-0">
+                <div className="flex items-center gap-2 md:gap-3">
+                  <div className="flex flex-col w-[120px] md:w-fit">
                     <p className="text-[16px] font-bold text-gray-800 flex flex-col">
                       <span className="text-xs text-[#6D6A5D] font-medium">
                         {convertUTCtoIST(session?.sessionTime?.from).date}
@@ -122,9 +122,9 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
                     </p>
                   </div>
 
-                  <div className="border-gray-300 border w-[1px] h-[56px] mx-3"></div>
+                  <div className="border-gray-300 border w-[1px] h-[56px] mx-0 md:mx-3"></div>
 
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center gap-2 md:gap-2">
                     <Avatar className="w-[42px] h-[42px]">
                       <AvatarImage
                         src={patient?.practitionerTagged[0]?.generalInformation?.profileImageUrl}
@@ -140,13 +140,13 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions }) => {
                         }
                       </AvatarFallback>
                     </Avatar>
-                    <div className="flex flex-col">
+                    <div className="flex flex-col md:gap-1">
                       <p className="text-[14px] font-bold text-gray-800">
                         {patient?.practitionerTagged[0]?.generalInformation?.firstName} {patient?.practitionerTagged[0]?.generalInformation?.lastName}
                       </p>
                       <Phone
-                        size={28}
-                        className="bg-[#776EA5] fill-white text-white rounded-full p-[7px] mt-1"
+                        size={22}
+                        className="bg-[#776EA5] fill-white text-white rounded-full p-[4px]"
                       />
                     </div>
                   </div>
