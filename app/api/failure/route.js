@@ -4,7 +4,7 @@ export async function POST(req) {
   const html = `
     <html>
       <head>
-        <meta http-equiv="refresh" content="0; url=/patient/dashboard" />
+        <meta http-equiv="refresh" content="0; url=/patient/payment-failure" />
       </head>
       <body>
         Redirecting to confirmation page...

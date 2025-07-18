@@ -26,6 +26,7 @@
     "cmdk": "^1.1.1",
     "cookies-next": "^6.0.0",
     "country-flag-emoji-polyfill": "^0.1.8",
+    "crypto": "^1.0.1",
     "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
     "html2canvas": "^1.4.1",

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import crypto from 'crypto';
 
 export async function POST(req) {
   let body = {};
@@ -18,9 +19,25 @@ export async function POST(req) {
     console.log('Unsupported Content-Type:', contentType);
   }
 
-  console.log('Received body:', body);
+  const {
+    key = '',
+    txnid = '',
+    amount = '',
+    productinfo = '',
+    firstname = '',
+    email = '',
+    status = '',
+    hash = '',
+  } = body;
 
-  const params = new URLSearchParams(body).toString();
+  const hashString = `${process.env.PAYU_HOSTED_SALT}|${status}|||||||||||${email}|${firstname}|${productinfo}|${amount}|${txnid}|${key}`;
+  const generatedHash = crypto.createHash('sha512').update(hashString).digest('hex');
+  const hashIsValid = generatedHash === hash;
+  const params = new URLSearchParams({
+    ...body,
+    hashIsValid: hashIsValid ? '1' : '0',
+  }).toString();
+
   const url = `/patient/payment-success?${params}`;
 
   const html = `
@@ -39,5 +56,3 @@ export async function POST(req) {
     headers: { 'Content-Type': 'text/html' },
   });
 }
-
-
