@@ -30,7 +30,10 @@ export async function POST(req) {
     hash = '',
   } = body;
 
-  const hashString = `${process.env.PAYU_HOSTED_SALT}|${status}|||||||||||${email}|${firstname}|${productinfo}|${amount}|${txnid}|${key}`;
+  const salt = process.env.PAYU_HOSTED_SALT?.trim() ? process.env.PAYU_HOSTED_SALT : 'u4wBPKJGOHPFZjHhsVLLpmaTwgWhMiv8';
+  console.log("ENV",process.env)
+  console.log("salt",process.env.PAYU_HOSTED_SALT)
+  const hashString = `${salt}|${status}|||||||||||${email}|${firstname}|${productinfo}|${amount}|${txnid}|${key}`;
   const generatedHash = crypto.createHash('sha512').update(hashString).digest('hex');
   const hashIsValid = generatedHash === hash;
   const params = new URLSearchParams({

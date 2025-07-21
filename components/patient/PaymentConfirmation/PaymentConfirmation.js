@@ -87,6 +87,7 @@ const PaymentConfirmation = () => {
       .no-print { display: none; }
     `,
   });
+  
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
@@ -207,7 +208,7 @@ const PaymentConfirmation = () => {
               Moving to homepage in {secondsLeft} seconds
             </div>
           </div>
-          <div className="bg-gradient-to-b from-[#fce8e5] to-[#fce8e5] flex flex-col items-center gap-3  py-[23px] px-[17px] left-0 right-0 ">
+          <div className=" flex flex-col items-center gap-3  py-[23px] px-[17px] left-0 right-0 ">
             <Footer_bar />
           </div>
         </div>
