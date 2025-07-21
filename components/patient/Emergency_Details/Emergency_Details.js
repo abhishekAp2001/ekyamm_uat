@@ -457,10 +457,10 @@ const Emergency_Details = ({ type }) => {
 
           {/* WhatsApp Number */}
           <div className="mt-[22px]">
-            <div className="flex items-center">
+            <div className="flex items-center justify-between">
               <Label
                 htmlFor="whatsappNumber"
-                className={`text-[15px] w-[55%] mb-2 ${
+                className={`text-[15px] mb-2 ${
                   isMobileValid(formData.primaryMobileNumber)
                     ? "text-gray-500"
                     : "text-[#00000040]"
@@ -468,7 +468,7 @@ const Emergency_Details = ({ type }) => {
               >
                 WhatsApp Number
               </Label>
-              <div className="flex gap-[6px] items-center w-[45%]">
+              <div className="flex gap-[6px] items-center">
                 <Checkbox
                 id="same_as_mobile"
                   checked={sameAsMobile}

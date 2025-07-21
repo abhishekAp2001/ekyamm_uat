@@ -563,10 +563,10 @@ const IP_Details = () => {
               )}
           </div>
           <div className="mt-[22px]">
-            <div className="flex items-center">
+            <div className="flex items-center justify-between">
               <Label
                 htmlFor="whatsappNumber"
-                className={`text-[15px] w-[55%] mb-[7.59px] ${
+                className={`text-[15px] mb-[7.59px] ${
                   isMobileValid(formData.primaryMobileNumber)
                     ? "text-gray-500"
                     : "text-[#00000040]"
@@ -574,7 +574,7 @@ const IP_Details = () => {
               >
                 Whatsapp Number *
               </Label>
-              <div className="flex gap-[6px] items-center w-[45%]">
+              <div className="flex gap-[6px] items-center">
                 <Checkbox
                 id='same_as_mobile'
                   className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"

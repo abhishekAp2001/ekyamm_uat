@@ -41,8 +41,9 @@ const Invoice = () => {
         return tax
     }
     const totalAmount = sessions_selection?.session_count * sessions_selection?.total
+    
     return (
-        <div className='print-only hidden'>
+        <div className='print-only'>
             <div className="invoice-box" id="invoice">
                 <table cellPadding={0} cellSpacing={0}>
                     <tbody><tr>
@@ -218,7 +219,7 @@ const Invoice = () => {
         .print-only {
             visibility: hidden; /* Hide on screen */
             position: absolute; /* Prevent layout interference */
-            top: 0;
+            top: -5999px;
             left: 0;
             width: 100%;
           }

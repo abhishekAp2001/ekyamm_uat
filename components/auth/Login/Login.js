@@ -135,8 +135,8 @@ const Login = () => {
                 </div>
                 <div className="flex justify-between mt-[11.72px]">
                   <div className="flex gap-[6px] items-center">
-                    <Checkbox className="w-4 h-4 border border-[#776EA5] rounded-[1.8px]" />
-                    <label htmlFor="" className="text-[12px] text-gray-500">
+                    <Checkbox className="w-4 h-4 border border-[#776EA5] rounded-[1.8px]" id="forgot-password"/>
+                    <label htmlFor="forgot-password" className="text-[12px] text-gray-500">
                       Remember Me
                     </label>
                   </div>
