@@ -10,6 +10,7 @@ import axios from "axios";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { showErrorToast } from "@/lib/toast";
+import { usePathname } from "next/navigation";
 
 const Page = () => {
   const [email, setEmail] = useState("");
@@ -110,7 +111,7 @@ const Page = () => {
     }
   };
 
-  const pathname = window.location.pathname
+  const pathname = usePathname()
 
   return (
     <> 

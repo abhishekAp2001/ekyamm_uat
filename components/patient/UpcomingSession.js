@@ -19,7 +19,6 @@ import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import Profile from "./practitioner/Profile";
 import Certifications from "./Certifications/Certifications";
 import Client_Testimonial from "./Client_Testimonials/Client_Testimonial";
-import { ChevronDown,Share2,Trash } from "lucide-react";
 const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions,pastSession }) => {
   const [patientSessionToken, setPatientSessionToken] = useState(null);
   const [patient, setPatient] = useState(null);
@@ -205,7 +204,7 @@ function formatSessionTime(sessionTime) {
             upcomingsessions?.map((session, index) => {
               const isExpanded = expandedIndex === index;
               return(
-                <div className="bg-[#FFFFFF80] rounded-2xl p-4 w-full max-w-md mx-auto transition-all duration-300 mb-2"
+                <div className="bg-[#FFFFFF80] rounded-2xl p-4 w-full mx-auto transition-all duration-300 mb-2"
               key={index}>
                 {/* COLLAPSED HEADER */}
                 {!isExpanded && (
@@ -292,7 +291,10 @@ function formatSessionTime(sessionTime) {
                     <Button
                       disabled = {!isWithinTwoMinutesBefore(session?.sessionTime?.from)}
                       className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[14px] font-[600] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center w-[48%] disabled:opacity-60 disabled:cursor-not-allowed"
-                      onClick={() => {handleStartCall(session?._id,session?.videoRoomName) }}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleStartCall(session?._id,session?.videoRoomName) 
+                      }}
                     >
                       Start Call
                     </Button>
@@ -394,7 +396,7 @@ function formatSessionTime(sessionTime) {
                         className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[14px] font-[600] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center w-[48%] disabled:opacity-60 disabled:cursor-not-allowed"
                         onClick={(e) => { 
                           e.stopPropagation();
-                          handleStartCall(session?._id,session?.videoRoomName) }}
+                          handleStartCall(session?._id,session?.videoRoomName)}}
                       >
                         Start Call
                       </Button>
