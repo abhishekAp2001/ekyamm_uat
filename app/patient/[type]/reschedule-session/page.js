@@ -1,16 +1,12 @@
 import Reschedule_Session from '@/components/patient/Reschedule_Session/Reschedule_Session'
-import React, { Suspense } from 'react'
- 
+import React from 'react'
+
 const page = () => {
   return (
     <>
-      <Suspense>
-        <Reschedule_Session/>
-      </Suspense>
+      <Reschedule_Session/>
     </>
   )
 }
- 
+
 export default page
- 
- 
