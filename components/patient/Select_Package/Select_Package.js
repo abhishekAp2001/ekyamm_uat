@@ -67,7 +67,7 @@ const Select_Package = () => {
   return (
     <>
       <div className="flex flex-col h-screen bg-gradient-to-b space-y-4 from-[#f9f9f9] to-[#ffe7e4] max-w-[576px] mx-auto">
-        <div className="flex items-center gap-1 p-4 bg-[#faf7f7] fixed top-0 left-0 right-0 max-w-[576px] mx-auto z-10">
+        <div className="flex items-center gap-1 p-4 bg-[#e2dbf9] fixed top-0 left-0 right-0 max-w-[576px] mx-auto z-10">
           <ChevronLeft
             onClick={() => {
               router.push("/patient/dashboard");
@@ -80,13 +80,13 @@ const Select_Package = () => {
           </div>
           <div className="h-6 w-6" />
         </div>
-        <div className="bg-gradient-to-b from-[#f9f9f9] to-[#ffe7e4] pt-[18%] lg:pt-[10%] flex-1 overflow-y-auto pb-[110px] ">
+        <div className="bg-gradient-to-b from-[#DFDAFB] to-[#ffe7e4] pt-[18%] lg:pt-[10%] flex-1 overflow-y-auto pb-[110px] ">
           <div className=" px-4 py-0 ">
-            <div className="bg-[#FFFFFF80] p-4 rounded-[12px]">
+            <div className="bg-[#ffffff60] p-4 rounded-[12px]">
               <p className="text-[15px] font-medium text-gray-500 mb-[7.59px]">
                 Patient
               </p>
-              <div className="bg-[#FFFFFF80] py-2 px-3 flex gap-3 items-center rounded-[10px] ">
+              <div className="bg-[#ffffff24] py-2 px-3 flex gap-3 items-center rounded-[10px] ">
                 <Avatar>
                   <AvatarImage
                     className="rounded-full object-cover w-[42px] h-[42px]"
@@ -113,7 +113,7 @@ const Select_Package = () => {
               <p className="text-[15px] text-gray-500 mb-[7.59px] font-medium  mt-5">
                 Assign Practitioner
               </p>
-              <div className="bg-[#FFFFFF80] py-2 px-3 flex items-center gap-3 rounded-[10px] ">
+              <div className="bg-[#ffffff24] py-2 px-3 flex items-center gap-3 rounded-[10px] ">
                 <Avatar>
                   <AvatarImage
                     className="rounded-full object-cover w-[42px] h-[42px]"
@@ -167,7 +167,7 @@ const Select_Package = () => {
                 <Select value="Counselling" disabled>
                   <SelectTrigger
                     id="session-type"
-                    className="w-full h-[39px] rounded-[7.26px] bg-white p-4 text-sm font-semibold text-black"
+                    className="w-full h-[39px] rounded-[7.26px] bg-[#ffffff50] p-4 text-sm font-semibold text-black"
                   >
                     <SelectValue placeholder="Select type..." />
                   </SelectTrigger>

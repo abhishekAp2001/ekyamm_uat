@@ -4,12 +4,12 @@
   "description": "Ekyamm",
   "icons": [
     {
-      "src": "/images/ekyamm.png",
+      "src": "/images/logo-circle-hands.svg",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/images/ekyamm.png",
+      "src": "/images/logo-circle-hands.svg",
       "sizes": "512x512",
       "type": "image/png"
     }

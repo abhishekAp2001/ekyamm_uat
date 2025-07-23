@@ -67,7 +67,7 @@ const Psychiatrist_profile = () => {
       </div>
 
       {/* Main Card */}
-      <div className="pt-[120px]">
+      <div className="pt-[120px] w-full">
         <div className="flex justify-center items-center rounded-[16px] border bg-[#ffffffd1] w-full h-auto">
           <div className="w-full h-auto px-4 py-6 flex flex-col items-center justify-start text-center">
             {/* CH Circle */}
@@ -167,8 +167,9 @@ const Psychiatrist_profile = () => {
             ) : (
               <div className="w-full h-[56px] flex items-center justify-between bg-gradient-to-r from-[#bba3e438] to-[#eda1974d] rounded-[8px] p-[12px] gap-[10px] mt-3"
                 >
-                <div className="flex items-center gap-[10px] w-full"
+                <div className="flex items-center justify-between gap-[10px] w-full"
                 onClick={() => { setDoctorDrawer(true) }}>
+                  <div className="flex items-center gap-[10px]">
                   <Image
                     src="/images/medical_services.png"
                     alt="Medical Icon"
@@ -176,7 +177,7 @@ const Psychiatrist_profile = () => {
                     height={32}
                     className="rounded-full object-cover"
                   />
-                  <span className="text-[15px] font-medium">{clinic?.doctorDetails?.firstName} {clinic?.doctorDetails?.lastName}</span>
+                  <span className="text-[15px] font-medium">{clinic?.doctorDetails?.firstName} {clinic?.doctorDetails?.lastName}</span></div>
                   <ChevronLeft className="rotate-180 text-[#8F8F8F]" />
                 </div>
                 
