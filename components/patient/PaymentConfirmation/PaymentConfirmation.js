@@ -36,7 +36,7 @@ const PaymentConfirmation = () => {
       }
     }
     else if(!cookie){
-      router.push('/login')
+      router.push('/patient/login')
     }
   }, []);
   useEffect(() => {
@@ -49,7 +49,7 @@ const PaymentConfirmation = () => {
       }
     }
     else if(!cookie){
-      router.push('/login')
+      router.push('/patient/login')
     }
   }, []);
 
@@ -205,7 +205,7 @@ const PaymentConfirmation = () => {
               Dashboard
             </Button>
             <div className="flex justify-center mt-2 text-[12px] text-[#000000] opacity-30 font-[500]">
-              Moving to homepage in {secondsLeft} seconds
+              Moving to Dashboard in {secondsLeft} seconds
             </div>
           </div>
           <div className=" flex flex-col items-center gap-3  py-[23px] px-[17px] left-0 right-0 ">

@@ -103,7 +103,7 @@ const Emergency_Details = ({ type }) => {
 
   // Load data from cookie on mount
   useEffect(() => {
-    const savedData = getCookie("cp_doctor_details");
+    const savedData = localStorage.getItem("emergency_details")
     if (savedData) {
       const parsedData = JSON.parse(savedData);
       setFormData((prev) => ({
@@ -180,7 +180,7 @@ const Emergency_Details = ({ type }) => {
         whatsappNumber: formData.whatsappNumber,
       },
     };
-
+    localStorage.setItem("emergency_details",JSON.stringify(payload))
     // router.push(`/patient/dashboard`);
     try {
       const response = await axios.post(
@@ -258,8 +258,8 @@ const Emergency_Details = ({ type }) => {
     },[])
   return (
     <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col max-w-[576px] mx-auto">
-      <Emergency_Header />
-      <div className="min-h-screen pt-[12%] pb-[20%] lg:pb-[14%] overflow-auto px-[17px]">
+      <Emergency_Header type={type}/>
+      <div className="min-h-screen pt-[10%] pb-[20%] lg:pb-[14%] overflow-auto px-[17px]">
         <div className="mt-3 lg:mt-0 bg-[#FFFFFF80] rounded-[12px] p-4 px-3">
           <strong className="text-[15px] text-black font-semibold">
             Emergency Contact Details
@@ -595,7 +595,7 @@ const Emergency_Details = ({ type }) => {
                 </DrawerTitle>
                 <DrawerDescription className="mt-6 flex gap-3 w-full">
                   <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
-                  onClick={() => handleClose()}>
+                  onClick={() => router.push(`/patient/${type}/family-details`)}>
                     Confirm
                   </Button>
 

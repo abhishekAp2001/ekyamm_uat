@@ -149,7 +149,7 @@ const IP_bank_details = () => {
 
   const uploadImage = async (filename, type) => {
     try {
-      const file = base64ToFile(filename, "myImage.png");
+      const file = await base64ToFile(filename, 0.6);
       const form = new FormData();
       form.append("filename", file);
       const response = await axios.post(`v2/psychiatrist/uploadImage`, form);

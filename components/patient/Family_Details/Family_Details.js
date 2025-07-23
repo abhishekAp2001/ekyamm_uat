@@ -102,7 +102,7 @@ const Family_Details = ({ type }) => {
 
   // Load data from cookie on mount
   useEffect(() => {
-    const savedData = getCookie("cp_doctor_details");
+    const savedData = localStorage.getItem("family_details");
     if (savedData) {
       const parsedData = JSON.parse(savedData);
       setFormData((prev) => ({
@@ -179,7 +179,7 @@ const Family_Details = ({ type }) => {
         whatsappNumber: formData.whatsappNumber,
       },
     };
-
+    localStorage.setItem("family_details",JSON.stringify(formData))
     try {
       const response = await axios.post(
         process.env.NEXT_PUBLIC_BASE_URL + "/v2/cp/patient/familyMember",
@@ -596,7 +596,7 @@ const Family_Details = ({ type }) => {
                 </DrawerTitle>
                 <DrawerDescription className="mt-6 flex gap-3 w-full">
                   <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
-                  onClick={() => handleClose()}
+                  onClick={() => router.push(`/patient/${type}/details`)}
                   >
                     Confirm
                   </Button>

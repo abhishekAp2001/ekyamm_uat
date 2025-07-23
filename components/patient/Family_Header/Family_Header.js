@@ -45,7 +45,7 @@ const Family_Header = ({ type }) => {
                         </DrawerTitle>
                         <DrawerDescription className="mt-6 flex gap-3 w-full">
                           <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
-                          onClick={() => handleClose()}>
+                         onClick={() => router.push(`/patient/${type}/details`)}>
                             Confirm
                           </Button>
         

@@ -43,7 +43,7 @@ const P_Pay_For_Session = ({ type }) => {
       }
     }
     else if (!cookie) {
-      router.push('/login')
+      router.push('/patient/login')
     }
   }, []);
   useEffect(() => {
@@ -56,7 +56,7 @@ const P_Pay_For_Session = ({ type }) => {
       }
     }
     else if (!cookie) {
-      router.push('/login')
+      router.push('/patient/login')
     }
   }, []);
 
@@ -70,7 +70,7 @@ const P_Pay_For_Session = ({ type }) => {
       }
     }
     else if (!cookie) {
-      router.push('/login')
+      router.push('/patient/login')
     }
   }, []);
 
@@ -116,6 +116,23 @@ const P_Pay_For_Session = ({ type }) => {
       payuFormRef.current?.submit();
     }
   }, [formFields]);
+  function getFormattedDateTime() {
+  const today = new Date();
+
+  const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+  const datePart = today.toLocaleDateString('en-US', options);
+
+  let hours = today.getHours();
+  const minutes = today.getMinutes().toString().padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+
+  const timePart = `${hours}:${minutes} ${ampm}`;
+
+  return `${datePart} | ${timePart}`;
+}
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
@@ -131,7 +148,7 @@ const P_Pay_For_Session = ({ type }) => {
               Session
             </strong>
             <p className="text-center mb-4">
-              <span className="text-sm text-[#776EA5] font-black">Friday, 11 December 2024 | 11:00 AM</span>
+              <span className="text-sm text-[#776EA5] font-black">{getFormattedDateTime()}</span>
             </p>
             <div className="mb-3 bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[12px] p-2 flex justify-between px-2">
               <div>

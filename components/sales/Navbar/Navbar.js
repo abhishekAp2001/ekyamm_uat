@@ -2,14 +2,14 @@ import Image from 'next/image'
 import React, { useRef } from 'react'
 import "./navbar.css";
 import Link from 'next/link';
- 
+import { usePathname } from 'next/navigation';
 const Navbar = ({onStartClick}) => {
   const formRef = useRef();
    
       const handleButtonClick = () => {
         formRef.current?.openForm();
       };
-    const pathname = window.location.pathname
+    const pathname = usePathname()
   return (
     <>
       <div className="fixed top-0 left-0 right-0 z-10 bg-white shadow-md py-2 md:py-5 px-[17px] md:px-[6%] flex flex-col navbar_sec">
