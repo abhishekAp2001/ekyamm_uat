@@ -315,7 +315,15 @@ const Patient_Pays_Registration = ({ type }) => {
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
-
+        <div className='m-auto pt-5'>
+      <Image
+              src="/images/patient-logo.png"
+              alt="Company Logo"
+              width={100}
+              height={60}
+              className="cursor-pointer w-full h-[60px]"
+            />
+            </div>
         <div className="h-full pt-[15%] lg:pt-[10%] pb-[20%] lg:pb-[12%]  overflow-auto px-[16px]">
           <div className="bg-[#FFFFFFB2] rounded-[12px] p-5 mt-[25px] relative">
             <div>

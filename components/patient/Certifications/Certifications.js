@@ -46,9 +46,9 @@ const certificationList = [
 
 const Certifications = ({ setShowCertifications, doc }) => {
   return (
-    <div className="min-h-screen w-full bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] px-4 pt-2 pb-6 max-w-[576px] mx-auto">
+    <div className="min-h-screen w-full px-4 pt-2 pb-6 max-w-[576px] mx-auto" style={{ background: `linear-gradient(rgb(223, 218, 251) 0%, rgb(249, 204, 197) 100%), linear-gradient(0deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5))`}}>
       {/* Header */}
-      <div className="flex items-center gap-2 mb-4 fixed top-0 left-0 right-0 px-4 bg-[#eeecfb] max-w-[576px] mx-auto">
+      <div className="flex items-center gap-2 mb-4 fixed top-0 left-0 right-0 px-4 bg-[#] max-w-[576px] mx-auto">
         <div className="py-4 flex items-center gap-2">
           <ChevronLeft
             className="w-5 h-5 text-black"
@@ -88,7 +88,7 @@ const Certifications = ({ setShowCertifications, doc }) => {
                         src={img}
                         alt="certificate"
                         fill
-                        className="object-cover rounded-[9px]"
+                        className="object-cover"
                       />
                       {/* Black overlay with zoom icon */}
                       <div className="absolute inset-0 bg-[#000000b3] transition-opacity duration-200 flex items-center justify-center">
@@ -96,7 +96,7 @@ const Certifications = ({ setShowCertifications, doc }) => {
                           src="/images/preview.png"
                           alt="preview"
                           width={20}
-                          height={20} className="object-cover rounded-[9px]"
+                          height={20} className="object-cover"
                         />
                       </div>
                     </div>
@@ -106,11 +106,11 @@ const Certifications = ({ setShowCertifications, doc }) => {
                     {/* Cancel button */}
                     <div className="absolute top-2 right-2">
                       <DialogClose asChild>
-                        <button className="">
+                        {/* <button className="">
                           <span className="text-white text-xl border-0">
                             <X />
                           </span>
-                        </button>
+                        </button> */}
                       </DialogClose>
                     </div>
 

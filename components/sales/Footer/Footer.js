@@ -29,8 +29,8 @@ const Footer = () => {
             <Image
               src="/images/Play-store.png"
               alt="Play Store"
-              width={110}
-              height={50}
+              width={120}
+              height={41}
               className="logo w-auto h-[41px] md:w-full md:h-auto"
             />
           </Link>
@@ -42,8 +42,8 @@ const Footer = () => {
             <Image
               src="/images/App-store.png"
               alt="App Store"
-              width={110}
-              height={50}
+              width={120}
+              height={41}
               className="logo w-auto h-[41px] md:w-full md:h-auto"
             />
           </Link>

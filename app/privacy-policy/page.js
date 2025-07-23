@@ -21,17 +21,6 @@ const Page = () => {
     );
   }, []);
 
-  const handleContactClick = () => {
-    if (isMobile) {
-      window.open(
-        "https://api.whatsapp.com/send/?phone=9326780323&text&type=phone_number&app_absent=0",
-        "_blank"
-      );
-    } else {
-      setFormOpen(true);
-    }
-  };
-
   const formRef = useRef();
   
     useEffect(() => {
@@ -60,7 +49,7 @@ const Page = () => {
         />
       </Head>
 
-      <Navbar onStartClick={handleButtonClick}/>
+      <Navbar onStartClick={handleButtonClick} />
 
       {isFormOpen && (
         <div
@@ -396,7 +385,13 @@ const Page = () => {
           We store your data in the cloud and on India servers. If you would
           like to delete the personal data that you have provided or uploaded or
           created on Ekyamm platform{" "}
-          <Link href="/request-account-delete" className="text-[#0d6efd] font-[400]">click here</Link>.
+          <Link
+            href="/request-account-delete"
+            className="text-[#0d6efd] font-[400]"
+          >
+            click here
+          </Link>
+          .
         </p>
         <br />
 
@@ -462,9 +457,9 @@ const Page = () => {
       </section>
       <Footer />
 
-            <div id="contact-form-placeholder" className='m-0'>
-             <Contact_Form  ref={formRef}/>
-            </div>
+      <div id="contact-form-placeholder" className="m-0">
+        <Contact_Form ref={formRef} />
+      </div>
     </>
   );
 };

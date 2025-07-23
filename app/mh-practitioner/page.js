@@ -209,7 +209,7 @@ const Page = () => {
                   MH Practitioner
                 </a>
               </li>
-              <li className="mr-[35px] font-light text-[18px] leading-none">
+              <li className="mr-[35px] font-normal text-[18px] leading-none">
                 <a href="./" className="no-underline text-inherit text-[16px]">
                   Fertility
                 </a>

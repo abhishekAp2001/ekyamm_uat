@@ -315,11 +315,8 @@ const Schedule_Session = () => {
   const handleTimeFormat = (dateTime) => {
     const utcDate = new Date(dateTime);
 
-    // Convert to IST by adding 5 hours 30 minutes offset
-    const istOffset = 5.5 * 60; // IST is UTC+5:30
-    const istTime = new Date(utcDate.getTime() + istOffset * 60 * 1000);
+    const istTime = new Date(utcDate.getTime());
 
-    // Get parts
     const hours = istTime.getHours() % 12 || 12;
     const minutes = istTime.getMinutes().toString().padStart(2, '0');
     const ampm = istTime.getHours() >= 12 ? 'PM' : 'AM';
@@ -680,7 +677,6 @@ const Schedule_Session = () => {
                 value={sessionDetail}
                 onChange={(e) => setSessionDetail(e.target.value)}
                 placeholder="Enter session details here"
-                disabled
                 className="w-full h-[100px] rounded-[7.26px] bg-white px-3 py-2 border border-[#E6E6E6] opacity-80"
               />
             </div>

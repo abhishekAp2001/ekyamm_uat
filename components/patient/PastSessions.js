@@ -7,7 +7,7 @@ const PastSessions = ({sessions}) => {
   function convertUTCtoIST(utcDateStr) {
     const utcDate = new Date(utcDateStr);
     const IST_OFFSET = 5.5 * 60;
-    const istTime = new Date(utcDate.getTime() + IST_OFFSET * 60 * 1000);
+    const istTime = new Date(utcDate.getTime());
     const day = istTime.getDate();
     const month = istTime.toLocaleString('en-US', { month: 'long' });
     const dateStr = `${day} ${month}`;
@@ -53,9 +53,10 @@ const PastSessions = ({sessions}) => {
   return formattedDate;
 }
   return (
+    <>
+    {sessions && sessions?.length > 0 ? (
     <div className="">
     <h2 className="text-sm font-semibold py-2">Past Sessions</h2>
-    {sessions && sessions?.length > 0 ? (
     <>
       {sessions?.map((session, index) => (
       <div
@@ -78,13 +79,14 @@ const PastSessions = ({sessions}) => {
         </div>
       </div>
     ))}
-    </>):
+    </>
+  </div>):
     (<>
-      <div className="flex items-center justify-center">
+      {/* <div className="flex items-center justify-center">
         <p className="text-gray-500">No past sessions available</p>
-      </div>
+      </div> */}
     </>)}
-  </div>
+    </>
   )
 }
 

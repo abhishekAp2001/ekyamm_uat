@@ -15,7 +15,7 @@ import {
 import { Button } from "../../ui/button";
 import { X } from "lucide-react";
 import { useState } from "react";
-const Emergency_Header = () => {
+const Emergency_Header = ({ type }) => {
   const [show, setShow] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -54,7 +54,7 @@ const Emergency_Header = () => {
                         </DrawerTitle>
                         <DrawerDescription className="mt-6 flex gap-3 w-full">
                           <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
-                          onClick={() => handleClose()}>
+                          onClick={() => router.push(`/patient/${type}/family-details`)}>
                             Confirm
                           </Button>
         

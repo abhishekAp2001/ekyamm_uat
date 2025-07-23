@@ -400,6 +400,7 @@ const PP_Details = ({ type }) => {
 
   const handleSave = async () => {
     if (isFormValid()) {
+      localStorage.setItem("pp_details",JSON.stringify(formData))
       handleUpdatePatientDetails();
     } else {
       setTouched({
@@ -467,7 +468,7 @@ const PP_Details = ({ type }) => {
 
   const uploadImage = async (filename, type) => {
     try {
-      const file = base64ToFile(filename, "myImage.png");
+      const file = await base64ToFile(filename, 0.6);
       const form = new FormData();
       form.append("filename", file);
       const response = await axios.post(
@@ -485,7 +486,7 @@ const PP_Details = ({ type }) => {
       }
     } catch (error) {
       if (error.forceLogout) {
-        router.push("/login");
+        router.push("/patient/login");
       } else {
         showErrorToast(error?.response?.data?.error?.message);
       }
@@ -992,7 +993,7 @@ const PP_Details = ({ type }) => {
                 </DrawerTitle>
                 <DrawerDescription className="mt-6 flex gap-3 w-full">
                   <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
-                  onClick={() => handleClose()}>
+                  onClick={() => router.push("/patient/login")}>
                     Confirm
                   </Button>
 

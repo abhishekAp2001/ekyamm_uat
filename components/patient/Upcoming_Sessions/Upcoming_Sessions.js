@@ -91,7 +91,7 @@ useEffect(() => {
           getPatientSession();
   }, [patientSessionToken]);
   return (
-    <div className="relative h-screen max-w-[576px]  flex flex-col  bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5] ">
+    <div className="relative h-screen max-w-[576px]  flex flex-col  bg-gradient-to-b space-y-4 from-[#e7d6ec] to-[#F9CCC5] ">
       {/* Fixed Header */}
       {/* <div className="fixed top-0 left-0 right-0 z-50 flex flex-col gap-8 bg-[#e7d6ec] max-w-[576px] mx-auto">
         Gradient Header
@@ -168,10 +168,14 @@ useEffect(() => {
       {dashboard ? (
         <></>
       ):(
-        <div className="flex items-center justify-between p-5">
+       <>
+         <div className="flex items-center justify-between py-5 ps-2 pe-5">
           {/* Left Icon */}
-          <ChevronLeft size={28} className="text-black cursor-pointer" 
+         <div className="flex items-center text-[16px] font-semibold text-gray-800">
+           <ChevronLeft size={28} className="text-black cursor-pointer" 
           onClick={()=>{router.push("/patient/patient-profile")}}/>
+          Session Details
+         </div>
           {/* Right Side Image */}
           <Image
           onClick={()=>{router.push('/patient/dashboard')}}
@@ -182,14 +186,15 @@ useEffect(() => {
             className="bg-transparent"
           />
         </div>
+       </>
       )}
       {/* Scrollable Body */}
       { loading ? (
         <div className="flex justify-center"><Loader2 className="w-6 h-6 animate-spin" aria-hidden="true" /></div>):
         (
-          <div className=" flex-1 overflow-y-auto px-3 pb-5">
+          <div className=" flex-1 overflow-y-auto px-4 pb-5">
         {/* Filter Row */}
-        <div className="flex justify-between items-center my-2">
+        <div className="flex justify-between items-center my-2 ">
           <strong className="text-sm text-black font-semibold">
             Upcoming Sessions
           </strong>
@@ -212,7 +217,8 @@ useEffect(() => {
                 {/* Always show first two */}
                 <UpcomingSession upcomingsessions={showAllUpcoming
                   ? sessions.upcomingSessions
-                  : sessions.upcomingSessions.slice(0, 2)} />
+                  : sessions.upcomingSessions.slice(0, 2)}
+                  pastSession={sessions?.pastSessions?.[sessions?.pastSessions?.length - 1]}/>
               </>
             )}
             {/* Past Sessions */}

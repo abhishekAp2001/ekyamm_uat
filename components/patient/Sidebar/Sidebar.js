@@ -98,7 +98,8 @@ const Sidebar = ({ onClose }) => {
 
             {/* Settings + Sign Out */}
             <div className="w-auto h-[74px] flex flex-col gap-[26px]">
-              <div className="w-[162px] flex items-center gap-2">
+              <div className="w-[162px] flex items-center gap-2"
+              onClick={()=>{router.push('/patient/patient-profile')}}>
                 <Image
                   src="/images/setting.png"
                   alt="Settings Icon"

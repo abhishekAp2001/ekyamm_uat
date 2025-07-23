@@ -65,7 +65,7 @@ const Patient_Profile = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [otpSent, setOtpSent] = useState(false);
   const [mobile, setMobile1] = useState("");
-  const [email,setEmail] = useState("")
+  const [email, setEmail] = useState("")
   const [showCounsellorProfile, setShowCounsellorProfile] = useState(false);
   const [showCertifications, setShowCertifications] = useState(false);
   const [showClientTestimonials, setShowClientTestimonials] = useState(false);
@@ -77,7 +77,8 @@ const Patient_Profile = () => {
   const [secondsLeft, setSecondsLeft] = useState(120);
   const [newVerifiedDrawer, setNewVerifiedDrawer] = useState(false)
   const [drawerFor, setDrawerFor] = useState("mobile")
-  const [imageDrawer,setImageDrawer] = useState(false)
+  const [imageDrawer, setImageDrawer] = useState(false)
+  const [openTooltipIndex, setOpenTooltipIndex] = useState(null);
   const [formData, setFormData] = useState({
     profileImageBase64: "",
     firstName: patient?.firstName || "",
@@ -95,23 +96,23 @@ const Patient_Profile = () => {
       state: patient?.addressDetails?.state || "",
     },
   });
-  useEffect(()=>{
-    if(!cookieValue){
-      router.push('/login')
+  useEffect(() => {
+    if (!cookieValue) {
+      router.push('/patient/login')
     }
   })
   const cameraInputRef = useRef(null);
   const photoInputRef = useRef(null);
-  const handleInputChange = (e, setMobile,setEmail) => {
+  const handleInputChange = (e, setMobile, setEmail) => {
     console.log("here")
-    if(drawerFor == "email"){
+    if (drawerFor == "email") {
       setEmail(e.target.value)
     }
-    else{
+    else {
       const digitsOnly = e.target.value.replace(/\D/g, "");
-    if (digitsOnly.length <= 10) {
-      setMobile(digitsOnly);
-    }
+      if (digitsOnly.length <= 10) {
+        setMobile(digitsOnly);
+      }
     }
   };
 
@@ -225,6 +226,7 @@ const Patient_Profile = () => {
       );
       if (response?.data?.success) {
         setCookie("PatientInfo", JSON.stringify(response?.data?.data));
+        setImageDrawer(false)
         router.push(`/patient/patient-profile`);
       }
     } catch (error) {
@@ -236,9 +238,12 @@ const Patient_Profile = () => {
 
   const uploadImage = async (filename, type) => {
     try {
-      const file = base64ToFile(filename, "myImage.png");
+      console.log("filename",filename)
+      const file = await base64ToFile(filename, 0.6);
+      console.log("File",file)
       const form = new FormData();
       form.append("filename", file);
+      console.log("PAYLOAD",form)
       const response = await axios.post(
         process.env.NEXT_PUBLIC_BASE_URL + `/v2/psychiatrist/uploadImage`,
         form,
@@ -376,7 +381,7 @@ const Patient_Profile = () => {
     }
   }
 
-    const sendOtpEmail = async (email = "") => {
+  const sendOtpEmail = async (email = "") => {
     setDrawerFor("email")
     setDrawerOpen(true)
     try {
@@ -400,7 +405,7 @@ const Patient_Profile = () => {
     }
   }
 
-    const verifyEmailOtp = async () => {
+  const verifyEmailOtp = async () => {
     try {
       setIsLoading(true)
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/email/otpValidateForProfile`, {
@@ -426,7 +431,7 @@ const Patient_Profile = () => {
     }
   }
 
-    const verifyNewEmailOtp = async () => {
+  const verifyNewEmailOtp = async () => {
     try {
       setIsLoading(true)
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/email/otpValidateForProfile`, {
@@ -518,11 +523,11 @@ const Patient_Profile = () => {
     }
   }
 
-    const updateEmailDetails = async (email) => {
-      console.log("email",email)
+  const updateEmailDetails = async (email) => {
+    console.log("email", email)
     try {
       const response = await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient/contactDetails/update`, {
-        email:email
+        email: email
       }, {
         headers: {
           accesstoken: patientSessionToken
@@ -565,22 +570,22 @@ const Patient_Profile = () => {
   }, [secondsLeft, router]);
 
   const formatSeconds = (totalSeconds) => {
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-  const paddedMinutes = String(minutes).padStart(2, '0');
-  const paddedSeconds = String(seconds).padStart(2, '0');
-  return `${paddedMinutes}:${paddedSeconds}`;
-};
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    const paddedMinutes = String(minutes).padStart(2, '0');
+    const paddedSeconds = String(seconds).padStart(2, '0');
+    return `${paddedMinutes}:${paddedSeconds}`;
+  };
   return (
-    <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
+    <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px]">
       <div className="">
-        <div className="flex items-center justify-between p-5">
+        <div className="flex items-center justify-between py-5 ps-3 pe-5">
           {/* Left Icon */}
           <ChevronLeft size={28} className="text-black cursor-pointer"
             onClick={() => { router.push("/patient/dashboard") }} />
           {/* Right Side Image */}
           <Image
-          onClick={()=>{router.push('/patient/dashboard')}}
+            onClick={() => { router.push('/patient/dashboard') }}
             src="/images/box.png"
             width={28}
             height={18}
@@ -589,14 +594,14 @@ const Patient_Profile = () => {
           />
         </div>
       </div>
-      <div className="h-full  overflow-auto px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] pb-5">
+      <div className="h-full  overflow-x-hidden overflow-y-auto px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] pb-5 max-w-[576px]">
         {/* Profile Image */}
         {/* Main Card */}
         <div className="bg-[#FFFFFF]  p-6 pb-1 mt-[55px] rounded-[16px]">
           <div className="flex justify-center  rounded-[17.63px] mx-auto relative mb-6 mt-[-77px]">
             <Avatar className="w-[100px] h-[100px]">
               <AvatarImage
-                src={patient?.profileImageUrl||"/images/profile.png"}
+                src={patient?.profileImageUrl || "/images/profile.png"}
                 alt={`${patient?.firstName} ${patient?.lastName}`}
                 className="rounded-full object-cover"
               />
@@ -618,7 +623,7 @@ const Patient_Profile = () => {
                     <Button className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex  justify-between items-center w-full h-[50px] rounded-[8.62px]"
                       onClick={handleTakePhoto}
                     >
-                      <Link href={"/cp_type"}>Take Photo</Link>
+                     Take Photo
                       <Image
                         src="/images/arrow.png"
                         width={24}
@@ -764,7 +769,7 @@ const Patient_Profile = () => {
           ].map((item, idx) => (
             <div key={idx} className="mb-4">
               <button
-                className="bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[8px] p-2 h-[56px] p-3 w-full text-left flex items-center justify-between"
+                className="bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[8px] p-2 h-[56px] w-full text-left flex items-center justify-between"
                 style={
                   item.disabled ? { opacity: 0.5, cursor: "not-allowed" } : {}
                 }
@@ -788,12 +793,22 @@ const Patient_Profile = () => {
                         height={13}
                         alt="info"
                         className="ml-1 w-[13.6px] h-[13.6px]"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setOpenTooltipIndex(
+                            openTooltipIndex === idx ? null : idx
+                          );
+                        }}
                       />
                       {item.tooltip && (
                         <strong
-                          className="absolute bottom-full mb-1 left-[-100%] translate-[-44%_0px]
-                        px-2 py-1 rounded bg-black text-white text-xs opacity-0 group-hover:opacity-100
-                        transition whitespace-nowrap z-10 "
+                          className={`
+                  absolute bottom-full mb-1 left-[-100%] translate-[-44%_0px]
+                  px-2 py-1 rounded bg-black text-white text-xs
+                  transition whitespace-nowrap z-10
+                  ${openTooltipIndex === idx ? 'opacity-100' : 'opacity-0'}
+                  group-hover:opacity-100
+                `}
                         >
                           {item.tooltip}
                         </strong>
@@ -857,7 +872,7 @@ const Patient_Profile = () => {
                       Verify Yourself
                     </span>
                     <span className="text-[14px] font-[500] text-black text-center">
-                      {drawerFor == "email" ? ("Enter OTP shared on your email"):("Enter OTP shared on your mobile number")}
+                      {drawerFor == "email" ? ("Enter OTP shared on your email") : ("Enter OTP shared on your mobile number")}
                     </span>
 
                     <div className="mt-[32px]">
@@ -887,7 +902,7 @@ const Patient_Profile = () => {
                   </Button>
                   <Button
                     className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white rounded-[8px] w-[48%] h-[45px] disabled:opacity-50"
-                    onClick={() => { drawerFor =="email"?verifyEmailOtp():verifyMobileOtp() }}
+                    onClick={() => { drawerFor == "email" ? verifyEmailOtp() : verifyMobileOtp() }}
                     disabled={otp.length !== 6}  // 👈 corrected this condition too
                   >
                     {isLoading ? (<Loader2 className="animate-spin" />) : (
@@ -963,7 +978,7 @@ const Patient_Profile = () => {
                           className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white py-[14.5px] mx-auto rounded-[8px] w-[172.27px] h-[45px]"
                           onClick={() => { setOtpSent(true), setNewMobileDrawer(true) }}
                         >
-                          Next   
+                          Next
                         </Button>
                       </div>
                     </div>
@@ -1016,17 +1031,17 @@ const Patient_Profile = () => {
                     {/* OTP Section */}
                     <div className="flex flex-col justify-center items-center">
                       <span className="text-[16px] font-[600] text-black mb-[16.49px]">
-                        {drawerFor == "email" ? ("Enter New email"):("Enter New Mobile Number")}
+                        {drawerFor == "email" ? ("Enter New email") : ("Enter New Mobile Number")}
                       </span>
 
                       <div className="flex items-center bg-white border rounded-[7.26px]  w-[338px] h-[39px]">
                         <Input
                           id="mobile"
                           type="text"
-                          placeholder={drawerFor == "email"?("Enter email"):("Enter new mobile number")}
-                          value={drawerFor=="email"?email:mobile}
+                          placeholder={drawerFor == "email" ? ("Enter email") : ("Enter new mobile number")}
+                          value={drawerFor == "email" ? email : mobile}
                           // onChange={handleInputChange}
-                          onChange={(e) => handleInputChange(e, setMobile1,setEmail)}
+                          onChange={(e) => handleInputChange(e, setMobile1, setEmail)}
                           className="bg-white border rounded-[7.26px] text-[12px] text-black font-500 placeholder:text-[12px] placeholder:text-[#000000] placeholder:font-[500]  py-3 px-4 w-full h-[39px]"
                           maxLength={drawerFor === "email" ? undefined : 10}
                           inputMode={drawerFor === "email" ? "text" : "numeric"}
@@ -1066,7 +1081,7 @@ const Patient_Profile = () => {
                         <div className="flex flex-col items-center gap-2">
                           {otp.length === 6 && newOtpSent ? (
                             <Button
-                              onClick={() => {drawerFor == "email" ? (verifyNewEmailOtp()):(verifyNewMobileOtp())}}
+                              onClick={() => { drawerFor == "email" ? (verifyNewEmailOtp()) : (verifyNewMobileOtp()) }}
                               disabled={otp.length !== 6}
                               className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white rounded-[8px] w-[163.34px] h-[45px] disabled:opacity-50 disabled:cursor-not-allowed"
                             >
@@ -1074,26 +1089,31 @@ const Patient_Profile = () => {
                             </Button>
                           ) : !newOtpSent ? (
                             <Button
-                              onClick={() => {drawerFor=="email"?(sendNewOtpEmail(email)):(sendNewOtp(mobile))}}
+                              onClick={() => { drawerFor == "email" ? (sendNewOtpEmail(email)) : (sendNewOtp(mobile)) }}
                               className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white py-[14.5px] rounded-[8px] w-[163.34px] h-[45px]"
+                              disabled={
+                                drawerFor === "email"
+                                  ? !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+                                  : mobile.length !== 10
+                              }
                             >
                               Get OTP
                             </Button>
                           ) : (
                             <div className="flex flex-col items-center gap-1 min-h-[50px]">
                               <Button
-                                onClick={() => {drawerFor=="email"?(sendNewOtpEmail(email)):(sendNewOtp(mobile))}}
+                                onClick={() => { drawerFor == "email" ? (sendNewOtpEmail(email)) : (sendNewOtp(mobile)) }}
                                 disabled={secondsLeft > 0}
                                 className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white py-[14.5px] rounded-[8px] w-[163.34px] h-[45px] disabled:opacity-50 disabled:cursor-not-allowed"
                               >
                                 Resend OTP
                               </Button>
                               <div className="min-h-[16px] text-[12px] font-[500] text-gray-500">
-                              {newOtpSent && secondsLeft > 0 && otp.length < 6 && (
-                                <div className="text-[12px] font-[500] text-gray-500">
-                                  Resend OTP in {formatSeconds(secondsLeft)}s
-                                </div>
-                              )}
+                                {newOtpSent && secondsLeft > 0 && otp.length < 6 && (
+                                  <div className="text-[12px] font-[500] text-gray-500">
+                                    Resend OTP in {formatSeconds(secondsLeft)}s
+                                  </div>
+                                )}
                               </div>
                             </div>
                           )}
@@ -1158,8 +1178,10 @@ const Patient_Profile = () => {
                         </Button>
                         <Button
                           className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white py-[14.5px] mx-auto rounded-[8px] w-[172.27px] h-[45px]"
-                          onClick={() => {drawerFor=="email"? 
-                            updateEmailDetails(email):updateContactDetails(mobile)}}
+                          onClick={() => {
+                            drawerFor == "email" ?
+                              updateEmailDetails(email) : updateContactDetails(mobile)
+                          }}
                         >
                           Next
                         </Button>
@@ -1176,7 +1198,7 @@ const Patient_Profile = () => {
         {/* <span className="text-[10px] font-[500] text-black mr-1">Powered by</span> */}
         <Image src="/images/ekyamm.png" width={114} height={24} alt="ekyamm" />
         <div className="flex justify-center items-center mb-[26px]"
-        onClick = {()=>{router.push(`${whatsappUrl}`)}}>
+          onClick={() => { router.push(`${whatsappUrl}`) }}>
           <span className="text-[12px] font-[500] text-gray-500 mr-1">
             Support
           </span>
@@ -1190,10 +1212,10 @@ const Patient_Profile = () => {
         </div>
       </div>
       {showCounsellorProfile ? (
-        <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90">
+        <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90 max-w-[576px] mx-auto" >
           <div className="relative h-screen overflow-y-auto">
             <Profile
-            patient={patient}
+              patient={patient}
               setShowCounsellorProfile={setShowCounsellorProfile}
               setShowCertifications={setShowCertifications}
               setShowClientTestimonials={setShowClientTestimonials}
