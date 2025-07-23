@@ -677,7 +677,6 @@ const Schedule_Session = () => {
                 value={sessionDetail}
                 onChange={(e) => setSessionDetail(e.target.value)}
                 placeholder="Enter session details here"
-                disabled
                 className="w-full h-[100px] rounded-[7.26px] bg-white px-3 py-2 border border-[#E6E6E6] opacity-80"
               />
             </div>

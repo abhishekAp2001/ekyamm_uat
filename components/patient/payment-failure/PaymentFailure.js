@@ -1,11 +1,13 @@
-'use client';
-import React, { useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation';
-import { XCircle } from 'lucide-react';
-import axios from 'axios';
+"use client";
+import React, { useEffect,useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { X, XCircle } from "lucide-react";
+import axios from "axios";
+import Link from "next/link";
+import { showErrorToast } from "@/lib/toast";
 const PaymentFailure = () => {
   const searchParams = useSearchParams();
-  const router = useRouter()
+  const router = useRouter();
   useEffect(() => {
     const queryObj = {};
     searchParams.forEach((value, key) => {
@@ -15,28 +17,52 @@ const PaymentFailure = () => {
       try {
         const response = await axios.post(
           `${process.env.NEXT_PUBLIC_BASE_URL}/v2/webhook/payu`,
-          { ...queryObj, isPayuHosted:true }
+          { ...queryObj, isPayuHosted: true }
         );
       } catch (error) {
-        console.error('Error calling webhook:', error);
+        console.error("Error calling webhook:", error);
       }
     };
-    payu()
-    setTimeout(() => {
+      showErrorToast("Payment Failed");
+    payu();
+  }, []);
+
+
+  const query = useSearchParams();
+  const txnid = query.get('txnid');
+
+  const [seconds, setSeconds] = useState(5);
+
+  useEffect(() => {
+    if (seconds === 0) {
       router.push(`/patient/dashboard`);
-    }, 10000);
-  }, [])
+    }
+
+    const timer = setInterval(() => {
+      setSeconds((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [seconds, txnid, router]);
   return (
     <div>
-      <div className="flex flex-col items-center justify-center min-h-screen bg-red-50 px-4">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-red-50 px-4 bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5] relative">
         <XCircle className="w-24 h-24 text-red-600 mb-6" />
-        <h1 className="text-3xl font-bold text-red-700 mb-2">
+        <strong className="text-[16px] text-black font-[600] text-center">
           Payment Failed
-        </h1>
-        <p className="text-yellow-800 text-lg">Redirecting…</p>
+        </strong>
+        <p className="text-black text-sm font-medium">
+          Redirecting to dashboard {seconds} second{seconds !== 1 ? "s" : ""}
+          ...
+        </p>
+        <div className="absolute top-4 right-3">
+            <Link href="/patient/dashboard">
+              <X width={24} height={24} className="w-8 mb-0" />
+            </Link>
+          </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default PaymentFailure
+export default PaymentFailure;

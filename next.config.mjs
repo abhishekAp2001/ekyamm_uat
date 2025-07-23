@@ -1,5 +1,5 @@
 // /** @type {import('next').NextConfig} */
-
+ 
 // const nextConfig = {
 //   // output: 'export',
 //   images: {
@@ -7,12 +7,12 @@
 //   },
 //   // Optional: Keep your custom domain if needed
 //   // customDomain: "https://ekyamm-images-backend.s3.ap-south-1.amazonaws.com",
-
+ 
 // };
-
-
+ 
+ 
 import TerserPlugin from 'terser-webpack-plugin';
-
+ 
 /** @type {import('next').NextConfig} */
 import nextPWA from 'next-pwa';
 const withPWA =nextPWA({
@@ -31,7 +31,7 @@ const nextConfig = withPWA(
   },
   reactStrictMode: true,
   swcMinify: true,
-
+ 
   webpack(config, { isServer }) {
     if (!isServer) {
       config.optimization.minimizer.push(
@@ -48,9 +48,11 @@ const nextConfig = withPWA(
     }
     return config;
   },
-
+ 
   output: 'standalone',
 }
 );
 
 export default nextConfig;
+ 
+ 

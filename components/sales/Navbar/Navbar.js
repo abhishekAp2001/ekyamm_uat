@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 const Navbar = ({onStartClick}) => {
   const formRef = useRef();
-    
+   
       const handleButtonClick = () => {
         formRef.current?.openForm();
       };
@@ -23,23 +23,23 @@ const Navbar = ({onStartClick}) => {
           height={60}
           className="cursor-pointer max-w-[142px] h-auto md:max-w-[240px]"
         /></Link>
-
+ 
         {/* Right side */}
         <div className="flex items-center nav-right">
           {/* Desktop Menu */}
           <ul id="menu-desktop"  className="hidden md:flex list-none flex-row m-0 p-0">
-            <li className="mr-[35px] font-light text-[18px] leading-none">
+            <li className="mr-[35px] font-normal text-[18px] leading-none">
               <a href="./mh-practitioner" className="no-underline text-inherit text-[16px]">
                 MH Practitioner
               </a>
             </li>
-            <li className={` ${pathname==='/'?'mr-[35px] font-bold text-[18px] leading-none text-[#776EA5]':'mr-[35px] font-light text-[18px] leading-none'}`}>
+            <li className={` ${pathname==='/'?'mr-[35px] font-bold text-[18px] leading-none text-[#776EA5]':'mr-[35px] font-normal text-[18px] leading-none'}`}>
               <a href="./" className="no-underline text-inherit text-[16px]">
                 Fertility
               </a>
             </li>
           </ul>
-
+ 
           {/* Desktop buttons */}
           <button id="contactUs" className="hidden md:block bg-[#776EA5] text-white border-none px-2 py-2 rounded-[11px] font-quicksand font-medium" onClick={onStartClick}>
             Contact Us
@@ -50,25 +50,27 @@ const Navbar = ({onStartClick}) => {
           </button>
         </div>
       </div>
-
+ 
       {/* Mobile Menu */}
       <ul id="menu-mobile" className="flex md:hidden list-none flex-row p-0 px-[2.5%]">
-        <li className="mr-[35px] font-light text-[18px] leading-none">
+        <li className="mr-[35px] font-normal text-[18px] leading-none">
           <a href="/mh-practitioner" className="no-underline text-inherit text-[14px]">
             MH Practitioner
           </a>
         </li>
-        <li className="mr-[35px] font-bold text-[18px] leading-none text-[#776EA5]">
-          <a href="./" className="no-underline text-inherit text-[14px]">
-            Fertility
-          </a>
-        </li>
+        <li className={` ${pathname==='/'?'mr-[35px] font-bold text-[18px] leading-none text-[#776EA5]':'mr-[35px] font-normal text-[18px] leading-none'}`}>
+              <a href="./" className="no-underline text-inherit text-[16px]">
+                Fertility
+              </a>
+            </li>
       </ul>
-
+ 
      
     </div>
     </>
   )
 }
-
+ 
 export default Navbar
+ 
+ 

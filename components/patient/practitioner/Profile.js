@@ -29,8 +29,8 @@ const Profile = ({
     }
   }
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] relative max-w-[576px] mx-auto">
-          <div className="fixed top-0 left-0 right-0 w-full h-[64px] z-50 flex items-center justify-between px-4 bg-[#eeecfb] max-w-[576px] mx-auto">
+    <div className="min-h-screen flex flex-col bg-gradient-to-t from-[#fce8e5] to-[#eeecfb]  max-w-[576px] mx-auto fixed left-0 right-0 h-screen">
+          <div className="fixed top-0 left-0 right-0 w-full h-[64px] z-50 flex items-center justify-between px-4 bg-[#e1d8f5] max-w-[576px] mx-auto">
         <ChevronLeft
           size={24}
           className="text-black cursor-pointer"
@@ -47,7 +47,8 @@ const Profile = ({
       </div>
     {doc ? (
       <>
-      <div className="flex-1 pt-[116px] pb-[90px] w-full overflow-auto px-4">
+      <div className="flex-1 pt-[116px] pb-[90px] w-full overflow-auto px-4" style={{ background:`linear-gradient(180deg, #DFDAFB 0%, #F9CCC5 100%),
+linear-gradient(0deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5))` }}>
         <div className="w-full mx-auto bg-[#FFFFFFCC] rounded-[12px] px-4 pt-8 pb-6 flex flex-col items-center">
           {/* Profile Image + Name */}
           <div className="flex flex-col items-center -mt-20">
@@ -164,12 +165,12 @@ const Profile = ({
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 bg-[#fce8e5] flex justify-center py-4 max-w-[576px] mx-auto px-6">
+      <div className="fixed bottom-0 left-0 right-0 bg-[#f6cecb] flex justify-center py-4 max-w-[576px] mx-auto px-6">
         <Button
           onClick={() => {
             handleBookNowClick()
           }}
-          className="w-full h-[45px] bg-gradient-to-r from-[#E7A1A0] to-[#BBA3E4] text-white text-[15px] font-semibold rounded-[8px]"
+          className="w-full h-[45px] bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[15px] font-semibold rounded-[8px]"
         >
           Book Now at {formatAmount(doc?.practiceDetails?.fees?.singleSession)}/- per session
         </Button>

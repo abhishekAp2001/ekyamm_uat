@@ -9,8 +9,11 @@ import { ChevronLeft } from "lucide-react";
 
 const Client_Testimonial = ({ setShowClientTestimonials, doc }) => {
   return (
-    <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] min-h-screen w-full px-4 max-w-[576px] mx-auto">
-      <div className="w-full fixed top left-0 right-0 z-10 max-w-[576px] mx-auto bg-[#f0ecf9]">
+    <div className="min-h-screen w-full px-4 max-w-[576px] mx-auto" style={{ background: `
+      linear-gradient(180deg, #DFDAFB 0%, #F9CCC5 100%),
+      linear-gradient(0deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5))
+    ` }}>
+      <div className="w-full fixed top left-0 right-0 z-10 max-w-[576px] mx-auto bg-[#e1d9f7]">
         <div className="flex items-center gap-[9px] p-4">
           <ChevronLeft
             size={24}

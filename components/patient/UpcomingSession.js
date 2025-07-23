@@ -3,7 +3,7 @@ import Script from "next/script";
 import React from "react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Link2, Phone } from "lucide-react";
+import { ChevronDown, Link2, Phone, Share2, Trash } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -38,20 +38,19 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions,pastSess
       } catch (err) {
         console.error("Error parsing cookie", err);
       }
-    }
-    else if (!cookie) {
-      router.push('/patient/login')
+    } else if (!cookie) {
+      router.push("/patient/login");
     }
   }, []);
   function convertUTCtoIST(utcDateStr) {
     const utcDate = new Date(utcDateStr);
     const istTime = new Date(utcDate.getTime());
     const day = istTime.getDate();
-    const month = istTime.toLocaleString('en-US', { month: 'long' });
+    const month = istTime.toLocaleString("en-US", { month: "long" });
     const dateStr = `${day} ${month}`;
     let hours = istTime.getHours();
     const minutes = istTime.getMinutes();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const ampm = hours >= 12 ? "PM" : "AM";
     hours = hours % 12;
     hours = hours ? hours : 12;
     const minutesStr = minutes < 10 ? `0${minutes}` : minutes;
@@ -73,15 +72,21 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions,pastSess
     if (!patientSessionToken) return;
     const getTherapistDetails = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient?type=therapist`, {
-          headers: {
-            accesstoken: patientSessionToken,
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient?type=therapist`,
+          {
+            headers: {
+              accesstoken: patientSessionToken,
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (response?.data?.success) {
           setTherapist(response?.data?.data?.practitionerTagged[0]);
-          setCookie("selectedCounsellor", JSON.stringify(response?.data?.data?.practitionerTagged[0]));
+          setCookie(
+            "selectedCounsellor",
+            JSON.stringify(response?.data?.data?.practitionerTagged[0])
+          );
         }
       } catch (err) {
         console.log("err", err);

@@ -45,7 +45,7 @@ const Header = ({ loading = false, patient }) => {
           </div>
         )}
 
-        <div className="flex justify-between items-center mt-2 relative">
+        <div className="flex justify-between items-center mt-2 relative inset-0 z-30">
           <div className="flex items-center gap-2">
             <Avatar className='w-8 h-4 rounded-[25px] contents'
             onClick={() => router.push("/patient/patient-profile")}>

@@ -577,9 +577,9 @@ const Patient_Profile = () => {
     return `${paddedMinutes}:${paddedSeconds}`;
   };
   return (
-    <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
+    <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px]">
       <div className="">
-        <div className="flex items-center justify-between p-5">
+        <div className="flex items-center justify-between py-5 ps-3 pe-5">
           {/* Left Icon */}
           <ChevronLeft size={28} className="text-black cursor-pointer"
             onClick={() => { router.push("/patient/dashboard") }} />
@@ -594,7 +594,7 @@ const Patient_Profile = () => {
           />
         </div>
       </div>
-      <div className="h-full  overflow-auto px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] pb-5">
+      <div className="h-full  overflow-x-hidden overflow-y-auto px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] pb-5 max-w-[576px]">
         {/* Profile Image */}
         {/* Main Card */}
         <div className="bg-[#FFFFFF]  p-6 pb-1 mt-[55px] rounded-[16px]">
@@ -769,7 +769,7 @@ const Patient_Profile = () => {
           ].map((item, idx) => (
             <div key={idx} className="mb-4">
               <button
-                className="bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[8px] p-2 h-[56px] p-3 w-full text-left flex items-center justify-between"
+                className="bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[8px] p-2 h-[56px] w-full text-left flex items-center justify-between"
                 style={
                   item.disabled ? { opacity: 0.5, cursor: "not-allowed" } : {}
                 }
@@ -1212,7 +1212,7 @@ const Patient_Profile = () => {
         </div>
       </div>
       {showCounsellorProfile ? (
-        <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90">
+        <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90 max-w-[576px] mx-auto" >
           <div className="relative h-screen overflow-y-auto">
             <Profile
               patient={patient}
