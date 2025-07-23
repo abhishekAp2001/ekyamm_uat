@@ -2,13 +2,14 @@ import Image from 'next/image'
 import React, { useRef } from 'react'
 import "./navbar.css";
 import Link from 'next/link';
-
+import { usePathname } from 'next/navigation';
 const Navbar = ({onStartClick}) => {
   const formRef = useRef();
     
       const handleButtonClick = () => {
         formRef.current?.openForm();
       };
+    const pathname = usePathname()
   return (
     <>
       <div className="fixed top-0 left-0 right-0 z-10 bg-white shadow-md py-2 md:py-5 px-[17px] md:px-[6%] flex flex-col navbar_sec">
@@ -32,7 +33,7 @@ const Navbar = ({onStartClick}) => {
                 MH Practitioner
               </a>
             </li>
-            <li className="mr-[35px] font-bold text-[18px] leading-none text-[#776EA5]">
+            <li className={` ${pathname==='/'?'mr-[35px] font-bold text-[18px] leading-none text-[#776EA5]':'mr-[35px] font-light text-[18px] leading-none'}`}>
               <a href="./" className="no-underline text-inherit text-[16px]">
                 Fertility
               </a>

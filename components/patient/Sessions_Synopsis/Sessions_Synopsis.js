@@ -94,7 +94,7 @@ useEffect(() => {
     }
   }
   else if(!cookie){
-    router.push('/login')
+    router.push('patient/login')
   }
 }, []);
   return (

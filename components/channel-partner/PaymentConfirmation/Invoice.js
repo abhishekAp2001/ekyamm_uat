@@ -43,7 +43,7 @@ const Invoice = () => {
     const totalAmount = sessions_selection?.session_count * sessions_selection?.total
     
     return (
-        <div className='print-only'>
+        <div className='print-only text-black'>
             <div className="invoice-box" id="invoice">
                 <table cellPadding={0} cellSpacing={0}>
                     <tbody><tr>

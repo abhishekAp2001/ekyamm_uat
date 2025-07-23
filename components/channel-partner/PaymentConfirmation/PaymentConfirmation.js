@@ -236,7 +236,7 @@ useEffect(() => {
                 </Link>
               </div>
               <div className="flex justify-center mt-2 text-[12px] text-[#000000] opacity-30 font-[500]">
-                Moving to homepage in {secondsLeft} seconds
+                Moving to Dashboard in {secondsLeft} seconds
               </div>
             </div>
           </div>

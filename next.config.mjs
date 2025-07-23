@@ -14,7 +14,15 @@
 import TerserPlugin from 'terser-webpack-plugin';
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+import nextPWA from 'next-pwa';
+const withPWA =nextPWA({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+});
+
+const nextConfig = withPWA(
+  {
   images: {
     remotePatterns: [{
       "protocol": "https",
@@ -42,6 +50,7 @@ const nextConfig = {
   },
 
   output: 'standalone',
-};
+}
+);
 
 export default nextConfig;

@@ -60,7 +60,7 @@ const Select_Package = () => {
       setSelectedPackageIdx(1);
       setTotalPrice(selectedCounsellorData?.practiceDetails?.fees?.singleSession);
     }
-    else{
+    else {
       setSelectedPackageIdx(idx);
     }
   }
@@ -90,7 +90,7 @@ const Select_Package = () => {
                 <Avatar>
                   <AvatarImage
                     className="rounded-full object-cover w-[42px] h-[42px]"
-                    src={patientSessionData?.profileImageUrl||"/images/profile.png"}
+                    src={patientSessionData?.profileImageUrl || "/images/profile.png"}
                     alt={`${patientSessionData?.firstName || ""} ${patientSessionData?.lastName || ""
                       }`}
                   />
@@ -101,11 +101,11 @@ const Select_Package = () => {
                       }`}
                   </p>
                   <p className="text-xs text-[#6D6A5D]">{`${patientSessionData?.countryCode_primary.match(/\d+$/)
-                      ? "+" +
-                      patientSessionData.countryCode_primary.match(
-                        /\d+$/
-                      )[0]
-                      : "+91"
+                    ? "+" +
+                    patientSessionData.countryCode_primary.match(
+                      /\d+$/
+                    )[0]
+                    : "+91"
                     } ${patientSessionData?.primaryMobileNumber || ""}`}</p>
                 </div>
               </div>
@@ -146,11 +146,11 @@ const Select_Package = () => {
                   <p className="text-xs text-[#6D6A5D]">{`${selectedCounsellorData?.generalInformation?.countryCode_primary.match(
                     /\d+$/
                   )
-                      ? "+" +
-                      selectedCounsellorData?.generalInformation?.countryCode_primary.match(
-                        /\d+$/
-                      )[0]
-                      : "+91"
+                    ? "+" +
+                    selectedCounsellorData?.generalInformation?.countryCode_primary.match(
+                      /\d+$/
+                    )[0]
+                    : "+91"
                     } ${selectedCounsellorData?.generalInformation
                       ?.primaryMobileNumber || ""
                     }`}</p>
@@ -164,10 +164,7 @@ const Select_Package = () => {
                 >
                   Session Type
                 </Label>
-                <Select
-                  value={sessionType}
-                  onValueChange={(v) => setSessionType(v)}
-                >
+                <Select value="Counselling" disabled>
                   <SelectTrigger
                     id="session-type"
                     className="w-full h-[39px] rounded-[7.26px] bg-white p-4 text-sm font-semibold text-black"
@@ -180,13 +177,12 @@ const Select_Package = () => {
                         value="Counselling"
                         className="text-xs font-semibold px-5"
                       >
-                        Counselling ( 1 hour )
+                        Counselling (1 hour)
                       </SelectItem>
-                      <SelectItem value="Therapy">Therapy</SelectItem>
-                      <SelectItem value="Check-up">Check-up</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>
+
               </div>
             </div>
 
@@ -199,7 +195,7 @@ const Select_Package = () => {
                   (packageItem, idx) => (
                     <div className="flex items-center space-x-2" key={idx}>
                       <Checkbox id={`package-${idx}`}
-                      checked = {selectedPackageIdx === packageItem?.sessions}
+                        checked={selectedPackageIdx === packageItem?.sessions}
                         onCheckedChange={() => {
                           setTotalPrice(packageItem.rate);
                           setSelectedPackage(packageItem?.sessions);
@@ -255,11 +251,11 @@ const Select_Package = () => {
             </Button> */}
             <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
               onClick={() => setDrawerOpen(true)}>
-                Cancel
-              </Button>
+              Cancel
+            </Button>
             <Drawer className="pt-[9.97px] max-w-[576px] m-auto"
-              open = {drawerOpen} 
-              onClose = {() => setDrawerOpen(false)}>
+              open={drawerOpen}
+              onClose={() => setDrawerOpen(false)}>
               <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
                 <DrawerHeader>
                   <DrawerTitle className="text-[16px] font-[600] text-center">
@@ -267,13 +263,14 @@ const Select_Package = () => {
                   </DrawerTitle>
                   <DrawerDescription className="mt-6 flex gap-3 w-full">
                     <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
-                    onClick={()=>{router.push("/patient/dashboard")}}>
+                      onClick={() => { router.push("/patient/dashboard") }}>
                       Confirm
                     </Button>
 
                     <Button className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
                       onClick={() => {
-                      setDrawerOpen(false);}}>
+                        setDrawerOpen(false);
+                      }}>
                       Continue
                     </Button>
                   </DrawerDescription>
@@ -293,9 +290,10 @@ const Select_Package = () => {
             <Button
               className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] h-[45px]  rounded-[8px] flex items-center justify-center w-[48%]"
               onClick={() => {
-                setCookie("session_selection",JSON.stringify({"total":totalPrice,"session_count":selectedPackageIdx}))
+                setCookie("session_selection", JSON.stringify({ "total": totalPrice, "session_count": selectedPackageIdx }))
                 router.push(`/patient/pay-for-sessions`);
               }}
+              disabled={selectedPackageIdx === 1}
             >
               Generate Invoice
             </Button>

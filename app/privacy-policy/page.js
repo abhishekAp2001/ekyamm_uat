@@ -21,17 +21,6 @@ const Page = () => {
     );
   }, []);
 
-  const handleContactClick = () => {
-    if (isMobile) {
-      window.open(
-        "https://api.whatsapp.com/send/?phone=9326780323&text&type=phone_number&app_absent=0",
-        "_blank"
-      );
-    } else {
-      setFormOpen(true);
-    }
-  };
-
   const formRef = useRef();
   
     useEffect(() => {
