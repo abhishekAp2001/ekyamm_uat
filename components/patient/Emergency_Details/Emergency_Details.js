@@ -259,7 +259,7 @@ const Emergency_Details = ({ type }) => {
   return (
     <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col max-w-[576px] mx-auto">
       <Emergency_Header />
-      <div className="min-h-screen pt-[10%] pb-[20%] lg:pb-[14%] overflow-auto px-[17px]">
+      <div className="min-h-screen pt-[12%] pb-[20%] lg:pb-[14%] overflow-auto px-[17px]">
         <div className="mt-3 lg:mt-0 bg-[#FFFFFF80] rounded-[12px] p-4 px-3">
           <strong className="text-[15px] text-black font-semibold">
             Emergency Contact Details

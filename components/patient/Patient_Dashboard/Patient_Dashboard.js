@@ -137,7 +137,7 @@ const Patient_Dashboard = () => {
           {/* Scrollable Body */}
           {!practitioner || practitioner.length === 0 ? (<div className="mt-[192px] flex-1 overflow-y-auto px-3 pb-5">
             {/* Filter Row */}
-            <div className="flex justify-between items-center my-2">
+            <div className="flex justify-between items-center my-2 ">
               <strong className="text-sm text-black font-semibold">
                 Available Counsellors
               </strong>

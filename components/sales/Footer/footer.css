@@ -27,6 +27,9 @@ footer #copyright{
     text-decoration: none;
     color: #666666;
 }
+ #store img {
+    height: 41px !important;
+  }
 
 @media (max-width: 768px) {
     /* Tablet styles */

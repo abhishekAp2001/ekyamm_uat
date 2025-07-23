@@ -132,7 +132,12 @@ const indexValue = currentIndex === -1 ? 0 : currentIndex;
           </div>
         </div>
       </>
-      <div className="flex-grow px-4 mt-[18px] pb-[90px] pt-[16%] lg:pt-[10%]">
+      <div className="flex-grow px-4 mt-[18px] pb-[90px] pt-[16%] lg:pt-[10%]" style={{
+    background: `
+      linear-gradient(180deg, #DFDAFB 0%, #F9CCC5 100%),
+      linear-gradient(0deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5))
+    `
+  }}>
         {/* Session Fee */}
         <div className="bg-white rounded-[12px] p-4 mb-[10px]">
           <div className="text-[15px] font-[500] text-gray-500 mb-5">
@@ -184,16 +189,16 @@ const indexValue = currentIndex === -1 ? 0 : currentIndex;
 
         {/* language */}
         {/* Language */}
-        <div className="w-full max-w-md mt-4">
-          <div className="mt-[22px]">
+        <div className="w-full mt-4 bg-white rounded-[12px] p-4">
+          <div className="">
             <Label className={`text-[15px] font-medium mb-[7.59px]`}>
-              Language Proficiency <span className="text-red-500">*</span>
+            Select Preferred Language
             </Label>
             <div className="relative">
               <Input
                 type="text"
                 placeholder="Language"
-                className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-3 h-[38px] bg-white placeholder:text-gray-500`}
+                className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-3 h-[38px] bg-[#BBA3E41A] placeholder:text-gray-500`}
                 value={selectedLanguage}
                 readOnly
               />
@@ -205,7 +210,7 @@ const indexValue = currentIndex === -1 ? 0 : currentIndex;
             </div>
             <ul className="flex flex-wrap gap-[10px] mt-2">
               {selectedLanguage && (
-                <li className="flex items-center gap-[5px] py-[2px] px-2 bg-white rounded-[5px] text-[15px] text-gray-500 hover:bg-gray-200">
+                <li className="flex items-center gap-[5px] py-[2px] px-2 bg-[#BBA3E41A] rounded-[5px] text-[15px] text-gray-500 hover:bg-gray-200">
                   {selectedLanguage}
                   <X
                     className="w-[11px] h-[11px] text-[#776EA5] border border-[#776EA5] rounded-full"
@@ -242,7 +247,7 @@ const indexValue = currentIndex === -1 ? 0 : currentIndex;
         </div>
         {/* language */}
 
-        <div className="bg-gradient-to-b  from-[#fce8e5]  to-[#fce8e5]  flex justify-center items-center gap-3 mt-[20.35px] fixed bottom-0 pb-[23px] left-0 right-0 max-w-[576px] mx-auto">
+        <div className="bg-[#f6cecb] flex justify-center items-center gap-3 mt-[20.35px] fixed bottom-0 pb-[23px] left-0 right-0 max-w-[576px] mx-auto">
           <Button
             onClick={() => {
               setShowFilter(false);

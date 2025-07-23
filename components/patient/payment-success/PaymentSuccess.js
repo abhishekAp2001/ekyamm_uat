@@ -1,9 +1,11 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { AlertTriangle, CheckCircle, Loader2 } from 'lucide-react';
-import { showErrorToast, showSuccessToast } from '@/lib/toast';
-import axios from 'axios';
+"use client";
+import React, { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { AlertTriangle, CheckCircle, Loader2, X } from "lucide-react";
+import { showErrorToast, showSuccessToast } from "@/lib/toast";
+import axios from "axios";
+import Image from "next/image";
+import Link from "next/link";
 
 const PaymentSuccess = () => {
   const router = useRouter();
@@ -26,49 +28,95 @@ const PaymentSuccess = () => {
           { ...cleanQuery, isPayuHosted: true }
         );
       } catch (error) {
-        console.error('Error calling webhook:', error);
+        console.error("Error calling webhook:", error);
       }
     };
 
-    if (queryObj.hashIsValid == '0') {
+    if (queryObj.hashIsValid == "0") {
       setHashCheck(false);
-      showErrorToast('Payment Failed');
-      setTimeout(() => {
-        router.push(`/patient/dashboard`);
-      }, 10000);
+      showErrorToast("Payment Failed");
+      // setTimeout(() => {
+      //   router.push(`/patient/dashboard`);
+      // }, 10000);
     } else {
       setHashCheck(true);
-      showSuccessToast('Payment Successful');
-      setTimeout(() => {
-        router.push(`/patient/payment-confirmation?txnid=${queryObj?.txnid}`);
-      }, 10000);
+      showSuccessToast("Payment Successful");
+      // setTimeout(() => {
+      //   router.push(`/patient/payment-confirmation?txnid=${queryObj?.txnid}`);
+      // }, 10000);
     }
 
     setLoading(false);
-    payu()
+    payu();
   }, [searchParams, router]);
 
+  const query = useSearchParams();
+  const txnid = query.get("txnid");
+
+  const [seconds, setSeconds] = useState(5);
+
+  useEffect(() => {
+    if (loading || hascheck === null) return;
+
+    const timer = setInterval(() => {
+      setSeconds((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [loading, hascheck]);
+
+  // Redirect logic
+  useEffect(() => {
+    if (seconds === 0 && hascheck === true) {
+      router.push(`/patient/payment-confirmation?txnid=${txnid}`);
+    } else if (seconds === 0 && hascheck === false) {
+      router.push("/patient/dashboard");
+    }
+  }, [seconds, hascheck, router, txnid]);
+
   return (
-    <div>
+    <div className="relative">
       {loading ? (
-        <div className="flex flex-col items-center justify-center min-h-screen px-4">
+        <div className="flex flex-col items-center justify-center min-h-screen px-4 bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5] relative">
           <Loader2 className="w-24 h-24 mb-6 animate-spin" />
         </div>
       ) : hascheck === true ? (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-green-50 px-4">
-          <CheckCircle className="w-24 h-24 text-green-600 mb-6" />
-          <h1 className="text-3xl font-bold text-green-700 mb-2">
+        <div className="flex flex-col items-center justify-center gap-[11px] h-screen bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5]">
+          <Image
+            src="/images/Verified-successfully.png"
+            width={62}
+            height={62}
+            className="w-[62.5px] mb-0"
+            alt="ekyamm"
+          />
+          <strong className="text-[16px] text-black font-[600] text-center">
             Payment Successful!
-          </h1>
-          <p className="text-green-800 text-lg">Thank you.</p>
+          </strong>
+          <p className="text-black text-sm font-medium">
+            Redirecting to payment confirmation {seconds} second
+            {seconds !== 1 ? "s" : ""}...
+          </p>
+          <div className="absolute top-4 right-3">
+            <Link href="/patient/payment-confirmation?txnid=${queryObj?.txnid}">
+              <X width={24} height={24} className="w-8 mb-0" />
+            </Link>
+          </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-yellow-50 px-4">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5] px-4">
           <AlertTriangle className="w-24 h-24 text-yellow-600 mb-6" />
-          <h1 className="text-3xl font-bold text-yellow-700 mb-2">
+          <strong className="text-[16px] text-black font-[600] text-center">
             Security Error
-          </h1>
-          <p className="text-yellow-800 text-lg">Redirecting…</p>
+          </strong>
+          <p className="text-black text-sm font-medium">
+            Redirecting to dashboard {seconds} second{seconds !== 1 ? "s" : ""}
+            ...
+          </p>
+          <div className="absolute top-4 right-3">
+            <Link href="/patient/dashboard">
+              <X width={24} height={24} className="w-8 mb-0" />
+            </Link>
+          </div>
         </div>
       )}
     </div>

@@ -189,7 +189,8 @@ one symbol, and no spaces.`;
 
     return (
         <>
-            <div className=" bg-gradient-to-b  from-[#DFDAFB] to-[#F9CCC5] h-full flex flex-col justify-evenly items-center px-[16px] max-w-[576px] mx-auto">
+            <div className=" bg-gradient-to-b  from-[#DFDAFB] to-[#F9CCC5] h-full flex flex-col justify-between items-center px-[16px] max-w-[576px] mx-auto">
+         
                 {formLoader && (
                     <div
                         className="fixed inset-0 bg-[#000000b8] bg-opacity-20 flex items-center justify-center z-50 transition-opacity duration-300"
@@ -210,7 +211,15 @@ one symbol, and no spaces.`;
                         </div>
                     </div>
                 )}
-            
+                <div className='pt-5'>
+      <Image
+              src="/images/patient-logo.png"
+              alt="Company Logo"
+              width={100}
+              height={60}
+              className="cursor-pointer w-full h-[60px]"
+            />
+            </div>
                 <div className="flex flex-col justify-center items-center w-full">
                     <div className="border-2 bg-[#FFFFFF80] border-[#FFFFFF4D] rounded-4xl py-6 px-6  mx-4 text-center w-full">
                         <strong className="text-[16px] text-black font-[600] text-center">

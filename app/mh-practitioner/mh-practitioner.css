@@ -4,7 +4,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  /* font-family: Arial, sans-serif; */
   font-optical-sizing: auto;
   background-image: linear-gradient(
     to bottom,
@@ -220,6 +220,7 @@ body {
 .secure-section .hero-text-column h1 {
   color: rgba(47, 47, 47, 1);
   font-weight: 700;
+  font-family: Roboto Serif;
 }
 .knowMore-section .hero-text-column img {
   width: 110px;
@@ -233,6 +234,7 @@ body {
 }
 .brand-text {
   color: rgba(59, 50, 107, 1);
+  font-family: Roboto Serif;
 }
 .brand-text-bold {
   font-weight: 600;

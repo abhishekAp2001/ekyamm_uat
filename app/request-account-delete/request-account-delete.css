@@ -13,6 +13,9 @@
       }
 
       /* Navbar styles */
+      .navbar_sec {
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto flex, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+      }
       .navbar {
         background-color: #ffffff; /* White background */
         padding: 20px 6% 20px 6%;

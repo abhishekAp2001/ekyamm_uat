@@ -10,12 +10,24 @@ import Section3 from '@/components/sales/Section3/Section3'
 import Section4 from '@/components/sales/Section4/Section4'
 import Footer from '@/components/sales/Footer/Footer'
 import Contact_Form from '@/components/sales/Contact_Form/Contact_Form'
+import { usePathname } from 'next/navigation'
  
  
  
 const Page = () => {
      const formRef = useRef();
   const [isMobile, setIsMobile] = useState(false);
+  const pathname = usePathname()
+
+  const getTitle = ()=> {
+    if(pathname === "/") {
+      return "Ekyamm"
+    } else if(pathname === "/mh-practitioner") {
+      return "MH Practitioner | Ekyamm"
+    } else if(pathname === "/request-account-delete") {
+      return "Request Account Delete | Ekyamm"
+    }
+  }
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 767);
@@ -35,19 +47,9 @@ const Page = () => {
   return (
    <div className="flex flex-col w-full h-screen bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5] ">
       <Head>
-        <title>Ekyamm</title>
-        <Link rel="icon" href="/images/logo-circle-hands.svg" type="image/png" />
-        {/* If you **really** need Bootstrap, keep this: */}
-        {/* Or remove if you use Tailwind */}
-        {/* <Link rel="stylesheet" href="/styles.css" /> */}
-      </Head>
- 
-    {/* <div
-        id="overlay"
-        style={{ display: isFormOpen ? "block" : "none" }}
-        onClick={closeForm}
-      ></div> */}
- 
+        <title>{getTitle()}</title>
+        <Link rel="icon" href="/images/logo-circle-hands.svg" type="image/png" className='' />
+      </Head> 
       {/* Navbar placeholder */}
       <div id="navbar-placeholder" style={{ padding: 0, margin: 0 }}></div>
       <Navbar onStartClick={handleButtonClick}/>

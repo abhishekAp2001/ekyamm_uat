@@ -91,7 +91,7 @@ useEffect(() => {
           getPatientSession();
   }, [patientSessionToken]);
   return (
-    <div className="relative h-screen max-w-[576px]  flex flex-col  bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5] ">
+    <div className="relative h-screen max-w-[576px]  flex flex-col  bg-gradient-to-b space-y-4 from-[#e7d6ec] to-[#F9CCC5] ">
       {/* Fixed Header */}
       {/* <div className="fixed top-0 left-0 right-0 z-50 flex flex-col gap-8 bg-[#e7d6ec] max-w-[576px] mx-auto">
         Gradient Header
@@ -189,7 +189,7 @@ useEffect(() => {
         (
           <div className=" flex-1 overflow-y-auto px-3 pb-5">
         {/* Filter Row */}
-        <div className="flex justify-between items-center my-2">
+        <div className="flex justify-between items-center my-2 ">
           <strong className="text-sm text-black font-semibold">
             Upcoming Sessions
           </strong>
