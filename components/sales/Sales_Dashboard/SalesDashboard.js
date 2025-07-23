@@ -9,8 +9,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-}
- from "@/components/ui/drawer";
+} from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Menu, Plus, X } from "lucide-react";
@@ -22,26 +21,46 @@ import Sidebar from "@/components/patient/Sidebar/Sidebar";
 import { getCookie, hasCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 const SalesDashboard = () => {
-  const router = useRouter()
+  const router = useRouter();
   const [showSidebar, setShowSidebar] = useState(false);
-  const greeting = new Date().getHours() < 12 ? "Morning" : (new Date().getHours() < 16 || (new Date().getHours() === 16 && new Date().getMinutes() === 0)) ? "Afternoon" : "Evening";
-  useEffect(()=>{
-    const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
-    if(!token){
-      router.push('/login')
+  const greeting =
+    new Date().getHours() < 12
+      ? "Morning"
+      : new Date().getHours() < 16 ||
+        (new Date().getHours() === 16 && new Date().getMinutes() === 0)
+      ? "Afternoon"
+      : "Evening";
+  useEffect(() => {
+    const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null;
+    if (!token) {
+      router.push("/login");
     }
-  })
+  });
   return (
     <>
-      <div className="bg-gradient-to-r  from-[#B0A4F5] to-[#EDA197] rounded-bl-3xl rounded-br-3xl px-3 py-5 mb-0 fixed top-0 left-0 right-0 max-w-[576px] mx-auto">
-        <div className="flex justify-between items-center">
-          <Menu color="white" width={24} className="mr-5" 
-          onClick={() => setShowSidebar(true)}/>
+      <div className="bg-gradient-to-r  from-[#B0A4F5] to-[#EDA197] rounded-bl-3xl rounded-br-3xl px-3 py-5 mb-0 fixed top-0 left-0 right-0 max-w-[576px] mx-auto z-90">
+        <div className="flex justify-between items-center relative">
+          <Menu
+            color="white"
+            width={24}
+            className="mr-5"
+            onClick={() => setShowSidebar(true)}
+          />
           {showSidebar && (
-          <div className="absolute inset-0 z-50">
-            <Sidebar onClose={() => setShowSidebar(false)} />
-          </div>
-        )}
+            // <div className="absolute inset-0 z-50">
+            //   <Sidebar onClose={() => setShowSidebar(false)} />
+            // </div>
+            <>
+              <div
+                className="fixed inset-0  z-40"
+                onClick={() => setShowSidebar(false)}
+              ></div>
+ 
+              <div className="absolute inset-0 z-50">
+                <Sidebar onClose={() => setShowSidebar(false)} />
+              </div>
+            </>
+          )}
           <Image
             src="/images/ekyamm.png"
             width={100}
@@ -55,7 +74,13 @@ const SalesDashboard = () => {
           </Avatar>
         </div>
       </div>
-      <div className="px-3 h-full  overflow-auto pt-[26%] lg:pt-[17%]">
+      {/* <div className="px-3 h-full  overflow-auto pt-[26%] lg:pt-[17%] "> */}
+      <div
+        className={`px-3 h-full overflow-auto pt-[26%] lg:pt-[17%] transition-all duration-300 ${
+          showSidebar ? "blur-sm pointer-events-none select-none" : ""
+        }`}
+      >
+        {" "}
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <span className="text-[12px] text-gray-500">Good {greeting},</span>
@@ -76,7 +101,6 @@ const SalesDashboard = () => {
         <div className="flex justify-between items-center gap-3">
           <Dashboard_card />
         </div>
- 
         {/* Channel Partner */}
         <div className="mt-[12.35px] pt-[8.21px] pb-3.5 border=[1.47px] border-[#FFFFFF4D] rounded-2xl">
           <div className="flex justify-between items-center ps-2 pe-[16.93px]"></div>
@@ -204,8 +228,7 @@ const SalesDashboard = () => {
       </div>
  
       {/* footer */}
-      <div className="footer_bar bg-[#FFFFFFB2] max-w-[576px] h-[58px] fixed bottom-0 left-0 right-0 flex items-center m-auto">
-      {/* <div className="footer_bar bg-[#FFFFFFB2] h-[58px] absolute bottom-0 left-0 right-0 flex items-center"> */}
+      <div className="footer_bar bg-[#FFFFFFB2] max-w-[576px] h-[58px] fixed bottom-0 left-0 right-0 flex items-center m-auto z-0 ">
         <Tabs defaultValue="account" className="w-full">
           <TabsList className="w-full bg-transparent p-0  h-[58px]">
             <TabsTrigger
@@ -252,7 +275,5 @@ const SalesDashboard = () => {
 };
  
 export default SalesDashboard;
- 
- 
  
  

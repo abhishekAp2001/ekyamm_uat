@@ -455,7 +455,7 @@ const Schedule_Session = () => {
                 placeholder="Enter session type"
                 value="Counselling ( 1 Hr )"
                 readOnly
-                className="w-full h-10 rounded-[7.26px] bg-white px-3 py-2  border border-[#E6E6E6] text-black text-[12px] font-bold focus:border-none focus:ring-0 focus-visible:border-none focus-visible:ring-0 focus-visible:outline-0"
+                className="w-full h-10 rounded-[7.26px] bg-white px-3 py-2  border border-[#E6E6E6] text-gray-400 text-[12px] font-medium focus:border-none focus:ring-0 focus-visible:border-none focus-visible:ring-0 focus-visible:outline-0"
               />
             </div>
 
