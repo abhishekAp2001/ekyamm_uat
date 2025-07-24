@@ -1,10 +1,11 @@
 import Image from "next/image";
-import React from "react";
+import React,{useState} from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../../../ui/avatar";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { Mail, Phone, MapPin } from "lucide-react";
-
+import QRCode from 'qrcode'
 const CPList = ({ list }) => {
+  const [qrCode, setQrCode] = useState("");
   function cleanNumber(input) {
     return input.replace(/🇮🇳/, '')
       .replace(/\s+/g, '')
@@ -21,6 +22,14 @@ const CPList = ({ list }) => {
     });
     return formatted
   }
+    const generateQrCode = async (url) => {
+      try {
+        const QrcodeURL = await QRCode.toDataURL(url)
+        setQrCode(QrcodeURL);
+      } catch (error) {
+        console.error("Error generating QR code:", error);
+      }
+    }
   return (
     <>
       <div className="flex flex-wrap mt-[10.9px]">
