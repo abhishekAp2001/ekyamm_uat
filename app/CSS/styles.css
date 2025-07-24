@@ -12,7 +12,6 @@ body {
 :root {
     --nav-height: 0px;
 }
-  
 #section1-placeholder {
     padding-top: var(--nav-height);
     padding-top: 105px;

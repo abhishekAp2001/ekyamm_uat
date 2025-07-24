@@ -278,7 +278,7 @@ const Patient_Profile = () => {
         },
       })
       if (response?.data?.success) {
-        showSuccessToast("OTP sent to regetered mobile number")
+        showSuccessToast("OTP sent to registered mobile number")
       }
       if (!response?.data?.success) {
         showErrorToast("Unable to send OTP")
@@ -393,7 +393,7 @@ const Patient_Profile = () => {
         },
       })
       if (response?.data?.success) {
-        showSuccessToast("OTP sent to regetered email")
+        showSuccessToast("OTP sent to registered email")
       }
       if (!response?.data?.success) {
         showErrorToast("Unable to send OTP")

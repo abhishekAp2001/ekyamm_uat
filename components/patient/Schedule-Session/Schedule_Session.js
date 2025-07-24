@@ -349,12 +349,12 @@ const Schedule_Session = () => {
         </strong>
       </div>
       <div className="pt-15 px-4 pb-20 flex justify-center relative">
-        <div className="w-full flex flex-col gap-2">
+        <div className="w-full flex flex-col gap-6">
           <div>
             <label className="block text-[#8F8F8F] mb-1 text-[15px]">
               Patient
             </label>
-            <div className="w-full bg-[#FFFFFF]/50 rounded-[12px] px-[12px] py-[8px] flex items-center justify-between">
+            <div className="w-full bg-[#FFFFFF24] rounded-[12px] px-[12px] py-[8px] flex items-center justify-between">
               <div className="flex items-center gap-[12px]">
                 <Avatar>
                   <AvatarImage
@@ -390,7 +390,7 @@ const Schedule_Session = () => {
             <label className="block text-[#8F8F8F] mb-1 text-[15px]">
               Assign Practitioner
             </label>
-            <div className="w-full bg-[#FFFFFF]/50 rounded-[12px] px-[12px] py-[8px] flex items-center justify-between">
+            <div className="w-full bg-[#FFFFFF24] rounded-[12px] px-[12px] py-[8px] flex items-center justify-between">
               <div className="flex items-center gap-[12px]">
                 <Avatar>
                   <AvatarImage
@@ -447,7 +447,7 @@ const Schedule_Session = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 font-quicksand text-sm bg-gradient-to-br rounded-[16px]">
+          <div className="flex flex-col gap-6 font-quicksand text-sm bg-gradient-to-br rounded-[16px]">
             <div>
               <Label className="block text-[#8F8F8F] mb-1">Session Type</Label>
               <Input
@@ -455,7 +455,7 @@ const Schedule_Session = () => {
                 placeholder="Enter session type"
                 value="Counselling ( 1 Hr )"
                 readOnly
-                className="w-full h-10 rounded-[7.26px] bg-white px-3 py-2  border border-[#E6E6E6] text-gray-400 text-[12px] font-medium focus:border-none focus:ring-0 focus-visible:border-none focus-visible:ring-0 focus-visible:outline-0"
+                className="w-full h-10 rounded-[7.26px] bg-[#ffffff50] px-3 py-2  border border-[#E6E6E6] text-gray-400 text-[12px] font-medium focus:border-none focus:ring-0 focus-visible:border-none focus-visible:ring-0 focus-visible:outline-0"
               />
             </div>
 
@@ -658,7 +658,7 @@ const Schedule_Session = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-2">
               <label className="text-[#8F8F8F]">
                 Weekly Recurring Sessions
               </label>
@@ -667,7 +667,17 @@ const Schedule_Session = () => {
                 checked={isRecurring}
                 onCheckedChange={(checked) => setIsRecurring(checked)}
               />
-            </div>
+            </div> */}
+            
+            <label className="flex items-center gap-2 cursor-pointer text-[#8F8F8F]">
+  <span className="select-none">Weekly Recurring Sessions</span>
+  <Checkbox
+    className="h-4 w-[16.05px] border-[1.5px] border-[#776EA5] rounded-[1.7px]"
+    checked={isRecurring}
+    onCheckedChange={(checked) => setIsRecurring(checked)}
+  />
+</label>
+
 
             <div>
               <label className="block text-[#8F8F8F] mb-1">

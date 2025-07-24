@@ -505,12 +505,12 @@ const Reschedule_Session = () => {
         </strong>
       </div>
       <div className="pt-15 px-4 pb-20 flex justify-center relative">
-        <div className="w-full flex flex-col gap-2">
+        <div className="w-full flex flex-col gap-6">
           <div>
             <label className="block text-[#8F8F8F] mb-1 text-[15px]">
               Patient
             </label>
-            <div className="w-full bg-[#FFFFFF]/50 rounded-[12px] px-[12px] py-[8px] flex items-center justify-between">
+            <div className="w-full bg-[#FFFFFF24] rounded-[12px] px-[12px] py-[8px] flex items-center justify-between">
               <div className="flex items-center gap-[12px]">
                 <Avatar>
                   <AvatarImage
@@ -543,7 +543,7 @@ const Reschedule_Session = () => {
             <label className="block text-[#8F8F8F] mb-1 text-[15px]">
               Assign Practitioner
             </label>
-            <div className="w-full bg-[#FFFFFF]/50 rounded-[12px] px-[12px] py-[8px] flex items-center justify-between">
+            <div className="w-full bg-[#FFFFFF24] rounded-[12px] px-[12px] py-[8px] flex items-center justify-between">
               <div className="flex items-center gap-[12px]">
                 <Avatar>
                   <AvatarImage
@@ -592,15 +592,15 @@ const Reschedule_Session = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 font-quicksand text-sm bg-gradient-to-br rounded-[16px]">
+          <div className="flex flex-col gap-6 font-quicksand text-sm bg-gradient-to-br rounded-[16px]">
             <div>
               <Label className="block text-[#8F8F8F] mb-1">Session Type</Label>
               <Input
                 type="text"
-                placeholder="Enter session type"
+                placeholder="Enter session type" 
                 value="Counselling ( 1 Hr )"
                 readOnly
-                className="w-full h-10 rounded-[7.26px] bg-white px-3 py-2  border border-[#E6E6E6] text-gray-400 text-[12px] font-semibold focus:border-none focus:ring-0 focus-visible:border-none focus-visible:ring-0 focus-visible:outline-0"
+                className="w-full h-10 rounded-[7.26px] bg-[#ffffff50] px-3 py-2  border border-[#E6E6E6] text-gray-400 text-[12px] font-semibold focus:border-none focus:ring-0 focus-visible:border-none focus-visible:ring-0 focus-visible:outline-0"
               />
             </div>
 

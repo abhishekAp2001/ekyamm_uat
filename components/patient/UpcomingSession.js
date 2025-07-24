@@ -310,13 +310,7 @@ function formatSessionTime(sessionTime) {
                 {isExpanded && (
                   <div className="cursor-pointer" onClick={() => setExpandedIndex(null)}>
                     <div className="flex  justify-between mb-4">
-                      {/* <Image
-                src="/images/Close.svg"
-                width={23}
-                height={23}
-                alt=""
-                style={{ cursor: "pointer" }}
-              /> */}
+                      <div className="flex gap-3">
                       <Avatar className="w-[87.69px] h-[100px] rounded-[10px]" style={{width:'87.89px !important'}}
                       onClick={(e)=>{
                             e.stopPropagation()
@@ -364,6 +358,7 @@ function formatSessionTime(sessionTime) {
                             <span className="text-[14px] text-[#6D6A5D] font-medium"><span className="font-bold">Time Slot:</span> {formatSessionTime(session?.sessionTime)}</span>
                           </div>
                         </div>
+                      </div>
                       </div>
                       {/* Chevron icon (rotated) */}
                       <ChevronDown
