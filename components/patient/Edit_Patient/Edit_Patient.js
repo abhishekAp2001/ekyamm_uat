@@ -465,7 +465,7 @@ const Edit_Patient = ({ type }) => {
                         }
                         width={100}
                         height={90}
-                        className="w-full h-fit object-cover"
+                        className="w-full h-fit object-fill"
                         alt="Profile"
                     />
                     <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>

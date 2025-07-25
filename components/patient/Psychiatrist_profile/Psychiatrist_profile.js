@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Mail } from "lucide-react";
 import Image from "next/image";
 import {
   Drawer,
@@ -24,7 +24,7 @@ const Psychiatrist_profile = () => {
   const [patientSessionToken, setPatientSessionToken] = useState(null);
   const [loading, setLoading] = useState(false);
   const [clinic, setClinic] = useState(null);
-  const [doctorDrawer, setDoctorDrawer] = useState(false)
+  const [doctorDrawer, setDoctorDrawer] = useState(false);
   useEffect(() => {
     const token = getPatientSessionToken();
     setPatientSessionToken(token);
@@ -34,12 +34,15 @@ const Psychiatrist_profile = () => {
     const getClinicDetails = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient?type=clinic`, {
-          headers: {
-            accesstoken: patientSessionToken,
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient?type=clinic`,
+          {
+            headers: {
+              accesstoken: patientSessionToken,
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (response?.data?.success) {
           setClinic(response?.data?.data.clinicDetails);
         }
@@ -59,10 +62,23 @@ const Psychiatrist_profile = () => {
       {/* Header */}
       <div className="fixed top-0 left-0 right-0 h-[64px] z-50 flex items-center px-4 max-w-[574px] mx-auto">
         <div className="flex justify-between w-full items-center">
-          <ChevronLeft size={28} className="text-black cursor-pointer"
-            onClick={() => { router.push("/patient/patient-profile") }} />
+          <ChevronLeft
+            size={28}
+            className="text-black cursor-pointer"
+            onClick={() => {
+              router.push("/patient/patient-profile");
+            }}
+          />
 
-          <Image src="/images/Chats.png" alt="Chats" width={40} height={43} onClick={() => { router.push('/patient/dashboard') }} />
+          <Image
+            src="/images/Chats.png"
+            alt="Chats"
+            width={40}
+            height={43}
+            onClick={() => {
+              router.push("/patient/dashboard");
+            }}
+          />
         </div>
       </div>
 
@@ -79,9 +95,8 @@ const Psychiatrist_profile = () => {
                 {clinic?.clinicName
                   ?.split(" ")
                   .slice(0, 2)
-                  .map(word => word[0])
-                  .join("")
-                }
+                  .map((word) => word[0])
+                  .join("")}
               </div>
             </div>
 
@@ -91,7 +106,8 @@ const Psychiatrist_profile = () => {
                 {clinic?.clinicName}
               </p>
               <p className="text-[15px] font-normal text-center m-0 leading-tight opacity-70">
-                {clinic?.generalInformation?.area}, {clinic?.generalInformation?.city}
+                {clinic?.generalInformation?.area},{" "}
+                {clinic?.generalInformation?.city}
               </p>
 
               {/* Icons + Emergency */}
@@ -100,13 +116,25 @@ const Psychiatrist_profile = () => {
                 style={{ gap: "12px" }}
               >
                 <div className="flex items-center gap-[10px]">
-                  <a href={`tel:${clinic?.generalInformation?.primaryMobileNumber}`}>
-                    <Image
+                  <a
+                    href={`tel:${clinic?.generalInformation?.primaryMobileNumber}`}
+                    className="w-6 h-6 rounded-full flex items-center justify-center bg-[#776EA5]"
+                  >
+                    {/* <Image
                       src="/images/Group 924.png"
                       alt="icon1"
                       width={24}
                       height={24}
-                    />
+                    /> */}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="white"
+                      width="16.5"
+                      height="16.5"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M6.62 10.79a15.464 15.464 0 006.59 6.59l2.2-2.2a1 1 0 011.05-.24 11.72 11.72 0 003.68.59 1 1 0 011 1v3.5a1 1 0 01-1 1A17.5 17.5 0 013.5 5a1 1 0 011-1H8a1 1 0 011 1c0 1.27.2 2.5.59 3.68a1 1 0 01-.24 1.05l-2.2 2.2z" />
+                    </svg>
                   </a>
                   <a
                     href={`https://wa.me/${clinic?.generalInformation?.whatsappNumber}?text=hi`}
@@ -120,23 +148,47 @@ const Psychiatrist_profile = () => {
                       height={24}
                     />
                   </a>
-                  <a href={`mailto:${clinic?.generalInformation?.email}`}>
-                    <Image
-                      src="/images/Group 923.png"
-                      alt="icon3"
-                      width={24}
-                      height={24}
-                    />
+                  <a
+                    href={`mailto:${clinic?.generalInformation?.email}`}
+                    className="w-6 h-6 rounded-full flex items-center justify-center bg-[#776EA5]"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 44 36"
+                    >
+                      <rect
+                        x="0"
+                        y="0"
+                        width="44"
+                        height="36"
+                        rx="6"
+                        ry="6"
+                        fill="white"
+                      />
+                      <path
+                        d="M6 10l16 11 16-11"
+                        fill="none"
+                        stroke="#7669a8"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
                   </a>
                 </div>
                 <a href={`tel:${clinic?.generalInformation?.emergencyNumber}`}>
                   <div className="flex items-center bg-[#EC4444] text-white text-[12px] rounded-[5px] px-2 py-1 gap-1">
-                    <Image
-                      src="/images/call.png"
-                      alt="Emergency"
-                      width={12}
-                      height={12}
-                    />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="white"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M6.62 10.79a15.464 15.464 0 006.59 6.59l2.2-2.2a1 1 0 011.05-.24 11.72 11.72 0 003.68.59 1 1 0 011 1v3.5a1 1 0 01-1 1A17.5 17.5 0 013.5 5a1 1 0 011-1H8a1 1 0 011 1c0 1.27.2 2.5.59 3.68a1 1 0 01-.24 1.05l-2.2 2.2z" />
+                    </svg>
                     <span>Emergency</span>
                   </div>
                 </a>
@@ -153,40 +205,52 @@ const Psychiatrist_profile = () => {
             <div className="w-full bg-gradient-to-r from-[#bba3e438] to-[#eda1974d] rounded-[8px] p-[10px] mt-3 text-left">
               <p className="text-[15px] font-semibold">Address:</p>
               <p className="text-sm mt-[2px] leading-snug">
-                {clinic?.generalInformation?.area}, {clinic?.generalInformation?.city}
+                {clinic?.generalInformation?.area},{" "}
+                {clinic?.generalInformation?.city}
               </p>
               <p className="text-sm mt-[2px] leading-snug">
-                {clinic?.generalInformation?.state}, {clinic?.generalInformation?.pincode}
+                {clinic?.generalInformation?.state},{" "}
+                {clinic?.generalInformation?.pincode}
               </p>
             </div>
 
             {/* Doctor Info */}
             {clinic?.doctorDetails?.doNotDisplay ? (
-              <>
-              </>
+              <></>
             ) : (
-              <div className="w-full h-[56px] flex items-center justify-between bg-gradient-to-r from-[#bba3e438] to-[#eda1974d] rounded-[8px] p-[12px] gap-[10px] mt-3"
+              <div className="w-full h-[56px] flex items-center justify-between bg-gradient-to-r from-[#bba3e438] to-[#eda1974d] rounded-[8px] p-[12px] gap-[10px] mt-3">
+                <div
+                  className="flex items-center justify-between gap-[10px] w-full"
+                  onClick={() => {
+                    setDoctorDrawer(true);
+                  }}
                 >
-                <div className="flex items-center justify-between gap-[10px] w-full"
-                onClick={() => { setDoctorDrawer(true) }}>
                   <div className="flex items-center gap-[10px]">
-                  <Image
-                    src="/images/medical_services.png"
-                    alt="Medical Icon"
-                    width={32}
-                    height={32}
-                    className="rounded-full object-cover"
-                  />
-                  <span className="text-[15px] font-medium">{clinic?.doctorDetails?.firstName} {clinic?.doctorDetails?.lastName}</span></div>
+                    <Image
+                      src="/images/medical_services.png"
+                      alt="Medical Icon"
+                      width={32}
+                      height={32}
+                      className="rounded-full object-fill"
+                    />
+                    <span className="text-[15px] font-medium">
+                      {clinic?.doctorDetails?.firstName}{" "}
+                      {clinic?.doctorDetails?.lastName}
+                    </span>
+                  </div>
                   <ChevronLeft className="rotate-180 text-[#8F8F8F]" />
                 </div>
-                
+
                 {/* Drawer Trigger */}
-                <Drawer open={doctorDrawer} onClose={() => setDoctorDrawer(false)}>
-                  
+                <Drawer
+                  open={doctorDrawer}
+                  onClose={() => setDoctorDrawer(false)}
+                >
                   <DrawerContent>
                     <DrawerHeader>
-                      <DrawerTitle className="sr-only text-[15px]">Doctor Details</DrawerTitle>
+                      <DrawerTitle className="sr-only text-[15px]">
+                        Doctor Details
+                      </DrawerTitle>
                       <DrawerDescription className="sr-only text-[17px]">
                         Detailed information about the psychiatrist.
                       </DrawerDescription>
@@ -194,7 +258,6 @@ const Psychiatrist_profile = () => {
 
                     {/* Actual Visible Content */}
                     <div className="fixed bottom-0 left-0 right-0 w-full  ">
-
                       <div
                         onClick={() => setDoctorDrawer(false)}
                         className="absolute cursor-pointer"
@@ -210,10 +273,11 @@ const Psychiatrist_profile = () => {
                         />
                       </div>
 
-
                       <div
                         className="rounded-t-[16px] w-full "
-                        style={{ background: "linear-gradient(#DFDAFB, #F9CCC5)" }}
+                        style={{
+                          background: "linear-gradient(#DFDAFB, #F9CCC5)",
+                        }}
                       >
                         <div className="rounded-t-[14px] p-4 bg-gradient-to-b from-[#eeecfb] to-[#eeecfb] shadow-lg text-center">
                           <div className="flex items-center justify-center gap-2 mb-2 mt-7">
@@ -228,17 +292,24 @@ const Psychiatrist_profile = () => {
                             </p>
                           </div>
                           <h3 className="text-[20px] font-semibold text-black mb-3">
-                            {clinic?.doctorDetails?.firstName} {clinic?.doctorDetails?.lastName}
+                            {clinic?.doctorDetails?.firstName}{" "}
+                            {clinic?.doctorDetails?.lastName}
                           </h3>
 
                           <div className="flex items-center justify-center gap-3 mb-3">
-                            <a href={`tel:${clinic?.doctorDetails?.primaryMobileNumber}`}>
-                              <Image
-                                src="/images/Group 924.png"
-                                alt="phone"
-                                width={24}
-                                height={24}
-                              />
+                            <a
+                              href={`tel:${clinic?.doctorDetails?.primaryMobileNumber}`}
+                              className="w-6 h-6 rounded-full flex items-center justify-center bg-[#776EA5]"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="white"
+                                width="16.5"
+                                height="16.5"
+                                viewBox="0 0 24 24"
+                              >
+                                <path d="M6.62 10.79a15.464 15.464 0 006.59 6.59l2.2-2.2a1 1 0 011.05-.24 11.72 11.72 0 003.68.59 1 1 0 011 1v3.5a1 1 0 01-1 1A17.5 17.5 0 013.5 5a1 1 0 011-1H8a1 1 0 011 1c0 1.27.2 2.5.59 3.68a1 1 0 01-.24 1.05l-2.2 2.2z" />
+                              </svg>
                             </a>
                             <a
                               href={`https://wa.me/${clinic?.doctorDetails?.whatsappNumber}?text=hi`}
@@ -252,22 +323,48 @@ const Psychiatrist_profile = () => {
                                 height={24}
                               />
                             </a>
-                            <a href={`mailto:${clinic?.doctorDetails?.email}`}>
-                              <Image
-                                src="/images/Group 923.png"
-                                alt="mail"
-                                width={24}
-                                height={24}
-                              />
-                            </a>
-                            <a href={`tel:${clinic?.doctorDetails?.emergencyNumber}`}>
-                              <div className="flex items-center gap-1 px-2 py-1 bg-[#EC4444] rounded-[6px] text-white text-[14px] font-semibold">
-                                <Image
-                                  src="/images/call.png"
-                                  alt="call"
-                                  width={12}
-                                  height={12}
+                            <a
+                              href={`mailto:${clinic?.doctorDetails?.email}`}
+                              className="w-6 h-6 rounded-full flex items-center justify-center bg-[#776EA5]"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="14"
+                                height="14"
+                                viewBox="0 0 44 36"
+                              >
+                                <rect
+                                  x="0"
+                                  y="0"
+                                  width="44"
+                                  height="36"
+                                  rx="6"
+                                  ry="6"
+                                  fill="white"
                                 />
+                                <path
+                                  d="M6 10l16 11 16-11"
+                                  fill="none"
+                                  stroke="#7669a8"
+                                  stroke-width="3"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                              </svg>
+                            </a>
+                            <a
+                              href={`tel:${clinic?.doctorDetails?.emergencyNumber}`}
+                            >
+                              <div className="flex items-center gap-1 px-2 py-1 bg-[#EC4444] rounded-[6px] text-white text-[14px] font-semibold">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="white"
+                                  width="16"
+                                  height="16"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path d="M6.62 10.79a15.464 15.464 0 006.59 6.59l2.2-2.2a1 1 0 011.05-.24 11.72 11.72 0 003.68.59 1 1 0 011 1v3.5a1 1 0 01-1 1A17.5 17.5 0 013.5 5a1 1 0 011-1H8a1 1 0 011 1c0 1.27.2 2.5.59 3.68a1 1 0 01-.24 1.05l-2.2 2.2z" />
+                                </svg>
                                 <span>Emergency</span>
                               </div>
                             </a>

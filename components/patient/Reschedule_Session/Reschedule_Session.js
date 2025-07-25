@@ -510,11 +510,11 @@ const Reschedule_Session = () => {
             <label className="block text-[#8F8F8F] mb-1 text-[15px]">
               Patient
             </label>
-            <div className="w-full bg-[#FFFFFF24] rounded-[12px] px-[12px] py-[8px] flex items-center justify-between">
+            <div className="w-full bg-[#ffffff1a] rounded-[12px] px-[12px] py-[8px] flex items-center justify-between">
               <div className="flex items-center gap-[12px]">
                 <Avatar>
                   <AvatarImage
-                    className="rounded-full object-cover w-[42px] h-[42px]"
+                    className="rounded-full object-fill w-[42px] h-[42px]"
                     src={patientSessionData?.profileImageUrl || "/images/profile.png"}
                     alt={`${patientSessionData?.firstName || ""} ${patientSessionData?.lastName || ""
                       }`}
@@ -543,11 +543,11 @@ const Reschedule_Session = () => {
             <label className="block text-[#8F8F8F] mb-1 text-[15px]">
               Assign Practitioner
             </label>
-            <div className="w-full bg-[#FFFFFF24] rounded-[12px] px-[12px] py-[8px] flex items-center justify-between">
+            <div className="w-full bg-[#ffffff1a] rounded-[12px] px-[12px] py-[8px] flex items-center justify-between">
               <div className="flex items-center gap-[12px]">
                 <Avatar>
                   <AvatarImage
-                    className="rounded-full object-cover w-[42px] h-[42px]"
+                    className="rounded-full object-fill w-[42px] h-[42px]"
                     src={
                       selectedCounsellorData?.generalInformation
                         ?.profileImageUrl || ""
@@ -600,7 +600,7 @@ const Reschedule_Session = () => {
                 placeholder="Enter session type" 
                 value="Counselling ( 1 Hr )"
                 readOnly
-                className="w-full h-10 rounded-[7.26px] bg-[#ffffff50] px-3 py-2  border border-[#E6E6E6] text-gray-400 text-[12px] font-semibold focus:border-none focus:ring-0 focus-visible:border-none focus-visible:ring-0 focus-visible:outline-0"
+                className="w-full h-10 rounded-[7.26px] bg-[#ffffff28] px-3 py-2  border border-[#E6E6E6] text-gray-400 text-[12px] font-semibold focus:border-none focus:ring-0 focus-visible:border-none focus-visible:ring-0 focus-visible:outline-0"
               />
             </div>
 

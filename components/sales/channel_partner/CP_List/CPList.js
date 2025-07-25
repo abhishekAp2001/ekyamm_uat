@@ -58,7 +58,7 @@ const CPList = ({ list }) => {
                     src={list?.generalInformation?.profileImageUrl}
                     alt={`${list?.generalInformation?.firstName} ${list?.generalInformation?.lastName}`}
                   />
-                  <AvatarFallback>
+                  <AvatarFallback className='bg-[#eae8f0]'>
                     {list?.clinicName
                       ? list.clinicName
                         .split(" ")
@@ -71,7 +71,7 @@ const CPList = ({ list }) => {
                 </Avatar>
               </DialogTrigger>
 
-              <DialogContent className=" bg-[#f2f2f2] rounded-2xl p-[18px_12px]">
+              <DialogContent className=" bg-[#f2f2f2] rounded-2xl p-[18px_12px]"showCloseBlack>
                 <div className="flex flex-col space-y-4">
                   <h2 className="text-[20px] font-semibold">
                     Practice Details
@@ -79,7 +79,7 @@ const CPList = ({ list }) => {
 
                   {/* Avatar / logo and practice info */}
                   <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0 rounded-md bg-gray-100 p-2">
+                    <div className="flex-shrink-0 rounded-md  p-2">
                       {/* Logo: replace src with your static logo or dynamic one */}
                       <Avatar className="cursor-pointer">
                         {list?.generalInformation?.profileImageUrl ? (
@@ -89,7 +89,7 @@ const CPList = ({ list }) => {
                           />
                         ) : null}
 
-                        <AvatarFallback>
+                        <AvatarFallback className="bg-[#eae8f0]">
                           {list?.clinicName
                             ? list.clinicName
                               .split(" ")

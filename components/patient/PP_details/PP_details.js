@@ -508,7 +508,7 @@ const PP_Details = ({ type }) => {
             src={formData.profileImageBase64 || "/images/profile.png"}
             width={100}
             height={90}
-            className="w-full h-fit object-cover"
+            className="w-full h-fit object-fill"
             alt="Profile"
           />
           <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>

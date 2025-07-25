@@ -91,7 +91,7 @@ useEffect(() => {
           getPatientSession();
   }, [patientSessionToken]);
   return (
-    <div className="relative h-screen max-w-[576px]  flex flex-col  bg-gradient-to-b space-y-4 from-[#e7d6ec] to-[#F9CCC5] ">
+    <div className="relative max-w-[576px]  flex flex-col  bg-gradient-to-b space-y-4 from-[#e7d6ec] to-[#F9CCC5] ">
      
       {/* Go back button */}
       {dashboard ? (
@@ -121,7 +121,7 @@ useEffect(() => {
       { loading ? (
         <div className="flex justify-center"><Loader2 className="w-6 h-6 animate-spin" aria-hidden="true" /></div>):
         (
-          <div className=" flex-1 overflow-y-auto px-4 pb-5">
+          <div className=" flex-1 px-4 pb-5">
         {/* Filter Row */}
         <div className="flex justify-between items-center my-2 ">
           <strong className="text-sm text-black font-semibold">

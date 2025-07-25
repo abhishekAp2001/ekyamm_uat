@@ -2,12 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import {
-  CirclePlus,
-  ChevronLeft,
-  X,
-  Loader2,
-} from "lucide-react";
+import { CirclePlus, ChevronLeft, X, Loader2, FunnelX } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
@@ -140,7 +135,7 @@ const Filter = ({
           setFees(response?.data?.data?.fees)
         }
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
     }
     getSliderValue()
@@ -183,7 +178,7 @@ const Filter = ({
             variant="ghost"
           >
            Clear Filter
-           
+
           </Button>
           <div className="text-[15px] font-[500] text-gray-500 mb-5">
             Session Fee
@@ -215,7 +210,9 @@ const Filter = ({
           </div>
           <RadioGroup
             value={selectedGender}
-            onValueChange={(value) => setSelectedGender(value === selectedGender ? "" : value)}
+            onValueChange={(value) =>
+              setSelectedGender(value === selectedGender ? "" : value)
+            }
             className="flex gap-4 items-center"
           >
             {["male", "female", "other"].map((gender) => (
@@ -290,7 +287,7 @@ const Filter = ({
                   <CirclePlus
                     size={11}
                     color="#FFF"
-                    className="w-[11px] h-[11px] text-white suggested_languages ml-[-4px]"
+                    className="w-[11px] h-[11px] text-white suggested_languages ml-[-4px] circle_plus"
                   />
                 </Button>
               ))}

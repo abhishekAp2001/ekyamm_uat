@@ -88,10 +88,10 @@ const Select_Package = () => {
               <p className="text-[15px] font-medium text-gray-500 mb-[7.59px]">
                 Patient
               </p>
-              <div className="bg-[#ffffff24] py-2 px-3 flex gap-3 items-center rounded-[10px] ">
+              <div className="bg-[#ffffff0a] py-2 px-3 flex gap-3 items-center rounded-[10px] ">
                 <Avatar>
                   <AvatarImage
-                    className="rounded-full object-cover w-[42px] h-[42px]"
+                    className="rounded-full object-fill w-[42px] h-[42px]"
                     src={patientSessionData?.profileImageUrl || "/images/profile.png"}
                     alt={`${patientSessionData?.firstName || ""} ${patientSessionData?.lastName || ""
                       }`}
@@ -115,10 +115,10 @@ const Select_Package = () => {
               <p className="text-[15px] text-gray-500 mb-[7.59px] font-medium  mt-5">
                 Assign Practitioner
               </p>
-              <div className="bg-[#ffffff24] py-2 px-3 flex items-center gap-3 rounded-[10px] ">
+              <div className="bg-[#ffffff0a] py-2 px-3 flex items-center gap-3 rounded-[10px] ">
                 <Avatar>
                   <AvatarImage
-                    className="rounded-full object-cover w-[42px] h-[42px]"
+                    className="rounded-full object-fill w-[42px] h-[42px]"
                     src={
                       selectedCounsellorData?.generalInformation
                         ?.profileImageUrl || ""
@@ -169,7 +169,7 @@ const Select_Package = () => {
                 <Select value="Counselling" disabled>
                   <SelectTrigger
                     id="session-type"
-                    className="w-full h-[39px] rounded-[7.26px] bg-[#ffffff50] p-4 text-sm font-semibold text-black"
+                    className="w-full h-[39px] rounded-[7.26px] bg-[#ffffff2b] p-4 text-sm font-semibold text-black"
                   >
                     <SelectValue placeholder="Select type..." />
                   </SelectTrigger>
@@ -313,7 +313,7 @@ const Select_Package = () => {
               }}
               disabled={selectedPackageIdx === 1}
             >
-              Generate Invoice
+             Pay Now
             </Button>
           </div>
           <Footer_bar />

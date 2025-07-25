@@ -30,7 +30,7 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions,pastSess
   const [showClientTestimonials, setShowClientTestimonials] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState(null);
-  const router = useRouter()
+  const router = useRouter();
   const [therapist, setTherapist] = useState();
   useEffect(() => {
     const cookie = getCookie("PatientInfo");
@@ -107,7 +107,7 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions,pastSess
       }
     };
     getTherapistDetails();
-  }, [patientSessionToken])
+  }, [patientSessionToken]);
   const handleBookNowClick = () => {
     let maxAge = {}
         if(rememberMe){
@@ -118,14 +118,23 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions,pastSess
         }
     setCookie("selectedCounsellor", JSON.stringify(therapist),maxAge);
     if (patient.availableCredits === 0) {
-      router.push("/patient/select-package")
-    }
-    else {
+      router.push("/patient/select-package");
+    } else {
       router.push("/patient/schedule-session");
     }
-  }
+  };
+
+  const loadQuicksandFont = () => {
+    const link = document.createElement("link");
+    link.href = "https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap";
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
+  };
+
+  
  
   const handleStartCall = async (sessionId, roomName) => {
+    loadQuicksandFont();
     try {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/session/verify`, {
         "sessionId": sessionId
@@ -154,14 +163,18 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions,pastSess
         call.setTheme({
           light: {
             colors: {
-              accent: '#F9CCC5',
-              background: '#ECD3E0',
+              accent: "#bba3e4",
+              accentText: "#ffffff",
+              background: "#ECD3E0",
             },
+            fonts: {
+              default: '"Quicksand", sans-serif',
+            }        
           },
           dark: {
             colors: {
-              accent: '#776EA5',
-              background: '#ECD3E0',
+              accent: "#776EA5",
+              background: "#ECD3E0",
             },
           },
         });
@@ -181,48 +194,61 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions,pastSess
  
     }
   }
+ 
+
   const isWithinTwoMinutesBefore = (fromTime) => {
     if (!fromTime) return false;
     const fromDate = new Date(fromTime);
     const now = new Date();
- 
+
     const diffInMs = fromDate - now; // how much time until 'from'
     const diffInMinutes = diffInMs / (1000 * 60); // convert ms to min
- 
+
     return diffInMinutes <= 2;
-  }
+  };
   function formatPrettyDate(isoDate) {
-    if (!isoDate) return "--"
-  const date = new Date(isoDate);
+    if (!isoDate) return "--";
+    const date = new Date(isoDate);
 
-  const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
-  
-  const formatted = date.toLocaleDateString('en-US', options);
+    const options = {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    };
 
-  const parts = formatted.split(', ');
-  return `${parts[0]}, ${parts[1]},${parts[2]}`;
-}
-function formatSessionTime(sessionTime) {
-  const fromDate = new Date(sessionTime.from);
-  const toDate = new Date(sessionTime.to);
+    const formatted = date.toLocaleDateString("en-US", options);
 
-  const formatOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
+    const parts = formatted.split(", ");
+    return `${parts[0]}, ${parts[1]}, ${parts[2]}`;
+  }
+  function formatSessionTime(sessionTime) {
+    const fromDate = new Date(sessionTime.from);
+    const toDate = new Date(sessionTime.to);
 
-  const fromTime = fromDate.toLocaleTimeString('en-US', formatOptions).toLowerCase();
-  const toTime = toDate.toLocaleTimeString('en-US', formatOptions).toLowerCase();
+    const formatOptions = { hour: "numeric", minute: "2-digit", hour12: true };
 
-  return `${fromTime} – ${toTime}`;
-}
+    const fromTime = fromDate
+      .toLocaleTimeString("en-US", formatOptions)
+      .toLowerCase();
+    const toTime = toDate
+      .toLocaleTimeString("en-US", formatOptions)
+      .toLowerCase();
+
+    return `${fromTime} – ${toTime}`;
+  }
 
   return (
     <>
       <div>
-          {upcomingsessions && upcomingsessions?.length > 0 ? (
-            upcomingsessions?.map((session, index) => {
-              const isExpanded = expandedIndex === index;
-              return(
-                <div className="bg-[#FFFFFF80] rounded-2xl p-4 w-full mx-auto transition-all duration-300 mb-2"
-              key={index}>
+        {upcomingsessions && upcomingsessions?.length > 0 ? (
+          upcomingsessions?.map((session, index) => {
+            const isExpanded = expandedIndex === index;
+            return (
+              <div
+                className="bg-[#FFFFFF80] rounded-2xl p-4 w-full mx-auto transition-all duration-300 mb-2"
+                key={index}
+              >
                 {/* COLLAPSED HEADER */}
                 {!isExpanded && (
                   <div
@@ -236,7 +262,9 @@ function formatSessionTime(sessionTime) {
                             <div className="text-xs text-[#6D6A5D] font-medium">
                               {convertUTCtoIST(session?.sessionTime?.from).date}
                             </div>
-                            <div className="text-base text-black font-bold">{convertUTCtoIST(session?.sessionTime?.from).time}</div>
+                            <div className="text-base text-black font-bold">
+                              {convertUTCtoIST(session?.sessionTime?.from).time}
+                            </div>
                           </div>
                           <div className="text-xs text-[#6D6A5D] font-medium">
                             <div className="text-xs text-[#6D6A5D] font-medium">
@@ -246,19 +274,21 @@ function formatSessionTime(sessionTime) {
                         </div>
                         <div className="border-gray-300 border w-[1px] h-[56px] mx-0 md:mx-3"></div>
                         <div className="flex gap-2">
-                          <Avatar className="w-[42px] h-[42px] border border-[#F6FBF7]"
-                          onClick={(e)=>{
-                            e.stopPropagation()
-                            setShowCounsellorProfile(true)
-                          }}>
+                          <Avatar
+                            className="w-[42px] h-[42px] border border-[#F6FBF7]"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowCounsellorProfile(true);
+                            }}
+                          >
                             <AvatarImage
                               src={
-                                patient?.practitionerTagged[0]?.generalInformation
-                                  ?.profileImageUrl
+                                patient?.practitionerTagged[0]
+                                  ?.generalInformation?.profileImageUrl
                               }
                               alt={
-                                patient?.practitionerTagged[0]?.generalInformation
-                                  ?.profileImageUrl
+                                patient?.practitionerTagged[0]
+                                  ?.generalInformation?.profileImageUrl
                               }
                             />
                             <AvatarFallback>
@@ -272,7 +302,15 @@ function formatSessionTime(sessionTime) {
                           </Avatar>
                           <div className="flex flex-col md:gap-2">
                             <div className="text-[14px] font-bold text-gray-800">
-                              Dr.{patient?.practitionerTagged[0]?.generalInformation?.firstName} {patient?.practitionerTagged[0]?.generalInformation?.lastName}
+                              Dr.{" "}
+                              {
+                                patient?.practitionerTagged[0]
+                                  ?.generalInformation?.firstName
+                              }{" "}
+                              {
+                                patient?.practitionerTagged[0]
+                                  ?.generalInformation?.lastName
+                              }
                             </div>
                             <Phone
                               size={22}
@@ -286,12 +324,16 @@ function formatSessionTime(sessionTime) {
                     <div className="flex flex-col my-2">
                       <p className="text-[#6D6A5D] text-xs font-medium">
                         <span className="font-medium">Session Duration:</span>{" "}
-                        {getTimeDifference(session?.sessionTime?.from, session?.sessionTime?.to)} hours
+                        {getTimeDifference(
+                          session?.sessionTime?.from,
+                          session?.sessionTime?.to
+                        )}{" "}
+                        hours
                       </p>
                       <div className="flex items-center">
                         <p className="text-[#6D6A5D] text-xs font-medium">
                           <span className="font-medium">Session Mode:</span>{" "}
-                         {session?.sessionMode}
+                          {session?.sessionMode}
                         </p>
                         <Link2
                           size={14}
@@ -301,7 +343,7 @@ function formatSessionTime(sessionTime) {
                     </div>
                   </div>
                 )}
- 
+
                 {/* COLLAPSED FOOTER */}
                 {!isExpanded && (
                   <div className="flex gap-3">
@@ -309,8 +351,8 @@ function formatSessionTime(sessionTime) {
                       disabled = {!isWithinTwoMinutesBefore(session?.sessionTime?.from)}
                       className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[14px] font-[600] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center w-[48%] disabled:opacity-60 disabled:cursor-not-allowed"
                       onClick={(e) => {
-                        e.stopPropagation()
-                        handleStartCall(session?._id,session?.videoRoomName) 
+                        e.stopPropagation();
+                        handleStartCall(session?._id, session?.videoRoomName);
                       }}
                     >
                       Start Call
@@ -322,93 +364,130 @@ function formatSessionTime(sessionTime) {
                     </div>
                   </div>
                 )}
- 
+
                 {/* EXPANDED VIEW */}
                 {isExpanded && (
-                  <div className="cursor-pointer" onClick={() => setExpandedIndex(null)}>
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => setExpandedIndex(null)}
+                  >
                     <div className="flex  justify-between mb-4">
                       <div className="flex gap-3">
-                      <Avatar className="w-[87.69px] h-[100px] rounded-[10px]" style={{width:'87.89px !important'}}
-                      onClick={(e)=>{
-                            e.stopPropagation()
-                            setShowCounsellorProfile(true)
-                          }}>
-                        <AvatarImage className="w-[87.69px] h-[100px] rounded-[10px]"
-                          src={
-                            patient?.practitionerTagged[0]?.generalInformation
-                              ?.profileImageUrl
-                          }
-                          alt={
-                            patient?.practitionerTagged[0]?.generalInformation
-                              ?.profileImageUrl
-                          }
-                        />
-                        <AvatarFallback>
-                          {patient?.practitionerTagged[0]?.generalInformation?.firstName
-                            .charAt(0)
-                            .toUpperCase() +
-                            patient?.practitionerTagged[0]?.generalInformation?.lastName
+                        <Avatar
+                          className="w-[87.69px] h-[100px] rounded-[10px]"
+                          style={{ width: "87.89px !important" }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowCounsellorProfile(true);
+                          }}
+                        >
+                          <AvatarImage
+                            className="w-[87.69px] h-[100px] rounded-[10px]"
+                            src={
+                              patient?.practitionerTagged[0]?.generalInformation
+                                ?.profileImageUrl
+                            }
+                            alt={
+                              patient?.practitionerTagged[0]?.generalInformation
+                                ?.profileImageUrl
+                            }
+                          />
+                          <AvatarFallback>
+                            {patient?.practitionerTagged[0]?.generalInformation?.firstName
                               .charAt(0)
-                              .toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex flex-col">
-                        <div className="font-semibold text-base text-black">Dr. {patient?.practitionerTagged[0]?.generalInformation?.firstName} {patient?.practitionerTagged[0]?.generalInformation?.lastName}</div>
-                        <div className="flex items-center gap-3">
-                          <div className="hidden gap-3 text-white">
-                            <div className="p-2 bg-purple-500 rounded-full">
-                              <Phone className="w-4 h-4" />
+                              .toUpperCase() +
+                              patient?.practitionerTagged[0]?.generalInformation?.lastName
+                                .charAt(0)
+                                .toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col">
+                          <div className="font-semibold text-base text-black">
+                            Dr.{" "}
+                            {
+                              patient?.practitionerTagged[0]?.generalInformation
+                                ?.firstName
+                            }{" "}
+                            {
+                              patient?.practitionerTagged[0]?.generalInformation
+                                ?.lastName
+                            }
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <div className="hidden gap-3 text-white">
+                              <div className="p-2 bg-purple-500 rounded-full">
+                                <Phone className="w-4 h-4" />
+                              </div>
+                              <div className="p-2 bg-purple-500 rounded-full">
+                                <Share2 className="w-4 h-4" />
+                              </div>
+                              <div className="p-2 bg-red-500 rounded-full">
+                                <Trash className="w-4 h-4" />
+                              </div>
                             </div>
-                            <div className="p-2 bg-purple-500 rounded-full">
-                              <Share2 className="w-4 h-4" />
+                          </div>
+                          <div className="text-[#6D6A5D] flex flex-col gap-1">
+                            <div>
+                              <span className="text-[14px] text-[#6D6A5D] font-medium">
+                                <span className="font-bold">Date:</span>{" "}
+                                {formatPrettyDate(session?.sessionTime?.from)}
+                              </span>
                             </div>
-                            <div className="p-2 bg-red-500 rounded-full">
-                              <Trash className="w-4 h-4" />
+                            <div>
+                              <span className="text-[14px] text-[#6D6A5D] font-medium">
+                                <span className="font-bold">Time Slot:</span>{" "}
+                                {formatSessionTime(session?.sessionTime)}
+                              </span>
                             </div>
                           </div>
                         </div>
-                        <div className="text-[#6D6A5D] flex flex-col gap-1">
-                          <div>
-                            <span className="text-[14px] text-[#6D6A5D] font-medium"><span className="font-bold">Date:</span> {formatPrettyDate(session?.sessionTime?.from)}</span>
-                          </div>
-                          <div>
-                            <span className="text-[14px] text-[#6D6A5D] font-medium"><span className="font-bold">Time Slot:</span> {formatSessionTime(session?.sessionTime)}</span>
-                          </div>
-                        </div>
-                      </div>
                       </div>
                       {/* Chevron icon (rotated) */}
                       <ChevronDown
-                        className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""
-                          }`}
+                        className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${
+                          isExpanded ? "rotate-180" : ""
+                        }`}
                       />
                     </div>
- 
+
                     <div className="text-sm text-[#6D6A5D] flex flex-col gap-1">
                       <div>
-                        <span className="text-[14px] text-[#6D6A5D] font-medium"><span className="font-bold">Session Type:</span> {session?.sessionMode}</span>
+                        <span className="text-[14px] text-[#6D6A5D] font-medium">
+                          <span className="font-bold">Session Type:</span>{" "}
+                          {session?.sessionMode}
+                        </span>
                       </div>
                       <div>
-                        <span className="text-[14px] text-[#6D6A5D] font-medium"><span className="font-bold">Previous Session:</span> {formatPrettyDate(pastSession?.sessionTime?.from)||"--"}</span>
+                        <span className="text-[14px] text-[#6D6A5D] font-medium">
+                          <span className="font-bold">Previous Session:</span>{" "}
+                          {formatPrettyDate(pastSession?.sessionTime?.from) ||
+                            "--"}{" "}
+                        </span>
                       </div>
                     </div>
- 
+
                     <div className="flex gap-4 items-center mt-2">
                       <Button
                         variant="outline"
                         className="border-[#CC627B] text-[#CC627B] font-semibold text-[14px] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center w-[48%] "
-                       onClick={(e) => { 
-                        e.stopPropagation()
-                        router.push(`/patient/reschedule-session?reschedule=${session?.sessionTime?.from}&sessionMode=${session?.sessionMode}&sessionId=${session?._id}`) }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(
+                            `/patient/reschedule-session?reschedule=${session?.sessionTime?.from}&sessionMode=${session?.sessionMode}&sessionId=${session?._id}`
+                          );
+                        }}
                       >
                         Reschedule Session
                       </Button>
                       <Button
-                        disabled = {!isWithinTwoMinutesBefore(session?.sessionTime?.from)}
+                        disabled={
+                          !isWithinTwoMinutesBefore(session?.sessionTime?.from)
+                        }
                         className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[14px] font-[600] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center w-[48%] disabled:opacity-60 disabled:cursor-not-allowed"
-                        onClick={(e) => { 
+                        onClick={(e) => {
                           e.stopPropagation();
-                          handleStartCall(session?._id,session?.videoRoomName)}}
+                          handleStartCall(session?._id, session?.videoRoomName);
+                        }}
                       >
                         Start Call
                       </Button>
@@ -416,19 +495,22 @@ function formatSessionTime(sessionTime) {
                   </div>
                 )}
               </div>
-              )
- 
-})
-          ) :
-            (
-              <div className="bg-[#00000096] w-full px-3 rounded-[15px] backdrop-blur-[1px]">
-                <div className="p-10 flex justify-center items-center m-auto">
-                  <Button className='bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[173px] h-[45px]'
-                    onClick={() => { handleBookNowClick() }}>Book Your Sessions</Button>
-                </div>
-              </div>
-            )
-          }
+            );
+          })
+        ) : (
+          <div className="bg-[#00000096] w-full px-3 rounded-[15px] backdrop-blur-[1px]">
+            <div className="p-10 flex justify-center items-center m-auto">
+              <Button
+                className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[173px] h-[45px]"
+                onClick={() => {
+                  handleBookNowClick();
+                }}
+              >
+                Book Your Sessions
+              </Button>
+            </div>
+          </div>
+        )}
         {showCounsellorProfile ? (
           <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90">
             <div className="relative h-screen overflow-y-auto">
@@ -456,7 +538,7 @@ function formatSessionTime(sessionTime) {
         ) : (
           <></>
         )}
- 
+
         {showClientTestimonials ? (
           <div className="fixed top-0 left-0 right-0 w-full h-screen bg-white z-90">
             <div className="relative h-screen overflow-y-auto">
@@ -473,7 +555,5 @@ function formatSessionTime(sessionTime) {
     </>
   );
 };
- 
+
 export default UpcomingSession;
- 
- 

@@ -23,9 +23,9 @@ const PP_Header = () => {
   return (
     <>
       <div className="">
-        <div className="flex items-center py-4 ps-2 pe-4 gap-[9px]">
+        <div className="flex items-center py-4 ps-0 pe-4">
           <Button variant="ghost" onClick={() => setShow(true)}>
-            <ChevronLeft size={24} className=" text-black-700" />
+            <ChevronLeft size={24} width={24} className=" text-black-700" />
           </Button>
           <Drawer
             className="pt-[9.97px] max-w-[576px] m-auto"
