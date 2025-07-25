@@ -192,6 +192,7 @@ const Emergency_Details = ({ type }) => {
       );
       if (response.data.success) {
         showSuccessToast("Emergency detail added successfully");
+        
         setCookie("completeUserData", response.data.data);
         router.push(`/patient/dashboard`);
       } else {

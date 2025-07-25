@@ -27,10 +27,12 @@ import { isMobile } from "react-device-detect";
 import PP_Header from "../PP_Header/PP_Header";
 import { base64ToFile } from "@/lib/utils";
 import { X } from "lucide-react";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 
 polyfillCountryFlagEmojis();
 
 const Edit_Patient = ({ type }) => {
+    const{rememberMe} = useRememberMe()
     const router = useRouter();
     const customAxios = axiosInstance();
     const cameraInputRef = useRef(null);
@@ -398,7 +400,14 @@ const Edit_Patient = ({ type }) => {
                 }
             );
             if (response?.data?.success) {
-                setCookie("PatientInfo", JSON.stringify(response?.data?.data));
+                let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
+                setCookie("PatientInfo", JSON.stringify(response?.data?.data),maxAge);
                 router.push(`/patient/patient-profile`);
             }
         } catch (error) {

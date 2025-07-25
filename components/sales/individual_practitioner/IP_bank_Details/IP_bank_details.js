@@ -17,8 +17,10 @@ import { base64ToFile } from "@/lib/utils";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "../../../ui/drawer";
 import { X } from "lucide-react";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 
 const IP_bank_details = () => {
+  const {rememberMe} = useRememberMe()
   const axios = axiosInstance();
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -59,7 +61,14 @@ const IP_bank_details = () => {
 
   // Load form data from cookie on component mount
   useEffect(() => {
-    const savedData = localStorage.getItem("ip_bank_details");
+    let savedData
+    if(rememberMe){
+       savedData = localStorage.getItem("ip_bank_details");
+    }
+    else{
+       savedData = sessionStorage.getItem("ip_bank_details");
+    }
+    
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
@@ -132,7 +141,12 @@ const IP_bank_details = () => {
   // Handle save and continue
   const handleSave = () => {
     if (isFormValid()) {
-      localStorage.setItem("ip_bank_details", JSON.stringify(formData));
+      if(rememberMe){
+        localStorage.setItem("ip_bank_details", JSON.stringify(formData));
+      }
+      else{
+        sessionStorage.setItem("ip_bank_details", JSON.stringify(formData));
+      }
       handleAddIndividualPractitioner();
     } else {
       showErrorToast("Please fill all required fields correctly");
@@ -157,15 +171,33 @@ const IP_bank_details = () => {
         const imageUrl = response?.data?.image;
         // Save to localStorage based on type
         if (type === "profile") {
-          localStorage.setItem("profileImageUrl", imageUrl);
+          if(rememberMe){
+            localStorage.setItem("profileImageUrl", imageUrl);
+          }
+          else{
+            sessionStorage.setItem("profileImageUrl", imageUrl);
+          }
         } else if (type === "certificates") {
-          let existingCertificates =
-            JSON.parse(localStorage.getItem("certificates")) || [];
+          let existingCertificates = []
+          if(rememberMe){
+            existingCertificates=JSON.parse(localStorage.getItem("certificates")) || [];
+          }
+          else{
+            existingCertificates=JSON.parse(sessionStorage.getItem("certificates")) || [];
+          }
           existingCertificates.push(imageUrl);
-          localStorage.setItem(
+          if(rememberMe){
+            localStorage.setItem(
             "certificates",
             JSON.stringify(existingCertificates)
           );
+          }
+          else{
+            sessionStorage.setItem(
+            "certificates",
+            JSON.stringify(existingCertificates)
+          );
+          }
         }
         return imageUrl;
       }
@@ -182,26 +214,32 @@ const IP_bank_details = () => {
   const handleAddIndividualPractitioner = async () => {
     setIsLoading(true);
     try {
-      const ip_details = JSON.parse(localStorage.getItem("ip_details"));
-      const ip_medical_association_details = JSON.parse(
+      const ip_details = rememberMe?JSON.parse(localStorage.getItem("ip_details")):JSON.parse(sessionStorage.getItem("ip_details"));
+      const ip_medical_association_details = rememberMe? JSON.parse(
         localStorage.getItem("ip_medical_association_details")
+      ):JSON.parse(
+        sessionStorage.getItem("ip_medical_association_details")
       );
-      const ip_general_information = JSON.parse(
+      const ip_general_information = rememberMe ? JSON.parse(
         localStorage.getItem("ip_general_information")
-      );
-      const ip_single_session_fees = JSON.parse(
+      ): JSON.parse(
+        sessionStorage.getItem("ip_general_information")
+        );
+      const ip_single_session_fees = rememberMe?JSON.parse(
         localStorage.getItem("ip_single_session_fees")
-      );
+      ):JSON.parse(
+        sessionStorage.getItem("ip_single_session_fees")
+      )
 
       // Check for existing profile image URL in localStorage
-      let profileImageUrl = localStorage.getItem("profileImageUrl") || "";
+      let profileImageUrl = rememberMe?localStorage.getItem("profileImageUrl") || "":sessionStorage.getItem("profileImageUrl") || "";
       if (ip_details?.profileImageBase64 && !profileImageUrl) {
         profileImageUrl =
           (await uploadImage(ip_details?.profileImageBase64, "profile")) || "";
       }
 
       // Check for existing certificates in localStorage
-      let certificates = JSON.parse(localStorage.getItem("certificates")) || [];
+      let certificates = rememberMe? JSON.parse(localStorage.getItem("certificates")) || [] :JSON.parse(sessionStorage.getItem("certificates")) || []
       if (
         ip_medical_association_details?.certificates?.length > 0 &&
         certificates.length === 0
@@ -298,11 +336,20 @@ const IP_bank_details = () => {
         payload
       );
       if (response?.data?.success) {
-        localStorage.removeItem("ip_details");
+        if(rememberMe){
+          localStorage.removeItem("ip_details");
         localStorage.removeItem("ip_bank_details");
         localStorage.removeItem("ip_general_information");
         localStorage.removeItem("ip_medical_association_details");
         localStorage.removeItem("ip_single_session_fees");
+        }
+        else{
+          sessionStorage.removeItem("ip_details");
+        sessionStorage.removeItem("ip_bank_details");
+        sessionStorage.removeItem("ip_general_information");
+        sessionStorage.removeItem("ip_medical_association_details");
+        sessionStorage.removeItem("ip_single_session_fees");
+        }
         router.push("/sales");
         showSuccessToast("Invite Sent");
       }
@@ -320,15 +367,25 @@ const IP_bank_details = () => {
 
   const handleCancel = () => {
     router.push("/sales");
-    localStorage.removeItem("ip_details");
-    localStorage.removeItem("ip_bank_details");
-    localStorage.removeItem("ip_general_information");
-    localStorage.removeItem("ip_medical_association_details");
-    localStorage.removeItem("ip_single_session_fees");
+    if(rememberMe){
+          localStorage.removeItem("ip_details");
+        localStorage.removeItem("ip_bank_details");
+        localStorage.removeItem("ip_general_information");
+        localStorage.removeItem("ip_medical_association_details");
+        localStorage.removeItem("ip_single_session_fees");
+        }
+        else{
+          sessionStorage.removeItem("ip_details");
+        sessionStorage.removeItem("ip_bank_details");
+        sessionStorage.removeItem("ip_general_information");
+        sessionStorage.removeItem("ip_medical_association_details");
+        sessionStorage.removeItem("ip_single_session_fees");
+        }
   };
   useEffect(() => {
     const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
-    const ip_type_token = localStorage.getItem("ip_single_session_fees") ? JSON.parse(localStorage.getItem("ip_single_session_fees")) : null
+    const raw = rememberMe?localStorage.getItem("ip_single_session_fees"):sessionStorage.getItem("ip_single_session_fees")
+    const ip_type_token = raw ? JSON.parse(raw) : null;
     if (!token) {
       router.push('/login')
     }

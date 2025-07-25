@@ -23,7 +23,9 @@ import Client_Testimonial from "../Client_Testimonials/Client_Testimonial";
 import Profile from "../practitioner/Profile";
 import Filter from "../Filter/Filter";
 import Upcoming_Sessions from "../Upcoming_Sessions/Upcoming_Sessions";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 const Patient_Dashboard = () => {
+  const {rememberMe} = useRememberMe()
   const [patient, setPatient] = useState(null);
   const [counsellors, setCounsellors] = useState([]);
   const [selectedCounsellors, setSelectedCounsellors] = useState({});
@@ -35,10 +37,10 @@ const Patient_Dashboard = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [filterCount, setFilterCount] = useState(0);
   const [filterParams, setFilterParams] = useState({
-    language: "",
-    sessionFee: "",
-    gender: "",
-  });
+  language: "",
+  sessionFee: { from: null, to: null },
+  gender: "",
+});
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
@@ -64,8 +66,15 @@ const Patient_Dashboard = () => {
           },
         });
         if (response?.data?.success) {
+          let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
           console.log("setting cookie")
-          setCookie("PatientInfo", JSON.stringify(response?.data?.data));
+          setCookie("PatientInfo", JSON.stringify(response?.data?.data),maxAge);
           setPatient(response?.data?.data);
         }
       } catch (err) {
@@ -113,8 +122,11 @@ const Patient_Dashboard = () => {
   useEffect(() => {
     let count = 0;
     if (filterParams.gender !== "") count++;
-    if (filterParams.language !== "") count++;
-    if (filterParams.sessionFee !== "") count++;
+    if (Array.isArray(filterParams.language) && filterParams.language.length > 0) count++
+    if (
+    (filterParams.sessionFee.from !== "" && filterParams.sessionFee.from !== null) ||
+    (filterParams.sessionFee.to !== "" && filterParams.sessionFee.to !== null)
+  ) count++;
 
     setFilterCount(count);
   }, [filterParams]);

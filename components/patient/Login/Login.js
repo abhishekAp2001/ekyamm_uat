@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
@@ -8,11 +8,12 @@ import Image from "next/image";
 import axiosInstance from "@/lib/axiosInstance";
 import { toast } from "react-toastify";
 import { customEncodeString, encryptData } from "@/lib/utils";
-import { setCookie } from "cookies-next";
+import { hasCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { whatsappUrl } from "@/lib/constants";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 
 const Login = () => {
   const axios = axiosInstance();
@@ -22,7 +23,8 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
+  const { rememberMe, setRememberMe } = useRememberMe();
+  const [isRememberMe, setIsRememberMe] = useState(false);
   // Validation function
   const validateInputs = (userName, password) => {
     if (!userName.trim()) {
@@ -61,7 +63,14 @@ const Login = () => {
       const response = await axios.post("/v2/cp/user/signin", payload);
       if (response?.data?.success === true) {
         showSuccessToast("Login Successfully");
-        setCookie("patientSessionData", response?.data?.data);
+        let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
+        setCookie("patientSessionData", response?.data?.data,maxAge);
         router.push("/patient/dashboard");
       }
     } catch (error) {
@@ -73,7 +82,15 @@ const Login = () => {
       setLoading(false);
     }
   };
-
+    useEffect(()=>{
+      const checkCookie = ()=>{
+        const cookie = hasCookie("patientSessionData")
+        if(cookie){
+          router.push("/patient/dashboard")
+        }
+      }
+      checkCookie()
+    },[])
   return (
     <>
       <div className="bg-gradient-to-b from-[#DFDAFB] to-[#F9CCC5] h-screen relative">
@@ -124,7 +141,10 @@ const Login = () => {
                 </div>
                 <div className="flex justify-between mt-[11.72px]">
                   <div className="flex gap-[6px] items-center">
-                    <Checkbox className="w-4 h-4 border border-[#776EA5] rounded-[1.8px]" id="forgot-password"/>
+                    <Checkbox className="w-4 h-4 border border-[#776EA5] rounded-[1.8px]" id="forgot-password"
+                    onCheckedChange={(checked) => {
+                          setRememberMe(!!checked)
+                        }}/>
                     <label htmlFor="forgot-password" className="text-[12px] text-gray-500">
                       Remember Me
                     </label>

@@ -3,8 +3,10 @@ import { Button } from "../../../ui/button";
 import { useRouter } from "next/navigation";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "../../../ui/drawer";
 import { X } from "lucide-react";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 
 const IP_Buttons = ({ disabled, onSave, buttonText = "Save & Continue" }) => {
+  const {rememberMe} = useRememberMe()
   const router = useRouter()
   const [show,setShow] = useState(false)
   const handleClose = () =>{
@@ -12,11 +14,20 @@ const IP_Buttons = ({ disabled, onSave, buttonText = "Save & Continue" }) => {
   }
   const handleCancel = () => {
     router.push("/sales");
-    localStorage.removeItem("ip_details")
+    if(rememberMe){
+      localStorage.removeItem("ip_details")
     localStorage.removeItem("ip_bank_details")
     localStorage.removeItem("ip_general_information")
     localStorage.removeItem("ip_medical_association_details")
     localStorage.removeItem("ip_single_session_fees")
+    }
+    else{
+      sessionStorage.removeItem("ip_details")
+    sessionStorage.removeItem("ip_bank_details")
+    sessionStorage.removeItem("ip_general_information")
+    sessionStorage.removeItem("ip_medical_association_details")
+    sessionStorage.removeItem("ip_single_session_fees")
+    }
   };
 
   

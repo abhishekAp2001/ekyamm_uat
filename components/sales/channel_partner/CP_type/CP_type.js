@@ -15,11 +15,12 @@ import { useRouter } from "next/navigation";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import Image from "next/image";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 polyfillCountryFlagEmojis();
 
 const CP_type = () => {
   const axios = axiosInstance();
-
+  const {rememberMe} = useRememberMe()
   const [search, setSearch] = useState("");
   const [formData, setFormData] = useState({
     clinicName: "",
@@ -160,8 +161,15 @@ const CP_type = () => {
 
   // Handle save and continue
   const handleSave = () => {
+    let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
     if (isFormValid()) {
-      setCookie("cp_type", formData);
+      setCookie("cp_type", formData,maxAge);
       router.push("/sales/cp_clinic_details");
     } else {
       showErrorToast("Please fill all required fields correctly");
@@ -340,9 +348,13 @@ const CP_type = () => {
                     type="text"
                     placeholder="Enter URL name"
                     value={formData.userName}
-                    onChange={(e) =>
-                      setFormData({ ...formData, userName: e.target.value })
-                    }
+                    maxLength={20}
+                    
+                    onChange={(e) => {
+    const value = e.target.value;
+    const alphanumeric = value.replace(/[^a-zA-Z0-9]/g, "");
+    setFormData({ ...formData, userName: alphanumeric });
+  }}
                     onBlur={() => handleBlur("userName")}
                     disabled={!formData.clinicName}
                     className={`w-full rounded-[7.26px] font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${

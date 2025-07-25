@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SignOutModal from "../SignOutModal/SignOutModal"; // adjust path as needed
 import { useRouter } from "next/navigation";
 import { whatsappUrl } from "@/lib/constants";
@@ -10,7 +10,8 @@ import { getCookie, hasCookie } from "cookies-next";
 const Sidebar = ({ onClose }) => {
   const router = useRouter();
   const [showSignOutModal, setShowSignOutModal] = useState(false);
-
+  const [user,setUser] = useState(null)
+  const [patient,setPatient] = useState(null)
   const handleSignOutClick = () => {
     setShowSignOutModal(true);
   };
@@ -28,6 +29,7 @@ const Sidebar = ({ onClose }) => {
         .replace(/=.*/, "=;expires=" + new Date(0).toUTCString() + ";path=/");
     });
     localStorage.clear();
+    sessionStorage.clear()
     if(patient){
       router.push(`/patient/login`);
     }
@@ -35,7 +37,12 @@ const Sidebar = ({ onClose }) => {
       router.push(`/login`);
     }
   };
-
+  useEffect(()=>{
+    const user = hasCookie("user")?getCookie("user"):null
+    setUser(user)
+    const patient = hasCookie("patientSessionData")?getCookie("patientSessionData"):null
+    setPatient(patient)
+  },[])
   return (
     <div className="fixed inset-0 z-50 flex max-w-[576px] mx-auto">
       {/* Backdrop */}
@@ -80,7 +87,8 @@ const Sidebar = ({ onClose }) => {
             </div>
 
             {/* Clinic Details */}
-            <div className="flex flex-col gap-[8px]"
+            {patient && patient !== null && (
+              <div className="flex flex-col gap-[8px]"
             onClick={()=>{router.push('/patient/psychiatrist-profile')}}>
               <div className="w-[162px] flex items-center gap-2">
                 <Image
@@ -95,10 +103,12 @@ const Sidebar = ({ onClose }) => {
               </div>
               <div className=" mt-2 w-[162px] border-t border-white opacity-50"></div>
             </div>
+            )}
 
             {/* Settings + Sign Out */}
             <div className="w-auto h-[74px] flex flex-col gap-[26px]">
-              <div className="w-[162px] flex items-center gap-2"
+              {patient && patient !== null && (
+                <div className="w-[162px] flex items-center gap-2"
               onClick={()=>{router.push('/patient/patient-profile')}}>
                 <Image
                   src="/images/setting.png"
@@ -110,6 +120,7 @@ const Sidebar = ({ onClose }) => {
                   Settings
                 </p>
               </div>
+              )}
 
               <div
                 className="w-[162px] flex items-center gap-2 cursor-pointer"

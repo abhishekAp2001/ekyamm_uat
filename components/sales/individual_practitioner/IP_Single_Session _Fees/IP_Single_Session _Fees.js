@@ -16,8 +16,10 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { showErrorToast } from "@/lib/toast";
 import { getCookie, hasCookie } from "cookies-next";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 
 const IP_Single_Session_Fees = () => {
+  const {rememberMe} = useRememberMe()
   const router = useRouter();
   const [formData, setFormData] = useState({
     singleSession: "",
@@ -49,7 +51,7 @@ const IP_Single_Session_Fees = () => {
 
   // Load form data from localStorage on component mount
   useEffect(() => {
-    const savedData = localStorage.getItem("ip_single_session_fees");
+    const savedData = rememberMe?localStorage.getItem("ip_single_session_fees"):sessionStorage.getItem("ip_single_session_fees")
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
@@ -145,7 +147,12 @@ const IP_Single_Session_Fees = () => {
   const handleSave = async () => {
     if (isFormValid()) {
       try {
-        localStorage.setItem("ip_single_session_fees", JSON.stringify(formData));
+        if(rememberMe){
+          localStorage.setItem("ip_single_session_fees", JSON.stringify(formData));
+        }
+        else{
+          sessionStorage.setItem("ip_single_session_fees", JSON.stringify(formData));
+        }
         router.push("/sales/ip_bank_details");
       } catch (error) {
         console.error("Error saving data:", error);
@@ -163,7 +170,8 @@ const IP_Single_Session_Fees = () => {
 
       useEffect(() => {
         const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
-        const ip_type_token = localStorage.getItem("ip_medical_association_details") ? JSON.parse(localStorage.getItem("ip_medical_association_details")) : null
+            const raw = rememberMe?localStorage.getItem("ip_medical_association_details"):sessionStorage.getItem("ip_medical_association_details")
+    const ip_type_token = raw?JSON.parse(raw):null
         if (!token) {
           router.push('/login')
         }

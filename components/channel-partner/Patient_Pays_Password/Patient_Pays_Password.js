@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Baseurl, whatsappUrl } from "@/lib/constants";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2, MapPin } from "lucide-react";
 import Link from "next/link";
 import axiosInstance from "@/lib/axiosInstance";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
@@ -188,26 +188,65 @@ one symbol, and no spaces.`;
     verifyChannelPartner(type);
   }, [type]);
 
-  return (
-    <>
-      <div className=" bg-gradient-to-b  from-[#DFDAFB] to-[#F9CCC5] h-full flex flex-col justify-between items-center px-[16px] max-w-[576px] mx-auto">
-        {formLoader && (
-          <div
-            className="fixed inset-0 bg-[#000000b8] bg-opacity-20 flex items-center justify-center z-50 transition-opacity duration-300"
-            aria-live="polite"
-            aria-label="Loading"
-          >
-            <div className="bg-none p-6 rounded-lg shadow-lg flex flex-col items-center">
-              <Image
-                src="/loader.png"
-                width={48}
-                height={48}
-                alt="Loading"
-                className="animate-spin"
-              />
-              <p className="mt-2 text-lg font-semibold text-white">
-                Validating...
-              </p>
+                if (response?.data?.success === true) {
+                    setCookie("channelPartnerData", JSON.stringify(response.data.data));
+                    setChannelPartnerData(response.data.data);
+                    setFormData((prev) => ({
+                        ...prev,
+                        verificationToken: sanitizeInput(
+                            response.data.data?.verificationToken
+                        ),
+                    }));
+                } else {
+                    showErrorToast(
+                        response?.data?.error?.message || "Verification failed"
+                    );
+                }
+            } catch (err) {
+                showErrorToast(
+                    err?.response?.data?.error?.message ||
+                    "An error occurred while verifying"
+                );
+            } finally {
+                setLoading(false);
+            }
+        };
+        verifyChannelPartner(type);
+    }, [type]);
+
+    return (
+        <>
+            <div className=" bg-gradient-to-b  from-[#DFDAFB] to-[#F9CCC5] h-full flex flex-col justify-between items-center px-[16px] max-w-[576px] mx-auto">
+         
+                {formLoader && (
+                    <div
+                        className="fixed inset-0 bg-[#000000b8] bg-opacity-20 flex items-center justify-center z-50 transition-opacity duration-300"
+                        aria-live="polite"
+                        aria-label="Loading"
+                    >
+                        <div className="bg-none p-6 rounded-lg shadow-lg flex flex-col items-center">
+                            <Image
+                                src="/loader.png"
+                                width={48}
+                                height={48}
+                                alt="Loading"
+                                className="animate-spin"
+                            />
+                            <p className="mt-2 text-lg font-semibold text-white">
+                                Validating...
+                            </p>
+                        </div>
+                    </div>
+                )}
+                <div className='pt-5'>
+      <div className="flex justify-center items-center gap-[2px] pt-6">
+                      <div className="bg-[#776EA5] rounded-full w-[16.78px] h-[16.78px] flex justify-center items-center">
+                      <MapPin color="white" className="w-[12.15px] h-[12.15px]"/></div>
+                      <span className="text-sm text-[#776EA5] font-medium">
+                        {channelPartnerData?.area}, {channelPartnerData?.state} 
+                      </span>
+                    </div>
+
             </div>
           </div>
         )}

@@ -11,6 +11,7 @@ import { Baseurl } from "@/lib/constants";
 import { useState, useEffect } from "react";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 const Profile = ({
   patient,
   setShowCounsellorProfile,
@@ -18,9 +19,17 @@ const Profile = ({
   setShowClientTestimonials,
   doc,
 }) => {
+  const {rememberMe} = useRememberMe()
   const router = useRouter()
     const handleBookNowClick = () => {
-    setCookie("selectedCounsellor", JSON.stringify(doc));
+      let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
+    setCookie("selectedCounsellor", JSON.stringify(doc),maxAge);
     if (patient.availableCredits === 0) {
       router.push("/patient/select-package")
     }

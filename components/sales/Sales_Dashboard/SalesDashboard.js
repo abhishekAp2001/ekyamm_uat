@@ -106,7 +106,9 @@ const SalesDashboard = () => {
           <div className="flex justify-between items-center ps-2 pe-[16.93px]"></div>
           <div className="">
             <div className=" flex flex-col gap-3">
-              <div className="bg-[#FFFFFF80] text-black text-[16px] font-[600] py-[17px] p-[8px] flex  justify-between items-center w-full h-[44px] rounded-[8.62px]">
+              <Link 
+              href={"/sales/cp_list"}
+              className="bg-[#FFFFFF80] text-black text-[16px] font-[600] py-[17px] p-[8px] flex  justify-between items-center w-full h-[44px] rounded-[8.62px]">
                 <div className="flex items-center gap-[7px]">
                   <Image
                     src="/images/bx_clinic.png"
@@ -117,15 +119,17 @@ const SalesDashboard = () => {
                   />
                   Channel Partner
                 </div>
-                <Link
-                  href={"/sales/cp_list"}
+                <div
+                  
                   className="text-[12px] text-gray-500"
                 >
                   View All
-                </Link>
-              </div>
+                </div>
+              </Link>
  
-              <div className="bg-[#FFFFFF80] text-black text-[16px] font-[600] py-[17px] p-[8px] flex  justify-between items-center w-full h-[44px] rounded-[8.62px]">
+              <Link 
+              href={"/sales/ip_list"}
+              className="bg-[#FFFFFF80] text-black text-[16px] font-[600] py-[17px] p-[8px] flex  justify-between items-center w-full h-[44px] rounded-[8.62px]">
                 <div className="flex items-center gap-[7px]">
                   <Image
                     src="/images/bx_clinic.png"
@@ -136,14 +140,16 @@ const SalesDashboard = () => {
                   />
                   Individual Practitioner
                 </div>
-                <Link
-                  href={"/sales/ip_list"}
+                <div
+                  
                   className="text-[12px] text-gray-500"
                 >
                   View All
-                </Link>
-              </div>
-              <div className="bg-[#FFFFFF80] text-black text-[16px] font-[600] py-[17px] p-[8px] flex  justify-between items-center w-full h-[44px] rounded-[8.62px]">
+                </div>
+              </Link>
+              <Link
+              href={"/sales/clinic_list"}
+              className="bg-[#FFFFFF80] text-black text-[16px] font-[600] py-[17px] p-[8px] flex  justify-between items-center w-full h-[44px] rounded-[8.62px]">
                 <div className="flex items-center gap-[7px]">
                   <Image
                     src="/images/bx_clinic.png"
@@ -154,13 +160,13 @@ const SalesDashboard = () => {
                   />
                   Clinic
                 </div>
-                <Link
-                  href={"/sales/clinic_list"}
+                <div
+                  
                   className="text-[12px] text-gray-500"
                 >
                   View All
-                </Link>
-              </div>
+                </div>
+              </Link>
             </div>
           </div>
         </div>

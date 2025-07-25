@@ -20,11 +20,9 @@ import Profile from "./practitioner/Profile";
 import Certifications from "./Certifications/Certifications";
 import Client_Testimonial from "./Client_Testimonials/Client_Testimonial";
 import Daily from "@daily-co/daily-js";
-const UpcomingSession = ({
-  showUpcomingButtons = true,
-  upcomingsessions,
-  pastSession,
-}) => {
+import { useRememberMe } from "@/app/context/RememberMeContext";
+const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions,pastSession }) => {
+  const {rememberMe} = useRememberMe()
   const [patientSessionToken, setPatientSessionToken] = useState(null);
   const [patient, setPatient] = useState(null);
   const [showCounsellorProfile, setShowCounsellorProfile] = useState(false);
@@ -86,10 +84,18 @@ const UpcomingSession = ({
           }
         );
         if (response?.data?.success) {
+          let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
           setTherapist(response?.data?.data?.practitionerTagged[0]);
           setCookie(
             "selectedCounsellor",
-            JSON.stringify(response?.data?.data?.practitionerTagged[0])
+            JSON.stringify(response?.data?.data?.practitionerTagged[0]),
+            maxAge
           );
         }
       } catch (err) {
@@ -103,7 +109,14 @@ const UpcomingSession = ({
     getTherapistDetails();
   }, [patientSessionToken]);
   const handleBookNowClick = () => {
-    setCookie("selectedCounsellor", JSON.stringify(therapist));
+    let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
+    setCookie("selectedCounsellor", JSON.stringify(therapist),maxAge);
     if (patient.availableCredits === 0) {
       router.push("/patient/select-package");
     } else {
@@ -134,16 +147,16 @@ const UpcomingSession = ({
       if (response?.data?.success) {
         showSuccessToast(response?.data?.data?.message)
         const call = Daily.createFrame({
-           showLeaveButton: true,
-      iframeStyle: {
-        position: "fixed",
-        top: "0",
-        left: "0",
-        width: "100%",
-        height: "100%",
-        border: 0,
-        zIndex: 9999,
-        background: "#000",
+          showLeaveButton: true,
+          iframeStyle: {
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            width: '100%',
+            height: '100%',
+            border: 0,
+    zIndex: 9999,
+    background: '#000',
           },
         });
  

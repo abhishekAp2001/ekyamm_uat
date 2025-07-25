@@ -17,20 +17,17 @@ const Filter = ({
   loading = false,
 }) => {
   const axios = axiosInstance();
-  const [min, setMin] = useState(0);
-  const [max, setMax] = useState(0);
-  const [fees, setFees] = useState([]);
+  const [min, setMin] = useState(0)
+  const [max, setMax] = useState(0)
+  const [fees, setFees] = useState([])
   const [selectedGender, setSelectedGender] = useState(
     initialParams.gender || ""
   );
   const [languageInput, setLanguageInput] = useState("");
-  const [selectedLanguages, setSelectedLanguages] = useState(
-    initialParams.language || []
-  );
+  const [selectedLanguages, setSelectedLanguages] = useState(initialParams.language || []);
   const [languageList, setLanguageList] = useState([]); // State for API-fetched languages
-  const [sessionFee, setSessionFee] = useState(
-    initialParams.sessionFee || "150"
-  );
+  const [sessionFee, setSessionFee] = useState(initialParams.sessionFee || "150");
+  const [sessionFeeRange, setSessionFeeRange] = useState({ from: "", to: "" });
   useEffect(() => {
     setSelectedGender(initialParams.gender || "");
     const initial = initialParams.language;
@@ -43,16 +40,23 @@ const Filter = ({
     } else {
       setSelectedLanguages([]);
     }
-    setSessionFee(initialParams.sessionFee || "");
+    setSessionFeeRange({
+  from: initialParams.sessionFee?.from || "",
+  to: initialParams.sessionFee?.to || "",
+});
   }, [initialParams]);
 
   const handleClearFilters = () => {
     setSelectedGender("");
     setSelectedLanguages([]);
-    setSessionFee("");
+    setSessionFeeRange({ from: "", to: "" });
     setLanguageInput("");
-    setShowFilter(false);
-    onApplyFilter({ language: "", sessionFee: "", gender: "" });
+    setShowFilter(false)
+    onApplyFilter({
+  language: "",
+  sessionFee: { from: null, to: null },
+  gender: "",
+});
   };
   useEffect(() => {
     const getLanguageList = async () => {
@@ -87,7 +91,10 @@ const Filter = ({
     } else {
       setSelectedLanguages([]);
     }
-    setSessionFee(initialParams.sessionFee || "");
+    setSessionFeeRange({
+  from: initialParams.sessionFee?.from || "",
+  to: initialParams.sessionFee?.to || "",
+});
   }, [initialParams]);
 
   const handleAddToList = (value, setInput) => {
@@ -104,10 +111,13 @@ const Filter = ({
   const handleApply = () => {
     console.log("in");
     const params = {
-      language: selectedLanguages,
-      sessionFee: sessionFee || "",
-      gender: selectedGender || "",
-    };
+  language: selectedLanguages,
+  sessionFee: {
+    from: sessionFeeRange.from,
+    to: sessionFeeRange.to,
+  },
+  gender: selectedGender || "",
+};
     onApplyFilter(params);
   };
 
@@ -116,22 +126,23 @@ const Filter = ({
       try {
         const response = await axios.get(`/v2/cp/counsellors/fees`, {
           headers: {
-            accesstoken: token,
-          },
-        });
+            accesstoken: token
+          }
+        })
         if (response?.data?.success) {
-          setMin(response?.data?.data?.min);
-          setMax(response?.data?.data?.max);
-          setFees(response?.data?.data?.fees);
+          setMin(response?.data?.data?.min)
+          setMax(response?.data?.data?.max)
+          setFees(response?.data?.data?.fees)
         }
       } catch (error) {
         console.error(error);
       }
-    };
-    getSliderValue();
-  }, [token]);
-  const currentIndex =
-    sessionFee === "" ? 0 : fees.findIndex((fee) => fee === Number(sessionFee));
+    }
+    getSliderValue()
+  }, [token])
+  const currentIndex = sessionFee === ""
+    ? 0
+    : fees.findIndex(fee => fee === Number(sessionFee));
   const indexValue = currentIndex === -1 ? 0 : currentIndex;
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] min-h-screen flex flex-col max-w-[576px] mx-auto">
@@ -150,17 +161,15 @@ const Filter = ({
             </div>
             <div className="h-6 w-6" /> {/* Space */}
           </div>
+          
         </div>
       </>
-      <div
-        className="flex-grow px-4 mt-[18px] pb-[90px] pt-[16%] lg:pt-[10%]"
-        style={{
-          background: `
+      <div className="flex-grow px-4 mt-[18px] pb-[90px] pt-[16%] lg:pt-[10%]" style={{
+        background: `
       linear-gradient(180deg, #DFDAFB 0%, #F9CCC5 100%),
       linear-gradient(0deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5))
-    `,
-        }}
-      >
+    `
+      }}>
         {/* Session Fee */}
         <div className="bg-white rounded-[12px] p-4 mb-[10px]">
           <Button
@@ -169,22 +178,26 @@ const Filter = ({
             variant="ghost"
           >
            Clear Filter
-            
+
           </Button>
           <div className="text-[15px] font-[500] text-gray-500 mb-5">
             Session Fee
           </div>
           <Slider
-            value={[indexValue]}
-            onValueChange={(value) => {
-              const fee = fees[value[0]];
-              setSessionFee(fee === fees[0] ? "" : fee);
-            }}
-            max={fees.length - 1}
-            min={0}
-            step={1}
-            fees={fees}
-          />
+  value={[
+    sessionFeeRange.from === "" ? min : Number(sessionFeeRange.from),
+    sessionFeeRange.to === "" ? max : Number(sessionFeeRange.to),
+  ]}
+  onValueChange={(value) => {
+    setSessionFeeRange({
+      from: value[0],
+      to: value[1],
+    });
+  }}
+  min={min}
+  max={max}
+  step={100}
+/>
           <div className="flex justify-between mt-2 text-[12px] text-[#6D6A5D] font-[500]">
             <span>₹{min}/-</span>
             <span>₹{max}/-</span>
@@ -207,11 +220,10 @@ const Filter = ({
                 <RadioGroupItem value={gender} id={gender} />
                 <Label
                   htmlFor={gender}
-                  className={`text-[16px] ${
-                    selectedGender === gender
+                  className={`text-[16px] ${selectedGender === gender
                       ? "font-[600] text-black"
                       : "font-[500] text-gray-500"
-                  }`}
+                    }`}
                 >
                   {gender.charAt(0).toUpperCase() + gender.slice(1)}
                 </Label>
@@ -255,6 +267,7 @@ const Filter = ({
                 </li>
               ))}
             </ul>
+
           </div>
           <div className="">
             <Label

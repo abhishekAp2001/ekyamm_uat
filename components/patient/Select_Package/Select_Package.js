@@ -44,7 +44,9 @@ import {
   selectedCounsellorData as getSelectedCounsellorData
 } from "@/lib/utils";
 import { setCookie } from "cookies-next";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 const Select_Package = () => {
+  const { rememberMe } = useRememberMe()
   const router = useRouter();
   const patientSessionData = getPatientSessionData();
   const selectedCounsellorData = getSelectedCounsellorData();
@@ -191,25 +193,34 @@ const Select_Package = () => {
                 Select Number of Sessions
               </Label>
               <div className="bg-[#FFFFFF80] p-4 rounded-[12px] flex flex-col gap-[10px]">
-                {selectedCounsellorData?.practiceDetails?.fees?.packages?.map(
-                  (packageItem, idx) => (
-                    <div className="flex items-center space-x-2" key={idx}>
-                      <Checkbox id={`package-${idx}`}
-                        checked={selectedPackageIdx === packageItem?.sessions}
+                {[4, 8, 12].map((sessions, idx) => {
+
+                  const packageItem = selectedCounsellorData?.practiceDetails?.fees?.packages?.find(
+                    (pkg) => pkg.sessions === sessions
+                  );
+
+                  const rate = packageItem?.rate ?? selectedCounsellorData?.practiceDetails?.fees?.singleSession;
+
+                  return (
+                    <div className="flex items-center space-x-2" key={sessions}>
+                      <Checkbox
+                        id={`package-${sessions}`}
+                        checked={selectedPackageIdx === sessions}
                         onCheckedChange={() => {
-                          setTotalPrice(packageItem.rate);
-                          setSelectedPackage(packageItem?.sessions);
+                          setTotalPrice(rate);
+                          setSelectedPackage(sessions);
                         }}
                       />
                       <Label
-                        htmlFor={`package-${idx}`}
+                        htmlFor={`package-${sessions}`}
                         className="text-base font-semibold text-black"
                       >
-                        {packageItem?.sessions} Sessions
+                        {sessions} Sessions
                       </Label>
                     </div>
-                  )
-                )}
+                  );
+                })}
+
 
               </div>
             </div>
@@ -290,7 +301,14 @@ const Select_Package = () => {
             <Button
               className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] h-[45px]  rounded-[8px] flex items-center justify-center w-[48%]"
               onClick={() => {
-                setCookie("session_selection", JSON.stringify({ "total": totalPrice, "session_count": selectedPackageIdx }))
+                let maxAge = {}
+                if (rememberMe) {
+                  maxAge = { maxAge: 60 * 60 * 24 * 30 }
+                }
+                else if (!rememberMe) {
+                  maxAge = {}
+                }
+                setCookie("session_selection", JSON.stringify({ "total": totalPrice, "session_count": selectedPackageIdx }), maxAge)
                 router.push(`/patient/pay-for-sessions`);
               }}
               disabled={selectedPackageIdx === 1}

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
@@ -8,20 +8,20 @@ import Image from "next/image";
 import axiosInstance from "@/lib/axiosInstance";
 import { toast } from "react-toastify";
 import { customEncodeString, encryptData } from "@/lib/utils";
-import { setCookie } from "cookies-next";
+import { hasCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { whatsappUrl } from "@/lib/constants";
 import { Eye, EyeOff } from "lucide-react";
-
+import { useRememberMe } from "@/app/context/RememberMeContext";
 const Login = () => {
+  const { rememberMe, setRememberMe } = useRememberMe();
   const axios = axiosInstance();
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
-
   // Validation function
   const validateInputs = (userName, password) => {
     if (!userName.trim()) {
@@ -58,7 +58,14 @@ const Login = () => {
           response?.data?.data?.userType === "superAdmin" &&
           response?.data?.data?.status === "active"
         ) {
-          setCookie("user", response?.data?.data);
+        let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
+          setCookie("user", response?.data?.data,maxAge);
           router.push("/sales");
         }
       }
@@ -74,7 +81,15 @@ const Login = () => {
       }
     }
   };
-
+  useEffect(()=>{
+    const checkCookie = ()=>{
+      const cookie = hasCookie("user")
+      if(cookie){
+        router.push("/sales")
+      }
+    }
+    checkCookie()
+  },[])
   return (
     <>
       <div className="bg-gradient-to-b from-[#DFDAFB] to-[#F9CCC5] h-screen relative max-w-[576px] mx-auto">
@@ -135,7 +150,11 @@ const Login = () => {
                 </div>
                 <div className="flex justify-between mt-[11.72px]">
                   <div className="flex gap-[6px] items-center">
-                    <Checkbox className="w-4 h-4 border border-[#776EA5] rounded-[1.8px]" id="forgot-password"/>
+                    <Checkbox className="w-4 h-4 border border-[#776EA5] rounded-[1.8px]" id="forgot-password"
+                    onCheckedChange={(checked) => {
+                          setRememberMe(!!checked)
+                        }}
+                        />
                     <label htmlFor="forgot-password" className="text-[12px] text-gray-500">
                       Remember Me
                     </label>
