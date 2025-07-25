@@ -188,32 +188,6 @@ one symbol, and no spaces.`;
     verifyChannelPartner(type);
   }, [type]);
 
-                if (response?.data?.success === true) {
-                    setCookie("channelPartnerData", JSON.stringify(response.data.data));
-                    setChannelPartnerData(response.data.data);
-                    setFormData((prev) => ({
-                        ...prev,
-                        verificationToken: sanitizeInput(
-                            response.data.data?.verificationToken
-                        ),
-                    }));
-                } else {
-                    showErrorToast(
-                        response?.data?.error?.message || "Verification failed"
-                    );
-                }
-            } catch (err) {
-                showErrorToast(
-                    err?.response?.data?.error?.message ||
-                    "An error occurred while verifying"
-                );
-            } finally {
-                setLoading(false);
-            }
-        };
-        verifyChannelPartner(type);
-    }, [type]);
-
     return (
         <>
             <div className=" bg-gradient-to-b  from-[#DFDAFB] to-[#F9CCC5] h-full flex flex-col justify-between items-center px-[16px] max-w-[576px] mx-auto">
@@ -249,7 +223,6 @@ one symbol, and no spaces.`;
 
             </div>
           </div>
-        )}
         <div className="pt-5">
           <Image
             src="/images/patient-logo.png"z
@@ -470,7 +443,6 @@ one symbol, and no spaces.`;
             </div>
           </div>
         </div>
-      </div>
     </>
   );
 };
