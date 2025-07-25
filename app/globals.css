@@ -238,10 +238,14 @@ body {
   height: 42px !important;
 }
 .\[\&_svg\:not\(\[class\*\=\'size-\'\]\)\]\:size-4 svg:not([class*="size-"]){
-  width: 16px;
-  height: 16px;
-  /* color: #776ea5 !important; */
+  width: 22px;
+  height: 22px;
 }
+.circle_plus{
+  width: 16px !important;
+  height: 22px !important;
+}
+
 .bottom-drawer{
   border-top-left-radius: 12px !important;
   border-top-right-radius: 12px !important;
@@ -261,10 +265,57 @@ body {
   background: #ffffffb3;
 }
 
+#daily-gradient-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9998;
+  background: linear-gradient(90deg, #BBA3E4 0%, #E7A1A0 100%);
+}
+
+#daily-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+}
+
+.card-content{
+  background-color: #000 !important;
+  background: #000 !important;
+}
+.haircheck.jsx-793565102{
+  background-color: #000 !important;
+}
 
 
-/* @media only screen and (max-width: 480px) {
-  .Toastify__toast {
-    --toastify-toast-width: 95%;
-  }
+/* safari */
+
+input,
+textarea,
+select {
+  font-size: 16px !important; 
+}
+input.small-text {
+  font-size: 16px !important;
+  transform: scale(0.875);
+  transform-origin: left top;
+}
+
+/* .jsx-3192593359 {
+  font-family: "Quicksand", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 } */
+
+.jsx-9ef85770a31f9e5f {
+  font-family: "Quicksand", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+#haircheck-join {
+  background-color: #cc627b00 !important;
+  border-color: #cc627b !important;
+  color: #CC627B !important;
+}
+

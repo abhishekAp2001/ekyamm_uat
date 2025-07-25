@@ -6,7 +6,7 @@ import { X } from "lucide-react";
 const SignOutModal = ({ onCancel, onConfirm }) => {
   return (
     <div className="fixed inset-0 flex items-end justify-center bg-black/30 z-50 max-w-[576px] mx-auto">
-      <div className="w-full h-[275px] rounded-t-[16px] bg-gradient-to-b from-[#F9F8FD] to-[#FDF1F0] shadow-xl p-6 relative flex flex-col justify-between rounded-tl-2xl rounded-tr-2xl">
+      <div className="w-full h-[194px] rounded-t-[16px] bg-gradient-to-b from-[#F9F8FD] to-[#FDF1F0] shadow-xl p-6 relative flex flex-col justify-between rounded-tl-2xl rounded-tr-2xl">
         {/* Close Icon */}
         <button
           onClick={onCancel}
@@ -17,7 +17,7 @@ const SignOutModal = ({ onCancel, onConfirm }) => {
         </button>
 
         {/* Message */}
-        <div className="flex flex-col items-center justify-center text-center mt-[40px] mb-[20px]">
+        <div className="flex flex-col items-center justify-center text-center">
           <p className="font-[Quicksand] font-bold text-[20px] leading-[100%] text-black">
             Are you sure
           </p>
@@ -27,7 +27,7 @@ const SignOutModal = ({ onCancel, onConfirm }) => {
         </div>
 
         {/* Buttons */}
-      <div className="w-full h-[40.51px] flex justify-center gap-[12px] mx-auto mb-16">
+      <div className="w-full h-[40.51px] flex justify-center gap-[12px] mx-auto mb-[26px]">
   <button
     onClick={onCancel}
     className="w-full h-[40.51px] border border-[#CC627B] text-[#CC627B] rounded-[8px] text-[14px] font-[600] font-[Quicksand] leading-[16px] flex items-center justify-center mr-auto"

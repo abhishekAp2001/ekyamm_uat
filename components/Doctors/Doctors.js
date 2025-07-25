@@ -61,7 +61,7 @@ const Doctors = () => {
                     src={profile.image}
                     width={42}
                     height={42}
-                    className="rounded-full object-cover w-[42px] h-[42px]"
+                    className="rounded-full object-fill w-[42px] h-[42px]"
                   />
                   <div>
                     <Label className="text-[16px] text-black font-[600] font-['Quicksand']">

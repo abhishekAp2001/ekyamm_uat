@@ -4,23 +4,26 @@ import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { formatDate } from "date-fns";
+import { Button } from "@/components/ui/button";
+import {
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
 const All_clinics = ({ list }) => {
   function cleanNumber(input) {
-    return input.replace(/🇮🇳/, '')
-      .replace(/\s+/g, '')
-      .trim();
+    return input.replace(/🇮🇳/, "").replace(/\s+/g, "").trim();
   }
 
   function formatDate(isoString) {
-
     const date = new Date(isoString);
 
-    const formatted = date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    const formatted = date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
-    return formatted
+    return formatted;
   }
   return (
     <>
@@ -40,20 +43,24 @@ const All_clinics = ({ list }) => {
                     />
                   ) : null}
 
-                  <AvatarFallback>
+                  <AvatarFallback className="bg-[#eae8f0]">
                     {list?.clinicName
                       ? list.clinicName
-                        .split(" ")
-                        .map((word) => word[0])
-                        .join("")
-                        .toUpperCase()
-                      : `${list?.generalInformation?.firstName?.[0] || ""}${list?.generalInformation?.lastName?.[0] || ""}`.toUpperCase()}
+                          .split(" ")
+                          .map((word) => word[0])
+                          .join("")
+                          .toUpperCase()
+                      : `${list?.generalInformation?.firstName?.[0] || ""}${
+                          list?.generalInformation?.lastName?.[0] || ""
+                        }`.toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-
               </DialogTrigger>
 
-              <DialogContent className=" bg-[#f2f2f2] rounded-2xl p-[18px_12px]">
+              <DialogContent
+                className=" bg-[#f2f2f2] rounded-2xl p-[18px_12px]"
+                showCloseBlack
+              >
                 <div className="flex flex-col space-y-4">
                   <h2 className="text-[20px] font-semibold">
                     Practice Details
@@ -64,24 +71,27 @@ const All_clinics = ({ list }) => {
                     <div className="flex-shrink-0 rounded-md bg-gray-100 p-2">
                       {/* Logo: replace src with your static logo or dynamic one */}
                       <Avatar className="cursor-pointer">
-                  {list?.generalInformation?.profileImageUrl ? (
-                    <AvatarImage
-                      src={list.generalInformation.profileImageUrl}
-                      alt={`${list?.generalInformation?.firstName} ${list?.generalInformation?.lastName}`}
-                    />
-                  ) : null}
+                        {list?.generalInformation?.profileImageUrl ? (
+                          <AvatarImage
+                            src={list.generalInformation.profileImageUrl}
+                            alt={`${list?.generalInformation?.firstName} ${list?.generalInformation?.lastName}`}
+                          />
+                        ) : null}
 
-                  <AvatarFallback>
-                    {list?.clinicName
-                      ? list.clinicName
-                        .split(" ")
-                        .map((word) => word[0])
-                        .join("")
-                        .toUpperCase()
-                      : `${list?.generalInformation?.firstName?.[0] || ""}${list?.generalInformation?.lastName?.[0] || ""}`.toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-
+                        <AvatarFallback className="bg-[#eae8f0]">
+                          {list?.clinicName
+                            ? list.clinicName
+                                .split(" ")
+                                .map((word) => word[0])
+                                .join("")
+                                .toUpperCase()
+                            : `${
+                                list?.generalInformation?.firstName?.[0] || ""
+                              }${
+                                list?.generalInformation?.lastName?.[0] || ""
+                              }`.toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
                     </div>
                     <div className="flex flex-col space-y-1 text-sm">
                       <span className="font-semibold text-base">
@@ -90,9 +100,10 @@ const All_clinics = ({ list }) => {
                       <span className="flex items-center text-gray-500">
                         <Phone className="w-4 h-4 mr-1" />
                         {list?.generalInformation?.primaryMobileNumber
-                          ? cleanNumber(list.generalInformation.primaryMobileNumber)
-                          : "Not added"
-                        }
+                          ? cleanNumber(
+                              list.generalInformation.primaryMobileNumber
+                            )
+                          : "Not added"}
                         (Primary)
                       </span>
                       <span className="flex items-center text-gray-500">
@@ -108,15 +119,16 @@ const All_clinics = ({ list }) => {
                         </svg>
                         {list?.generalInformation?.whatsappNumber
                           ? cleanNumber(list.generalInformation.whatsappNumber)
-                          : "Not added"
-                        }
+                          : "Not added"}
                       </span>
                       <span className="flex items-center text-gray-500">
-                        <Mail className="w-4 h-4 mr-1" /> {list?.generalInformation?.email || "Not added"}
+                        <Mail className="w-4 h-4 mr-1" />{" "}
+                        {list?.generalInformation?.email || "Not added"}
                         (Primary)
                       </span>
                       <span className="flex items-center text-gray-500">
-                        <Mail className="w-4 h-4 mr-1" /> {list?.generalInformation?.billingEmail || "Not added"}
+                        <Mail className="w-4 h-4 mr-1" />{" "}
+                        {list?.generalInformation?.billingEmail || "Not added"}
                         (Practice)
                       </span>
                       <span className="text-gray-700 font-medium">
@@ -124,9 +136,7 @@ const All_clinics = ({ list }) => {
                         <span className="font-normal">
                           {list?.generalInformation?.dateOfBirth
                             ? formatDate(list?.generalInformation?.dateOfBirth)
-                            : "Not added"
-                          }
-
+                            : "Not added"}
                         </span>
                       </span>
                       <span className="text-gray-700 font-medium">
@@ -134,19 +144,13 @@ const All_clinics = ({ list }) => {
                         <span className="font-normal">
                           {list?.therapistDetails?.numberOfTherapist
                             ? list?.therapistDetails?.numberOfTherapist
-                            : 0
-                          }
-
+                            : 0}
                         </span>
                       </span>
                       <span className="text-gray-700 font-medium">
                         <b>Number of patients </b>
                         <span className="font-normal">
-                          {list?.patients
-                            ? list?.patients
-                            : 0
-                          }
-
+                          {list?.patients ? list?.patients : 0}
                         </span>
                       </span>
                     </div>
@@ -161,9 +165,7 @@ const All_clinics = ({ list }) => {
                       <Phone className="w-4 h-4 mr-1" />
                       {list?.generalInformation?.emergencyNumber
                         ? cleanNumber(list.generalInformation.emergencyNumber)
-                        : "Not added"
-                      }
-
+                        : "Not added"}
                     </div>
                   </div>
 
@@ -171,17 +173,15 @@ const All_clinics = ({ list }) => {
                   <div className="text-sm">
                     <div className="font-medium text-base">Address</div>
                     <div className="flex items-center text-gray-500">
-                      <MapPin className="w-4 h-4 mr-1" /> {
-                        list?.generalInformation?.city &&
-                        list?.generalInformation?.state &&
-                        list?.generalInformation?.pincode ? (
-                        ` ${list.generalInformation.city}, ${list.generalInformation.state}, ${list.generalInformation.pincode}`
-                      ) : (
-                        "Not added"
-                      )}
-
+                      <MapPin className="w-4 h-4 mr-1" />{" "}
+                      {list?.generalInformation?.city &&
+                      list?.generalInformation?.state &&
+                      list?.generalInformation?.pincode
+                        ? ` ${list.generalInformation.city}, ${list.generalInformation.state}, ${list.generalInformation.pincode}`
+                        : "Not added"}
                     </div>
                   </div>
+                 
                 </div>
               </DialogContent>
             </Dialog>

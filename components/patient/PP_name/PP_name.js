@@ -14,7 +14,7 @@ const PP_name = () => {
               src="/images/name.jpg"
               alt="Top banner"
               fill
-              className="object-cover rounded-bl-[70px] rounded-br-[70px]"
+              className="object-fill rounded-bl-[70px] rounded-br-[70px]"
             />
           </div>
         </div>

@@ -2,17 +2,10 @@
 import React, { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import {
-  ChevronDown,
-  CirclePlus,
-  CircleX,
-  ChevronLeft,
-  X,
-  Loader2,
-} from "lucide-react";
+import { CirclePlus, ChevronLeft, X, Loader2, FunnelX } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
-import { showErrorToast } from "@/lib/toast";
+import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import axiosInstance from "@/lib/axiosInstance";
 import { Input } from "@/components/ui/input";
 
@@ -24,24 +17,43 @@ const Filter = ({
   loading = false,
 }) => {
   const axios = axiosInstance();
-  const [min, setMin] = useState(0)
-  const [max,setMax] = useState(0)
-  const [fees, setFees] = useState([])
+  const [min, setMin] = useState(0);
+  const [max, setMax] = useState(0);
+  const [fees, setFees] = useState([]);
   const [selectedGender, setSelectedGender] = useState(
     initialParams.gender || ""
   );
   const [languageInput, setLanguageInput] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState(
-    initialParams.language || ""
+  const [selectedLanguages, setSelectedLanguages] = useState(
+    initialParams.language || []
   );
   const [languageList, setLanguageList] = useState([]); // State for API-fetched languages
-  const [sessionFee, setSessionFee] = useState(initialParams.sessionFee || "150");
+  const [sessionFee, setSessionFee] = useState(
+    initialParams.sessionFee || "150"
+  );
   useEffect(() => {
     setSelectedGender(initialParams.gender || "");
-    setSelectedLanguage(initialParams.language || "");
+    const initial = initialParams.language;
+    if (initial) {
+      if (Array.isArray(initial)) {
+        setSelectedLanguages(initial);
+      } else {
+        setSelectedLanguages([initial]);
+      }
+    } else {
+      setSelectedLanguages([]);
+    }
     setSessionFee(initialParams.sessionFee || "");
   }, [initialParams]);
 
+  const handleClearFilters = () => {
+    setSelectedGender("");
+    setSelectedLanguages([]);
+    setSessionFee("");
+    setLanguageInput("");
+    setShowFilter(false);
+    onApplyFilter({ language: "", sessionFee: "", gender: "" });
+  };
   useEffect(() => {
     const getLanguageList = async () => {
       try {
@@ -65,54 +77,62 @@ const Filter = ({
 
   useEffect(() => {
     setSelectedGender(initialParams.gender || "");
-    setSelectedLanguage(initialParams.language || "");
+    const initial = initialParams.language;
+    if (initial) {
+      if (Array.isArray(initial)) {
+        setSelectedLanguages(initial);
+      } else {
+        setSelectedLanguages([initial]);
+      }
+    } else {
+      setSelectedLanguages([]);
+    }
     setSessionFee(initialParams.sessionFee || "");
   }, [initialParams]);
 
   const handleAddToList = (value, setInput) => {
-    if (value) {
-      setSelectedLanguage(value);
+    if (value && !selectedLanguages.includes(value)) {
+      setSelectedLanguages([...selectedLanguages, value]);
       setInput("");
     }
   };
 
-  const handleRemoveFromList = () => {
-    setSelectedLanguage("");
+  const handleRemoveFromList = (language) => {
+    setSelectedLanguages(selectedLanguages.filter((l) => l !== language));
   };
 
   const handleApply = () => {
     console.log("in");
     const params = {
-      language: selectedLanguage || "", // Default to Hindi if none selected
+      language: selectedLanguages,
       sessionFee: sessionFee || "",
       gender: selectedGender || "",
     };
     onApplyFilter(params);
   };
 
-  useEffect(()=>{
-    const getSliderValue = async()=>{
+  useEffect(() => {
+    const getSliderValue = async () => {
       try {
-        const response = await axios.get(`/v2/cp/counsellors/fees`,{
+        const response = await axios.get(`/v2/cp/counsellors/fees`, {
           headers: {
-            accesstoken:token
-          }
-        })
-      if(response?.data?.success){
-        setMin(response?.data?.data?.min)
-        setMax(response?.data?.data?.max)
-        setFees(response?.data?.data?.fees)
-      }
+            accesstoken: token,
+          },
+        });
+        if (response?.data?.success) {
+          setMin(response?.data?.data?.min);
+          setMax(response?.data?.data?.max);
+          setFees(response?.data?.data?.fees);
+        }
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    }
-    getSliderValue()
-  },[token])
-  const currentIndex = sessionFee === ""
-  ? 0
-  : fees.findIndex(fee => fee === Number(sessionFee));
-const indexValue = currentIndex === -1 ? 0 : currentIndex;
+    };
+    getSliderValue();
+  }, [token]);
+  const currentIndex =
+    sessionFee === "" ? 0 : fees.findIndex((fee) => fee === Number(sessionFee));
+  const indexValue = currentIndex === -1 ? 0 : currentIndex;
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] min-h-screen flex flex-col max-w-[576px] mx-auto">
       <>
@@ -132,14 +152,25 @@ const indexValue = currentIndex === -1 ? 0 : currentIndex;
           </div>
         </div>
       </>
-      <div className="flex-grow px-4 mt-[18px] pb-[90px] pt-[16%] lg:pt-[10%]" style={{
-    background: `
+      <div
+        className="flex-grow px-4 mt-[18px] pb-[90px] pt-[16%] lg:pt-[10%]"
+        style={{
+          background: `
       linear-gradient(180deg, #DFDAFB 0%, #F9CCC5 100%),
       linear-gradient(0deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5))
-    `
-  }}>
+    `,
+        }}
+      >
         {/* Session Fee */}
         <div className="bg-white rounded-[12px] p-4 mb-[10px]">
+          <Button
+            onClick={handleClearFilters} // <-- add your clear filter handler
+            className="border border-[#CC627B] bg-transparent text-[12px] font-[600] text-[#CC627B] px-[10px] py-0   rounded-[8px] flex items-center justify-center w-fit h-[28px] ml-auto"
+            variant="ghost"
+          >
+           Clear Filter
+            
+          </Button>
           <div className="text-[15px] font-[500] text-gray-500 mb-5">
             Session Fee
           </div>
@@ -152,7 +183,7 @@ const indexValue = currentIndex === -1 ? 0 : currentIndex;
             max={fees.length - 1}
             min={0}
             step={1}
-            fees = {fees}
+            fees={fees}
           />
           <div className="flex justify-between mt-2 text-[12px] text-[#6D6A5D] font-[500]">
             <span>₹{min}/-</span>
@@ -166,7 +197,9 @@ const indexValue = currentIndex === -1 ? 0 : currentIndex;
           </div>
           <RadioGroup
             value={selectedGender}
-            onValueChange={(value) => setSelectedGender(value === selectedGender ? "" : value)}
+            onValueChange={(value) =>
+              setSelectedGender(value === selectedGender ? "" : value)
+            }
             className="flex gap-4 items-center"
           >
             {["male", "female", "other"].map((gender) => (
@@ -192,15 +225,15 @@ const indexValue = currentIndex === -1 ? 0 : currentIndex;
         <div className="w-full mt-4 bg-white rounded-[12px] p-4">
           <div className="">
             <Label className={`text-[15px] font-medium mb-[7.59px]`}>
-            Select Preferred Language
+              Select Preferred Language
             </Label>
             <div className="relative">
               <Input
                 type="text"
                 placeholder="Language"
-                className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-3 h-[38px] bg-[#BBA3E41A] placeholder:text-gray-500`}
-                value={selectedLanguage}
-                readOnly
+                className="..."
+                value={languageInput}
+                onChange={(e) => setLanguageInput(e.target.value)}
               />
               <CirclePlus
                 size={20}
@@ -209,15 +242,18 @@ const indexValue = currentIndex === -1 ? 0 : currentIndex;
               />
             </div>
             <ul className="flex flex-wrap gap-[10px] mt-2">
-              {selectedLanguage && (
-                <li className="flex items-center gap-[5px] py-[2px] px-2 bg-[#BBA3E41A] rounded-[5px] text-[15px] text-gray-500 hover:bg-gray-200">
-                  {selectedLanguage}
+              {selectedLanguages.map((language, index) => (
+                <li
+                  key={index}
+                  className="flex items-center gap-[5px] py-[2px] px-2 bg-[#BBA3E41A] rounded-[5px] text-[15px] text-gray-500 hover:bg-gray-200"
+                >
+                  {language}
                   <X
                     className="w-[11px] h-[11px] text-[#776EA5] border border-[#776EA5] rounded-full"
-                    onClick={handleRemoveFromList}
+                    onClick={() => handleRemoveFromList(language)}
                   />
                 </li>
-              )}
+              ))}
             </ul>
           </div>
           <div className="">
@@ -238,7 +274,7 @@ const indexValue = currentIndex === -1 ? 0 : currentIndex;
                   <CirclePlus
                     size={11}
                     color="#FFF"
-                    className="w-[11px] h-[11px] text-white suggested_languages ml-[-4px]"
+                    className="w-[11px] h-[11px] text-white suggested_languages ml-[-4px] circle_plus"
                   />
                 </Button>
               ))}

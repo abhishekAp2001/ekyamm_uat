@@ -564,7 +564,7 @@ const CP_doctor_details = () => {
                 onChange={(e) => handleInputChange(e, "emergencyNumber")}
                 onBlur={() => handleBlur("emergencyNumber")}
                 disabled={!isMobileValid(formData.whatsappNumber)}
-                className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
+                className={`border rounded-[7.26px]   text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
                   isMobileValid(formData.whatsappNumber)
                     ? "bg-white placeholder:text-gray-500"
                     : "bg-[#ffffff90] placeholder:text-[#00000040]"

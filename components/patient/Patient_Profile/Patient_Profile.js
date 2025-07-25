@@ -603,7 +603,7 @@ const Patient_Profile = () => {
               <AvatarImage
                 src={patient?.profileImageUrl || "/images/profile.png"}
                 alt={`${patient?.firstName} ${patient?.lastName}`}
-                className="rounded-full object-cover"
+                className="rounded-full object-fill"
               />
             </Avatar>
             <Drawer className="pt-[9.97px]" open={imageDrawer} onClose={() => setImageDrawer(false)}>
