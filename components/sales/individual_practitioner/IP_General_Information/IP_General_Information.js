@@ -12,8 +12,10 @@ import axiosInstance from "@/lib/axiosInstance";
 import { useRouter } from "next/navigation";
 import { showErrorToast } from "@/lib/toast";
 import { getCookie, hasCookie } from "cookies-next";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 
 const IP_General_Information = () => {
+  const {rememberMe} = useRememberMe()
   const axios = axiosInstance();
   const router = useRouter();
   const [languageList, setLanguageList] = useState([]);
@@ -43,7 +45,7 @@ const IP_General_Information = () => {
 
   // Load form data from cookie on component mount
   useEffect(() => {
-    const savedData = localStorage.getItem("ip_general_information");
+    const savedData = rememberMe?localStorage.getItem("ip_general_information"):sessionStorage.getItem("ip_general_information");
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
@@ -148,7 +150,12 @@ const IP_General_Information = () => {
 
   const handleSave = () => {
     if (isFormValid()) {
-      localStorage.setItem("ip_general_information", JSON.stringify(formData));
+      if(rememberMe){
+        localStorage.setItem("ip_general_information", JSON.stringify(formData));
+      }
+      else{
+        sessionStorage.setItem("ip_general_information", JSON.stringify(formData));
+      }
       router.push("/sales/ip_medical_association_details");
     } else {
       showErrorToast("Please fill all required fields correctly");
@@ -157,7 +164,8 @@ const IP_General_Information = () => {
 
   useEffect(() => {
     const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
-    const ip_type_token = localStorage.getItem("ip_details") ? JSON.parse(localStorage.getItem("ip_details")) : null
+    const raw = rememberMe?localStorage.getItem("ip_details"):sessionStorage.getItem("ip_details")
+    const ip_type_token = raw?JSON.parse(raw):null
     if (!token) {
       router.push('/login')
     }

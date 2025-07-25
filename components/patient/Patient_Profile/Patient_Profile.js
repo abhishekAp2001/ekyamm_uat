@@ -35,6 +35,7 @@ import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { Baseurl, whatsappUrl } from "@/lib/constants";
 import { setCookie } from "cookies-next";
 import { base64ToFile } from "@/lib/utils";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 const sessionData = [
   {
     date: "24th Apr",
@@ -57,6 +58,7 @@ const sessionData = [
 ];
 
 const Patient_Profile = () => {
+  const {rememberMe} = useRememberMe()
   const router = useRouter();
   const cookieValue = getCookie("PatientInfo");
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -225,7 +227,14 @@ const Patient_Profile = () => {
         { headers: { accesstoken: patientSessionToken } }
       );
       if (response?.data?.success) {
-        setCookie("PatientInfo", JSON.stringify(response?.data?.data));
+        let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
+        setCookie("PatientInfo", JSON.stringify(response?.data?.data),maxAge);
         setImageDrawer(false)
         router.push(`/patient/patient-profile`);
       }
@@ -358,7 +367,8 @@ const Patient_Profile = () => {
     try {
       setIsLoading(true)
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/mobile/otpValidateForProfile`, {
-        otp: otp
+        otp: otp,
+        newMobile: mobile
       }, {
         headers: {
           accesstoken: patientSessionToken,
@@ -498,9 +508,16 @@ const Patient_Profile = () => {
       })
       console.log("Res", response)
       if (response?.data?.success) {
+        let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
         patient.countryCode_primary = "🇮🇳 +91"
         patient.primaryMobileNumber = mobile
-        setCookie("PatientInfo", JSON.stringify(patient))
+        setCookie("PatientInfo", JSON.stringify(patient),maxAge)
         showSuccessToast("Contact details updated")
         handleVerifiedDrawerClose()
       }
@@ -535,8 +552,15 @@ const Patient_Profile = () => {
       })
       console.log("Res", response)
       if (response?.data?.success) {
+        let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
         patient.email = email
-        setCookie("PatientInfo", JSON.stringify(patient))
+        setCookie("PatientInfo", JSON.stringify(patient),maxAge)
         showSuccessToast("Contact details updated")
         handleVerifiedDrawerClose()
       }

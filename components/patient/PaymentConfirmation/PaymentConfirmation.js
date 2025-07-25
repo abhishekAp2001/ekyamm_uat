@@ -10,7 +10,9 @@ import { useSearchParams } from 'next/navigation';
 import { useReactToPrint } from "react-to-print";
 import Invoice from '@/components/channel-partner/PaymentConfirmation/Invoice';
 import Footer_bar from '@/components/Footer_bar/Footer_bar';
+import { useRememberMe } from '@/app/context/RememberMeContext';
 const PaymentConfirmation = () => {
+  const {rememberMe} = useRememberMe()
   const targetRef = useRef()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -29,7 +31,14 @@ const PaymentConfirmation = () => {
       try {
         const cookieObj = JSON.parse(cookie);
         cookieObj.txnId = transactionId;
-        setCookie("session_selection", JSON.stringify(cookieObj));
+        let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
+        setCookie("session_selection", JSON.stringify(cookieObj),maxAge);
         setSession(cookieObj);
       } catch (err) {
         console.error("Error parsing cookie", err);

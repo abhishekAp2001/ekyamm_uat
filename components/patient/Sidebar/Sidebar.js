@@ -29,6 +29,7 @@ const Sidebar = ({ onClose }) => {
         .replace(/=.*/, "=;expires=" + new Date(0).toUTCString() + ";path=/");
     });
     localStorage.clear();
+    sessionStorage.clear()
     if(patient){
       router.push(`/patient/login`);
     }

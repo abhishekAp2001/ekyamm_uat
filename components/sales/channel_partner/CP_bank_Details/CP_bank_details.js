@@ -11,11 +11,12 @@ import { toast } from "react-toastify";
 import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 
 const CP_bank_details = () => {
   const axios = axiosInstance();
   const router = useRouter();
-
+  const {rememberMe} = useRememberMe()
   const [formData, setFormData] = useState({
     accountHolderName: "",
     accountNumber: "",
@@ -119,8 +120,15 @@ const CP_bank_details = () => {
 
   // Handle save and continue
   const handleSave = () => {
+    let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
     if (isFormValid()) {
-      setCookie("cp_bank_details", formData);
+      setCookie("cp_bank_details", formData,maxAge);
       handleAddChannelPartner();
     } else {
       showErrorToast("Please fill all required fields correctly");

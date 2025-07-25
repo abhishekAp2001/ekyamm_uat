@@ -9,6 +9,7 @@ import { formatAmount } from "@/lib/utils";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { getCookie } from "cookies-next";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 const DoctorCard = ({
   patient,
   doc,
@@ -16,9 +17,17 @@ const DoctorCard = ({
   setShowCounsellorProfile,
   setSelectedCounsellors,
 }) => {
+  const {rememberMe} = useRememberMe()
   const router = useRouter();
   const handleBookNowClick = () => {
-    setCookie("selectedCounsellor", JSON.stringify(doc));
+    let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
+    setCookie("selectedCounsellor", JSON.stringify(doc),maxAge);
     if (patient.availableCredits === 0) {
       router.push("/patient/select-package")
     }

@@ -18,8 +18,10 @@ import {
 } from "../../../ui/select";
 import axiosInstance from "@/lib/axiosInstance";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 
 const CP_billing_details = () => {
+  const {rememberMe} = useRememberMe()
   const router = useRouter();
   const axios = axiosInstance();
   const [formData, setFormData] = useState({
@@ -199,12 +201,19 @@ const CP_billing_details = () => {
 
   // Handle save and continue
   const handleSave = () => {
+    let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
     if (isFormValid()) {
       if (formData.billingType === "monthly") {
-        setCookie("cp_billing_details", formData);
+        setCookie("cp_billing_details", formData,maxAge);
         handleAddChannelPartner();
       } else {
-        setCookie("cp_billing_details", formData);
+        setCookie("cp_billing_details", formData,maxAge);
         router.push("/sales/cp_bank_details");
       }
     } else {

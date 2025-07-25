@@ -11,18 +11,34 @@ import { showErrorToast } from "@/lib/toast";
 import { setCookie } from "cookies-next";
 import axios from "axios";
 import { Baseurl } from "@/lib/constants";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 // AvailableSession shows session credits and a loader when fetching
 export default function AvailableSession({ loading = false, patient }) {
+  const {rememberMe} = useRememberMe()
   const router = useRouter();
   const [patientSessionToken, setPatientSessionToken] = useState(null);
   const [therapist, setTherapist] = useState();
   const { availableCredits = 0, totalCredits = 0 } = patient || {};
   const onBookSession = () => {
-    setCookie("selectedCounsellor", JSON.stringify(therapist));
+    let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
+    setCookie("selectedCounsellor", JSON.stringify(therapist),maxAge);
     router.push("/patient/schedule-session");
   };
   const onAddPackage = () => {
-    setCookie("selectedCounsellor", JSON.stringify(therapist));
+    let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
+    setCookie("selectedCounsellor", JSON.stringify(therapist),maxAge);
     router.push("/patient/select-package");
   };
   useEffect(() => {

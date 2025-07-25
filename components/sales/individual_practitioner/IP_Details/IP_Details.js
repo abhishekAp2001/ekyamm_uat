@@ -31,9 +31,11 @@ import axiosInstance from "@/lib/axiosInstance";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { showErrorToast } from "@/lib/toast";
 import { getCookie, hasCookie } from "cookies-next";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 polyfillCountryFlagEmojis();
 
 const IP_Details = () => {
+  const {rememberMe} = useRememberMe()
   const router = useRouter();
   const axios = axiosInstance();
   const [formData, setFormData] = useState({
@@ -109,7 +111,8 @@ const IP_Details = () => {
 
   // Load form data from localStorage on component mount
   useEffect(() => {
-    const savedData = localStorage.getItem("ip_details");
+    const savedData = rememberMe?localStorage.getItem("ip_details"):sessionStorage.getItem("ip_details")
+    console.log("saved_data",savedData)
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
@@ -152,7 +155,7 @@ const IP_Details = () => {
       }
     }
     getCountryList();
-  }, [countrySearch]);
+  }, []);
 
   // Handle file selection for photo upload or capture
   const handlePhotoUpload = async (event) => {
@@ -236,7 +239,13 @@ const IP_Details = () => {
             ? `${formData.title} ${formData.firstName}`
             : formData.firstName,
         };
-        localStorage.setItem("ip_details", JSON.stringify(saveData));
+        console.log("remember",rememberMe)
+        if(rememberMe){
+          localStorage.setItem("ip_details", JSON.stringify(saveData));
+        }
+        else{
+          sessionStorage.setItem("ip_details", JSON.stringify(saveData));
+        }
         router.push("/sales/ip_general_information");
       } catch (error) {
         console.error("Error saving data:", error);

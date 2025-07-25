@@ -9,8 +9,10 @@ import { toast } from "react-toastify";
 import { DrawerTitle } from "../../../ui/drawer";
 import { showErrorToast } from "@/lib/toast";
 import { getCookie, hasCookie } from "cookies-next";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 
 const IP_Medical_Association_Certificate = () => {
+  const {rememberMe} = useRememberMe()
   const [formData, setFormData] = useState({
     name: "",
     medicalAssociationNumber: "",
@@ -19,7 +21,7 @@ const IP_Medical_Association_Certificate = () => {
 
   // Load data from localStorage on component mount
   useEffect(() => {
-    const savedData = localStorage.getItem("ip_medical_association_details");
+    const savedData = rememberMe?localStorage.getItem("ip_medical_association_details"):sessionStorage.getItem("ip_medical_association_details")
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
@@ -44,7 +46,8 @@ const IP_Medical_Association_Certificate = () => {
 
     useEffect(() => {
       const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
-      const ip_type_token = localStorage.getItem("ip_medical_association_details") ? JSON.parse(localStorage.getItem("ip_medical_association_details")) : null
+      const raw = rememberMe?localStorage.getItem("ip_medical_association_details"):sessionStorage.getItem("ip_medical_association_details")
+    const ip_type_token = raw?JSON.parse(raw):null
       if (!token) {
         router.push('/login')
       }

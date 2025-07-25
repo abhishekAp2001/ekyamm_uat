@@ -1,9 +1,11 @@
 import Image from "next/image";
 import React,{useState} from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../../../ui/avatar";
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogClose } from "@/components/ui/dialog";
+import { Mail, Phone, MapPin, Loader2 } from "lucide-react";
 import QRCode from 'qrcode'
+import { Button } from "@/components/ui/button";
+import { DialogTitle } from "@radix-ui/react-dialog";
 const CPList = ({ list }) => {
   const [qrCode, setQrCode] = useState("");
   function cleanNumber(input) {
@@ -30,6 +32,17 @@ const CPList = ({ list }) => {
         console.error("Error generating QR code:", error);
       }
     }
+    const handleDownload = () => {
+  if (!qrCode) return;
+
+  const link = document.createElement('a');
+  link.href = qrCode;      // your base64 data URL
+  link.download = 'qr-code.png'; // file name
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
   return (
     <>
       <div className="flex flex-wrap mt-[10.9px]">
@@ -174,6 +187,47 @@ const CPList = ({ list }) => {
                       }
                     </div>
                   </div>
+                    {list?.generalInformation?.billingType === "patientPays" && (
+                        <Dialog>
+                    <DialogTrigger asChild>
+                      <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px] rounded-[8px] flex items-center justify-center w-[84px] h-[40px] ml-auto"
+                      onClick = {()=>{
+                        generateQrCode(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${list?.generalInformation?.userName}`)
+                      }}>
+                        QR
+                      </Button>
+                    </DialogTrigger>
+ 
+                    <DialogContent className="w-full  h-[68vh] bg-[#f2f2f2] rounded-[7px] flex flex-col justify-between" showCloseBlack>
+                      <DialogHeader>
+                        <DialogTitle className="text-lg font-bold">
+                          Your QR Code
+                        </DialogTitle>
+                      </DialogHeader>
+ 
+                      <div className="text-center py-4 m-auto">
+                        {qrCode ? (<Image
+                    src={qrCode}
+                    width={224}
+                    height={224}
+                    alt="UPI QR Code"
+                  />) : (
+                    <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
+                  )}
+                        {/* Add your <img src="/qr.png" /> or QR Code component here */}
+                      </div>
+ 
+                      <DialogClose asChild>
+                        <Button variant="outline" className="border border-[#CC627B] bg-transparent text-[12px] font-[600] text-[#CC627B] px-[10px] py-0   rounded-[8px] flex items-center justify-center w-fit h-[28px] ml-auto"
+                        onClick={()=>{
+                          handleDownload()
+                        }}>
+                          Download
+                        </Button>
+                      </DialogClose>
+                    </DialogContent>
+                  </Dialog>
+                    )}
                 </div>
               </DialogContent>
             </Dialog>

@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 import { useEffect } from "react";
 import { useDisableBounce } from "./useDisableBounce";
 import { usePathname } from "next/navigation";
-
+import { RememberMeProvider } from "./context/RememberMeContext";
 const quicksand = Quicksand({
   variable: "--font-quicksand",
   subsets: ["latin"],
@@ -89,8 +89,10 @@ export default function RootLayout({ children }) {
     }
   `}
       >
-        {children}
+        <RememberMeProvider>
+          {children}
         <ToastContainer position="bottom-center" closeButton={false} />
+        </RememberMeProvider>
       </body>
     </html>
   );

@@ -29,9 +29,11 @@ import { isMobile } from "react-device-detect";
 import { useRouter } from "next/navigation";
 import { showErrorToast } from "@/lib/toast";
 import { getCookie, hasCookie } from "cookies-next";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 
 
 const IP_Medical_Association_Details = () => {
+  const {rememberMe} = useRememberMe()
   const [formData, setFormData] = useState({
     name: "",
     medicalAssociationNumber: "",
@@ -57,7 +59,7 @@ const IP_Medical_Association_Details = () => {
 
   // Load form data from localStorage on component mount
   useEffect(() => {
-    const savedData = localStorage.getItem("ip_medical_association_details");
+    const savedData = rememberMe?localStorage.getItem("ip_medical_association_details"):sessionStorage.getItem("ip_medical_association_details")
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
@@ -170,7 +172,12 @@ const IP_Medical_Association_Details = () => {
           medicalAssociationNumber: formData.medicalAssociationNumber,
           certificates: formData.certificates.map(({ name, base64 }) => ({ name, base64 })),
         };
-        localStorage.setItem("ip_medical_association_details", JSON.stringify(saveData));
+        if(rememberMe){
+          localStorage.setItem("ip_medical_association_details", JSON.stringify(saveData));
+        }
+        else{
+          sessionStorage.setItem("ip_medical_association_details", JSON.stringify(saveData));
+        }
         router.push("/sales/ip_medical_association_certificate")
       } catch (error) {
         console.error("Error saving data:", error);
@@ -186,7 +193,8 @@ const IP_Medical_Association_Details = () => {
   } 
   useEffect(() => {
     const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
-    const ip_type_token = localStorage.getItem("ip_general_information") ? JSON.parse(localStorage.getItem("ip_general_information")) : null
+    const raw = rememberMe?localStorage.getItem("ip_general_information"):sessionStorage.getItem("ip_general_information")
+    const ip_type_token = raw?JSON.parse(raw):null
     if (!token) {
       router.push('/login')
     }

@@ -20,12 +20,13 @@ import { getCookie, hasCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { showErrorToast } from "@/lib/toast";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 polyfillCountryFlagEmojis();
 
 const CP_doctor_details = () => {
   const router = useRouter();
   const axios = axiosInstance();
-
+  const {rememberMe} = useRememberMe()
   const [formData, setFormData] = useState({
     doNotDisplay: false,
     title: "Dr.",
@@ -163,6 +164,13 @@ const CP_doctor_details = () => {
 
   // Handle save and continue
   const handleSave = () => {
+    let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
     if (isFormValid()) {
       const saveData = {
         ...formData,
@@ -170,7 +178,7 @@ const CP_doctor_details = () => {
           ? `${formData.title} ${formData.firstName}`
           : formData.firstName,
       };
-      setCookie("cp_doctor_details", saveData);
+      setCookie("cp_doctor_details", saveData, maxAge);
       router.push("/sales/cp_billing_details");
     } else {
       setTouched({

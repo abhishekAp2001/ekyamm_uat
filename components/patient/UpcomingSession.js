@@ -19,7 +19,10 @@ import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import Profile from "./practitioner/Profile";
 import Certifications from "./Certifications/Certifications";
 import Client_Testimonial from "./Client_Testimonials/Client_Testimonial";
+import Daily from "@daily-co/daily-js";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions,pastSession }) => {
+  const {rememberMe} = useRememberMe()
   const [patientSessionToken, setPatientSessionToken] = useState(null);
   const [patient, setPatient] = useState(null);
   const [showCounsellorProfile, setShowCounsellorProfile] = useState(false);
@@ -81,10 +84,18 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions,pastSess
           }
         );
         if (response?.data?.success) {
+          let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
           setTherapist(response?.data?.data?.practitionerTagged[0]);
           setCookie(
             "selectedCounsellor",
-            JSON.stringify(response?.data?.data?.practitionerTagged[0])
+            JSON.stringify(response?.data?.data?.practitionerTagged[0]),
+            maxAge
           );
         }
       } catch (err) {
@@ -98,7 +109,14 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions,pastSess
     getTherapistDetails();
   }, [patientSessionToken])
   const handleBookNowClick = () => {
-    setCookie("selectedCounsellor", JSON.stringify(therapist));
+    let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
+    setCookie("selectedCounsellor", JSON.stringify(therapist),maxAge);
     if (patient.availableCredits === 0) {
       router.push("/patient/select-package")
     }
@@ -119,7 +137,7 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions,pastSess
         })
       if (response?.data?.success) {
         showSuccessToast(response?.data?.data?.message)
-        const call = window.Daily.createFrame({
+        const call = Daily.createFrame({
           showLeaveButton: true,
           iframeStyle: {
             position: 'fixed',
@@ -147,12 +165,14 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions,pastSess
             },
           },
         });
-        console.log(`${process.env.NEXT_PUBLIC_VIDEO_CALL_URL}/${roomName}`)
-        console.log(response?.data?.data?.token)
         call.join({
           url: `${process.env.NEXT_PUBLIC_VIDEO_CALL_URL}/${roomName}`,
           token: response?.data?.data?.token,
         });
+        call.on('left-meeting', () => {
+          call.destroy();
+          router.push('/patient/dashboard')
+});
       }
     } catch (error) {
       console.error("error", error)
@@ -196,9 +216,6 @@ function formatSessionTime(sessionTime) {
 
   return (
     <>
-      <Script
-        src="https://unpkg.com/@daily-co/daily-js"
-      />
       <div>
           {upcomingsessions && upcomingsessions?.length > 0 ? (
             upcomingsessions?.map((session, index) => {

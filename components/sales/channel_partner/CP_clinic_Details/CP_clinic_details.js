@@ -11,10 +11,11 @@ import { getCookie, hasCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { showErrorToast } from "@/lib/toast";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 
 const CP_clinic_details = () => {
   const router = useRouter();
-
+  const {rememberMe} = useRememberMe()
   const [formData, setFormData] = useState({
     pincode: "",
     area: "",
@@ -124,8 +125,15 @@ const CP_clinic_details = () => {
 
   // Handle save and continue
   const handleSave = () => {
+    let maxAge = {}
+        if(rememberMe){
+          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+        }
+        else if(!rememberMe){
+          maxAge = {}
+        }
     if (isFormValid()) {
-      setCookie("cp_clinic_details", formData);
+      setCookie("cp_clinic_details", formData,maxAge);
       router.push("/sales/cp_doctor_details");
     } else {
       setTouched({
