@@ -314,6 +314,7 @@ const CP_type = () => {
                 type="text"
                 placeholder="Enter clinic name"
                 value={formData.clinicName}
+                maxLength={20}
                 onChange={(e) =>
                   setFormData({ ...formData, clinicName: e.target.value })
                 }
