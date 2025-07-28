@@ -212,26 +212,18 @@ one symbol, and no spaces.`;
                         </div>
                     </div>
                 )}
-                <div className='pt-5'>
-      <div className="flex justify-center items-center gap-[2px] pt-6">
-                      <div className="bg-[#776EA5] rounded-full w-[16.78px] h-[16.78px] flex justify-center items-center">
-                      <MapPin color="white" className="w-[12.15px] h-[12.15px]"/></div>
-                      <span className="text-sm text-[#776EA5] font-medium">
-                        {channelPartnerData?.area}, {channelPartnerData?.state} 
-                      </span>
-                    </div>
-
-            </div>
-          </div>
-        <div className="pt-5">
-          <Image
-            src="/images/patient-logo.png"z
-            alt="Company Logo"
-            width={100}
-            height={60}
-            className="cursor-pointer w-full h-[60px]"
-          />
-        </div>
+                <div className="flex flex-col justify-center items-center pt-6">
+                        <strong className="text-[20px] text-[#776EA5] font-semibold">
+                              {channelPartnerData?.clinicName || "Greetings Hospital"}
+                            </strong>
+                        <div className="flex justify-center items-center gap-[2px]">
+                          <div className="bg-[#776EA5] rounded-full w-[16.78px] h-[16.78px] flex justify-center items-center">
+                            <MapPin color="white" className="w-[12.15px] h-[12.15px]" /></div>
+                          <span className="text-sm text-[#776EA5] font-medium">
+                            {channelPartnerData?.area}
+                          </span>
+                        </div>
+                        </div>
         <div className="flex flex-col justify-center items-center w-full">
           <div className="border-2 bg-[#FFFFFF80] border-[#FFFFFF4D] rounded-4xl py-6 px-6  mx-4 text-center w-full">
             <strong className="text-[16px] text-black font-[600] text-center">
@@ -443,6 +435,7 @@ one symbol, and no spaces.`;
             </div>
           </div>
         </div>
+          </div>
     </>
   );
 };

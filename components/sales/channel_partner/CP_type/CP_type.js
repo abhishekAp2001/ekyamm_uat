@@ -20,7 +20,7 @@ polyfillCountryFlagEmojis();
 
 const CP_type = () => {
   const axios = axiosInstance();
-  const {rememberMe} = useRememberMe()
+  const { rememberMe } = useRememberMe()
   const [search, setSearch] = useState("");
   const [formData, setFormData] = useState({
     clinicName: "",
@@ -130,7 +130,7 @@ const CP_type = () => {
       } else {
         showErrorToast(
           error?.response?.data?.error?.message ||
-            "Failed to add new channel partner type"
+          "Failed to add new channel partner type"
         );
         throw error;
       }
@@ -162,26 +162,26 @@ const CP_type = () => {
   // Handle save and continue
   const handleSave = () => {
     let maxAge = {}
-        if(rememberMe){
-          maxAge = { maxAge: 60 * 60 * 24 * 30 }
-        }
-        else if(!rememberMe){
-          maxAge = {}
-        }
+    if (rememberMe) {
+      maxAge = { maxAge: 60 * 60 * 24 * 30 }
+    }
+    else if (!rememberMe) {
+      maxAge = {}
+    }
     if (isFormValid()) {
-      setCookie("cp_type", formData,maxAge);
+      setCookie("cp_type", formData, maxAge);
       router.push("/sales/cp_clinic_details");
     } else {
       showErrorToast("Please fill all required fields correctly");
     }
   };
 
-    useEffect(()=>{
-      const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
-      if(!token){
-        router.push('/login')
-      }
-    })
+  useEffect(() => {
+    const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+    if (!token) {
+      router.push('/login')
+    }
+  })
   const getCountryList = async () => {
     try {
       const response = await axios.get(`v2/country?search=${countrySearch}`);
@@ -303,9 +303,8 @@ const CP_type = () => {
             <div>
               <Label
                 htmlFor="clinicName"
-                className={`text-[15px] mb-2 mt-5 ${
-                  formData.type ? "text-gray-500" : "text-[#00000040]"
-                }`}
+                className={`text-[15px] mb-2 mt-5 ${formData.type ? "text-gray-500" : "text-[#00000040]"
+                  }`}
               >
                 Clinic Name *
               </Label>
@@ -320,11 +319,10 @@ const CP_type = () => {
                 }
                 onBlur={() => handleBlur("clinicName")}
                 disabled={!formData.type}
-                className={`rounded-[7.26px] font-semibold py-3 px-4 h-[39px] ${
-                  formData.type
+                className={`rounded-[7.26px] font-semibold py-3 px-4 h-[39px] ${formData.type
                     ? "bg-white placeholder:text-[15px] placeholder:text-gray-500"
                     : "bg-[#ffffff90]"
-                }`}
+                  }`}
               />
               {touched.clinicName && !formData.clinicName && (
                 <span className="text-red-500 text-sm mt-1 block">
@@ -335,9 +333,8 @@ const CP_type = () => {
             <div>
               <Label
                 htmlFor="userName"
-                className={`text-[15px] mb-2 mt-[22px] ${
-                  formData.clinicName ? "text-gray-500" : "text-[#00000040]"
-                }`}
+                className={`text-[15px] mb-2 mt-[22px] ${formData.clinicName ? "text-gray-500" : "text-[#00000040]"
+                  }`}
               >
                 Unique URL *
               </Label>
@@ -350,19 +347,19 @@ const CP_type = () => {
                     placeholder="Enter URL name"
                     value={formData.userName}
                     maxLength={20}
-                    
+
                     onChange={(e) => {
-    const value = e.target.value;
-    const alphanumeric = value.replace(/[^a-zA-Z0-9]/g, "");
-    setFormData({ ...formData, userName: alphanumeric });
-  }}
+                      const value = e.target.value;
+                      const alphanumericWithDash = value.replace(/[^a-zA-Z0-9-]/g, "");
+                      setFormData({ ...formData, userName: alphanumericWithDash });
+                    }}
+
                     onBlur={() => handleBlur("userName")}
                     disabled={!formData.clinicName}
-                    className={`w-full rounded-[7.26px] font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                      formData.clinicName
+                    className={`w-full rounded-[7.26px] font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${formData.clinicName
                         ? "bg-white placeholder:text-gray-500"
                         : "bg-[#ffffff90] placeholder:text-[#00000040]"
-                    }`}
+                      }`}
                   />
                   {/* Only show icon if username is not empty */}
                   {formData.userName && isUserNameAvailable === true && (
@@ -410,11 +407,10 @@ const CP_type = () => {
             <div>
               <Label
                 htmlFor="email"
-                className={`text-[15px] mb-2 mt-[22px] ${
-                  formData.userName && isUserNameAvailable === true
+                className={`text-[15px] mb-2 mt-[22px] ${formData.userName && isUserNameAvailable === true
                     ? "text-gray-500"
                     : "text-[#00000040]"
-                }`}
+                  }`}
               >
                 Clinic Primary Email Address *
               </Label>
@@ -431,11 +427,10 @@ const CP_type = () => {
                 }
                 onBlur={() => handleBlur("email")}
                 disabled={!formData.userName || isUserNameAvailable !== true}
-                className={`rounded-[7.26px] font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                  formData.userName && isUserNameAvailable === true
+                className={`rounded-[7.26px] font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${formData.userName && isUserNameAvailable === true
                     ? "bg-white placeholder:text-gray-500"
                     : "bg-[#ffffff90] placeholder:text-[#00000040]"
-                }`}
+                  }`}
               />
 
               {touched.email &&
@@ -454,11 +449,10 @@ const CP_type = () => {
             <div className="mt-[22px]">
               <Label
                 htmlFor="primaryMobileNumber"
-                className={`text-[15px] mb-2 ${
-                  isEmailValid(formData.email)
+                className={`text-[15px] mb-2 ${isEmailValid(formData.email)
                     ? "text-gray-500"
                     : "text-[#00000040]"
-                }`}
+                  }`}
               >
                 Clinic Primary Mobile Number *
               </Label>
@@ -513,11 +507,10 @@ const CP_type = () => {
                   onChange={(e) => handleInputChange(e, "primaryMobileNumber")}
                   onBlur={() => handleBlur("primaryMobileNumber")}
                   disabled={!isEmailValid(formData.email)}
-                  className={`border rounded-[7.26px] font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
-                    isEmailValid(formData.email)
+                  className={`border rounded-[7.26px] font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${isEmailValid(formData.email)
                       ? "bg-white placeholder:text-gray-500"
                       : "bg-[#ffffff90] placeholder:text-[#00000040]"
-                  }`}
+                    }`}
                 />
               </div>
               {touched.primaryMobileNumber &&
@@ -537,17 +530,16 @@ const CP_type = () => {
               <div className="flex items-center justify-between">
                 <Label
                   htmlFor="whatsappNumber"
-                  className={`text-[15px] w-[55%] max-[576px]:w-[80%] ${
-                    isMobileValid(formData.primaryMobileNumber)
+                  className={`text-[15px] w-[55%] max-[576px]:w-[80%] ${isMobileValid(formData.primaryMobileNumber)
                       ? "text-gray-500 border-0 shadow-none"
                       : "text-[#00000040] border-0 shadow-none"
-                  }`}
+                    }`}
                 >
                   Clinic Whatsapp Number *
                 </Label>
                 <div className="flex gap-[6px] items-center justify-end w-[45%]">
                   <Checkbox
-                  id="same_as_mobile"
+                    id="same_as_mobile"
                     checked={sameAsMobile}
                     onCheckedChange={(checked) => {
                       setSameAsMobile(checked);
@@ -567,12 +559,11 @@ const CP_type = () => {
                     className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] "
                   />
                   <label
-                  htmlFor="same_as_mobile"
-                    className={`text-[12px] ${
-                      isMobileValid(formData.primaryMobileNumber)
+                    htmlFor="same_as_mobile"
+                    className={`text-[12px] ${isMobileValid(formData.primaryMobileNumber)
                         ? "text-gray-500 "
                         : "text-[#00000040]"
-                    }`}
+                      }`}
                   >
                     Same as Mobile Number
                   </label>
@@ -606,7 +597,7 @@ const CP_type = () => {
                       width: "max-content",
                       backgroundColor:
                         sameAsMobile ||
-                        isMobileValid(formData.primaryMobileNumber)
+                          isMobileValid(formData.primaryMobileNumber)
                           ? "#fff"
                           : "#f6f5fd",
                     }),
@@ -631,11 +622,10 @@ const CP_type = () => {
                   disabled={
                     sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
                   }
-                  className={`rounded-[7.26px] border-0 font-semibold rounded-l-none placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
-                    sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
+                  className={`rounded-[7.26px] border-0 font-semibold rounded-l-none placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
                       ? "bg-[#ffffff90] placeholder:text-[#00000040] border-0 shadow-none"
                       : "bg-white placeholder:text-gray-500 border-0 shadow-none"
-                  }`}
+                    }`}
                 />
               </div>
               {touched.whatsappNumber &&
@@ -654,11 +644,10 @@ const CP_type = () => {
             <div className="mt-[22px]">
               <Label
                 htmlFor="emergencyNumber"
-                className={`text-[15px] mb-2 ${
-                  isMobileValid(formData.whatsappNumber)
+                className={`text-[15px] mb-2 ${isMobileValid(formData.whatsappNumber)
                     ? "text-gray-500"
                     : "text-[#00000040]"
-                }`}
+                  }`}
               >
                 Clinic Emergency Number *
               </Label>
@@ -709,11 +698,10 @@ const CP_type = () => {
                   onChange={(e) => handleInputChange(e, "emergencyNumber")}
                   onBlur={() => handleBlur("emergencyNumber")}
                   disabled={!isMobileValid(formData.whatsappNumber)}
-                  className={`border rounded-[7.26px] font-semibold rounded-l-none shadow border-l-0 placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
-                    isMobileValid(formData.whatsappNumber)
+                  className={`border rounded-[7.26px] font-semibold rounded-l-none shadow border-l-0 placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${isMobileValid(formData.whatsappNumber)
                       ? "bg-white placeholder:text-gray-500 border-0 shadow-none"
                       : "bg-[#ffffff90] placeholder:text-[#00000040] border-0 shadow-none"
-                  }`}
+                    }`}
                 />
               </div>
               {touched.emergencyNumber &&

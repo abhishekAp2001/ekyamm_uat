@@ -32,12 +32,12 @@ const CPList = ({ list }) => {
         console.error("Error generating QR code:", error);
       }
     }
-    const handleDownload = () => {
+    const handleDownload = (username) => {
   if (!qrCode) return;
 
   const link = document.createElement('a');
   link.href = qrCode;      // your base64 data URL
-  link.download = 'qr-code.png'; // file name
+  link.download = `qr-code-${username}.png`; // file name
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -201,7 +201,7 @@ const CPList = ({ list }) => {
                     <DialogContent className="w-full  h-[68vh] bg-[#f2f2f2] rounded-[7px] flex flex-col justify-between" showCloseBlack>
                       <DialogHeader>
                         <DialogTitle className="text-lg font-bold">
-                          Your QR Code
+                          QR Code - {list?.generalInformation?.userName}
                         </DialogTitle>
                       </DialogHeader>
  
@@ -220,7 +220,7 @@ const CPList = ({ list }) => {
                       <DialogClose asChild>
                         <Button variant="outline" className="border border-[#CC627B] bg-transparent text-[12px] font-[600] text-[#CC627B] px-[10px] py-0   rounded-[8px] flex items-center justify-center w-fit h-[28px] ml-auto"
                         onClick={()=>{
-                          handleDownload()
+                          handleDownload(list?.generalInformation?.userName)
                         }}>
                           Download
                         </Button>

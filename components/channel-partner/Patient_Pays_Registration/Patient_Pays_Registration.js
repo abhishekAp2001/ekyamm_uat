@@ -332,14 +332,19 @@ const Patient_Pays_Registration = ({ type }) => {
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
-        <div className="flex justify-center items-center gap-[2px] pt-6">
-                      <div className="bg-[#776EA5] rounded-full w-[16.78px] h-[16.78px] flex justify-center items-center">
-                      <MapPin color="white" className="w-[12.15px] h-[12.15px]"/></div>
-                      <span className="text-sm text-[#776EA5] font-medium">
-                        {channelPartnerData?.area}, {channelPartnerData?.state} 
-                      </span>
-                    </div>
-        <div className="h-full pt-[10%] lg:pt-[10%] pb-[20%] lg:pb-[12%]  overflow-auto px-[16px]">
+        <div className="flex flex-col justify-center items-center pt-6">
+        <strong className="text-[20px] text-[#776EA5] font-semibold">
+              {channelPartnerData?.clinicName || "Greetings Hospital"}
+            </strong>
+        <div className="flex justify-center items-center gap-[2px]">
+          <div className="bg-[#776EA5] rounded-full w-[16.78px] h-[16.78px] flex justify-center items-center">
+            <MapPin color="white" className="w-[12.15px] h-[12.15px]" /></div>
+          <span className="text-sm text-[#776EA5] font-medium">
+            {channelPartnerData?.area}
+          </span>
+        </div>
+        </div>
+        <div className="h-full pt-[4%] lg:pt-[4%] pb-[20%] lg:pb-[12%]  overflow-auto px-[16px]">
           <div className="bg-[#FFFFFFB2] rounded-[12px] p-5 mt-[25px] relative">
             <div>
               <Label className="text-[15px] text-gray-500 mb-[7.59px]">
