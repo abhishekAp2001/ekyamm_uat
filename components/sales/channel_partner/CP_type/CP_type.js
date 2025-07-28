@@ -356,7 +356,8 @@ const CP_type = () => {
 
                     onBlur={() => handleBlur("userName")}
                     disabled={!formData.clinicName}
-                    className={`w-full rounded-[7.26px] font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${formData.clinicName
+                    className={`w-full rounded-[7.26px] font-semibold placeholder:text-[15px] py-3 px-4 max-[431px]:pr-10 h-[39px]
+  ${formData.clinicName
                         ? "bg-white placeholder:text-gray-500"
                         : "bg-[#ffffff90] placeholder:text-[#00000040]"
                       }`}

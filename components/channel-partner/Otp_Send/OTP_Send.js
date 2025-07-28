@@ -19,7 +19,7 @@ import { Eye, EyeOff, Loader2Icon, MapPin } from "lucide-react";
 import axios from "axios";
 import { whatsappUrl } from "@/lib/constants";
 import OTPInput from "react-otp-input";
-
+ 
 const OTP_Send = ({ type }) => {
   const [selectedMethod, setSelectedMethod] = useState("");
   const [otp, setOtp] = useState("");
@@ -31,10 +31,10 @@ const OTP_Send = ({ type }) => {
   const [channelPartnerData, setChannelPartnerData] = useState(null);
   const router = useRouter();
   const customAxios = axiosInstance();
-
+ 
   const sendOtp = async () => {
     if (isLoading) return;
-
+ 
     setLoading(true);
     try {
       if (selectedMethod === "mobile") {
@@ -60,7 +60,7 @@ const OTP_Send = ({ type }) => {
       setLoading(false);
     }
   };
-
+ 
   function redirectAfterOtpValidate(type) {
     showSuccessToast("OTP verified successfully!");
     setTimeout(() => {
@@ -72,7 +72,7 @@ const OTP_Send = ({ type }) => {
       showErrorToast("Please enter a valid 6-digit OTP");
       return;
     }
-
+ 
     setLoading(true);
     try {
       if (selectedMethod === "mobile") {
@@ -97,7 +97,7 @@ const OTP_Send = ({ type }) => {
       setLoading(false);
     }
   };
-
+ 
   const changeOtpMethod = (method) => {
     setSelectedMethod(method);
     setOtpSendStatus(false);
@@ -105,17 +105,17 @@ const OTP_Send = ({ type }) => {
     setResendTimer(120);
     setIsResendDisabled(false);
   };
-
+ 
   const sendEmailOtp = async () => {
     setLoading(true);
-
+ 
     try {
       const response = await customAxios.post(`v2/cp/email/otpGenerate`, {
         email: channelPartnerData?.email,
         verificationToken: channelPartnerData?.verificationToken,
         type: "cpLoginOTP",
       });
-
+ 
       if (response?.data?.success === true) {
         return true;
       } else {
@@ -131,10 +131,10 @@ const OTP_Send = ({ type }) => {
     }
     return false;
   };
-
+ 
   const sendMobileOtp = async () => {
     setLoading(true);
-
+ 
     try {
       const apiUrl = "http://india.smscloudhub.com/generateOtp.jsp";
       const mobileNumber =
@@ -185,13 +185,13 @@ const OTP_Send = ({ type }) => {
     }
     return false;
   };
-
+ 
   const validateMobileOtp = async (otp) => {
     setLoading(true);
-
+ 
     try {
       const apiUrl = "http://india.smscloudhub.com/validateOtpApi.jsp";
-
+ 
       const mobileNumber =
         channelPartnerData.primaryMobileNumber?.trim() || null;
       let countryCode = "+91";
@@ -206,12 +206,12 @@ const OTP_Send = ({ type }) => {
           );
         }
       }
-
+ 
       const params = {
         mobileno: `${countryCode}${mobileNumber}`,
         otp: otp,
       };
-
+ 
       // const result = await axios.get(apiUrl, { params });
       const response = await customAxios.post(`v2/cp/mobile/otpValidate`, {
         mobile: mobileNumber,
@@ -234,16 +234,16 @@ const OTP_Send = ({ type }) => {
     }
     return false;
   };
-
+ 
   const validateEmailOtp = async (otp) => {
     setLoading(true);
-
+ 
     try {
       const response = await customAxios.post(`v2/cp/email/otpValidate`, {
         email: channelPartnerData?.email,
         otp: otp,
       });
-
+ 
       if (response?.data?.success === true) {
         // showErrorToast("Verified successfully");
         return true;
@@ -271,7 +271,7 @@ const OTP_Send = ({ type }) => {
     }
     return () => clearInterval(timer);
   }, [otpSendStatus, resendTimer]);
-
+ 
   useEffect(() => {
     const cookieData = getCookie("channelPartnerData");
     if (cookieData) {
@@ -287,7 +287,7 @@ const OTP_Send = ({ type }) => {
     }
     // showSuccessToast(`OTP sent to your verified mobile number.`);
   }, [type]);
-
+ 
   return (
     <>
       <div className=" bg-gradient-to-b  from-[#DFDAFB] to-[#F9CCC5] h-full flex flex-col px-3">
@@ -295,7 +295,7 @@ const OTP_Send = ({ type }) => {
           to={`/channel-partner/${type}`}
           title="Add New Patient"
         />
-        <div className="h-full flex flex-col justify-around items-center">
+        <div className="h-full flex flex-col justify-between items-center my-[20%]">
           <div className="flex flex-col items-center w-full">
             <strong className="text-[20px] text-[#776EA5] font-semibold">
               {channelPartnerData?.clinicName || "Greetings Hospital"}
@@ -308,12 +308,14 @@ const OTP_Send = ({ type }) => {
                 {channelPartnerData?.area}
               </span>
             </div>
-            <div className="border-2 bg-[#FFFFFF80] border-[#FFFFFF4D] rounded-4xl py-[17px] text-center w-full my-[64px]  px-5">
+            </div>
+ 
+            <div className="border-2 bg-[#FFFFFF80] border-[#FFFFFF4D] rounded-4xl py-[17px] text-center w-full  px-5">
               <strong className="text-[15px] text-black font-[600] text-center">
                 {selectedMethod === "mobile" || selectedMethod === "email"
                     ? "Send OTP to"
                     : "Send OTP to Verified ID"}
-                
+               
               </strong>
               <div>
                 <div className="flex justify-between items-center mt-[15px] gap-3">
@@ -336,7 +338,7 @@ const OTP_Send = ({ type }) => {
                       Email
                     </div>
                   </label>
-
+ 
                   <label className="w-[48%] h-[45px] cursor-pointer">
                     <input
                       type="radio"
@@ -361,7 +363,7 @@ const OTP_Send = ({ type }) => {
                   <>
                     <div className="my-[15px]">
                       <div className="text-[12px] text-gray-500 font-medium text-left mb-1 relative ">
-                      Enter OTP 
+                      Enter OTP
                     </div>
                       <div className="relative flex items-center mt-2">
                         <OTPInput
@@ -425,7 +427,7 @@ const OTP_Send = ({ type }) => {
                   )}
                 </Button>
               </div>
-
+ 
               {otpSendStatus && (
                 <div className="text-xs text-gray-500 font-medium text-center mt-2">
                   {resendTimer > 0 ? (
@@ -441,11 +443,9 @@ const OTP_Send = ({ type }) => {
                 </div>
               )}
             </div>
-          </div>
-        </div>
-
+ 
         {/* footer */}
-        <div className="flex flex-col justify-center items-center gap-[4.75px] pb-5">
+        <div className="flex flex-col justify-center items-center gap-[4.75px] pb-5 ">
           <div className="flex gap-1 items-center">
             <span className="text-[10px] text-gray-500 font-medium">
               Copyright © {new Date().getFullYear()}
@@ -473,9 +473,14 @@ const OTP_Send = ({ type }) => {
             </a>
           </div>
         </div>
+         
+        </div>
+ 
       </div>
     </>
   );
 };
-
+ 
 export default OTP_Send;
+ 
+ 
