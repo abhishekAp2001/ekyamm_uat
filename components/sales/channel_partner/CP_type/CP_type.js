@@ -46,6 +46,10 @@ const CP_type = () => {
   const [countryList, setCountryList] = useState([]);
   const [isUserNameAvailable, setIsUserNameAvailable] = useState(null);
   const [isCheckingUserName, setIsCheckingUserName] = useState(false);
+  const [isMobileAvailable, setIsMobileAvailable] = useState(null);
+  const [isCheckingMobile, setIsCheckingMobile] = useState(false);
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
+  const [isEmailAvailable, setIsEmailAvailable] = useState(null);
   const [sameAsMobile, setSameAsMobile] = useState(false);
   const router = useRouter();
   const [countrySearch, setCountrySearch] = useState("");
@@ -159,6 +163,51 @@ const CP_type = () => {
     }
   };
 
+  const checkMobileAvailability = async (mobile, country_code) => {
+    try {
+      setIsCheckingMobile(true);
+      const response = await axios.post(`/v2/sales/mobile/verify`, {
+        type: "CP",
+        countryCode: country_code,
+        mobile: mobile,
+      });
+      if (response?.data?.success) {
+        setIsMobileAvailable(true);
+      }
+    } catch (error) {
+      // console.log(error);
+      if (error.forceLogout) {
+        router.push("/login");
+      } else {
+        setIsMobileAvailable(false);
+      }
+    } finally {
+      setIsCheckingMobile(false);
+    }
+  };
+
+  const checkEmailAvailability = async (email) => {
+    try {
+      setIsCheckingEmail(true);
+      const response = await axios.post(`/v2/sales/email/verify`, {
+        type: "CP",
+        email: email,
+      });
+      if (response?.data?.success) {
+        setIsEmailAvailable(true);
+      }
+    } catch (error) {
+      // console.log(error);
+      if (error.forceLogout) {
+        router.push("/login");
+      } else {
+        setIsEmailAvailable(false);
+      }
+    } finally {
+      setIsCheckingEmail(false);
+    }
+  };
+
   // Handle save and continue
   const handleSave = () => {
     let maxAge = {}
@@ -215,6 +264,22 @@ const CP_type = () => {
       return () => clearTimeout(timer);
     }
   }, [formData.userName, touched.userName]);
+
+  useEffect(() => {
+    if (formData.primaryMobileNumber && touched.primaryMobileNumber) {
+      if (isMobileValid(formData.primaryMobileNumber)) {
+        checkMobileAvailability(formData.primaryMobileNumber, formData.countryCode_primary)
+      }
+    }
+  }, [formData.countryCode_primary, formData.primaryMobileNumber, touched.primaryMobileNumber])
+
+  useEffect(() => {
+    if (formData.email && touched.email) {
+      if (isEmailValid(formData.email)) {
+        checkEmailAvailability(formData.email)
+      }
+    }
+  }, [formData.email, touched.email])
 
   // Validation functions
   const isEmailValid = (email) => /\S+@\S+\.\S+/.test(email);
@@ -320,8 +385,8 @@ const CP_type = () => {
                 onBlur={() => handleBlur("clinicName")}
                 disabled={!formData.type}
                 className={`rounded-[7.26px] font-semibold py-3 px-4 h-[39px] ${formData.type
-                    ? "bg-white placeholder:text-[15px] placeholder:text-gray-500"
-                    : "bg-[#ffffff90]"
+                  ? "bg-white placeholder:text-[15px] placeholder:text-gray-500"
+                  : "bg-[#ffffff90]"
                   }`}
               />
               {touched.clinicName && !formData.clinicName && (
@@ -409,31 +474,51 @@ const CP_type = () => {
               <Label
                 htmlFor="email"
                 className={`text-[15px] mb-2 mt-[22px] ${formData.userName && isUserNameAvailable === true
-                    ? "text-gray-500"
-                    : "text-[#00000040]"
+                  ? "text-gray-500"
+                  : "text-[#00000040]"
                   }`}
               >
                 Clinic Primary Email Address *
               </Label>
-              <Input
-                id="email"
-                type="text"
-                placeholder="Enter your email"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    email: e.target.value.toLowerCase(),
-                  })
-                }
-                onBlur={() => handleBlur("email")}
-                disabled={!formData.userName || isUserNameAvailable !== true}
-                className={`rounded-[7.26px] font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${formData.userName && isUserNameAvailable === true
+              <div className="relative">
+                <Input
+                  id="email"
+                  type="text"
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={(e) =>
+                    {setFormData({
+                      ...formData,
+                      email: e.target.value.toLowerCase(),
+                    })
+                    setIsEmailAvailable(null);}
+                  }
+                  onBlur={() => handleBlur("email")}
+                  disabled={!formData.userName || isUserNameAvailable !== true}
+                  className={`rounded-[7.26px] font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${formData.userName && isUserNameAvailable === true
                     ? "bg-white placeholder:text-gray-500"
                     : "bg-[#ffffff90] placeholder:text-[#00000040]"
-                  }`}
-              />
-
+                    }`}
+                />
+                {formData.email && isEmailAvailable === true && (
+                  <Image
+                    src="/images/green_check.png"
+                    width={20}
+                    height={20}
+                    className="w-[20.83px] pt-1.5 absolute top-[3px] right-3.5"
+                    alt="check"
+                  />
+                )}
+                {formData.email && isEmailAvailable === false && (
+                  <Image
+                    src="/images/error_circle.png"
+                    width={20}
+                    height={20}
+                    className="w-[20.83px] pt-1.5 absolute top-[3px] right-3.5"
+                    alt="check"
+                  />
+                )}
+              </div>
               {touched.email &&
                 formData.email &&
                 !isEmailValid(formData.email) && (
@@ -446,18 +531,32 @@ const CP_type = () => {
                   Email is required
                 </span>
               )}
+
+              {touched.email && isCheckingEmail && (
+                <span className="text-yellow-500 text-sm mt-1 block">
+                  Checking...
+                </span>
+              )}
+              {touched.email &&
+                !isCheckingEmail &&
+                formData.email &&
+                isEmailAvailable === false && (
+                  <span className="text-red-500 text-sm mt-1 block">
+                    Email not available
+                  </span>
+                )}
             </div>
             <div className="mt-[22px]">
               <Label
                 htmlFor="primaryMobileNumber"
-                className={`text-[15px] mb-2 ${isEmailValid(formData.email)
-                    ? "text-gray-500"
-                    : "text-[#00000040]"
+                className={`text-[15px] mb-2 ${isEmailValid(formData.email) && isEmailAvailable === true
+                  ? "text-gray-500"
+                  : "text-[#00000040]"
                   }`}
               >
                 Clinic Primary Mobile Number *
               </Label>
-              <div className="flex items-center gap-3 h-[39px]">
+              <div className="flex items-center gap-3 h-[39px] relative">
                 <Select
                   options={countryOptions}
                   value={countryOptions.find(
@@ -475,7 +574,7 @@ const CP_type = () => {
                       }),
                     }));
                   }}
-                  isDisabled={!isEmailValid(formData.email)}
+                  isDisabled={!isEmailValid(formData.email) || isEmailAvailable !== true}
                   className="w-[100px] border-none shadow-none"
                   styles={{
                     control: (base) => ({
@@ -485,7 +584,7 @@ const CP_type = () => {
                       height: "39px",
                       minHeight: "39px",
                       width: "max-content",
-                      backgroundColor: isEmailValid(formData.email)
+                      backgroundColor: isEmailValid(formData.email) && isEmailAvailable === true
                         ? "#fff"
                         : "#f6f5fd",
                     }),
@@ -505,15 +604,46 @@ const CP_type = () => {
                   type="text"
                   placeholder="Enter primary mobile no."
                   value={formData.primaryMobileNumber}
-                  onChange={(e) => handleInputChange(e, "primaryMobileNumber")}
+                  onChange={(e) => {
+    handleInputChange(e, "primaryMobileNumber");
+    const value = e.target.value.replace(/\D/g, "").slice(0, 10);
+    if (value.length === 10) {
+      checkMobileAvailability(value, formData.countryCode_primary);
+    } else {
+      setIsMobileAvailable(null); // reset availability if not 10 digits
+    }
+  }}
                   onBlur={() => handleBlur("primaryMobileNumber")}
-                  disabled={!isEmailValid(formData.email)}
-                  className={`border rounded-[7.26px] font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${isEmailValid(formData.email)
-                      ? "bg-white placeholder:text-gray-500"
-                      : "bg-[#ffffff90] placeholder:text-[#00000040]"
+                  disabled={!isEmailValid(formData.email) || isEmailAvailable !== true}
+                  className={`border rounded-[7.26px] font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${isEmailValid(formData.email) && isEmailAvailable === true
+                    ? "bg-white placeholder:text-gray-500"
+                    : "bg-[#ffffff90] placeholder:text-[#00000040]"
                     }`}
                 />
+                {formData.primaryMobileNumber && isMobileAvailable === true && (
+                  <Image
+                    src="/images/green_check.png"
+                    width={20}
+                    height={20}
+                    className="w-[20.83px] pt-1.5 absolute top-[3px] right-3.5"
+                    alt="check"
+                  />
+                )}
+                {formData.primaryMobileNumber && isMobileAvailable === false && (
+                  <Image
+                    src="/images/error_circle.png"
+                    width={20}
+                    height={20}
+                    className="w-[20.83px] pt-1.5 absolute top-[3px] right-3.5"
+                    alt="check"
+                  />
+                )}
               </div>
+              {touched.primaryMobileNumber && isCheckingMobile && (
+                <span className="text-yellow-500 text-sm mt-1 block">
+                  Checking...
+                </span>
+              )}
               {touched.primaryMobileNumber &&
                 formData.primaryMobileNumber &&
                 !isMobileValid(formData.primaryMobileNumber) && (
@@ -526,14 +656,23 @@ const CP_type = () => {
                   Mobile number is required
                 </span>
               )}
+              {touched.primaryMobileNumber &&
+                !isCheckingMobile &&
+                isMobileValid(formData.primaryMobileNumber) &&
+                formData.primaryMobileNumber &&
+                isMobileAvailable === false && (
+                  <span className="text-red-500 text-sm mt-1 block">
+                    Mobile number not available
+                  </span>
+                )}
             </div>
             <div className="mt-[22px]">
               <div className="flex items-center justify-between">
                 <Label
                   htmlFor="whatsappNumber"
-                  className={`text-[15px] w-[55%] max-[576px]:w-[80%] ${isMobileValid(formData.primaryMobileNumber)
-                      ? "text-gray-500 border-0 shadow-none"
-                      : "text-[#00000040] border-0 shadow-none"
+                  className={`text-[15px] w-[55%] max-[576px]:w-[80%] ${isMobileValid(formData.primaryMobileNumber) && isMobileAvailable === true
+                    ? "text-gray-500 border-0 shadow-none"
+                    : "text-[#00000040] border-0 shadow-none"
                     }`}
                 >
                   Clinic Whatsapp Number *
@@ -556,14 +695,14 @@ const CP_type = () => {
                         }));
                       }
                     }}
-                    disabled={!isMobileValid(formData.primaryMobileNumber)}
+                    disabled={!isMobileValid(formData.primaryMobileNumber) || isMobileAvailable !== true}
                     className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] "
                   />
                   <label
                     htmlFor="same_as_mobile"
-                    className={`text-[12px] ${isMobileValid(formData.primaryMobileNumber)
-                        ? "text-gray-500 "
-                        : "text-[#00000040]"
+                    className={`text-[12px] ${isMobileValid(formData.primaryMobileNumber) && isMobileAvailable === true
+                      ? "text-gray-500 "
+                      : "text-[#00000040]"
                       }`}
                   >
                     Same as Mobile Number
@@ -585,7 +724,7 @@ const CP_type = () => {
                     })
                   }
                   isDisabled={
-                    sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
+                    sameAsMobile || !isMobileValid(formData.primaryMobileNumber) || isMobileAvailable !== true
                   }
                   className="w-[100px] border-none shadow-none "
                   styles={{
@@ -598,7 +737,7 @@ const CP_type = () => {
                       width: "max-content",
                       backgroundColor:
                         sameAsMobile ||
-                          isMobileValid(formData.primaryMobileNumber)
+                          isMobileValid(formData.primaryMobileNumber) && isMobileAvailable === true
                           ? "#fff"
                           : "#f6f5fd",
                     }),
@@ -621,11 +760,11 @@ const CP_type = () => {
                   onChange={(e) => handleInputChange(e, "whatsappNumber")}
                   onBlur={() => handleBlur("whatsappNumber")}
                   disabled={
-                    sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
+                    sameAsMobile || !isMobileValid(formData.primaryMobileNumber) || isMobileAvailable !== true
                   }
                   className={`rounded-[7.26px] border-0 font-semibold rounded-l-none placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
-                      ? "bg-[#ffffff90] placeholder:text-[#00000040] border-0 shadow-none"
-                      : "bg-white placeholder:text-gray-500 border-0 shadow-none"
+                    ? "bg-[#ffffff90] placeholder:text-[#00000040] border-0 shadow-none"
+                    : "bg-white placeholder:text-gray-500 border-0 shadow-none"
                     }`}
                 />
               </div>
@@ -646,8 +785,8 @@ const CP_type = () => {
               <Label
                 htmlFor="emergencyNumber"
                 className={`text-[15px] mb-2 ${isMobileValid(formData.whatsappNumber)
-                    ? "text-gray-500"
-                    : "text-[#00000040]"
+                  ? "text-gray-500"
+                  : "text-[#00000040]"
                   }`}
               >
                 Clinic Emergency Number *
@@ -700,8 +839,8 @@ const CP_type = () => {
                   onBlur={() => handleBlur("emergencyNumber")}
                   disabled={!isMobileValid(formData.whatsappNumber)}
                   className={`border rounded-[7.26px] font-semibold rounded-l-none shadow border-l-0 placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${isMobileValid(formData.whatsappNumber)
-                      ? "bg-white placeholder:text-gray-500 border-0 shadow-none"
-                      : "bg-[#ffffff90] placeholder:text-[#00000040] border-0 shadow-none"
+                    ? "bg-white placeholder:text-gray-500 border-0 shadow-none"
+                    : "bg-[#ffffff90] placeholder:text-[#00000040] border-0 shadow-none"
                     }`}
                 />
               </div>
