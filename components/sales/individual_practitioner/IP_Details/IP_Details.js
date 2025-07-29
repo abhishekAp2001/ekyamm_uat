@@ -35,7 +35,7 @@ import { useRememberMe } from "@/app/context/RememberMeContext";
 polyfillCountryFlagEmojis();
 
 const IP_Details = () => {
-  const {rememberMe} = useRememberMe()
+  const { rememberMe } = useRememberMe()
   const router = useRouter();
   const axios = axiosInstance();
   const [formData, setFormData] = useState({
@@ -64,6 +64,10 @@ const IP_Details = () => {
 
   const [sameAsMobile, setSameAsMobile] = useState(false);
   const [countryList, setCountryList] = useState([]);
+  const [isMobileAvailable, setIsMobileAvailable] = useState(null);
+  const [isCheckingMobile, setIsCheckingMobile] = useState(false);
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
+  const [isEmailAvailable, setIsEmailAvailable] = useState(null);
   const [countrySearch, setCountrySearch] = useState("");
   const cameraInputRef = useRef(null);
   const photoInputRef = useRef(null);
@@ -111,8 +115,8 @@ const IP_Details = () => {
 
   // Load form data from localStorage on component mount
   useEffect(() => {
-    const savedData = rememberMe?localStorage.getItem("ip_details"):sessionStorage.getItem("ip_details")
-    console.log("saved_data",savedData)
+    const savedData = rememberMe ? localStorage.getItem("ip_details") : sessionStorage.getItem("ip_details")
+    console.log("saved_data", savedData)
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
@@ -239,11 +243,11 @@ const IP_Details = () => {
             ? `${formData.title} ${formData.firstName}`
             : formData.firstName,
         };
-        console.log("remember",rememberMe)
-        if(rememberMe){
+        console.log("remember", rememberMe)
+        if (rememberMe) {
           localStorage.setItem("ip_details", JSON.stringify(saveData));
         }
-        else{
+        else {
           sessionStorage.setItem("ip_details", JSON.stringify(saveData));
         }
         router.push("/sales/ip_general_information");
@@ -279,6 +283,67 @@ const IP_Details = () => {
   const handleCloseDrawer = () => {
     setDrawerOpen(false);
   };
+
+  const checkMobileAvailability = async (mobile, country_code) => {
+    try {
+      setIsCheckingMobile(true);
+      const response = await axios.post(`/v2/sales/mobile/verify`, {
+        type: "IP",
+        countryCode: country_code,
+        mobile: mobile,
+      });
+      if (response?.data?.success) {
+        setIsMobileAvailable(true);
+      }
+    } catch (error) {
+      // console.log(error);
+      if (error.forceLogout) {
+        router.push("/login");
+      } else {
+        setIsMobileAvailable(false);
+      }
+    } finally {
+      setIsCheckingMobile(false);
+    }
+  };
+
+  const checkEmailAvailability = async (email) => {
+    try {
+      setIsCheckingEmail(true);
+      const response = await axios.post(`/v2/sales/email/verify`, {
+        type: "IP",
+        email: email,
+      });
+      if (response?.data?.success) {
+        setIsEmailAvailable(true);
+      }
+    } catch (error) {
+      // console.log(error);
+      if (error.forceLogout) {
+        router.push("/login");
+      } else {
+        setIsEmailAvailable(false);
+      }
+    } finally {
+      setIsCheckingEmail(false);
+    }
+  };
+
+  useEffect(() => {
+    if (formData.primaryMobileNumber && touched.primaryMobileNumber) {
+      if (formData.primaryMobileNumber.length === 10) {
+        checkMobileAvailability(formData.primaryMobileNumber, formData.countryCode_primary)
+      }
+    }
+  }, [formData.countryCode_primary, formData.primaryMobileNumber, touched.primaryMobileNumber])
+
+  useEffect(() => {
+    if (formData.email && touched.email) {
+      if (isEmailValid(formData.email)) {
+        checkEmailAvailability(formData.email)
+      }
+    }
+  }, [formData.email, touched.email])
 
   useEffect(() => {
     const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
@@ -405,11 +470,10 @@ const IP_Details = () => {
                 onChange={(e) => handleTextInputChange(e, "firstName")}
                 onBlur={() => handleBlur("firstName")}
                 disabled={!formData.title}
-                className={`flex-1 rounded-[7.26px] text-[15px]text-black font-semibold placeholder:text-[15px]    py-3 px-4 h-[39px] ${
-                  formData.title
-                    ? "bg-white placeholder:text-gray-500"
-                    : "bg-[#ffffff90] placeholder:text-[#00000040]"
-                }`}
+                className={`flex-1 rounded-[7.26px] text-[15px]text-black font-semibold placeholder:text-[15px]    py-3 px-4 h-[39px] ${formData.title
+                  ? "bg-white placeholder:text-gray-500"
+                  : "bg-[#ffffff90] placeholder:text-[#00000040]"
+                  }`}
               />
             </div>
             {touched.title && !formData.title && (
@@ -426,9 +490,8 @@ const IP_Details = () => {
           <div>
             <Label
               htmlFor="lastName"
-              className={`text-[15px] mb-[7.59px] mt-[22px] ${
-                formData.firstName ? "text-gray-500" : "text-[#00000040]"
-              }`}
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${formData.firstName ? "text-gray-500" : "text-[#00000040]"
+                }`}
             >
               Last Name *
             </Label>
@@ -440,11 +503,10 @@ const IP_Details = () => {
               onChange={(e) => handleTextInputChange(e, "lastName")}
               onBlur={() => handleBlur("lastName")}
               disabled={!formData.firstName}
-              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                formData.firstName
-                  ? "bg-white placeholder:text-gray-500"
-                  : "bg-[#ffffff90] placeholder:text-[#00000040]"
-              }`}
+              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${formData.firstName
+                ? "bg-white placeholder:text-gray-500"
+                : "bg-[#ffffff90] placeholder:text-[#00000040]"
+                }`}
             />
             {touched.lastName && !formData.lastName && (
               <span className="text-red-500 text-sm mt-1 block">
@@ -455,26 +517,51 @@ const IP_Details = () => {
           <div>
             <Label
               htmlFor="email"
-              className={`text-[15px] mb-[7.59px] mt-[22px] ${
-                formData.lastName ? "text-gray-500" : "text-[#00000040]"
-              }`}
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${formData.lastName ? "text-gray-500" : "text-[#00000040]"
+                }`}
             >
               Primary Email Address *
             </Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={(e) => handleTextInputChange(e, "email")}
-              onBlur={() => handleBlur("email")}
-              disabled={!formData.lastName}
-              className={`rounded-[7.26px] text-[15px]text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                formData.lastName
+            <div className="relative">
+              <Input
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={(e) => {handleTextInputChange(e, "email"),setIsEmailAvailable(null)}}
+                onBlur={() => handleBlur("email")}
+                disabled={!formData.lastName}
+                className={`rounded-[7.26px] text-[15px]text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${formData.lastName
                   ? "bg-white placeholder:text-gray-500"
                   : "bg-[#ffffff90] placeholder:text-[#00000040]"
-              }`}
-            />
+                  }`}
+              />
+
+              {formData.email && isEmailAvailable === true && (
+                <Image
+                  src="/images/green_check.png"
+                  width={20}
+                  height={20}
+                  className="w-[20.83px] pt-1.5 absolute top-[3px] right-3.5"
+                  alt="check"
+                />
+              )}
+              {formData.email && isEmailAvailable === false && (
+                <Image
+                  src="/images/error_circle.png"
+                  width={20}
+                  height={20}
+                  className="w-[20.83px] pt-1.5 absolute top-[3px] right-3.5"
+                  alt="check"
+                />
+              )}
+
+            </div>
+            {touched.email && isCheckingEmail && (
+              <span className="text-yellow-500 text-sm mt-1 block">
+                Checking...
+              </span>
+            )}
             {touched.email && !formData.email && (
               <span className="text-red-500 text-sm mt-1 block">
                 Email is required
@@ -487,15 +574,23 @@ const IP_Details = () => {
                   Invalid email
                 </span>
               )}
+            {touched.email &&
+              !isCheckingEmail &&
+              isEmailValid(formData.email) &&
+              formData.email &&
+              isEmailAvailable === false && (
+                <span className="text-red-500 text-sm mt-1 block">
+                  Email not available
+                </span>
+              )}
           </div>
           <div className="mt-[22px]">
             <Label
               htmlFor="primaryMobileNumber"
-              className={`text-[15px] mb-[7.59px] ${
-                isEmailValid(formData.email)
-                  ? "text-gray-500"
-                  : "text-[#00000040]"
-              }`}
+              className={`text-[15px] mb-[7.59px] ${isEmailValid(formData.email) && isEmailAvailable === true
+                ? "text-gray-500"
+                : "text-[#00000040]"
+                }`}
             >
               Primary Mobile Number *
             </Label>
@@ -517,7 +612,7 @@ const IP_Details = () => {
                     }),
                   }));
                 }}
-                isDisabled={!isEmailValid(formData.email)}
+                isDisabled={!isEmailValid(formData.email) || isEmailAvailable === false}
                 className="w-[100px] border-none focus:border-none hover:border-none hover:outline-none shadow-none"
                 styles={{
                   control: (base) => ({
@@ -527,7 +622,7 @@ const IP_Details = () => {
                     height: "39px",
                     minHeight: "39px",
                     width: "max-content",
-                    backgroundColor: isEmailValid(formData.email)
+                    backgroundColor: isEmailValid(formData.email) && isEmailAvailable === true
                       ? "#fff"
                       : "#faf5f8",
                   }),
@@ -540,24 +635,51 @@ const IP_Details = () => {
                 }
                 menuPlacement="top"
               />
-              <Input
-                id="primaryMobileNumber"
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                placeholder="Enter primary mobile no."
-                value={formData.primaryMobileNumber}
-                onChange={(e) => handleInputChange(e, "primaryMobileNumber")}
-                onBlur={() => handleBlur("primaryMobileNumber")}
-                disabled={!isEmailValid(formData.email)}
-                className={`rounded-[7.26px]  border-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
-                  isEmailValid(formData.email)
+              <div className="relative">
+                <Input
+                  id="primaryMobileNumber"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="Enter primary mobile no."
+                  value={formData.primaryMobileNumber}
+                  onChange={(e) => {
+    handleInputChange(e, "primaryMobileNumber");
+    setIsMobileAvailable(null);
+  }}
+                  onBlur={() => {handleBlur("primaryMobileNumber")}}
+                  disabled={!isEmailValid(formData.email) || isEmailAvailable === false}
+                  className={`rounded-[7.26px]  border-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${isEmailValid(formData.email)
                     ? "bg-white placeholder:text-gray-500 border-0 shadow-none"
                     : "bg-[#ffffff90] placeholder:text-[#00000040] border-0 shadow-none"
-                }`}
-                maxLength={10}
-              />
+                    }`}
+                  maxLength={10}
+                />
+                {formData.primaryMobileNumber && isMobileAvailable === true && (
+                  <Image
+                    src="/images/green_check.png"
+                    width={20}
+                    height={20}
+                    className="w-[20.83px] pt-1.5 absolute top-[3px] right-3.5"
+                    alt="check"
+                  />
+                )}
+                {formData.primaryMobileNumber && isMobileAvailable === false && (
+                  <Image
+                    src="/images/error_circle.png"
+                    width={20}
+                    height={20}
+                    className="w-[20.83px] pt-1.5 absolute top-[3px] right-3.5"
+                    alt="check"
+                  />
+                )}
+              </div>
             </div>
+            {touched.primaryMobileNumber && isCheckingMobile && (
+              <span className="text-yellow-500 text-sm mt-1 block">
+                Checking...
+              </span>
+            )}
             {touched.primaryMobileNumber && !formData.primaryMobileNumber && (
               <span className="text-red-500 text-sm mt-1 block">
                 Mobile number is required
@@ -570,22 +692,30 @@ const IP_Details = () => {
                   Must be 10 digits
                 </span>
               )}
+            {touched.primaryMobileNumber &&
+              !isCheckingMobile &&
+              isMobileValid(formData.primaryMobileNumber) &&
+              formData.primaryMobileNumber &&
+              isMobileAvailable === false && (
+                <span className="text-red-500 text-sm mt-1 block">
+                  Mobile number not available
+                </span>
+              )}
           </div>
           <div className="mt-[22px]">
             <div className="flex items-center justify-between">
               <Label
                 htmlFor="whatsappNumber"
-                className={`text-[15px] mb-[7.59px] ${
-                  isMobileValid(formData.primaryMobileNumber)
-                    ? "text-gray-500"
-                    : "text-[#00000040]"
-                }`}
+                className={`text-[15px] mb-[7.59px] ${isMobileValid(formData.primaryMobileNumber) && isMobileAvailable === true
+                  ? "text-gray-500"
+                  : "text-[#00000040]"
+                  }`}
               >
                 Whatsapp Number *
               </Label>
               <div className="flex gap-[6px] items-center">
                 <Checkbox
-                id='same_as_mobile'
+                  id='same_as_mobile'
                   className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"
                   checked={sameAsMobile}
                   onCheckedChange={(checked) => {
@@ -602,15 +732,14 @@ const IP_Details = () => {
                       }));
                     }
                   }}
-                  disabled={!isMobileValid(formData.primaryMobileNumber)}
+                  disabled={!isMobileValid(formData.primaryMobileNumber) || isMobileAvailable === false}
                 />
                 <label
-                  className={`text-[12px] ${
-                    isMobileValid(formData.primaryMobileNumber)
-                      ? "text-gray-500"
-                      : "text-[#00000040]"
-                  }`}
-                htmlFor="same_as_mobile">
+                  className={`text-[12px] ${isMobileValid(formData.primaryMobileNumber) && isMobileAvailable === true
+                    ? "text-gray-500"
+                    : "text-[#00000040]"
+                    }`}
+                  htmlFor="same_as_mobile">
                   Same as Mobile Number
                 </label>
               </div>
@@ -630,7 +759,7 @@ const IP_Details = () => {
                   })
                 }
                 isDisabled={
-                  sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
+                  sameAsMobile || !isMobileValid(formData.primaryMobileNumber) || isMobileAvailable === false
                 }
                 className="w-[100px] border-none focus:border-none shadow-none"
                 styles={{
@@ -643,7 +772,7 @@ const IP_Details = () => {
                     width: "max-content",
                     backgroundColor:
                       sameAsMobile ||
-                      isMobileValid(formData.primaryMobileNumber)
+                        isMobileValid(formData.primaryMobileNumber) && isMobileAvailable === true
                         ? "#fff"
                         : "#faf5f8",
                   }),
@@ -666,13 +795,12 @@ const IP_Details = () => {
                 onChange={(e) => handleInputChange(e, "whatsappNumber")}
                 onBlur={() => handleBlur("whatsappNumber")}
                 disabled={
-                  sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
+                  sameAsMobile || !isMobileValid(formData.primaryMobileNumber) || isMobileAvailable === false
                 }
-                className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
-                  sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
-                    ? "bg-[#ffffff90] placeholder:text-[#00000040]"
-                    : "bg-white placeholder:text-gray-500"
-                }`}
+                className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${sameAsMobile || !isMobileValid(formData.primaryMobileNumber) || isMobileAvailable === false
+                  ? "bg-[#ffffff90] placeholder:text-[#00000040]"
+                  : "bg-white placeholder:text-gray-500"
+                  }`}
                 maxLength={10}
               />
             </div>
@@ -692,11 +820,10 @@ const IP_Details = () => {
           <div className="mt-[22px]">
             <Label
               htmlFor="emergencyNumber"
-              className={`text-[15px] mb-[7.59px] ${
-                isMobileValid(formData.whatsappNumber)
-                  ? "text-gray-500"
-                  : "text-[#00000040]"
-              }`}
+              className={`text-[15px] mb-[7.59px] ${isMobileValid(formData.whatsappNumber)
+                ? "text-gray-500"
+                : "text-[#00000040]"
+                }`}
             >
               Emergency Number *
             </Label>
@@ -745,11 +872,10 @@ const IP_Details = () => {
                 onChange={(e) => handleInputChange(e, "emergencyNumber")}
                 onBlur={() => handleBlur("emergencyNumber")}
                 disabled={!isMobileValid(formData.whatsappNumber)}
-                className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
-                  isMobileValid(formData.whatsappNumber)
-                    ? "bg-white placeholder:text-gray-500"
-                    : "bg-[#ffffff90] placeholder:text-[#00000040]"
-                }`}
+                className={`border rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${isMobileValid(formData.whatsappNumber)
+                  ? "bg-white placeholder:text-gray-500"
+                  : "bg-[#ffffff90] placeholder:text-[#00000040]"
+                  }`}
                 maxLength={10}
                 inputMode="numeric"
                 pattern="[0-9]*"
