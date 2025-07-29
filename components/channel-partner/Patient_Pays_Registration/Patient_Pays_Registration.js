@@ -287,6 +287,7 @@ const Patient_Pays_Registration = ({ type }) => {
         showErrorToast("email is already registered.");
       }
     } catch (error) {
+      showErrorToast("Something went wrong, please try again.");
       setEmailLoading(false);
       console.error("Error", error);
     }

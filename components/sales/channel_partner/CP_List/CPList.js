@@ -192,7 +192,7 @@ const CPList = ({ list }) => {
                     <DialogTrigger asChild>
                       <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px] rounded-[8px] flex items-center justify-center w-[84px] h-[40px] ml-auto"
                       onClick = {()=>{
-                        generateQrCode(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${list?.generalInformation?.userName}`)
+                        generateQrCode(`${process.env.NEXT_PUBLIC_BACKEND_URL}/channel-partner/${list?.generalInformation?.userName}`)
                       }}>
                         QR
                       </Button>
