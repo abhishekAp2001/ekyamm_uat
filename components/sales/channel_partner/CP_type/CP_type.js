@@ -106,7 +106,6 @@ const CP_type = () => {
         setCp_List(response?.data?.data);
       }
     } catch (error) {
-      // console.log("error", error);
       if (error.forceLogout) {
         router.push("/login");
       } else {
@@ -491,7 +490,11 @@ const CP_type = () => {
                       ...formData,
                       email: e.target.value.toLowerCase(),
                     })
-                    setIsEmailAvailable(null);}
+                    setIsEmailAvailable(null);
+                    if (isEmailValid(e.target.value)) {
+      setTouched((prev) => ({ ...prev, email: true }));
+    }
+                  }
                   }
                   onBlur={() => handleBlur("email")}
                   disabled={!formData.userName || isUserNameAvailable !== true}
@@ -609,6 +612,7 @@ const CP_type = () => {
     const value = e.target.value.replace(/\D/g, "").slice(0, 10);
     if (value.length === 10) {
       checkMobileAvailability(value, formData.countryCode_primary);
+          setTouched((prev) => ({ ...prev, primaryMobileNumber: true }));
     } else {
       setIsMobileAvailable(null); // reset availability if not 10 digits
     }

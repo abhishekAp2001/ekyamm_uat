@@ -528,7 +528,11 @@ const IP_Details = () => {
                 type="email"
                 placeholder="Enter your email"
                 value={formData.email}
-                onChange={(e) => {handleTextInputChange(e, "email"),setIsEmailAvailable(null)}}
+                onChange={(e) => {handleTextInputChange(e, "email"),setIsEmailAvailable(null)
+                  if (isEmailValid(e.target.value)) {
+    setTouched((prev) => ({ ...prev, email: true }));
+  }
+                }}
                 onBlur={() => handleBlur("email")}
                 disabled={!formData.lastName}
                 className={`rounded-[7.26px] text-[15px]text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${formData.lastName
@@ -612,7 +616,7 @@ const IP_Details = () => {
                     }),
                   }));
                 }}
-                isDisabled={!isEmailValid(formData.email) || isEmailAvailable === false}
+                isDisabled={!isEmailValid(formData.email) || isEmailAvailable === false || isCheckingEmail}
                 className="w-[100px] border-none focus:border-none hover:border-none hover:outline-none shadow-none"
                 styles={{
                   control: (base) => ({
@@ -648,7 +652,7 @@ const IP_Details = () => {
     setIsMobileAvailable(null);
   }}
                   onBlur={() => {handleBlur("primaryMobileNumber")}}
-                  disabled={!isEmailValid(formData.email) || isEmailAvailable === false}
+                  disabled={!isEmailValid(formData.email) || isEmailAvailable === false || isCheckingEmail}
                   className={`rounded-[7.26px]  border-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${isEmailValid(formData.email)
                     ? "bg-white placeholder:text-gray-500 border-0 shadow-none"
                     : "bg-[#ffffff90] placeholder:text-[#00000040] border-0 shadow-none"
