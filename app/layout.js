@@ -84,8 +84,8 @@ export default function RootLayout({ children }) {
     ${isFullWidthPage ? "w-full" : "max-w-[576px] mx-auto"}
     ${
       isPrivacyPage
-        ? "bg-privacy-gradient"
-        : "bg-gradient-to-t from-[#eeecfb] to-[#fce8e5] md:bg-black md:bg-none md:from-transparent md:to-transparent"
+        ? "bg-privacy-gradient" 
+        : "bg-gradient-to-t from-[#eeecfb] to-[#fce8e5] md:bg-[linear-gradient(180deg,_#dfdafbad_0%,_#f9ccc587_100%)]  md:from-transparent md:to-transparent"
     }
   `}
       >
