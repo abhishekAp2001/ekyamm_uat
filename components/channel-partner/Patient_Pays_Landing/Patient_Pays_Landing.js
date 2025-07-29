@@ -45,8 +45,14 @@ const Patient_Pays_Landing = ({ type }) => {
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
       {/* Background Image on Right */}
-      <div
+      {/* <div
         className="absolute top-0 right-0 w-full h-full bg-cover bg-center bg-no-repeat  max-[361px]:bg-[10px_42px] max-[376px]:bg-[52px_44px] min-[376px]:bg-[0px_0px] min-[767px]:bg-[150px_80px]"
+        style={{
+          backgroundImage: "url('/images/relaxed-feminine-woman.png')",
+        }}
+      /> */}
+       <div
+        className="absolute top-0 right-0 w-full h-full bg-contain bg-right lg:bg-cover xl:bg-cover bg-no-repeat  lg:bg-[28%_-319px]"
         style={{
           backgroundImage: "url('/images/relaxed-feminine-woman.png')",
         }}

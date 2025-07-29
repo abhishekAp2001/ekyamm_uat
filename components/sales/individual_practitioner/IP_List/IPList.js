@@ -112,15 +112,15 @@ const IPList = ({ list }) => {
                           ? cleanNumber(list.generalInformation.whatsappNumber)
                           : "Not added"}
                       </span>
-                      <span className="flex items-center text-gray-500">
-                        <Mail className="w-4 h-4 mr-1" />{" "}
+                      <span className="flex text-gray-500">
+                      <Mail className="max-[391px]:w-[18px] w-4 h-4 mr-1 mt-[3px]" /><span className="break-all">{" "}
                         {list?.generalInformation?.email || "Not added"}
-                        (Primary)
+                        (Primary)</span>
                       </span>
-                      <span className="flex items-center text-gray-500">
-                        <Mail className="w-4 h-4 mr-1" />{" "}
+                      <span className="flex text-gray-500">
+                      <Mail className="max-[391px]:w-[18px] w-4 h-4 mr-1 mt-[3px]" /><span className="break-all">{" "}
                         {list?.generalInformation?.billingEmail || "Not added"}
-                        (Practice)
+                        (Practice) </span>
                       </span>
                       <span className="text-gray-700 font-medium">
                         <b>Date of Birth - </b>
