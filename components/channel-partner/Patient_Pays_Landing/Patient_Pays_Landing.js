@@ -54,7 +54,7 @@ const Patient_Pays_Landing = ({ type }) => {
        <div
         className="absolute top-0 right-0 w-full h-full bg-contain bg-right lg:bg-cover xl:bg-cover bg-no-repeat  lg:bg-[28%_-319px]"
         style={{
-          backgroundImage: "url('/images/relaxed-feminine-woman.png')",
+          backgroundImage: "url('/images/relaxed-feminine-woman-left.png')",
         }}
       />
 

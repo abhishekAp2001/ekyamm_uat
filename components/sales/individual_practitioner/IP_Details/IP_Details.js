@@ -694,7 +694,7 @@ const IP_Details = () => {
                 }
                 menuPlacement="top"
               />
-              <div className="relative">
+              <div className="relative w-full">
                 <Input
                   id="primaryMobileNumber"
                   type="text"
