@@ -1,11 +1,12 @@
 import { ChevronLeft } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
-
+import { useRememberMe } from "@/app/context/RememberMeContext";
 const IP_Header = ({ text }) => {
+  const { rememberMe } = useRememberMe()
   const pathname = usePathname();
   const router = useRouter();
-
+  const doNotHaveMedicalAssociation = rememberMe ? (localStorage.getItem("doNotHaveMedicalAssociation")==="true") : (sessionStorage.getItem("doNotHaveMedicalAssociation")==="true");
   const handleBack = () => {
     if (pathname === "/sales/ip_details") {
       router.push("/sales");
@@ -16,7 +17,12 @@ const IP_Header = ({ text }) => {
     } else if (pathname === "/sales/ip_medical_association_certificate") {
       router.push("/sales/ip_medical_association_details");
     } else if (pathname === "/sales/ip_single_session_fees") {
-      router.push("/sales/ip_medical_association_certificate");
+      if(doNotHaveMedicalAssociation){
+        router.push("/sales/ip_general_information");
+      }
+      else{
+        router.push("/sales/ip_medical_association_certificate");
+      }
     } else if (pathname === "/sales/ip_bank_details") {
       router.push("/sales/ip_single_session_fees");
     } 

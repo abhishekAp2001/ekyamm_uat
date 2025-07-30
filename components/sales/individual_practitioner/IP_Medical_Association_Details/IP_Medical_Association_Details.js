@@ -192,13 +192,16 @@ const IP_Medical_Association_Details = () => {
     setDrawerOpen(false)
   } 
   useEffect(() => {
+    const doNotHaveMedicalAssociation = rememberMe ? (localStorage.getItem("doNotHaveMedicalAssociation")==="true") : (sessionStorage.getItem("doNotHaveMedicalAssociation")==="true")
     const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
     const raw = rememberMe?localStorage.getItem("ip_general_information"):sessionStorage.getItem("ip_general_information")
     const ip_type_token = raw?JSON.parse(raw):null
     if (!token) {
       router.push('/login')
     }
-    else if (!ip_type_token) {
+    else if (!ip_type_token || doNotHaveMedicalAssociation) {
+      console.log("IP_TYPE_TOKEN",!ip_type_token)
+      console.log("DO NOT MEDI",doNotHaveMedicalAssociation)
       router.push('/sales/ip_general_information')
     }
   }, [])

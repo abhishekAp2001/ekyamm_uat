@@ -13,9 +13,10 @@ import { useRouter } from "next/navigation";
 import { showErrorToast } from "@/lib/toast";
 import { getCookie, hasCookie } from "cookies-next";
 import { useRememberMe } from "@/app/context/RememberMeContext";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const IP_General_Information = () => {
-  const {rememberMe} = useRememberMe()
+  const { rememberMe } = useRememberMe()
   const axios = axiosInstance();
   const router = useRouter();
   const [languageList, setLanguageList] = useState([]);
@@ -25,6 +26,13 @@ const IP_General_Information = () => {
   const [dontTreatList, setDontTreatList] = useState([]);
   const [languageInput, setLanguageInput] = useState("");
   const [languageListFinal, setLanguageListFinal] = useState([]);
+  const [dontHaveMedicalAssociation, setDontHaveMedicalAssociation] = useState(false);
+  useEffect(() => {
+    const doNotHaveMedicalAssociation = rememberMe ? (localStorage.getItem("doNotHaveMedicalAssociation")==="true") : (sessionStorage.getItem("doNotHaveMedicalAssociation")==="true");
+    if (doNotHaveMedicalAssociation) {
+      setDontHaveMedicalAssociation(doNotHaveMedicalAssociation);
+    }
+  }, [rememberMe]);
   const [touched, setTouched] = useState({
     yearsOfExperience: false,
     specialization: false,
@@ -45,7 +53,7 @@ const IP_General_Information = () => {
 
   // Load form data from cookie on component mount
   useEffect(() => {
-    const savedData = rememberMe?localStorage.getItem("ip_general_information"):sessionStorage.getItem("ip_general_information");
+    const savedData = rememberMe ? localStorage.getItem("ip_general_information") : sessionStorage.getItem("ip_general_information");
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
@@ -150,13 +158,21 @@ const IP_General_Information = () => {
 
   const handleSave = () => {
     if (isFormValid()) {
-      if(rememberMe){
+      if (rememberMe) {
+        localStorage.setItem("doNotHaveMedicalAssociation", !!dontHaveMedicalAssociation)
         localStorage.setItem("ip_general_information", JSON.stringify(formData));
       }
-      else{
+      else {
+        sessionStorage.setItem("doNotHaveMedicalAssociation", !!dontHaveMedicalAssociation)
         sessionStorage.setItem("ip_general_information", JSON.stringify(formData));
       }
-      router.push("/sales/ip_medical_association_details");
+      if (dontHaveMedicalAssociation) {
+        router.push("/sales/ip_single_session_fees")
+
+      }
+      else if (!dontHaveMedicalAssociation) {
+        router.push("/sales/ip_medical_association_details");
+      }
     } else {
       showErrorToast("Please fill all required fields correctly");
     }
@@ -164,8 +180,8 @@ const IP_General_Information = () => {
 
   useEffect(() => {
     const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
-    const raw = rememberMe?localStorage.getItem("ip_details"):sessionStorage.getItem("ip_details")
-    const ip_type_token = raw?JSON.parse(raw):null
+    const raw = rememberMe ? localStorage.getItem("ip_details") : sessionStorage.getItem("ip_details")
+    const ip_type_token = raw ? JSON.parse(raw) : null
     if (!token) {
       router.push('/login')
     }
@@ -221,11 +237,10 @@ const IP_General_Information = () => {
           <div className="w-full max-w-md mt-4">
             <div>
               <Label
-                className={`text-[15px] font-medium mb-[7.59px] ${
-                  isYearsOfExperienceValid()
+                className={`text-[15px] font-medium mb-[7.59px] ${isYearsOfExperienceValid()
                     ? "text-gray-500"
                     : "text-[#00000040]"
-                }`}
+                  }`}
               >
                 Specialisation <span className="text-red-500">*</span>
               </Label>
@@ -233,22 +248,20 @@ const IP_General_Information = () => {
                 <Input
                   type="text"
                   placeholder="Enter your specialisation"
-                  className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-3 h-[38px] ${
-                    isYearsOfExperienceValid()
+                  className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-3 h-[38px] ${isYearsOfExperienceValid()
                       ? "bg-white placeholder:text-gray-500"
                       : "bg-[#ffffff90] placeholder:text-[#00000040]"
-                  }`}
+                    }`}
                   value={specialisationInput}
                   onChange={(e) => setSpecialisationInput(e.target.value)}
                   disabled={!isYearsOfExperienceValid()}
                 />
                 <CirclePlus
                   size={20}
-                  className={`w-5 h-5 absolute top-2 right-2 ${
-                    isYearsOfExperienceValid()
+                  className={`w-5 h-5 absolute top-2 right-2 ${isYearsOfExperienceValid()
                       ? "text-gray-500"
                       : "text-[#00000040]"
-                  }`}
+                    }`}
                   onClick={() =>
                     isYearsOfExperienceValid() &&
                     handleAddToList(
@@ -291,9 +304,8 @@ const IP_General_Information = () => {
 
             <div className="mt-[22px]">
               <Label
-                className={`text-[15px] font-medium mb-[7.59px] ${
-                  isSpecializationValid() ? "text-gray-500" : "text-[#00000040]"
-                }`}
+                className={`text-[15px] font-medium mb-[7.59px] ${isSpecializationValid() ? "text-gray-500" : "text-[#00000040]"
+                  }`}
               >
                 What I don’t Treat
               </Label>
@@ -301,22 +313,20 @@ const IP_General_Information = () => {
                 <Input
                   type="text"
                   placeholder="Share your concerns..."
-                  className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-3 h-[38px] ${
-                    isSpecializationValid()
+                  className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-3 h-[38px] ${isSpecializationValid()
                       ? "bg-white placeholder:text-gray-500"
                       : "bg-[#ffffff90] placeholder:text-[#00000040]"
-                  }`}
+                    }`}
                   value={dontTreatInput}
                   onChange={(e) => setDontTreatInput(e.target.value)}
                   disabled={!isSpecializationValid()}
                 />
                 <CirclePlus
                   size={20}
-                  className={`w-5 h-5 absolute top-2 right-2 ${
-                    isSpecializationValid()
+                  className={`w-5 h-5 absolute top-2 right-2 ${isSpecializationValid()
                       ? "text-gray-500"
                       : "text-[#00000040]"
-                  }`}
+                    }`}
                   onClick={() =>
                     isSpecializationValid() &&
                     handleAddToList(
@@ -356,20 +366,18 @@ const IP_General_Information = () => {
           {/* textarea */}
           <div className="mt-4">
             <Label
-              className={`text-[15px] font-medium mb-[7.59px] ${
-                isWhatIDontTreatValid() ? "text-gray-500" : "text-[#00000040]"
-              }`}
+              className={`text-[15px] font-medium mb-[7.59px] ${isWhatIDontTreatValid() ? "text-gray-500" : "text-[#00000040]"
+                }`}
             >
               What to Expect in the Session{" "}
               <span className="text-red-500">*</span>
             </Label>
             <Textarea
               placeholder="Share your expectations or any specific concerns you have."
-              className={`text-[15px] text-black font-semibold ${
-                isWhatIDontTreatValid()
+              className={`text-[15px] text-black font-semibold ${isWhatIDontTreatValid()
                   ? "bg-white"
                   : "bg-[#ffffff90] text-[#00000040] placeholder:font-medium placeholder:text-gray-500"
-              }`}
+                }`}
               value={formData.whatToExpectInSession}
               onChange={(e) => handleInputChange(e, "whatToExpectInSession")}
               onBlur={() => handleBlur("whatToExpectInSession")}
@@ -387,9 +395,8 @@ const IP_General_Information = () => {
           <div className="w-full max-w-md mt-4">
             <div className="mt-[22px]">
               <Label
-                className={`text-[15px] font-medium mb-[7.59px] ${
-                  isWhatToExpectValid() ? "text-gray-500" : "text-[#00000040]"
-                }`}
+                className={`text-[15px] font-medium mb-[7.59px] ${isWhatToExpectValid() ? "text-gray-500" : "text-[#00000040]"
+                  }`}
               >
                 Language Proficiency <span className="text-red-500">*</span>
               </Label>
@@ -397,20 +404,18 @@ const IP_General_Information = () => {
                 <Input
                   type="text"
                   placeholder="Language"
-                  className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-3 h-[38px] ${
-                    isWhatToExpectValid()
+                  className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-3 h-[38px] ${isWhatToExpectValid()
                       ? "bg-white placeholder:text-gray-500"
                       : "bg-[#ffffff90] placeholder:text-[#00000040]"
-                  }`}
+                    }`}
                   value={languageInput}
                   onChange={(e) => setLanguageInput(e.target.value)}
                   disabled={!isWhatToExpectValid()}
                 />
                 <CirclePlus
                   size={20}
-                  className={`w-5 h-5 absolute top-2 right-2 ${
-                    isWhatToExpectValid() ? "text-gray-500" : "text-[#00000040]"
-                  }`}
+                  className={`w-5 h-5 absolute top-2 right-2 ${isWhatToExpectValid() ? "text-gray-500" : "text-[#00000040]"
+                    }`}
                   onClick={() =>
                     isWhatToExpectValid() &&
                     handleAddToList(
@@ -453,9 +458,8 @@ const IP_General_Information = () => {
             <div className="">
               <Label
                 htmlFor="text"
-                className={`text-[15px] font-medium mb-[7.59px] ${
-                  isWhatToExpectValid() ? "text-gray-500" : "text-[#00000040]"
-                }`}
+                className={`text-[15px] font-medium mb-[7.59px] ${isWhatToExpectValid() ? "text-gray-500" : "text-[#00000040]"
+                  }`}
               >
                 Suggested Languages
               </Label>
@@ -522,8 +526,22 @@ const IP_General_Information = () => {
               onChange={(e) => handleInputChange(e, "googleMapAddress")}
             />
           </div>
-        </div>
 
+        </div>
+        <Checkbox
+          onCheckedChange={(checked) => {
+            setDontHaveMedicalAssociation(checked)
+            if (rememberMe) {
+              localStorage.setItem("doNotHaveMedicalAssociation", !!checked)
+            }
+            else {
+              sessionStorage.setItem("doNotHaveMedicalAssociation", !!checked)
+            }
+          }}
+          id='have_medical_association'
+          className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"
+          checked={dontHaveMedicalAssociation}
+        />
         {/* Button footer */}
         <IP_Buttons
           disabled={!isFormValid()}

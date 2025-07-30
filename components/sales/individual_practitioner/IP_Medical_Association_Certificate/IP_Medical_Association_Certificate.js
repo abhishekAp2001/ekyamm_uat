@@ -10,8 +10,10 @@ import { DrawerTitle } from "../../../ui/drawer";
 import { showErrorToast } from "@/lib/toast";
 import { getCookie, hasCookie } from "cookies-next";
 import { useRememberMe } from "@/app/context/RememberMeContext";
+import { useRouter } from "next/navigation";
 
 const IP_Medical_Association_Certificate = () => {
+  const router = useRouter();
   const {rememberMe} = useRememberMe()
   const [formData, setFormData] = useState({
     name: "",

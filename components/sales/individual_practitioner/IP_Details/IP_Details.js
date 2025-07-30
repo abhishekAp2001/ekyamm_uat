@@ -29,7 +29,7 @@ import { toast } from "react-toastify";
 import Select from "react-select";
 import axiosInstance from "@/lib/axiosInstance";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
-import { showErrorToast } from "@/lib/toast";
+import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { getCookie, hasCookie } from "cookies-next";
 import { useRememberMe } from "@/app/context/RememberMeContext";
 polyfillCountryFlagEmojis();
@@ -71,7 +71,7 @@ const IP_Details = () => {
   const [countrySearch, setCountrySearch] = useState("");
   const cameraInputRef = useRef(null);
   const photoInputRef = useRef(null);
-
+  const [doNotAddMeToEpn, setDoNotAddMeToEpn] = useState(false);
   // Validation functions
   const isEmailValid = (email) => /\S+@\S+\.\S+/.test(email);
   const isMobileValid = (mobile) => /^\d{10}$/.test(mobile);
@@ -116,7 +116,6 @@ const IP_Details = () => {
   // Load form data from localStorage on component mount
   useEffect(() => {
     const savedData = rememberMe ? localStorage.getItem("ip_details") : sessionStorage.getItem("ip_details")
-    console.log("saved_data", savedData)
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
@@ -243,17 +242,66 @@ const IP_Details = () => {
             ? `${formData.title} ${formData.firstName}`
             : formData.firstName,
         };
-        console.log("remember", rememberMe)
         if (rememberMe) {
           localStorage.setItem("ip_details", JSON.stringify(saveData));
         }
         else {
           sessionStorage.setItem("ip_details", JSON.stringify(saveData));
         }
-        router.push("/sales/ip_general_information");
+        if (doNotAddMeToEpn) {
+          let profileImageUrl = formData.profileImageBase64
+          if (formData?.profileImageBase64 && !profileImageUrl) {
+            profileImageUrl =
+              (await uploadImage(formData?.profileImageBase64, "profile")) || "";
+          }
+          const response = await axios.post(`/v2/sales/invite/individualPractitioner`, {
+            "practitionerDetails": {
+              "generalInformation": {
+                "profileImageUrl": profileImageUrl,
+                "firstName": saveData?.firstName,
+                "lastName": saveData?.lastName,
+                "email": saveData?.email,
+                "countryCode_primary": saveData?.countryCode_primary,
+                "primaryMobileNumber": saveData?.primaryMobileNumber,
+                "countryCode_whatsapp": saveData?.countryCode_whatsapp,
+                "whatsappNumber": saveData?.whatsappNumber,
+                "countryCode_emergency": saveData?.countryCode_emergency,
+                "emergencyNumber": saveData?.emergencyNumber,
+                "residentialAddress": "",
+                "googleMapAddress": "",
+              },
+              "doNotAddToEPN": true
+            }
+          })
+          if (response?.data?.success === true) {
+            if (rememberMe) {
+              localStorage.removeItem("ip_details");
+              localStorage.removeItem("ip_bank_details");
+              localStorage.removeItem("ip_general_information");
+              localStorage.removeItem("ip_medical_association_details");
+              localStorage.removeItem("ip_single_session_fees");
+              localStorage.removeItem("doNotHaveGST");
+              localStorage.removeItem("doNotHaveMedicalAssociation");
+            }
+            else {
+              sessionStorage.removeItem("ip_details");
+              sessionStorage.removeItem("ip_bank_details");
+              sessionStorage.removeItem("ip_general_information");
+              sessionStorage.removeItem("ip_medical_association_details");
+              sessionStorage.removeItem("ip_single_session_fees");
+              sessionStorage.removeItem("doNotHaveGST");
+              sessionStorage.removeItem("doNotHaveMedicalAssociation");
+            }
+            router.push("/sales");
+            showSuccessToast("Invite Sent");
+          }
+        }
+        else {
+          router.push("/sales/ip_general_information");
+        }
       } catch (error) {
         console.error("Error saving data:", error);
-        showErrorToast("Failed to save details");
+        showErrorToast("Failed to send invite");
       }
     } else {
       setTouched({
@@ -355,6 +403,12 @@ const IP_Details = () => {
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
       <IP_Header text="Add Individual Practitioner Details" />
       <div className="h-full pb-[22%] overflow-auto px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb]">
+        <Checkbox
+          id='do_not_add_me_to_epn'
+          className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"
+          checked={doNotAddMeToEpn}
+          onCheckedChange={(checked) => setDoNotAddMeToEpn(checked)}
+        />
         <div className="flex justify-center w-[140.8px] h-fit rounded-[17.63px] mx-auto relative mb-6">
           <Image
             src={formData.profileImageBase64 || "/images/profile.png"}
@@ -528,10 +582,11 @@ const IP_Details = () => {
                 type="email"
                 placeholder="Enter your email"
                 value={formData.email}
-                onChange={(e) => {handleTextInputChange(e, "email"),setIsEmailAvailable(null)
+                onChange={(e) => {
+                  handleTextInputChange(e, "email"), setIsEmailAvailable(null)
                   if (isEmailValid(e.target.value)) {
-    setTouched((prev) => ({ ...prev, email: true }));
-  }
+                    setTouched((prev) => ({ ...prev, email: true }));
+                  }
                 }}
                 onBlur={() => handleBlur("email")}
                 disabled={!formData.lastName}
@@ -648,10 +703,10 @@ const IP_Details = () => {
                   placeholder="Enter primary mobile no."
                   value={formData.primaryMobileNumber}
                   onChange={(e) => {
-    handleInputChange(e, "primaryMobileNumber");
-    setIsMobileAvailable(null);
-  }}
-                  onBlur={() => {handleBlur("primaryMobileNumber")}}
+                    handleInputChange(e, "primaryMobileNumber");
+                    setIsMobileAvailable(null);
+                  }}
+                  onBlur={() => { handleBlur("primaryMobileNumber") }}
                   disabled={!isEmailValid(formData.email) || isEmailAvailable === false || isCheckingEmail}
                   className={`rounded-[7.26px]  border-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${isEmailValid(formData.email)
                     ? "bg-white placeholder:text-gray-500 border-0 shadow-none"
@@ -902,7 +957,7 @@ const IP_Details = () => {
         <IP_Buttons
           disabled={!isFormValid()}
           onSave={handleSave}
-          buttonText="Save & Continue"
+          buttonText={doNotAddMeToEpn ? "Send Invite" : "Save & Continue"}
         />
       </div>
     </div>

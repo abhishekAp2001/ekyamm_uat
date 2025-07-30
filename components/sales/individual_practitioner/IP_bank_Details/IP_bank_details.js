@@ -20,7 +20,7 @@ import { X } from "lucide-react";
 import { useRememberMe } from "@/app/context/RememberMeContext";
 
 const IP_bank_details = () => {
-  const {rememberMe} = useRememberMe()
+  const { rememberMe } = useRememberMe()
   const axios = axiosInstance();
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -41,10 +41,10 @@ const IP_bank_details = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const [show,setShow] = useState(false)
-    const handleClose = () =>{
-      setShow(false)
-    }
+  const [show, setShow] = useState(false)
+  const handleClose = () => {
+    setShow(false)
+  }
 
   // Validation functions
   const isIfscValid = (ifsc) => /^[A-Z]{4}0\d{6}$/.test(ifsc);
@@ -62,13 +62,13 @@ const IP_bank_details = () => {
   // Load form data from cookie on component mount
   useEffect(() => {
     let savedData
-    if(rememberMe){
-       savedData = localStorage.getItem("ip_bank_details");
+    if (rememberMe) {
+      savedData = localStorage.getItem("ip_bank_details");
     }
-    else{
-       savedData = sessionStorage.getItem("ip_bank_details");
+    else {
+      savedData = sessionStorage.getItem("ip_bank_details");
     }
-    
+
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
@@ -108,7 +108,7 @@ const IP_bank_details = () => {
       } else {
         showErrorToast(
           error?.response?.data?.error?.message ||
-            "Failed to fetch bank details"
+          "Failed to fetch bank details"
         );
       }
     }
@@ -141,10 +141,10 @@ const IP_bank_details = () => {
   // Handle save and continue
   const handleSave = () => {
     if (isFormValid()) {
-      if(rememberMe){
+      if (rememberMe) {
         localStorage.setItem("ip_bank_details", JSON.stringify(formData));
       }
-      else{
+      else {
         sessionStorage.setItem("ip_bank_details", JSON.stringify(formData));
       }
       handleAddIndividualPractitioner();
@@ -171,32 +171,32 @@ const IP_bank_details = () => {
         const imageUrl = response?.data?.image;
         // Save to localStorage based on type
         if (type === "profile") {
-          if(rememberMe){
+          if (rememberMe) {
             localStorage.setItem("profileImageUrl", imageUrl);
           }
-          else{
+          else {
             sessionStorage.setItem("profileImageUrl", imageUrl);
           }
         } else if (type === "certificates") {
           let existingCertificates = []
-          if(rememberMe){
-            existingCertificates=JSON.parse(localStorage.getItem("certificates")) || [];
+          if (rememberMe) {
+            existingCertificates = JSON.parse(localStorage.getItem("certificates")) || [];
           }
-          else{
-            existingCertificates=JSON.parse(sessionStorage.getItem("certificates")) || [];
+          else {
+            existingCertificates = JSON.parse(sessionStorage.getItem("certificates")) || [];
           }
           existingCertificates.push(imageUrl);
-          if(rememberMe){
+          if (rememberMe) {
             localStorage.setItem(
-            "certificates",
-            JSON.stringify(existingCertificates)
-          );
+              "certificates",
+              JSON.stringify(existingCertificates)
+            );
           }
-          else{
+          else {
             sessionStorage.setItem(
-            "certificates",
-            JSON.stringify(existingCertificates)
-          );
+              "certificates",
+              JSON.stringify(existingCertificates)
+            );
           }
         }
         return imageUrl;
@@ -214,32 +214,34 @@ const IP_bank_details = () => {
   const handleAddIndividualPractitioner = async () => {
     setIsLoading(true);
     try {
-      const ip_details = rememberMe?JSON.parse(localStorage.getItem("ip_details")):JSON.parse(sessionStorage.getItem("ip_details"));
-      const ip_medical_association_details = rememberMe? JSON.parse(
+      const ip_details = rememberMe ? JSON.parse(localStorage.getItem("ip_details")) : JSON.parse(sessionStorage.getItem("ip_details"));
+      const ip_medical_association_details = rememberMe ? JSON.parse(
         localStorage.getItem("ip_medical_association_details")
-      ):JSON.parse(
+      ) : JSON.parse(
         sessionStorage.getItem("ip_medical_association_details")
       );
+      const doNotHaveMedicalAssociation = rememberMe ? (localStorage.getItem("doNotHaveMedicalAssociation")==="true") : (sessionStorage.getItem("doNotHaveMedicalAssociation")==="true");
+      const doNotHaveGST = rememberMe ? (localStorage.getItem("doNotHaveGST")==="true") : (sessionStorage.getItem("doNotHaveGST")==="true");
       const ip_general_information = rememberMe ? JSON.parse(
         localStorage.getItem("ip_general_information")
-      ): JSON.parse(
+      ) : JSON.parse(
         sessionStorage.getItem("ip_general_information")
-        );
-      const ip_single_session_fees = rememberMe?JSON.parse(
+      );
+      const ip_single_session_fees = rememberMe ? JSON.parse(
         localStorage.getItem("ip_single_session_fees")
-      ):JSON.parse(
+      ) : JSON.parse(
         sessionStorage.getItem("ip_single_session_fees")
       )
 
       // Check for existing profile image URL in localStorage
-      let profileImageUrl = rememberMe?localStorage.getItem("profileImageUrl") || "":sessionStorage.getItem("profileImageUrl") || "";
+      let profileImageUrl = rememberMe ? localStorage.getItem("profileImageUrl") || "" : sessionStorage.getItem("profileImageUrl") || "";
       if (ip_details?.profileImageBase64 && !profileImageUrl) {
         profileImageUrl =
           (await uploadImage(ip_details?.profileImageBase64, "profile")) || "";
       }
 
       // Check for existing certificates in localStorage
-      let certificates = rememberMe? JSON.parse(localStorage.getItem("certificates")) || [] :JSON.parse(sessionStorage.getItem("certificates")) || []
+      let certificates = rememberMe ? JSON.parse(localStorage.getItem("certificates")) || [] : JSON.parse(sessionStorage.getItem("certificates")) || []
       if (
         ip_medical_association_details?.certificates?.length > 0 &&
         certificates.length === 0
@@ -272,8 +274,8 @@ const IP_bank_details = () => {
             whatsappNumber: ip_details?.whatsappNumber,
             countryCode_emergency: ip_details?.countryCode_emergency,
             emergencyNumber: ip_details?.emergencyNumber,
-            residentialAddress: ip_general_information?.address||"", // Optional
-            googleMapAddress: ip_general_information?.googleMapAddress||"", // Optional
+            residentialAddress: ip_general_information?.address || "", // Optional
+            googleMapAddress: ip_general_information?.googleMapAddress || "", // Optional
           },
           practiceDetails: {
             logoUrl: profileImageUrl,
@@ -284,14 +286,16 @@ const IP_bank_details = () => {
               ip_general_information?.whatToExpectInSession,
             languageProficiency: ip_general_information?.languageProficiency, // Fetch launguage options from Local V2 > Sales > Get languages API
             // Medical Association Details
-            medicalAssociations: [
-              {
-                name: ip_medical_association_details?.name,
-                medicalAssociationNumber:
-                  ip_medical_association_details?.medicalAssociationNumber,
-                certificates: certificates,
-              },
-            ],
+            doNotHaveMedicalAssociation: doNotHaveMedicalAssociation,
+            medicalAssociations: doNotHaveMedicalAssociation
+              ? []
+              : [
+                {
+                  name: ip_medical_association_details?.name,
+                  medicalAssociationNumber: ip_medical_association_details?.medicalAssociationNumber,
+                  certificates: certificates,
+                },
+              ],
             address: ip_general_information?.address, // Same as generalInformation.address
             googleMapAddress: ip_general_information?.googleMapAddress, // Same as generalInformation.googleMapAddress
             fees: {
@@ -321,7 +325,8 @@ const IP_bank_details = () => {
         },
         kycDetails: {
           panCard: ip_single_session_fees?.panCard,
-          gstNumber: ip_single_session_fees?.gstNumber,
+          doNotHaveGST: doNotHaveGST,
+          gstNumber: doNotHaveGST?"":ip_single_session_fees?.gstNumber,
         },
         bankDetails: {
           accountHolderName: formData?.accountHolderName,
@@ -336,19 +341,23 @@ const IP_bank_details = () => {
         payload
       );
       if (response?.data?.success) {
-        if(rememberMe){
+        if (rememberMe) {
           localStorage.removeItem("ip_details");
-        localStorage.removeItem("ip_bank_details");
-        localStorage.removeItem("ip_general_information");
-        localStorage.removeItem("ip_medical_association_details");
-        localStorage.removeItem("ip_single_session_fees");
+          localStorage.removeItem("ip_bank_details");
+          localStorage.removeItem("ip_general_information");
+          localStorage.removeItem("ip_medical_association_details");
+          localStorage.removeItem("ip_single_session_fees");
+          localStorage.removeItem("doNotHaveGST");
+          localStorage.removeItem("doNotHaveMedicalAssociation");
         }
-        else{
+        else {
           sessionStorage.removeItem("ip_details");
-        sessionStorage.removeItem("ip_bank_details");
-        sessionStorage.removeItem("ip_general_information");
-        sessionStorage.removeItem("ip_medical_association_details");
-        sessionStorage.removeItem("ip_single_session_fees");
+          sessionStorage.removeItem("ip_bank_details");
+          sessionStorage.removeItem("ip_general_information");
+          sessionStorage.removeItem("ip_medical_association_details");
+          sessionStorage.removeItem("ip_single_session_fees");
+          sessionStorage.removeItem("doNotHaveGST");
+          sessionStorage.removeItem("doNotHaveMedicalAssociation");
         }
         router.push("/sales");
         showSuccessToast("Invite Sent");
@@ -367,24 +376,28 @@ const IP_bank_details = () => {
 
   const handleCancel = () => {
     router.push("/sales");
-    if(rememberMe){
-          localStorage.removeItem("ip_details");
-        localStorage.removeItem("ip_bank_details");
-        localStorage.removeItem("ip_general_information");
-        localStorage.removeItem("ip_medical_association_details");
-        localStorage.removeItem("ip_single_session_fees");
-        }
-        else{
-          sessionStorage.removeItem("ip_details");
-        sessionStorage.removeItem("ip_bank_details");
-        sessionStorage.removeItem("ip_general_information");
-        sessionStorage.removeItem("ip_medical_association_details");
-        sessionStorage.removeItem("ip_single_session_fees");
-        }
+    if (rememberMe) {
+      localStorage.removeItem("ip_details");
+      localStorage.removeItem("ip_bank_details");
+      localStorage.removeItem("ip_general_information");
+      localStorage.removeItem("ip_medical_association_details");
+      localStorage.removeItem("ip_single_session_fees");
+       localStorage.removeItem("doNotHaveGST");
+          localStorage.removeItem("doNotHaveMedicalAssociation");
+    }
+    else {
+      sessionStorage.removeItem("ip_details");
+      sessionStorage.removeItem("ip_bank_details");
+      sessionStorage.removeItem("ip_general_information");
+      sessionStorage.removeItem("ip_medical_association_details");
+      sessionStorage.removeItem("ip_single_session_fees");
+      sessionStorage.removeItem("doNotHaveGST");
+          sessionStorage.removeItem("doNotHaveMedicalAssociation");
+    }
   };
   useEffect(() => {
     const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
-    const raw = rememberMe?localStorage.getItem("ip_single_session_fees"):sessionStorage.getItem("ip_single_session_fees")
+    const raw = rememberMe ? localStorage.getItem("ip_single_session_fees") : sessionStorage.getItem("ip_single_session_fees")
     const ip_type_token = raw ? JSON.parse(raw) : null;
     if (!token) {
       router.push('/login')
@@ -434,11 +447,10 @@ const IP_bank_details = () => {
           <div>
             <Label
               htmlFor="bankName"
-              className={`text-[15px] mb-[7.59px] mt-[22px] ${
-                isIfscValid(formData.ifscCode)
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${isIfscValid(formData.ifscCode)
                   ? "text-gray-500"
                   : "text-[#00000040]"
-              }`}
+                }`}
             >
               Bank Name *
             </Label>
@@ -448,11 +460,10 @@ const IP_bank_details = () => {
               placeholder="Add Bank Name"
               value={formData.bankName}
               disabled
-              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                isIfscValid(formData.ifscCode)
+              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${isIfscValid(formData.ifscCode)
                   ? "bg-white placeholder:text-gray-500"
                   : "bg-[#ffffff90] placeholder:text-[#00000040]"
-              }`}
+                }`}
             />
             {touched.bankName && !formData.bankName && (
               <span className="text-red-500 text-sm mt-1 block">
@@ -463,9 +474,8 @@ const IP_bank_details = () => {
           <div>
             <Label
               htmlFor="accountNumber"
-              className={`text-[15px] mb-[7.59px] mt-[22px] ${
-                formData.bankName ? "text-gray-500" : "text-[#00000040]"
-              }`}
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${formData.bankName ? "text-gray-500" : "text-[#00000040]"
+                }`}
             >
               Account Number *
             </Label>
@@ -478,11 +488,10 @@ const IP_bank_details = () => {
                 onChange={(e) => handleInputChange(e, "accountNumber")}
                 onBlur={() => handleBlur("accountNumber")}
                 disabled={!formData.bankName}
-                className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                  formData.bankName
+                className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${formData.bankName
                     ? "bg-white placeholder:text-gray-500"
                     : "bg-[#ffffff90] placeholder:text-[#00000040]"
-                }`}
+                  }`}
               />
               {touched.accountNumber &&
                 isAccountNumberValid(formData.accountNumber) && (
@@ -511,11 +520,10 @@ const IP_bank_details = () => {
           <div>
             <Label
               htmlFor="confirmAccountNumber"
-              className={`text-[15px] mb-[7.59px] mt-[22px] ${
-                isAccountNumberValid(formData.accountNumber)
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${isAccountNumberValid(formData.accountNumber)
                   ? "text-gray-500"
                   : "text-[#00000040]"
-              }`}
+                }`}
             >
               Confirm Account Number *
             </Label>
@@ -528,11 +536,10 @@ const IP_bank_details = () => {
                 onChange={(e) => handleInputChange(e, "confirmAccountNumber")}
                 onBlur={() => handleBlur("confirmAccountNumber")}
                 disabled={!isAccountNumberValid(formData.accountNumber)}
-                className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                  isAccountNumberValid(formData.accountNumber)
+                className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${isAccountNumberValid(formData.accountNumber)
                     ? "bg-white placeholder:text-gray-500"
                     : "bg-[#ffffff90] placeholder:text-[#00000040]"
-                }`}
+                  }`}
               />
               {touched.confirmAccountNumber &&
                 isConfirmAccountNumberValid() && (
@@ -572,11 +579,10 @@ const IP_bank_details = () => {
           <div>
             <Label
               htmlFor="accountHolderName"
-              className={`text-[15px] mb-[7.59px] mt-[22px] ${
-                isConfirmAccountNumberValid()
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${isConfirmAccountNumberValid()
                   ? "text-gray-500"
                   : "text-[#00000040]"
-              }`}
+                }`}
             >
               Account Holder Name *
             </Label>
@@ -593,11 +599,10 @@ const IP_bank_details = () => {
                   isConfirmAccountNumberValid()
                 )
               }
-              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                isConfirmAccountNumberValid()
+              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${isConfirmAccountNumberValid()
                   ? "bg-white placeholder:text-gray-500"
                   : "bg-[#ffffff90] placeholder:text-[#00000040]"
-              }`}
+                }`}
             />
             {touched.accountHolderName && !formData.accountHolderName && (
               <span className="text-red-500 text-sm mt-1 block">
@@ -624,29 +629,29 @@ const IP_bank_details = () => {
             Cancel
           </Button> */}
 
-           <Drawer open={show} onClose={()=>handleClose()} className="pt-[9.97px] max-w-[576px] m-auto">
-          <DrawerTrigger onClick={()=>setShow(true)} className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
-            Cancel
-          </DrawerTrigger>
-          <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
-            <DrawerHeader>
-              <DrawerTitle className="text-[16px] font-[600] text-center">
-                By cancelling, you are confirming to not add this partner to be part of Ekyamm
-              </DrawerTitle>
-              <DrawerDescription className="mt-6 flex gap-3 w-full">
-                <Button onClick={()=>handleCancel()} className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
-                  Confirm
-                </Button>
+          <Drawer open={show} onClose={() => handleClose()} className="pt-[9.97px] max-w-[576px] m-auto">
+            <DrawerTrigger onClick={() => setShow(true)} className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+              Cancel
+            </DrawerTrigger>
+            <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
+              <DrawerHeader>
+                <DrawerTitle className="text-[16px] font-[600] text-center">
+                  By cancelling, you are confirming to not add this partner to be part of Ekyamm
+                </DrawerTitle>
+                <DrawerDescription className="mt-6 flex gap-3 w-full">
+                  <Button onClick={() => handleCancel()} className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                    Confirm
+                  </Button>
 
-                <Button onClick={()=>handleClose()} className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
-                  Continue
-                </Button>
-              </DrawerDescription>
-            </DrawerHeader>
-            <DrawerFooter className="p-0">
-            </DrawerFooter>
-          </DrawerContent>
-        </Drawer>
+                  <Button onClick={() => handleClose()} className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+                    Continue
+                  </Button>
+                </DrawerDescription>
+              </DrawerHeader>
+              <DrawerFooter className="p-0">
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
           <Button
             disabled={!isFormValid() || isLoading}
             onClick={() => {
