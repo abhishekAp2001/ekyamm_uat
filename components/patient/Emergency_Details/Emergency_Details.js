@@ -15,7 +15,7 @@ import {
 import Select from "react-select";
 import axiosInstance from "@/lib/axiosInstance";
 import { toast } from "react-toastify";
-import { getCookie, setCookie } from "cookies-next";
+import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
@@ -194,6 +194,7 @@ const Emergency_Details = ({ type }) => {
         showSuccessToast("Emergency detail added successfully");
         
         setCookie("completeUserData", response.data.data);
+        deleteCookie()
         router.push(`/patient/dashboard`);
       } else {
         showErrorToast(

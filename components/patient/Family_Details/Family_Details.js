@@ -15,7 +15,7 @@ import {
 import Select from "react-select";
 import axiosInstance from "@/lib/axiosInstance";
 import { toast } from "react-toastify";
-import { getCookie, setCookie } from "cookies-next";
+import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
@@ -190,6 +190,7 @@ const Family_Details = ({ type }) => {
         showSuccessToast("Family member added successfully");
         setCookie("completeUserData", response.data.data);
         if (formData.emergencyContact) {
+          deleteCookie("completeUserData")
           router.push(`/patient/dashboard`);
         } else {
           router.push(`/patient/${type}/emergency-details`);

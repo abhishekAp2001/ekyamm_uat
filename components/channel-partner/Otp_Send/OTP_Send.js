@@ -227,7 +227,7 @@ const OTP_Send = ({ type }) => {
       return false;
     } catch (err) {
       showErrorToast(
-        err.response?.data?.reason || "An error occurred while generating OTP"
+        err.response?.data?.reason || "An error occurred while Verifying OTP"
       );
     } finally {
       setLoading(false);

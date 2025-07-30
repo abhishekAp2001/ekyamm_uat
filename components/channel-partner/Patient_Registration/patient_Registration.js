@@ -23,6 +23,10 @@ const Patient_Registration = ({ type }) => {
   const [countryList, setCountryList] = useState([]);
   const [countrySearch, setCountrySearch] = useState("");
   const [loading, setLoading] = useState("");
+  const [isMobileAvailable, setIsMobileAvailable] = useState(false);
+  const [isEmailAvailable, setIsEmailAvailable] = useState(false);
+  const [isCheckingMobile, setIsCheckingMobile] = useState(false);
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -99,7 +103,7 @@ const Patient_Registration = ({ type }) => {
       });
 
       if (response?.data?.success === true) {
-        const patientData = {...response?.data?.data?.patient,patientType:2}
+        const patientData = { ...response?.data?.data?.patient, patientType: 2 }
         setCookie("invitePatientInfo", JSON.stringify(patientData));
         router.push(`/channel-partner/${type}/patient-history`);
       } else {
@@ -111,7 +115,7 @@ const Patient_Registration = ({ type }) => {
       // console.log(err);
       showErrorToast(
         err?.response?.data?.error?.message ||
-          "An error occurred while inviting"
+        "An error occurred while inviting"
       );
     } finally {
       setLoading(false);
@@ -137,21 +141,81 @@ const Patient_Registration = ({ type }) => {
     }
   }, [type]);
 
+  const checkMobileAvailability = async (mobile, country_code) => {
+    try {
+      setIsCheckingMobile(true);
+      const response = await axios.post(`/v2/sales/mobile/verify`, {
+        type: "CP",
+        countryCode: country_code,
+        mobile: mobile,
+      });
+      if (response?.data?.success) {
+        setIsMobileAvailable(true);
+      }
+    } catch (error) {
+      // console.log(error);
+      if (error.forceLogout) {
+        router.push("/login");
+      } else {
+        setIsMobileAvailable(false);
+      }
+    } finally {
+      setIsCheckingMobile(false);
+    }
+  };
+
+  const checkEmailAvailability = async (email) => {
+    try {
+      setIsCheckingEmail(true);
+      const response = await axios.post(`/v2/sales/email/verify`, {
+        type: "CP",
+        email: email,
+      });
+      if (response?.data?.success) {
+        setIsEmailAvailable(true);
+      }
+    } catch (error) {
+      // console.log(error);
+      if (error.forceLogout) {
+        router.push("/login");
+      } else {
+        setIsEmailAvailable(false);
+      }
+    } finally {
+      setIsCheckingEmail(false);
+    }
+  };
+
+  useEffect(() => {
+    if (formData.primaryMobileNumber && touched.primaryMobileNumber) {
+      if (isMobileValid(formData.primaryMobileNumber)) {
+        checkMobileAvailability(formData.primaryMobileNumber, formData.countryCode_primary)
+      }
+    }
+  }, [formData.countryCode_primary, formData.primaryMobileNumber, touched.primaryMobileNumber])
+
+  useEffect(() => {
+    if (formData.email && touched.email) {
+      if (isEmailValid(formData.email)) {
+        checkEmailAvailability(formData.email)
+      }
+    }
+  }, [formData.email, touched.email])
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
-        <PR_Header type={type} patientType={2} text="New Patient Registration"  />
+        <PR_Header type={type} patientType={2} text="New Patient Registration" />
         <div className="h-full pt-[15%] lg:pt-[10%] pb-[20%] lg:pb-[12%]  overflow-auto px-[16px]">
           <div className="w-full h-[25px] text-[#776EA5] font-semibold text-[20px] leading-[25px] mb-2 text-center">
             {channelPartnerData?.clinicName || "Greetings Hospital"}
           </div>
           <div className="flex items-center justify-center gap-1">
-           <div className="bg-[#776EA5] rounded-full w-[16.78px] h-[16.78px] flex justify-center items-center">
-              <MapPin color="white" className="w-[12.15px] h-[12.15px]"/></div>
-              <span className="text-sm text-[#776EA5] font-medium">
-                {channelPartnerData?.area}
-              </span>
-              </div>
+            <div className="bg-[#776EA5] rounded-full w-[16.78px] h-[16.78px] flex justify-center items-center">
+              <MapPin color="white" className="w-[12.15px] h-[12.15px]" /></div>
+            <span className="text-sm text-[#776EA5] font-medium">
+              {channelPartnerData?.area}
+            </span>
+          </div>
           <div className="bg-[#FFFFFFB2] rounded-[12px] p-5 mt-[25px] relative">
             <div>
               <Label className="text-[15px] text-gray-500 mb-[7.59px]">
@@ -198,20 +262,64 @@ const Patient_Registration = ({ type }) => {
             </div>
 
             <div>
-              <Label className="text-[15px] text-gray-500 font-medium mb-[7.59px] mt-[22px]">
-                Email Address
-              </Label>
-              <Input
-                disabled={!formData.lastName}
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value.toLowerCase() })
-                }
-                onBlur={() => handleBlur("email")}
-                type="text"
-                placeholder="Enter Email Address"
-                className="bg-white rounded-[7.26px] placeholder:text-[15px] placeholder:text-gray-500 placeholder:font-medium font-semibold py-3 px-4 h-[39px]"
-              />
+              <div className="relative">
+                <Label className="text-[15px] text-gray-500 font-medium mb-[7.59px] mt-[22px]">
+                  Email Address
+                </Label>
+                <Input
+                  value={formData.email}
+                  onChange={(e) => {
+                    setFormData({ ...formData, email: e.target.value.toLowerCase() })
+                    setIsEmailAvailable(null);
+                    if (isEmailValid(e.target.value)) {
+                      setTouched((prev) => ({ ...prev, email: true }));
+                    }
+                  }
+                  }
+                  onBlur={() => handleBlur("email")}
+                  type="text"
+                  placeholder="Enter Email Address"
+                  className="bg-white rounded-[7.26px] placeholder:text-[15px] placeholder:text-gray-500 placeholder:font-medium font-semibold py-3 px-4 h-[39px]"
+                />
+                {formData.email && isEmailAvailable === true && (
+                  <Image
+                    src="/images/green_check.png"
+                    width={20}
+                    height={20}
+                    className="w-[20.83px] pt-1.5 absolute top-[3px] right-3.5"
+                    alt="check"
+                  />
+                )}
+                {formData.email && isEmailAvailable === false && (
+                  <Image
+                    src="/images/error_circle.png"
+                    width={20}
+                    height={20}
+                    className="w-[20.83px] pt-1.5 absolute top-[3px] right-3.5"
+                    alt="check"
+                  />
+                )}
+              </div>
+              {touched.email &&
+                formData.email &&
+                !isEmailValid(formData.email) && (
+                  <span className="text-red-500 text-sm mt-1 block">
+                    Invalid email
+                  </span>
+                )}
+              {touched.email && isCheckingEmail && (
+                <span className="text-yellow-500 text-sm mt-1 block">
+                  Checking...
+                </span>
+              )}
+              {touched.email &&
+                !isCheckingEmail &&
+                formData.email &&
+                isEmailAvailable === false && (
+                  <span className="text-red-500 text-sm mt-1 block">
+                    Email not available
+                  </span>
+                )}
             </div>
 
             <div>
@@ -248,7 +356,7 @@ const Patient_Registration = ({ type }) => {
                       height: "39px",
                       minHeight: "39px",
                       width: "max-content",
-                       backgroundColor:formData.lastName ?"#fff" : "#fff"
+                      backgroundColor: formData.lastName ? "#fff" : "#fff"
                     }),
                     menu: (base) => ({ ...base, width: "200px" }),
                   }}
@@ -265,19 +373,50 @@ const Patient_Registration = ({ type }) => {
                   inputMode="numeric"
                   pattern="[0-9]*"
                   value={formData.primaryMobileNumber}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setFormData({
                       ...formData,
                       primaryMobileNumber: e.target.value.replace(/\D/g, "").slice(0, 10),
                     })
+                    const value = e.target.value.replace(/\D/g, "").slice(0, 10);
+                    if (value.length === 10) {
+                      checkMobileAvailability(value, formData.countryCode_primary);
+                      setTouched((prev) => ({ ...prev, primaryMobileNumber: true }));
+                    } else {
+                      setIsMobileAvailable(null); // reset availability if not 10 digits
+                    }
                   }
-                  
+                  }
+
                   onBlur={() => handleBlur("primaryMobileNumber")}
                   disabled={!formData.lastName}
                   placeholder="Enter Mobile Number"
                   className="bg-white border border-gray-300 rounded-[7.26px] placeholder:text-[15px] placeholder:text-gray-500 placeholder:font-medium font-semibold py-2 px-4 h-[38px] w-full"
                 />
+                {formData.primaryMobileNumber && isMobileAvailable === true && (
+                  <Image
+                    src="/images/green_check.png"
+                    width={20}
+                    height={20}
+                    className="w-[20.83px] pt-1.5 absolute top-[3px] right-3.5"
+                    alt="check"
+                  />
+                )}
+                {formData.primaryMobileNumber && isMobileAvailable === false && (
+                  <Image
+                    src="/images/error_circle.png"
+                    width={20}
+                    height={20}
+                    className="w-[20.83px] pt-1.5 absolute top-[3px] right-3.5"
+                    alt="check"
+                  />
+                )}
               </div>
+              {touched.primaryMobileNumber && isCheckingMobile && (
+                <span className="text-yellow-500 text-sm mt-1 block">
+                  Checking...
+                </span>
+              )}
               {touched.primaryMobileNumber &&
                 formData.primaryMobileNumber &&
                 !isMobileValid(formData.primaryMobileNumber) && (
@@ -290,19 +429,28 @@ const Patient_Registration = ({ type }) => {
                   Mobile number is required
                 </span>
               )}
+              {touched.primaryMobileNumber &&
+                !isCheckingMobile &&
+                isMobileValid(formData.primaryMobileNumber) &&
+                formData.primaryMobileNumber &&
+                isMobileAvailable === false && (
+                  <span className="text-red-500 text-sm mt-1 block">
+                    Mobile number not available
+                  </span>
+                )}
             </div>
           </div>
 
           <div className="flex justify-center items-center gap-[18px] mt-[25px] px-1 ml-[31px] mr-[31px]">
-             <Link
-                disabled={loading}
-                href={`/channel-partner/${type}/existing-patient`}
-                className="text-[15px] "
-              >
-            <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px] rounded-[8px] flex items-center justify-center w-[141px] h-[45px]">
+            <Link
+              disabled={loading}
+              href={`/channel-partner/${type}/existing-patient`}
+              className="text-[15px] "
+            >
+              <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px] rounded-[8px] flex items-center justify-center w-[141px] h-[45px]">
                 Existing Patient
-            </Button>
-              </Link>
+              </Button>
+            </Link>
             <Button
               disabled={!isFormValid() || loading}
               type="button"
@@ -314,7 +462,7 @@ const Patient_Registration = ({ type }) => {
                 className="text-[15px] "
               > */}
               {loading ? (<Loader2Icon className="animate-spin" />) : '+ Patient History'}
-              
+
               {/* </Link> */}
             </Button>
           </div>

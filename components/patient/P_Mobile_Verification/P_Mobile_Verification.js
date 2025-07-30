@@ -15,7 +15,7 @@ import OTPInput from "react-otp-input";
 import axios from "axios";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import axiosInstance from "@/lib/axiosInstance";
-import { setCookie } from "cookies-next";
+import { getCookie, setCookie } from "cookies-next";
 import { formatTime } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
@@ -36,6 +36,7 @@ const P_Mobile_Verification = ({ type }) => {
   const [showOtp, setShowOtp] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [channelPartnerData, setChannelPartnerData] = useState(null);
+  const [verifiedUserData, setVerifiedUserData] = useState(null);
   const [resendTimer, setResendTimer] = useState(120);
   const [isResendDisabled, setIsResendDisabled] = useState(false);
 
@@ -132,7 +133,7 @@ const P_Mobile_Verification = ({ type }) => {
 
     try {
       const mobileNumber =
-        channelPartnerData.primaryMobileNumber?.trim() || null;
+        formData.primaryMobileNumber?.trim() || null;
       let countryCode = "+91";
       if (channelPartnerData.countryCode_primary) {
         const countryCodeParts =
@@ -200,6 +201,7 @@ const P_Mobile_Verification = ({ type }) => {
           mobileVerified: true,
         }));
         setCookie("verifiedUserData", JSON.stringify(response?.data?.data));
+        setVerifiedUserData(response?.data?.data?.verificationToken)
         return true;
       } else {
         setIsMobileVerified(false);
@@ -221,7 +223,7 @@ const P_Mobile_Verification = ({ type }) => {
 
     try {
       const mobileNumber =
-        channelPartnerData.primaryMobileNumber?.trim() || null;
+        formData?.primaryMobileNumber?.trim() || null;
       let countryCode = "+91";
       if (channelPartnerData.countryCode_primary) {
         const countryCodeParts =
@@ -234,11 +236,11 @@ const P_Mobile_Verification = ({ type }) => {
           );
         }
       }
-
+      const verifiedPatientToken = JSON.parse(getCookie("verifiedUserData") || "{}");
       const response = await customAxios.post(`v2/cp/mobile/otpGenerate`, {
         mobile: mobileNumber,
-        type: "cpLoginOTP",
-        verificationToken: channelPartnerData?.verificationToken,
+        type: "cpPatientRegisterOTP",
+        verificationToken: verifiedPatientToken.verificationToken,
         channelPartnerUsername: type
       });
 
