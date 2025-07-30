@@ -321,6 +321,7 @@ const IP_Single_Session_Fees = () => {
                 </span>
               )}
           </div>
+          <div className="mt-5 flex items-center gap-2">
           <Checkbox
             onCheckedChange={(checked) => {
               setDontHaveGst(checked)
@@ -335,6 +336,8 @@ const IP_Single_Session_Fees = () => {
             className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"
             checked={dontHaveGst}
           />
+            <Label htmlFor="have_gst">I do not have a GST number</Label>
+          </div>
           {!dontHaveGst && (
             <div className="mt-3">
               <Label

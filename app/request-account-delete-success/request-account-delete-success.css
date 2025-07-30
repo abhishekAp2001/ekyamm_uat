@@ -479,7 +479,7 @@
             border: 1px solid #776EA5;
         }
         #form-footer, #form-footer a{
-            font-family: 'Roboto Flex';
+            /* font-family: 'Roboto Flex'; */
             font-size: 12px;
             font-weight: 400;
             line-height: 18px;

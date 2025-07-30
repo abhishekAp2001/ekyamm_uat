@@ -400,15 +400,9 @@ const IP_Details = () => {
     }
   }, [])
   return (
-    <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
+    <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto relative">
       <IP_Header text="Add Individual Practitioner Details" />
       <div className="h-full pb-[22%] overflow-auto px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb]">
-        <Checkbox
-          id='do_not_add_me_to_epn'
-          className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"
-          checked={doNotAddMeToEpn}
-          onCheckedChange={(checked) => setDoNotAddMeToEpn(checked)}
-        />
         <div className="flex justify-center w-[140.8px] h-fit rounded-[17.63px] mx-auto relative mb-6">
           <Image
             src={formData.profileImageBase64 || "/images/profile.png"}
@@ -953,6 +947,15 @@ const IP_Details = () => {
                 </span>
               )}
           </div>
+        <div className="mt-5 flex items-center gap-2">
+        <Checkbox
+          id='do_not_add_me_to_epn'
+          className="w-4 h-4 border border-[#776EA5] rounded-[1.8px]"
+          checked={doNotAddMeToEpn}
+          onCheckedChange={(checked) => setDoNotAddMeToEpn(checked)}
+        />
+          <Label htmlFor="do_not_add_me_to_epn">Do not add me to EPN</Label>
+         </div>
         </div>
         <IP_Buttons
           disabled={!isFormValid()}

@@ -526,9 +526,8 @@ const IP_General_Information = () => {
               onChange={(e) => handleInputChange(e, "googleMapAddress")}
             />
           </div>
-
-        </div>
-        <Checkbox
+        <div className="mt-5 flex items-center gap-2">
+          <Checkbox
           onCheckedChange={(checked) => {
             setDontHaveMedicalAssociation(checked)
             if (rememberMe) {
@@ -542,6 +541,11 @@ const IP_General_Information = () => {
           className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"
           checked={dontHaveMedicalAssociation}
         />
+          <Label htmlFor="have_medical_association">I do not have a medical association</Label>
+
+        </div>
+        </div>
+       
         {/* Button footer */}
         <IP_Buttons
           disabled={!isFormValid()}
