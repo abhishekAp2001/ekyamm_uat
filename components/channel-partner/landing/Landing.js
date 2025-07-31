@@ -1,20 +1,46 @@
 "use client";
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-
-const Landing= () => {
+import axiosInstance from '@/lib/axiosInstance';
+import { showErrorToast } from '@/lib/toast';
+import { setCookie } from 'cookies-next';
+const Landing = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const type = searchParams.get("u");
-
+  const axios = axiosInstance();
   useEffect(() => {
-    if (type) {
-      console.log("Redirecting to", `/channel-partner/${type}`);
-      router.push(`/channel-partner/${type}`);
-    } else {
-      console.log("No type param found");
-    }
-  }, [type, router]);
+    const verifyChannelPartner = async (username) => {
+      try {
+        
+        const response = await axios.post(`v2/cp/channelPartner/verify`, {
+          username: username,
+        });
+
+        if (response?.data?.success === true) {
+          setCookie("channelPartnerData", JSON.stringify(response.data.data));
+          if (response?.data?.data?.billingType == "patientPays") {
+            router.push(`/channel-partner/${username}/patient-pay-landing`)
+          }
+          else{
+            router.push(`/channel-partner/${username}`);
+          }
+        } else {
+          showErrorToast(
+            response?.data?.error?.message || "Verification failed"
+          );
+          router.push('/')
+        }
+      } catch (err) {
+        showErrorToast(
+          err?.response?.data?.error?.message ||
+          "An error occurred while verifying"
+        );
+        router.push('/')
+      }
+    };
+    verifyChannelPartner(type); // Replace 'apollo' with dynamic username if needed
+  }, []);
 
   return (
     <div className="flex items-center justify-center h-screen w-full"

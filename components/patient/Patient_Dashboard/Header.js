@@ -34,7 +34,12 @@ const Header = ({ loading = false, patient }) => {
               <MapPin className="w-2 h-2 text-[#9f99bebd]" />
             </div>
             <span className="text-xs text-[#FFFFFF80] font-medium">
-              {addressDetails?.area}
+              {[
+                patient?.clinicDetails?.city,
+                patient?.clinicDetails?.state,
+              ]
+                .filter(Boolean)
+                .join(", ")}
             </span>
           </div>
         </div>
@@ -48,10 +53,10 @@ const Header = ({ loading = false, patient }) => {
         <div className="flex justify-between items-center mt-2 relative inset-0 z-30">
           <div className="flex items-center gap-2">
             <Avatar className='w-8 h-4 rounded-[25px] contents'
-            onClick={() => router.push("/patient/patient-profile")}>
+              onClick={() => router.push("/patient/patient-profile")}>
               <AvatarImage
                 className="h-8 w-8 mix-blend-multiply rounded-[25px] pt-0 overflow-auto"
-                src={patient?.profileImageUrl ||"/images/profile.png"}
+                src={patient?.profileImageUrl || "/images/profile.png"}
                 alt={`${patient?.firstName} ${patient?.lastName}`}
               />
             </Avatar>

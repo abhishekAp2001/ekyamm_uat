@@ -192,9 +192,11 @@ const Emergency_Details = ({ type }) => {
       );
       if (response.data.success) {
         showSuccessToast("Emergency detail added successfully");
-        
+        deleteCookie("completeUserData");
+        deleteCookie("patientInfo")
+        deleteCookie("patientLoginDetail")
+        deleteCookie("channelPartnerData")
         setCookie("completeUserData", response.data.data);
-        deleteCookie()
         router.push(`/patient/dashboard`);
       } else {
         showErrorToast(

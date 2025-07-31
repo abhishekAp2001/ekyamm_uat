@@ -5,8 +5,10 @@ import { X } from "lucide-react";
 
 const SignOutModal = ({ onCancel, onConfirm }) => {
   return (
-    <div className="fixed inset-0 flex items-end justify-center bg-black/30 z-50 max-w-[576px] mx-auto">
-      <div className="w-full h-[194px] rounded-t-[16px] bg-gradient-to-b from-[#F9F8FD] to-[#FDF1F0] shadow-xl p-6 relative flex flex-col justify-between rounded-tl-2xl rounded-tr-2xl">
+    <div className="fixed inset-0 flex items-end justify-center bg-black/30 z-50 max-w-[576px] mx-auto"
+    onClick={onCancel}>
+      <div className="w-full h-[194px] rounded-t-[16px] bg-gradient-to-b from-[#F9F8FD] to-[#FDF1F0] shadow-xl p-6 relative flex flex-col justify-between rounded-tl-2xl rounded-tr-2xl"
+      onClick={e => e.stopPropagation()}>
         {/* Close Icon */}
         <button
           onClick={onCancel}

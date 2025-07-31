@@ -7,7 +7,7 @@ import Link from "next/link";
 import Footer_bar from "../../Footer_bar/Footer_bar";
 import Confirm_Header from "../../Confirm_Header";
 import { MapPin } from "lucide-react";
-import { getCookie, hasCookie } from "cookies-next";
+import { getCookie, hasCookie, deleteCookie } from "cookies-next";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { calculatePaymentDetails, clinicSharePercent, formatAmount } from "@/lib/utils";
 import { useRouter } from "next/navigation";
@@ -47,6 +47,11 @@ useEffect(() => {
 useEffect(() => {
   if (secondsLeft === 0 && !hasRedirected.current) {
     hasRedirected.current = true;
+    deleteCookie("sessions_selection"); 
+    deleteCookie("channelPartnerData");
+    deleteCookie("invitePatientInfo");
+    deleteCookie("qrCodeInfo");
+    deleteCookie("paymentStatusInfo");
     router.push(`/channel-partner/${type}`);
     return;
   }

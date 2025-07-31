@@ -17,17 +17,17 @@ const DoctorCard = ({
   setShowCounsellorProfile,
   setSelectedCounsellors,
 }) => {
-  const {rememberMe} = useRememberMe()
+  const { rememberMe } = useRememberMe()
   const router = useRouter();
   const handleBookNowClick = () => {
     let maxAge = {}
-        if(rememberMe){
-          maxAge = { maxAge: 60 * 60 * 24 * 30 }
-        }
-        else if(!rememberMe){
-          maxAge = {}
-        }
-    setCookie("selectedCounsellor", JSON.stringify(doc),maxAge);
+    if (rememberMe) {
+      maxAge = { maxAge: 60 * 60 * 24 * 30 }
+    }
+    else if (!rememberMe) {
+      maxAge = {}
+    }
+    setCookie("selectedCounsellor", JSON.stringify(doc), maxAge);
     if (patient.availableCredits === 0) {
       router.push("/patient/select-package")
     }
@@ -42,12 +42,12 @@ const DoctorCard = ({
     >
       <AccordionTrigger className="flex items-center justify-between bg-white rounded-xl p-[12px] pb-[10px] no-underline hover:no-underline focus:no-underline active:no-underline focus-visible:no-underline">
         <div className="flex items-center space-x-3">
-          {}
+          { }
           <Avatar
-          onClick={() => {
-                  setSelectedCounsellors(doc);
-                  setShowCounsellorProfile(true);
-                }}>
+            onClick={() => {
+              setSelectedCounsellors(doc);
+              setShowCounsellorProfile(true);
+            }}>
             <AvatarImage
               src={doc?.generalInformation?.profileImageUrl}
               alt={`${doc?.generalInformation?.firstName} ${doc?.generalInformation?.lastName}`}
@@ -78,33 +78,37 @@ const DoctorCard = ({
                 <></>
               )}
             </div>
-            <p className="text-xs font-medium text-[#6D6A5D] py-[2px]">
-              {doc?.generalInformation?.city}, {doc?.generalInformation?.state}
-            </p>
+            {(doc?.generalInformation?.city && doc?.generalInformation?.state) ? (
+              <p className="text-xs font-medium text-[#6D6A5D] py-[2px]">
+                {doc?.generalInformation?.city}, {doc?.generalInformation?.state}
+              </p>
+            ) : doc?.generalInformation?.residentialAddress ? (
+              <p className="text-xs font-medium text-[#6D6A5D] py-[2px]">
+                {doc?.generalInformation?.residentialAddress}
+              </p>
+            ) : null}
             <p className="text-xs font-medium text-[#6D6A5D]">
               {Array.isArray(doc?.practiceDetails?.languageProficiency)
                 ? doc.practiceDetails.languageProficiency.map((lang, _lx) => (
+                  <span
+                    key={_lx}
+                    className={`${_lx === 0 ? "text-sm text-[#776EA5] font-black" : ""
+                      }`}
+                  >
+                    {lang?.trim() || ""}{" "}
+                  </span>
+                ))
+                : doc.practiceDetails.languageProficiency
+                  ?.split(",")
+                  ?.map((lang, _lx) => (
                     <span
                       key={_lx}
-                      className={`${
-                        _lx === 0 ? "text-sm text-[#776EA5] font-black" : ""
-                      }`}
+                      className={`${_lx === 0 ? "text-sm text-[#776EA5] font-black" : ""
+                        }`}
                     >
                       {lang?.trim() || ""}{" "}
                     </span>
-                  ))
-                : doc.practiceDetails.languageProficiency
-                    ?.split(",")
-                    ?.map((lang, _lx) => (
-                      <span
-                        key={_lx}
-                        className={`${
-                          _lx === 0 ? "text-sm text-[#776EA5] font-black" : ""
-                        }`}
-                      >
-                        {lang?.trim() || ""}{" "}
-                      </span>
-                    ))}
+                  ))}
             </p>
           </div>
         </div>
