@@ -75,7 +75,7 @@ const Patient_Pays_Landing = ({ type }) => {
           {/* Content Section */}
           <div className="space-y-6 lg:space-y-8">
             <div className="space-y-4 mb-[40px] md:mb-5">
-              <div className="flex flex-col mb-[30px] md:mb-[26px]">
+              <div className="flex flex-col mb-[30px] md:mb-[34px]">
                 <div className="md:mt-4">
                   <strong className="text-[34px] md:text-[38px] text-[#776EA5] font-bold leading-[34px]">
                     Balance Your{" "}
@@ -125,7 +125,7 @@ const Patient_Pays_Landing = ({ type }) => {
             </div>
 
             {/* Feature Points */}
-            <div className="space-y-2 md:mt-8">
+            <div className="space-y-2 md:mt-[34px]">
          
               <div className="flex items-center gap-2 mb-[11px] md:mb-[6px]">
                 <div className="flex-shrink-0 w-6 h-6 bg-[#776EA5] rounded-full flex items-center justify-center">
@@ -200,7 +200,7 @@ const Patient_Pays_Landing = ({ type }) => {
             </div>
 
             {/* Bottom Section */}
-            <div className="space-y-6 fixed mt-[40%] md:mt-5">
+            <div className="space-y-6 fixed mt-[40%] md:mt-[6%]">
               <div className="space-y-2">
                 {/* <h2 className="text-[20px] font-bold text-[#776EA5] leading-6">
                   A healthier <br /> mind & body
