@@ -200,7 +200,7 @@ const Patient_Pays_Landing = ({ type }) => {
             </div>
 
             {/* Bottom Section */}
-            <div className="space-y-6 fixed mt-[40%] md:mt-[6%]">
+            <div className="space-y-6 fixed max-[376px]:mt-0 min-[389px]:mt-[34%] max-[391px]:mt-[34%] min-[391px]:mt-[40%] min-[415px]:mt-[40%] md:mt-[6%]">
               <div className="space-y-2">
                 {/* <h2 className="text-[20px] font-bold text-[#776EA5] leading-6">
                   A healthier <br /> mind & body
