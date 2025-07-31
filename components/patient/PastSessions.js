@@ -4,22 +4,32 @@ import { getCookie } from 'cookies-next';
 import { useState,useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 const PastSessions = ({sessions}) => {
-  function convertUTCtoIST(utcDateStr) {
-    const utcDate = new Date(utcDateStr);
-    const IST_OFFSET = 5.5 * 60;
-    const istTime = new Date(utcDate.getTime());
-    const day = istTime.getDate();
-    const month = istTime.toLocaleString('en-US', { month: 'long' });
-    const dateStr = `${day} ${month}`;
-    let hours = istTime.getHours();
-    const minutes = istTime.getMinutes();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    const minutesStr = minutes < 10 ? `0${minutes}` : minutes;
-    const timeStr = `${hours}:${minutesStr} ${ampm}`;
-    return { date: dateStr, time: timeStr };
-  }
+function convertUTCtoIST(utcDateStr) {
+  const date = new Date(utcDateStr);
+
+  const options = {
+    timeZone: "Asia/Kolkata",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    day: "numeric",
+    month: "long",
+  };
+
+  const formatter = new Intl.DateTimeFormat("en-IN", options);
+  const parts = formatter.formatToParts(date);
+
+  const day = parts.find((p) => p.type === "day")?.value;
+  const month = parts.find((p) => p.type === "month")?.value;
+  const hour = parts.find((p) => p.type === "hour")?.value;
+  const minute = parts.find((p) => p.type === "minute")?.value;
+  const dayPeriod = parts.find((p) => p.type === "dayPeriod")?.value;
+
+  return {
+    date: `${day} ${month}`,
+    time: `${hour}:${minute} ${dayPeriod}`,
+  };
+}
     const [patient, setPatient] = useState(null);
     const router = useRouter()
   useEffect(() => {

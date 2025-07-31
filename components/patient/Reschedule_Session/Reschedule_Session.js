@@ -468,28 +468,38 @@ const Reschedule_Session = () => {
     setSuccessDrawerOpen(false);
   }
 
-  const handleTimeFormat = (dateTime) => {
-    const utcDate = new Date(dateTime);
+const handleTimeFormat = (dateTime) => {
+  const utcDate = new Date(dateTime);
 
-    const istTime = new Date(utcDate.getTime());
+  const formatter = new Intl.DateTimeFormat('en-IN', {
+    timeZone: 'Asia/Kolkata',
+    weekday: 'short',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
 
-    const hours = istTime.getHours() % 12 || 12;
-    const minutes = istTime.getMinutes().toString().padStart(2, '0');
-    const ampm = istTime.getHours() >= 12 ? 'PM' : 'AM';
+  const parts = formatter.formatToParts(utcDate);
 
-    const dayName = istTime.toLocaleDateString('en-US', { weekday: 'short' });
-    const day = istTime.getDate();
-    const monthName = istTime.toLocaleDateString('en-US', { month: 'long' });
-    const year = istTime.getFullYear();
+  const dayName = parts.find(p => p.type === 'weekday')?.value;
+  const day = parts.find(p => p.type === 'day')?.value;
+  const month = parts.find(p => p.type === 'month')?.value;
+  const year = parts.find(p => p.type === 'year')?.value;
+  const hour = parts.find(p => p.type === 'hour')?.value;
+  const minute = parts.find(p => p.type === 'minute')?.value;
+  const ampm = parts.find(p => p.type === 'dayPeriod')?.value;
 
-    // Combine
-    const formattedTime = `${hours}:${minutes} ${ampm}`
-    const formattedDate = `${dayName}, ${day} ${monthName} ${year}`
-    return {
-      time: formattedTime,
-      date: formattedDate,
-    };
-  }
+  const formattedTime = `${hour}:${minute} ${ampm}`;
+  const formattedDate = `${dayName}, ${day} ${month} ${year}`;
+
+  return {
+    time: formattedTime,
+    date: formattedDate,
+  };
+};
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] relative max-w-[576px] mx-auto">
       <div className="fixed top-0 left-0 right-0 h-[64px] z-50 flex items-center px-4 bg-gradient-to-b from-[#eeecfb] to-[#eeecfb] max-w-[576px] mx-auto">

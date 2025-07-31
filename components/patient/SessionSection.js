@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { format, parseISO } from "date-fns";
-
+import { toZonedTime  } from "date-fns-tz";
 const SessionSection = ({
   period,
   times,
@@ -33,7 +33,9 @@ const SessionSection = ({
       {times.length > 0 && (
         <AccordionContent className="pb-0">
           <div className="grid grid-cols-4 gap-2 mt-3">
-            {times.map((time, ti) => (
+            {times.map((time, ti) =>{
+              const istTime = toZonedTime (time?.from, "Asia/Kolkata");
+              return (
               <Button
                 disabled={!time?.available}
                 key={ti}
@@ -48,9 +50,10 @@ const SessionSection = ({
                   setSelectedToTime(time?.to);
                 }}
               >
-                {format(parseISO(time?.from), "hh:mm a")}
+                {format(istTime, "hh:mm a")}
               </Button>
-            ))}
+            )
+            })}
           </div>
         </AccordionContent>
       )}
