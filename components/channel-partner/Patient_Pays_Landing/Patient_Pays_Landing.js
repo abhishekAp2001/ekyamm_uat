@@ -67,7 +67,7 @@ const Patient_Pays_Landing = ({ type }) => {
         src="/images/relaxed-feminine-woman-left.png"
         width={100}
         height={100}
-        className="m-[312px]:w-[312px] min-[358px]:w-[224px] min-[389px]:w-full  md:w-[358px] h-full mix-blend-multiply absolute bottom-0 right-0"
+        className="m-[312px]:w-[312px] min-[358px]:w-[224px] min-[389px]:w-[290px]  md:w-[358px] h-full mix-blend-multiply absolute bottom-0 right-0"
         alt="ekyamm"
       />
       <div className="container mx-auto px-3 pt-[34px] pb-8 relative z-10">
@@ -200,7 +200,7 @@ const Patient_Pays_Landing = ({ type }) => {
             </div>
 
             {/* Bottom Section */}
-            <div className="space-y-6 fixed max-[376px]:mt-0 min-[389px]:mt-[34%] max-[391px]:mt-[34%] min-[391px]:mt-[40%] min-[415px]:mt-[40%] md:mt-[6%]">
+            <div className="space-y-6  max-[376px]:mt-0 min-[389px]:mt-[34%] max-[391px]:mt-[34%] min-[391px]:mt-[40%] min-[415px]:mt-[40%] md:mt-[6%]">
               <div className="space-y-2">
                 {/* <h2 className="text-[20px] font-bold text-[#776EA5] leading-6">
                   A healthier <br /> mind & body
@@ -225,7 +225,8 @@ const Patient_Pays_Landing = ({ type }) => {
               >
                 Get Support Now
               </Button>
-              <div className="flex gap-1 items-center fixed bottom-[26px]">
+              {/* <div className="flex gap-1 items-center fixed bottom-[26px]"> */}
+              <div className="flex gap-1 items-center pb-[26px]">
                 <span className="text-[10px] md:text-[16px] text-gray-500 font-medium">
                   Powered by
                 </span>
