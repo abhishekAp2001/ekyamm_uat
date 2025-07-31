@@ -186,9 +186,9 @@ const Upcoming_Sessions = ({dashboard = false}) => {
             className="text-sm text-[#776EA5] rounded-full h-6 flex items-center gap-1 bg-transparent shadow-none px-2"
           >
             {showAllUpcoming ? (
-              <EyeOff className="w-[13px] text-[#776EA5]" />
-            ) : (
               <Eye className="w-[13px] text-[#776EA5]" />
+            ) : (
+              <EyeOff className="w-[13px] text-[#776EA5]" />
             )}
             {showAllUpcoming ? "Show Less" : "View All"}
           </Button>

@@ -319,12 +319,12 @@ one symbol, and no spaces.`;
                     }
                   />
                   {showPassword ? (
-                    <EyeOff
+                    <Eye
                       onClick={() => setShowPassword(!showPassword)}
                       className="w-[14.67px] absolute top-2 right-[14.83px]"
                     />
                   ) : (
-                    <Eye
+                    <EyeOff
                       onClick={() => setShowPassword(!showPassword)}
                       className="w-[14.67px] absolute top-2 right-[14.83px]"
                     />
@@ -359,12 +359,12 @@ one symbol, and no spaces.`;
                   />
 
                   {showPassword ? (
-                    <EyeOff
+                    <Eye
                       onClick={() => setShowPassword(!showPassword)}
                       className="w-[14.67px] absolute top-2 right-[14.83px]"
                     />
                   ) : (
-                    <Eye
+                    <EyeOff
                       onClick={() => setShowPassword(!showPassword)}
                       className="w-[14.67px] absolute top-2 right-[14.83px]"
                     />

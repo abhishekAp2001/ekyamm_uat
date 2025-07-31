@@ -32,7 +32,12 @@ export default function RootLayout({ children }) {
     pathname === "/request-account-delete" ||
     pathname === "/request-account-delete-success" ||
     pathname === "/privacy-policy";
+  // const isPrivacyPage = pathname === "/privacy-policy";
+  // const isAutoHeightPage = pathname === "/patient/schedule-session" || pathname === "/privacy-policy";
   const isPrivacyPage = pathname === "/privacy-policy";
+  const isScheduleSession = pathname === "/patient/schedule-session";
+  const isRescheduleSession = pathname === "/patient/reschedule-session";
+  const isAutoHeightPage = isPrivacyPage || isScheduleSession || isRescheduleSession;
 
   const getTitle = () => {
     if (pathname === "/") {
@@ -80,7 +85,7 @@ export default function RootLayout({ children }) {
         className={`
     ${quicksand.variable} 
     antialiased 
-    ${isPrivacyPage ? "h-auto" : "h-screen"}
+    ${isAutoHeightPage ? "h-auto" : "h-screen"}
     ${isFullWidthPage ? "w-full" : "max-w-[576px] mx-auto"}
     ${
       isPrivacyPage

@@ -1,6 +1,9 @@
-
-import IP_bank_details from '@/components/sales/individual_practitioner/IP_bank_Details/IP_bank_details'
+'use client'
+import dynamic from "next/dynamic";
 import React from 'react'
+const IP_bank_details = dynamic(() => import('@/components/sales/individual_practitioner/IP_bank_Details/IP_bank_details'), {
+  ssr: false,
+})
 
 const page = () => {
   return (

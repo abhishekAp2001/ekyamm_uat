@@ -356,7 +356,7 @@ const handleTimeFormat = (dateTime) => {
           }}
         />
         <strong className="ml-2 text-[16px] font-semibold text-gray-800">
-          Schedule Session
+          Schedule Session 
         </strong>
       </div>
       <div className="pt-15 px-4 pb-20 flex justify-center relative">
@@ -365,7 +365,7 @@ const handleTimeFormat = (dateTime) => {
             <label className="block text-[#8F8F8F] mb-1 text-[15px]">
               Patient
             </label>
-            <div className="w-full bg-[#ffffff1a] rounded-[12px] px-[12px] py-[8px] flex items-center justify-between">
+            <div className="w-full bg-[#ffffff8a] rounded-[12px] px-[12px] py-[8px] flex items-center justify-between opacity-70">
               <div className="flex items-center gap-[12px]">
                 <Avatar>
                   <AvatarImage
@@ -377,12 +377,12 @@ const handleTimeFormat = (dateTime) => {
                   />
                 </Avatar>
                 <div>
-                  <Label className="text-[16px] text-black font-[600] font-['Quicksand']">
+                  <Label className="text-[16px] text-gray-500 font-[600] font-['Quicksand']">
                     {`${patientSessionData?.firstName || ""} ${
                       patientSessionData?.lastName || ""
                     }`}
                   </Label>
-                  <Label className="text-[15px] text-[#6D6A5D] font-[500] font-['Quicksand']">
+                  <Label className="text-[15px] text-gray-500 font-[500] font-['Quicksand']">
                     {`${
                       patientSessionData?.countryCode_primary.match(/\d+$/)
                         ? "+" +
@@ -401,7 +401,7 @@ const handleTimeFormat = (dateTime) => {
             <label className="block text-[#8F8F8F] mb-1 text-[15px]">
               Assign Practitioner
             </label>
-            <div className="w-full bg-[#ffffff1a] rounded-[12px] px-[12px] py-[8px] flex items-center justify-between">
+            <div className="w-full bg-[#ffffff8a] rounded-[12px] px-[12px] py-[8px] flex items-center justify-between opacity-70">
               <div className="flex items-center gap-[12px]">
                 <Avatar>
                   <AvatarImage
@@ -430,7 +430,7 @@ const handleTimeFormat = (dateTime) => {
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <Label className="text-[16px] text-black font-[600] font-['Quicksand']">
+                  <Label className="text-[16px] text-gray-500 font-[600] font-['Quicksand']">
                     {`${
                       selectedCounsellorData?.generalInformation?.firstName ||
                       ""
@@ -438,7 +438,7 @@ const handleTimeFormat = (dateTime) => {
                       selectedCounsellorData?.generalInformation?.lastName || ""
                     }`}
                   </Label>
-                  <Label className="text-[15px] text-[#6D6A5D] font-[500] font-['Quicksand']">
+                  <Label className="text-[15px] text-gray-500 font-[500] font-['Quicksand']">
                     {`${
                       selectedCounsellorData?.generalInformation?.countryCode_primary.match(
                         /\d+$/
@@ -466,7 +466,7 @@ const handleTimeFormat = (dateTime) => {
                 placeholder="Enter session type"
                 value="Counselling ( 1 Hr )"
                 readOnly
-                className="w-full h-10 rounded-[7.26px] bg-[#ffffff28] px-3 py-2  border border-[#E6E6E6] text-gray-400 text-[12px] font-medium focus:border-none focus:ring-0 focus-visible:border-none focus-visible:ring-0 focus-visible:outline-0"
+                className="w-full h-10 rounded-[7.26px] bg-[#ffffff84] px-3 py-2  border border-[#E6E6E6] text-gray-400 text-[12px] font-medium focus:border-none focus:ring-0 focus-visible:border-none focus-visible:ring-0 focus-visible:outline-0 opacity-70"
               />
             </div>
 

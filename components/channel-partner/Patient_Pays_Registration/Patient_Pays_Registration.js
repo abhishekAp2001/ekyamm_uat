@@ -460,13 +460,13 @@ const Patient_Pays_Registration = ({ type }) => {
                         aria-label={showEmailOtp ? "Hide OTP" : "Show OTP"}
                       >
                         {showEmailOtp ? (
-                          <EyeOff
+                          <Eye
                             width={20}
                             height={20}
                             className="h-4 w-4 text-[#776EA5]"
                           />
                         ) : (
-                          <Eye
+                          <EyeOff
                             width={20}
                             height={20}
                             className="h-4 w-4 text-[#776EA5]"
@@ -648,13 +648,13 @@ const Patient_Pays_Registration = ({ type }) => {
                         aria-label={showOtp ? "Hide OTP" : "Show OTP"}
                       >
                         {showOtp ? (
-                          <EyeOff
+                          <Eye
                             width={20}
                             height={20}
                             className="h-4 w-4 text-[#776EA5]"
                           />
                         ) : (
-                          <Eye
+                          <EyeOff
                             width={20}
                             height={20}
                             className="h-4 w-4 text-[#776EA5]"

@@ -295,7 +295,7 @@ const OTP_Send = ({ type }) => {
           to={`/channel-partner/${type}`}
           title="Add New Patient"
         />
-        <div className="h-full flex flex-col justify-between items-center my-[20%]">
+        <div className="h-full flex flex-col justify-between items-center my-[34%] md:my-[8%]">
           <div className="flex flex-col items-center w-full">
             <strong className="text-[20px] text-[#776EA5] font-semibold">
               {channelPartnerData?.clinicName || "Greetings Hospital"}
@@ -310,6 +310,7 @@ const OTP_Send = ({ type }) => {
             </div>
             </div>
  
+
             <div className="border-2 bg-[#FFFFFF80] border-[#FFFFFF4D] rounded-4xl py-[17px] text-center w-full  px-5">
               <strong className="text-[15px] text-black font-[600] text-center">
                 {selectedMethod === "mobile" || selectedMethod === "email"
@@ -390,13 +391,13 @@ const OTP_Send = ({ type }) => {
                           aria-label={showOtp ? "Hide OTP" : "Show OTP"}
                         >
                           {showOtp ? (
-                            <EyeOff
+                            <Eye
                               width={20}
                               height={20}
                               className="h-4 w-4 text-[#776EA5]"
                             />
                           ) : (
-                            <Eye
+                            <EyeOff
                               width={20}
                               height={20}
                               className="h-4 w-4 text-[#776EA5]"

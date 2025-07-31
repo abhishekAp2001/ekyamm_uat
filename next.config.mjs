@@ -20,7 +20,7 @@ const withPWA =nextPWA({
   register: true,
   skipWaiting: true,
 });
-
+ 
 const nextConfig = withPWA(
   {
   images: {
@@ -52,7 +52,8 @@ const nextConfig = withPWA(
   output: 'standalone',
 }
 );
-
+ 
 export default nextConfig;
+ 
  
  

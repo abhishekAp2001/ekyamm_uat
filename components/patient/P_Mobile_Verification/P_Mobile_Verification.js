@@ -410,13 +410,13 @@ const P_Mobile_Verification = ({ type }) => {
                         aria-label={showOtp ? "Hide OTP" : "Show OTP"}
                       >
                         {showOtp ? (
-                          <EyeOff
+                          <Eye
                             width={20}
                             height={20}
                             className="h-4 w-4 text-[#776EA5]"
                           />
                         ) : (
-                          <Eye
+                          <EyeOff
                             width={20}
                             height={20}
                             className="h-4 w-4 text-[#776EA5]"

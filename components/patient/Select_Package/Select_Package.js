@@ -91,7 +91,7 @@ const Select_Package = () => {
               <div className="bg-[#ffffff0a] py-2 px-3 flex gap-3 items-center rounded-[10px] ">
                 <Avatar>
                   <AvatarImage
-                    className="rounded-full object-fill w-[42px] h-[42px]"
+                    className="rounded-full object-cover w-[42px] h-[42px]"
                     src={patientSessionData?.profileImageUrl || "/images/profile.png"}
                     alt={`${patientSessionData?.firstName || ""} ${patientSessionData?.lastName || ""
                       }`}

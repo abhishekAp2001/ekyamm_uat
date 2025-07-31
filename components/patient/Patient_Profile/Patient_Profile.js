@@ -627,7 +627,7 @@ const Patient_Profile = () => {
               <AvatarImage
                 src={patient?.profileImageUrl || "/images/profile.png"}
                 alt={`${patient?.firstName} ${patient?.lastName}`}
-                className="rounded-full object-fill"
+                className="rounded-full"
               />
             </Avatar>
             <Drawer className="pt-[9.97px]" open={imageDrawer} onClose={() => setImageDrawer(false)}>

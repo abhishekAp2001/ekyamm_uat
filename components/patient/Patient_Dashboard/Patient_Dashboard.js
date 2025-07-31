@@ -135,7 +135,8 @@ const Patient_Dashboard = () => {
       <div className="flex flex-col min-h-screen bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5]  relative max-w-[576px] m-auto overflow-y-auto">
         <div className="relative h-screen max-w-[576px]  flex flex-col">
           {/* Fixed Header */}
-          <div className="fixed top-0 left-0 right-0 z-50 flex flex-col gap-8 bg-[#e7d6ec] max-w-[576px] mx-auto">
+          {/* <div className="fixed top-0 left-0 right-0 z-50 flex flex-col gap-8 bg-[#e7d6ec] max-w-[576px] mx-auto"> */}
+            <div className="fixed top-0 left-0 right-0 z-50 flex flex-col gap-8 bg-[#e5d7f0] max-w-[576px] mx-auto">
             {/* Gradient Header */}
             <Header
               loading={loading}
