@@ -92,7 +92,8 @@ useEffect(() => {
   }, [patientSessionToken]);
   return (
     // <div className="relative max-w-[576px]  flex flex-col  bg-gradient-to-b space-y-4 from-[#e7d6ec] to-[#F9CCC5] ">
-    <div className="relative max-w-[576px] overflow-auto h-full  flex flex-col bg-[linear-gradient(#e2d9f6_0%,_#f9ccc587_100%)]">
+    // <div className="relative max-w-[576px] overflow-auto h-full  flex flex-col bg-[linear-gradient(#e2d9f6_0%,_#f9ccc587_100%)]">
+    <div className="relative max-w-[576px] overflow-auto h-full  flex flex-col">
      
       {/* Go back button */}
       {dashboard ? (
@@ -122,7 +123,7 @@ useEffect(() => {
       { loading ? (
         <div className="flex justify-center"><Loader2 className="w-6 h-6 animate-spin" aria-hidden="true" /></div>):
         (
-          <div className=" flex-1 px-4 pb-5 pt-[10%]">
+          <div className=" flex-1 px-4 pb-5 pt-0 md:pt-0">
         {/* Filter Row */}
         <div className="flex justify-between items-center my-2 ">
           <strong className="text-sm text-black font-semibold">
@@ -133,9 +134,9 @@ useEffect(() => {
             className="text-sm text-[#776EA5] rounded-full h-6 flex items-center gap-1 bg-transparent shadow-none px-2"
           >
             {showAllUpcoming ? (
-              <EyeOff className="w-[13px] text-[#776EA5]" />
-            ) : (
               <Eye className="w-[13px] text-[#776EA5]" />
+            ) : (
+              <EyeOff className="w-[13px] text-[#776EA5]" />
             )}
             {showAllUpcoming ? "Show Less" : "View All"}
           </Button>

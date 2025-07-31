@@ -46,7 +46,7 @@ const Patient_Pays_Landing = ({ type }) => {
     verifyChannelPartner(type); // Replace 'apollo' with dynamic username if needed
   }, []);
   return (
-    <div className="min-h-screen bg-white relative overflow-hidden">
+    <div className="h-screen bg-white relative overflow-hidden">
       {/* Background Image on Right */}
       {/* <div
         className="absolute top-0 right-0 w-full h-full bg-cover bg-center bg-no-repeat  max-[361px]:bg-[10px_42px] max-[376px]:bg-[52px_44px] min-[376px]:bg-[0px_0px] min-[767px]:bg-[150px_80px]"
@@ -67,7 +67,7 @@ const Patient_Pays_Landing = ({ type }) => {
         src="/images/relaxed-feminine-woman-left.png"
         width={100}
         height={100}
-        className="m-[312px]:w-[312px] min-[358px]:w-[224px] min-[389px]:w-[290px]  md:w-[358px] h-full mix-blend-multiply absolute bottom-0 right-0"
+        className="m-[312px]:w-[312px] min-[358px]:w-[224px] min-[389px]:w-full  md:w-[358px] h-full mix-blend-multiply absolute bottom-0 right-0"
         alt="ekyamm"
       />
       <div className="container mx-auto px-3 pt-[34px] pb-8 relative z-10">
@@ -200,7 +200,7 @@ const Patient_Pays_Landing = ({ type }) => {
             </div>
 
             {/* Bottom Section */}
-            <div className="space-y-6  max-[376px]:mt-0 min-[389px]:mt-[34%] max-[391px]:mt-[34%] min-[391px]:mt-[40%] min-[415px]:mt-[40%] md:mt-[6%]">
+            <div className="space-y-6 md:fixed max-[376px]:mt-0 min-[389px]:mt-[34%] max-[391px]:mt-[34%] min-[391px]:mt-[40%] min-[415px]:mt-[40%] md:mt-[3%]">
               <div className="space-y-2">
                 {/* <h2 className="text-[20px] font-bold text-[#776EA5] leading-6">
                   A healthier <br /> mind & body
