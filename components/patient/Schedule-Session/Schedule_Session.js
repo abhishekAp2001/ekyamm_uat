@@ -345,7 +345,7 @@ const Schedule_Session = () => {
           }}
         />
         <strong className="ml-2 text-[16px] font-semibold text-gray-800">
-          Schedule Session
+          Schedule Session 
         </strong>
       </div>
       <div className="pt-15 px-4 pb-20 flex justify-center relative">
