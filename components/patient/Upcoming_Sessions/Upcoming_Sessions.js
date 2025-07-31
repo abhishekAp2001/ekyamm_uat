@@ -13,7 +13,7 @@ import PastSessions from "../PastSessions";
 import { AccordionContent } from "@radix-ui/react-accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { ChevronLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import axios from "axios";
 import { patientSessionToken as getPatientSessionToken } from "@/lib/utils";
 import { showErrorToast } from "@/lib/toast";
@@ -21,6 +21,7 @@ import { Baseurl } from "@/lib/constants";
 import { getCookie } from "cookies-next";
 import { Loader2 } from "lucide-react";
 const Upcoming_Sessions = ({dashboard = false}) => {
+  const pathname = usePathname();
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
@@ -93,7 +94,7 @@ useEffect(() => {
   return (
     // <div className="relative max-w-[576px]  flex flex-col  bg-gradient-to-b space-y-4 from-[#e7d6ec] to-[#F9CCC5] ">
     // <div className="relative max-w-[576px] overflow-auto h-full  flex flex-col bg-[linear-gradient(#e2d9f6_0%,_#f9ccc587_100%)]">
-    <div className="relative max-w-[576px] overflow-auto h-full  flex flex-col">
+    <div className={`relative max-w-[576px] overflow-auto h-full  flex flex-col ${pathname==='/patient/dashboard' ? '' : 'bg-[linear-gradient(#e2d9f6_0%,_#f9ccc587_100%)]'}`}>
      
       {/* Go back button */}
       {dashboard ? (
@@ -123,7 +124,7 @@ useEffect(() => {
       { loading ? (
         <div className="flex justify-center"><Loader2 className="w-6 h-6 animate-spin" aria-hidden="true" /></div>):
         (
-          <div className=" flex-1 px-4 pb-5 pt-0 md:pt-0">
+          <div className={`flex-1 px-4 pb-5 ${pathname==='/patient/dashboard' ? '' : 'pt-[15%] md:pt-[10%]'}`}>
         {/* Filter Row */}
         <div className="flex justify-between items-center my-2 ">
           <strong className="text-sm text-black font-semibold">

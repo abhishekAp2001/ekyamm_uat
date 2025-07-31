@@ -281,7 +281,7 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions,pastSess
                               setShowCounsellorProfile(true);
                             }}
                           >
-                            <AvatarImage
+                            <AvatarImage className=""
                               src={
                                 patient?.practitionerTagged[0]
                                   ?.generalInformation?.profileImageUrl

@@ -358,7 +358,7 @@ const Schedule_Session = () => {
               <div className="flex items-center gap-[12px]">
                 <Avatar>
                   <AvatarImage
-                    className="rounded-full object-fill w-[42px] h-[42px]"
+                    className="rounded-full w-[42px] h-[42px]"
                     src={patientSessionData?.profileImageUrl||"/images/profile.png"}
                     alt={`${patientSessionData?.firstName || ""} ${
                       patientSessionData?.lastName || ""

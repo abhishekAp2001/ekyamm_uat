@@ -88,7 +88,7 @@ const Select_Package = () => {
               <p className="text-[15px] font-medium text-gray-500 mb-[7.59px]">
                 Patient
               </p>
-              <div className="bg-[#ffffff0a] py-2 px-3 flex gap-3 items-center rounded-[10px] ">
+              <div className="bg-[#ffffff8a] py-2 px-3 flex gap-3 items-center rounded-[10px] opacity-70">
                 <Avatar>
                   <AvatarImage
                     className="rounded-full object-cover w-[42px] h-[42px]"
@@ -98,11 +98,11 @@ const Select_Package = () => {
                   />
                 </Avatar>
                 <div className="flex flex-col gap-1">
-                  <p className="font-semibold text-sm text-black">
+                  <p className="font-semibold text-sm text-gray-500">
                     {`${patientSessionData?.firstName || ""} ${patientSessionData?.lastName || ""
                       }`}
                   </p>
-                  <p className="text-xs text-[#6D6A5D]">{`${patientSessionData?.countryCode_primary.match(/\d+$/)
+                  <p className="text-xs text-gray-500">{`${patientSessionData?.countryCode_primary.match(/\d+$/)
                     ? "+" +
                     patientSessionData.countryCode_primary.match(
                       /\d+$/
@@ -115,7 +115,7 @@ const Select_Package = () => {
               <p className="text-[15px] text-gray-500 mb-[7.59px] font-medium  mt-5">
                 Assign Practitioner
               </p>
-              <div className="bg-[#ffffff0a] py-2 px-3 flex items-center gap-3 rounded-[10px] ">
+              <div className="bg-[#ffffff8a] py-2 px-3 flex items-center gap-3 rounded-[10px] opacity-70">
                 <Avatar>
                   <AvatarImage
                     className="rounded-full object-fill w-[42px] h-[42px]"
@@ -139,13 +139,13 @@ const Select_Package = () => {
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col gap-1">
-                  <p className="font-semibold text-sm text-black">
+                  <p className="font-semibold text-sm text-gray-500">
                     {`${selectedCounsellorData?.generalInformation?.firstName ||
                       ""
                       } ${selectedCounsellorData?.generalInformation?.lastName || ""
                       }`}
                   </p>
-                  <p className="text-xs text-[#6D6A5D]">{`${selectedCounsellorData?.generalInformation?.countryCode_primary.match(
+                  <p className="text-xs text-gray-500">{`${selectedCounsellorData?.generalInformation?.countryCode_primary.match(
                     /\d+$/
                   )
                     ? "+" +
@@ -169,7 +169,7 @@ const Select_Package = () => {
                 <Select value="Counselling" disabled>
                   <SelectTrigger
                     id="session-type"
-                    className="w-full h-[39px] rounded-[7.26px] bg-[#ffffff2b] p-4 text-sm font-semibold text-black"
+                    className="w-full h-[39px] rounded-[7.26px] bg-[#ffffff] p-4 text-sm font-semibold text-gray-500 opacity-70"
                   >
                     <SelectValue placeholder="Select type..." />
                   </SelectTrigger>
@@ -177,7 +177,7 @@ const Select_Package = () => {
                     <SelectGroup className="text-xs font-semibold">
                       <SelectItem
                         value="Counselling"
-                        className="text-xs font-semibold px-5"
+                        className="text-xs font-semibold px-5 text-gray-500"
                       >
                         Counselling (1 hour)
                       </SelectItem>

@@ -24,7 +24,9 @@ import Profile from "../practitioner/Profile";
 import Filter from "../Filter/Filter";
 import Upcoming_Sessions from "../Upcoming_Sessions/Upcoming_Sessions";
 import { useRememberMe } from "@/app/context/RememberMeContext";
+import { usePathname } from "next/navigation";
 const Patient_Dashboard = () => {
+  const pathname = usePathname();
   const {rememberMe} = useRememberMe()
   const [patient, setPatient] = useState(null);
   const [counsellors, setCounsellors] = useState([]);
@@ -193,7 +195,7 @@ const Patient_Dashboard = () => {
                 </Accordion>
               </>
             )}
-          </div>) : (<div className="mt-[192px]">
+          </div>) : (<div className={`mt-[192px] ${pathname==='/patient/dashboard' ? '' : 'bg-[linear-gradient(#e2d9f6_0%,_#f9ccc587_100%)]'}`}>
             <Upcoming_Sessions
               dashboard={true} />
           </div>)}
