@@ -410,7 +410,7 @@ const IP_bank_details = () => {
     // <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col">
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
       <IP_Header text="Add Individual Practitioner Details" />
-      <div className="h-full pb-[23%] lg:pb-[16%] overflow-auto px-4 bg-gradient-to-t from-[#fce8e5] to-[#eeecfb]">
+      <div className="h-full pt-[15%] md:pt-[10%] pb-[23%] lg:pb-[16%] overflow-auto px-4 bg-gradient-to-t from-[#fce8e5] to-[#eeecfb]">
         <div className=" bg-[#FFFFFF60] rounded-[12px] p-4">
           <strong className="text-[15px] text-black font-semibold">
             Bank Details

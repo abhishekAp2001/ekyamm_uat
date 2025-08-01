@@ -402,7 +402,7 @@ const IP_Details = () => {
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto relative">
       <IP_Header text="Add Individual Practitioner Details" />
-      <div className="h-full pb-[22%] overflow-auto px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb]">
+      <div className="h-full pt-[15%] md:pt-[10%] pb-[22%] overflow-auto px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb]">
         <div className="flex justify-center w-[140.8px] h-fit rounded-[17.63px] mx-auto relative mb-6">
           <Image
             src={formData.profileImageBase64 || "/images/profile.png"}

@@ -30,7 +30,7 @@ const IP_Header = ({ text }) => {
   return (
     <>
       <div className="">
-        <div className="flex items-center p-4 gap-[9px]">
+        <div className="flex items-center p-4 gap-[9px] fixed top-0 left-0 right-0 z-10 max-w-[576px] mx-auto bg-[#efebf8]">
           <ChevronLeft
             size={24}
             className=" text-black-700"

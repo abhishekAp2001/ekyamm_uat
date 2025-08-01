@@ -32,7 +32,7 @@ const IP_Buttons = ({ disabled, onSave, buttonText = "Save & Continue" }) => {
 
   
   return (
-    <div className="bg-gradient-to-t from-[#fce8e5] to-[#fce8e5] flex justify-between items-center gap-3 mt-[20.35px] fixed bottom-0 pb-[23px] left-0 right-0 px-4 max-w-[576px] mx-auto">
+    <div className="bg-gradient-to-t from-[#fce8e5] to-[#fce8e5] flex justify-between items-center gap-3 pt-[15.35px] fixed bottom-0 pb-[23px] left-0 right-0 px-4 max-w-[576px] mx-auto">
       {/* <Button
         onClick={() => {
           handleCancel();

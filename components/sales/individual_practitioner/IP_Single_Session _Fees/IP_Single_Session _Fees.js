@@ -197,7 +197,7 @@ const IP_Single_Session_Fees = () => {
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
       <IP_Header text="Add Individual Practitioner Details" />
-      <div className="h-full pb-[22%] overflow-auto px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb]">
+      <div className="h-full pt-[15%] md:pt-[10%] pb-[22%] overflow-auto px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb]">
         {/* Single Session Fees */}
         <div className="bg-[#FFFFFF80] rounded-[12px] p-4">
           <strong className="text-[15px] text-black font-semibold">

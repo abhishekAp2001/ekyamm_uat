@@ -225,7 +225,7 @@ const IP_Medical_Association_Details = () => {
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto ">
       <IP_Header text="Medical Association Details" />
-      <div className="h-full mb-[26%] overflow-auto px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb]">
+      <div className="h-full pt-[15%] md:pt-[10%] mb-[26%] overflow-auto px-[17px] bg-gradient-to-t from-[#fce8e5] to-[#eeecfb]">
         <div>
           <Label htmlFor="name" className="text-[15px] text-gray-500 mb-[7.59px]">
             Name of Medical Association *
