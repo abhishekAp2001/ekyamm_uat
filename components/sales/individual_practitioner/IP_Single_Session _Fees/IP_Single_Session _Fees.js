@@ -214,7 +214,7 @@ const IP_Single_Session_Fees = () => {
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#808080ba] text-[15px] font-semibold">₹</span>
               <Input
                 id="singleSession"
-                type="text"
+                type="number"
                 placeholder="Enter fee per hour"
                 value={formData.singleSession}
                 onChange={handleSingleSessionChange}
