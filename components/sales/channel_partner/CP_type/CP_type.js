@@ -258,7 +258,7 @@ const CP_type = () => {
     if (formData.userName && touched.userName) {
       const timer = setTimeout(
         () => checkUserNameAvailability(formData.userName),
-        500
+        2000
       );
       return () => clearTimeout(timer);
     }
@@ -416,6 +416,7 @@ const CP_type = () => {
                       const value = e.target.value;
                       const alphanumericWithDash = value.replace(/[^a-zA-Z0-9-]/g, "");
                       setFormData({ ...formData, userName: alphanumericWithDash });
+                      setTouched((prev) => ({ ...prev, userName: true }));
                     }}
 
                     onBlur={() => handleBlur("userName")}
@@ -485,15 +486,15 @@ const CP_type = () => {
                   type="text"
                   placeholder="Enter your email"
                   value={formData.email}
-                  onChange={(e) =>
-                    {setFormData({
+                  onChange={(e) => {
+                    setFormData({
                       ...formData,
                       email: e.target.value.toLowerCase(),
                     })
                     setIsEmailAvailable(null);
                     if (isEmailValid(e.target.value)) {
-      setTouched((prev) => ({ ...prev, email: true }));
-    }
+                      setTouched((prev) => ({ ...prev, email: true }));
+                    }
                   }
                   }
                   onBlur={() => handleBlur("email")}
@@ -608,15 +609,15 @@ const CP_type = () => {
                   placeholder="Enter primary mobile no."
                   value={formData.primaryMobileNumber}
                   onChange={(e) => {
-    handleInputChange(e, "primaryMobileNumber");
-    const value = e.target.value.replace(/\D/g, "").slice(0, 10);
-    if (value.length === 10) {
-      checkMobileAvailability(value, formData.countryCode_primary);
-          setTouched((prev) => ({ ...prev, primaryMobileNumber: true }));
-    } else {
-      setIsMobileAvailable(null); // reset availability if not 10 digits
-    }
-  }}
+                    handleInputChange(e, "primaryMobileNumber");
+                    const value = e.target.value.replace(/\D/g, "").slice(0, 10);
+                    if (value.length === 10) {
+                      checkMobileAvailability(value, formData.countryCode_primary);
+                      setTouched((prev) => ({ ...prev, primaryMobileNumber: true }));
+                    } else {
+                      setIsMobileAvailable(null); // reset availability if not 10 digits
+                    }
+                  }}
                   onBlur={() => handleBlur("primaryMobileNumber")}
                   disabled={!isEmailValid(formData.email) || isEmailAvailable !== true}
                   className={`border rounded-[7.26px] font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${isEmailValid(formData.email) && isEmailAvailable === true

@@ -18,7 +18,7 @@ const IP_Header = ({ text }) => {
       router.push("/sales/ip_medical_association_details");
     } else if (pathname === "/sales/ip_single_session_fees") {
       if(doNotHaveMedicalAssociation){
-        router.push("/sales/ip_general_information");
+        router.push("/sales/ip_medical_association_details");
       }
       else{
         router.push("/sales/ip_medical_association_certificate");

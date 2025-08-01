@@ -30,10 +30,11 @@ import { useRouter } from "next/navigation";
 import { showErrorToast } from "@/lib/toast";
 import { getCookie, hasCookie } from "cookies-next";
 import { useRememberMe } from "@/app/context/RememberMeContext";
+import { Checkbox } from "@/components/ui/checkbox";
 
 
 const IP_Medical_Association_Details = () => {
-  const {rememberMe} = useRememberMe()
+  const { rememberMe } = useRememberMe()
   const [formData, setFormData] = useState({
     name: "",
     medicalAssociationNumber: "",
@@ -45,21 +46,28 @@ const IP_Medical_Association_Details = () => {
     medicalAssociationNumber: false,
     certificates: false,
   });
-  const [drawerOpen,setDrawerOpen] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false)
 
   const cameraInputRef = useRef(null);
   const galleryInputRef = useRef(null);
   const fileInputRef = useRef(null);
-
+  const [dontHaveMedicalAssociation, setDontHaveMedicalAssociation] = useState(false);
   // Validation functions
   const isNameValid = () => formData.name.trim().length > 0;
   const isMedicalAssociationNumberValid = () => formData.medicalAssociationNumber.trim().length > 0;
   const isCertificatesValid = () => formData.certificates.length > 0;
-  const isFormValid = () => isNameValid() && isMedicalAssociationNumberValid() && isCertificatesValid();
+  const isFormValid = () => {
+    if (!dontHaveMedicalAssociation) {
+      return isNameValid() && isMedicalAssociationNumberValid() && isCertificatesValid();
+    }
+    else {
+      return true
+    }
+  }
 
   // Load form data from localStorage on component mount
   useEffect(() => {
-    const savedData = rememberMe?localStorage.getItem("ip_medical_association_details"):sessionStorage.getItem("ip_medical_association_details")
+    const savedData = rememberMe ? localStorage.getItem("ip_medical_association_details") : sessionStorage.getItem("ip_medical_association_details")
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
@@ -72,7 +80,7 @@ const IP_Medical_Association_Details = () => {
             url: cert.base64, // Use base64 as URL for display
           })),
         });
-        setTouched({
+        setTouched({ 
           name: !!parsedData.name,
           medicalAssociationNumber: !!parsedData.medicalAssociationNumber,
           certificates: parsedData.certificates.length > 0,
@@ -166,19 +174,23 @@ const IP_Medical_Association_Details = () => {
     });
     if (isFormValid()) {
       try {
-        // Store all form data in localStorage
-        const saveData = {
-          name: formData.name,
-          medicalAssociationNumber: formData.medicalAssociationNumber,
-          certificates: formData.certificates.map(({ name, base64 }) => ({ name, base64 })),
-        };
-        if(rememberMe){
-          localStorage.setItem("ip_medical_association_details", JSON.stringify(saveData));
+        if (!dontHaveMedicalAssociation) {
+          const saveData = {
+            name: formData.name,
+            medicalAssociationNumber: formData.medicalAssociationNumber,
+            certificates: formData.certificates.map(({ name, base64 }) => ({ name, base64 })),
+          };
+          if (rememberMe) {
+            localStorage.setItem("ip_medical_association_details", JSON.stringify(saveData));
+          }
+          else {
+            sessionStorage.setItem("ip_medical_association_details", JSON.stringify(saveData));
+          }
+          router.push("/sales/ip_medical_association_certificate")
         }
-        else{
-          sessionStorage.setItem("ip_medical_association_details", JSON.stringify(saveData));
+        else {
+          router.push("/sales/ip_single_session_fees")
         }
-        router.push("/sales/ip_medical_association_certificate")
       } catch (error) {
         console.error("Error saving data:", error);
         showErrorToast("Failed to save details");
@@ -187,24 +199,29 @@ const IP_Medical_Association_Details = () => {
       showErrorToast("Please fill all required fields and upload at least one certificate");
     }
   };
-  
-  const handleCloseDrawer = () =>{
+
+  const handleCloseDrawer = () => {
     setDrawerOpen(false)
-  } 
+  }
   useEffect(() => {
-    const doNotHaveMedicalAssociation = rememberMe ? (localStorage.getItem("doNotHaveMedicalAssociation")==="true") : (sessionStorage.getItem("doNotHaveMedicalAssociation")==="true")
     const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
-    const raw = rememberMe?localStorage.getItem("ip_general_information"):sessionStorage.getItem("ip_general_information")
-    const ip_type_token = raw?JSON.parse(raw):null
+    const raw = rememberMe ? localStorage.getItem("ip_general_information") : sessionStorage.getItem("ip_general_information")
+    const ip_type_token = raw ? JSON.parse(raw) : null
     if (!token) {
       router.push('/login')
     }
-    else if (!ip_type_token || doNotHaveMedicalAssociation) {
-      console.log("IP_TYPE_TOKEN",!ip_type_token)
-      console.log("DO NOT MEDI",doNotHaveMedicalAssociation)
+    else if (!ip_type_token) {
       router.push('/sales/ip_general_information')
     }
   }, [])
+
+
+  useEffect(() => {
+    const doNotHaveMedicalAssociation = rememberMe ? (localStorage.getItem("doNotHaveMedicalAssociation") === "true") : (sessionStorage.getItem("doNotHaveMedicalAssociation") === "true");
+    if (doNotHaveMedicalAssociation) {
+      setDontHaveMedicalAssociation(doNotHaveMedicalAssociation);
+    }
+  }, [rememberMe]);
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto ">
       <IP_Header text="Medical Association Details" />
@@ -214,6 +231,7 @@ const IP_Medical_Association_Details = () => {
             Name of Medical Association *
           </Label>
           <Input
+            disabled={dontHaveMedicalAssociation}
             id="name"
             type="text"
             placeholder="Enter Name of Medical Association"
@@ -222,10 +240,12 @@ const IP_Medical_Association_Details = () => {
             onBlur={() => handleBlur("name")}
             className="bg-white rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] placeholder:text-gray-500 py-3 px-4 h-[39px]"
           />
-          {touched.name && !isNameValid() && (
-            <span className="text-red-500 text-sm mt-1 block">
-              Medical Association Name is required
-            </span>
+          {!dontHaveMedicalAssociation && (
+            touched.name && !isNameValid() && (
+              <span className="text-red-500 text-sm mt-1 block">
+                Medical Association Name is required
+              </span>
+            )
           )}
         </div>
         <div>
@@ -243,16 +263,17 @@ const IP_Medical_Association_Details = () => {
             onChange={(e) => handleTextInputChange(e, "medicalAssociationNumber")}
             onBlur={() => handleBlur("medicalAssociationNumber")}
             disabled={!isNameValid()}
-            className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-              isNameValid()
-                ? "bg-white placeholder:text-gray-500"
-                : "bg-[#ffffff90] placeholder:text-[#00000040]"
-            }`}
+            className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${isNameValid()
+              ? "bg-white placeholder:text-gray-500"
+              : "bg-[#ffffff90] placeholder:text-[#00000040]"
+              }`}
           />
-          {touched.medicalAssociationNumber && !isMedicalAssociationNumberValid() && (
-            <span className="text-red-500 text-sm mt-1 block">
-              Medical Association Number is required
-            </span>
+          {!dontHaveMedicalAssociation && (
+            touched.medicalAssociationNumber && !isMedicalAssociationNumberValid() && (
+              <span className="text-red-500 text-sm mt-1 block">
+                Medical Association Number is required
+              </span>
+            )
           )}
         </div>
         <div className="mt-[21px] bg-[#FFFFFF80] rounded-[12px] p-4 h-[184px]">
@@ -261,26 +282,40 @@ const IP_Medical_Association_Details = () => {
               Upload Certificate *
             </span>
             <div className="">
-            <Drawer open={drawerOpen} onClose={handleCloseDrawer} >
-              <DrawerTrigger>
-                <Button
-                  className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] rounded-[8px] flex items-center justify-center w-[87px] h-[32px]"
-                  disabled={!isMedicalAssociationNumberValid()}
-                  onClick={()=>setDrawerOpen(true)}
-                >
-                  + Add
-                </Button>
-              </DrawerTrigger>
-              <DrawerTitle></DrawerTitle>
-              <DrawerContent className="bg-gradient-to-b from-[#e7e4f8] via-[#f0e1df] via-70% to-[#feedea] bottom-drawer">
-                <DrawerHeader>
-                  <DrawerDescription className="flex flex-col gap-3">
-                    {isMobile && (
+              <Drawer open={drawerOpen} onClose={handleCloseDrawer} >
+                <DrawerTrigger>
+                  <Button
+                    className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] rounded-[8px] flex items-center justify-center w-[87px] h-[32px]"
+                    disabled={!isMedicalAssociationNumberValid()}
+                    onClick={() => setDrawerOpen(true)}
+                  >
+                    + Add
+                  </Button>
+                </DrawerTrigger>
+                <DrawerTitle></DrawerTitle>
+                <DrawerContent className="bg-gradient-to-b from-[#e7e4f8] via-[#f0e1df] via-70% to-[#feedea] bottom-drawer">
+                  <DrawerHeader>
+                    <DrawerDescription className="flex flex-col gap-3">
+                      {isMobile && (
+                        <Button
+                          className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px] rounded-[8.62px]"
+                          onClick={() => handleFileInputTrigger("camera")}
+                        >
+                          Take Photo
+                          <Image
+                            src="/images/arrow.png"
+                            width={24}
+                            height={24}
+                            className="w-[24px]"
+                            alt="arrow"
+                          />
+                        </Button>
+                      )}
                       <Button
                         className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px] rounded-[8.62px]"
-                        onClick={() => handleFileInputTrigger("camera")}
+                        onClick={() => handleFileInputTrigger("gallery")}
                       >
-                        Take Photo
+                        Choose from Gallery
                         <Image
                           src="/images/arrow.png"
                           width={24}
@@ -289,60 +324,46 @@ const IP_Medical_Association_Details = () => {
                           alt="arrow"
                         />
                       </Button>
-                    )}
-                    <Button
-                      className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px] rounded-[8.62px]"
-                      onClick={() => handleFileInputTrigger("gallery")}
-                    >
-                      Choose from Gallery
-                      <Image
-                        src="/images/arrow.png"
-                        width={24}
-                        height={24}
-                        className="w-[24px]"
-                        alt="arrow"
+                      <Button
+                        className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px] rounded-[8.62px]"
+                        onClick={() => handleFileInputTrigger("file")}
+                      >
+                        Upload from File
+                        <Image
+                          src="/images/arrow.png"
+                          width={24}
+                          height={24}
+                          className="w-[24px]"
+                          alt="arrow"
+                        />
+                      </Button>
+                      <input
+                        ref={cameraInputRef}
+                        type="file"
+                        accept="image/*"
+                        capture="environment"
+                        className="hidden"
+                        onChange={handleFileUpload}
                       />
-                    </Button>
-                    <Button
-                      className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex justify-between items-center w-full h-[50px] rounded-[8.62px]"
-                      onClick={() => handleFileInputTrigger("file")}
-                    >
-                      Upload from File
-                      <Image
-                        src="/images/arrow.png"
-                        width={24}
-                        height={24}
-                        className="w-[24px]"
-                        alt="arrow"
+                      <input
+                        ref={galleryInputRef}
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleFileUpload}
                       />
-                    </Button>
-                    <input
-                      ref={cameraInputRef}
-                      type="file"
-                      accept="image/*"
-                      capture="environment"
-                      className="hidden"
-                      onChange={handleFileUpload}
-                    />
-                    <input
-                      ref={galleryInputRef}
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={handleFileUpload}
-                    />
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/*,application/pdf"
-                      className="hidden"
-                      onChange={handleFileUpload}
-                    />
-                  </DrawerDescription>
-                </DrawerHeader>
-                <DrawerFooter className="p-0"></DrawerFooter>
-              </DrawerContent>
-            </Drawer>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*,application/pdf"
+                        className="hidden"
+                        onChange={handleFileUpload}
+                      />
+                    </DrawerDescription>
+                  </DrawerHeader>
+                  <DrawerFooter className="p-0"></DrawerFooter>
+                </DrawerContent>
+              </Drawer>
             </div>
           </div>
           <div className="flex items-center gap-2 mt-4 overflow-x-auto">
@@ -384,14 +405,34 @@ const IP_Medical_Association_Details = () => {
                 </Dialog>
               </div>
             ))}
-            {touched.certificates && !isCertificatesValid() && (
-              <span className="text-red-500 text-sm mt-1 block">
-                At least one certificate is required
-              </span>
+            {!dontHaveMedicalAssociation && (
+              touched.certificates && !isCertificatesValid() && (
+                <span className="text-red-500 text-sm mt-1 block">
+                  At least one certificate is required
+                </span>
+              )
             )}
           </div>
         </div>
+        <div className="mt-5 flex items-center gap-2">
+          <Checkbox
+            onCheckedChange={(checked) => {
+              setDontHaveMedicalAssociation(checked)
+              if (rememberMe) {
+                localStorage.setItem("doNotHaveMedicalAssociation", !!checked)
+              }
+              else {
+                sessionStorage.setItem("doNotHaveMedicalAssociation", !!checked)
+              }
+            }}
+            id='have_medical_association'
+            className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"
+            checked={dontHaveMedicalAssociation}
+          />
+          <Label htmlFor="have_medical_association">I do not have a medical association</Label>
+        </div>
       </div>
+
       <div className="bg-gradient-to-b from-[#fce8e5] to-[#fce8e5] flex justify-center items-center gap-3 mt-[20.35px] fixed bottom-0 pb-[23px] left-0 right-0 px-[16px] max-w-[576px] mx-auto">
         <Button
           className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] rounded-[8px] flex items-center justify-center w-full h-[45px]"

@@ -69,11 +69,13 @@ const Page = ({ onStartClick }) => {
 
     // Check if the device is an Android device
     if (/android/i.test(userAgent)) {
-        window.location.href = "https://play.google.com/store/apps/details?id=com.ekyamm.app&hl=en_IN"; // Replace with your Play Store link
+        window.location.href = "https://play.google.com/store/apps/details?id=com.ekyamm.app&hl=en_IN"; 
+        // Replace with your Play Store link
     }
     // Check if the device is an iOS device
     else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        window.location.href = "https://apps.apple.com/in/app/ekyamm-mh-clinic-companion/id6450462268"; // Replace with your App Store link
+        window.location.href = "https://apps.apple.com/in/app/ekyamm-mh-clinic-companion/id6450462268"; 
+        // Replace with your App Store link
     } else {
         // Fallback for unsupported devices
         window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}`;
@@ -109,7 +111,7 @@ const Page = ({ onStartClick }) => {
             content={`${process.env.NEXT_PUBLIC_BACKEND_URL}/download-app`}
           />
         </head>
-        <title>Delete Account Request Successful | Ekyamm</title>
+        <title>Download App | Ekyamm</title>
       </Head>
 
       {/* Overlay */}
