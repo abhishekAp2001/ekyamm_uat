@@ -396,14 +396,13 @@ const UpcomingSession = ({
                         !hideTooltip && (
                           <div className="absolute bottom-full left-1/2 -translate-x-1/2 z-10 flex flex-col items-center transition-opacity duration-200 group-hover:opacity-100 opacity-0 pointer-events-auto">
                             <div className="bg-[#776EA5] text-white text-[14px] leading-[20px] px-[13px] py-[8px] rounded-[8px] w-[256px] text-center relative">
-                              Session will start on 12th May at
+                              Session will start on {convertUTCtoIST(session?.sessionTime?.from).date} at
                               <br />
-                              11.00AM as scheduled
-                              {/* Cancel (×) button */}
+                              {convertUTCtoIST(session?.sessionTime?.from).time} as scheduled
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  setHideTooltip(true); // Only hides during this hover
+                                  setHideTooltip(true);
                                 }}
                                 className="absolute right-[10px] top-[6px] text-white text-[16px] font-bold leading-none focus:outline-none"
                                 aria-label="Close tooltip"
@@ -503,9 +502,8 @@ const UpcomingSession = ({
                       </div>
                       {/* Chevron icon (rotated) */}
                       <ChevronDown
-                        className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${
-                          isExpanded ? "rotate-180" : ""
-                        }`}
+                        className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""
+                          }`}
                       />
                     </div>
 
@@ -528,7 +526,7 @@ const UpcomingSession = ({
                     <div className="flex gap-4 items-center mt-2">
                       <Button
                         variant="outline"
-                        className="border-[#CC627B] text-[#CC627B] font-semibold text-[14px] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center w-[48%] "
+                        className="border-[#CC627B] text-[#CC627B] font-semibold text-[14px] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center flex-1"
                         onClick={(e) => {
                           e.stopPropagation();
                           router.push(
@@ -538,19 +536,46 @@ const UpcomingSession = ({
                       >
                         Reschedule Session
                       </Button>
-                      <Button
-                        disabled={
-                          !isWithinTwoMinutesBefore(session?.sessionTime?.from)
-                        }
-                        className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[14px] font-[600] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center w-[48%] disabled:opacity-60 disabled:cursor-not-allowed"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleStartCall(session?._id, session?.videoRoomName);
-                        }}
+
+                      <div
+                        className="relative group flex-1"
+                        onMouseEnter={() => setHideTooltip(false)}
+                        onMouseLeave={() => setHideTooltip(false)}
                       >
-                        Start Call
-                      </Button>
+                        <Button
+                          disabled={!isWithinTwoMinutesBefore(session?.sessionTime?.from)}
+                          className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[14px] font-[600] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center w-full disabled:opacity-60 disabled:cursor-not-allowed"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleStartCall(session?._id, session?.videoRoomName);
+                          }}
+                        >
+                          Start Call
+                        </Button>
+
+                        {!isWithinTwoMinutesBefore(session?.sessionTime?.from) && !hideTooltip && (
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 z-10 flex flex-col items-center transition-opacity duration-200 group-hover:opacity-100 opacity-0 pointer-events-auto">
+                            <div className="bg-[#776EA5] text-white text-[14px] leading-[20px] px-[13px] py-[8px] rounded-[8px] w-[256px] text-center relative">
+                              Session will start on {convertUTCtoIST(session?.sessionTime?.from).date} at
+                              <br />
+                              {convertUTCtoIST(session?.sessionTime?.from).time} as scheduled
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setHideTooltip(true);
+                                }}
+                                className="absolute right-[10px] top-[6px] text-white text-[16px] font-bold leading-none focus:outline-none"
+                                aria-label="Close tooltip"
+                              >
+                                ×
+                              </button>
+                            </div>
+                            <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-l-transparent border-r-transparent border-t-[#776EA5]"></div>
+                          </div>
+                        )}
+                      </div>
                     </div>
+
                   </div>
                 )}
               </div>
