@@ -21,8 +21,13 @@ import Certifications from "./Certifications/Certifications";
 import Client_Testimonial from "./Client_Testimonials/Client_Testimonial";
 import Daily from "@daily-co/daily-js";
 import { useRememberMe } from "@/app/context/RememberMeContext";
-const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions,pastSession }) => {
-  const {rememberMe} = useRememberMe()
+const UpcomingSession = ({
+  showUpcomingButtons = true,
+  upcomingsessions,
+  pastSession,
+}) => {
+  const [hideTooltip, setHideTooltip] = useState(false);
+  const { rememberMe } = useRememberMe();
   const [patientSessionToken, setPatientSessionToken] = useState(null);
   const [patient, setPatient] = useState(null);
   const [showCounsellorProfile, setShowCounsellorProfile] = useState(false);
@@ -44,32 +49,32 @@ const UpcomingSession = ({ showUpcomingButtons = true, upcomingsessions,pastSess
       router.push("/patient/login");
     }
   }, []);
-function convertUTCtoIST(utcDateStr) {
-  const date = new Date(utcDateStr);
+  function convertUTCtoIST(utcDateStr) {
+    const date = new Date(utcDateStr);
 
-  const options = {
-    timeZone: "Asia/Kolkata",
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-    day: "numeric",
-    month: "long",
-  };
+    const options = {
+      timeZone: "Asia/Kolkata",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+      day: "numeric",
+      month: "long",
+    };
 
-  const formatter = new Intl.DateTimeFormat("en-IN", options);
-  const parts = formatter.formatToParts(date);
+    const formatter = new Intl.DateTimeFormat("en-IN", options);
+    const parts = formatter.formatToParts(date);
 
-  const day = parts.find((p) => p.type === "day")?.value;
-  const month = parts.find((p) => p.type === "month")?.value;
-  const hour = parts.find((p) => p.type === "hour")?.value;
-  const minute = parts.find((p) => p.type === "minute")?.value;
-  const dayPeriod = parts.find((p) => p.type === "dayPeriod")?.value;
+    const day = parts.find((p) => p.type === "day")?.value;
+    const month = parts.find((p) => p.type === "month")?.value;
+    const hour = parts.find((p) => p.type === "hour")?.value;
+    const minute = parts.find((p) => p.type === "minute")?.value;
+    const dayPeriod = parts.find((p) => p.type === "dayPeriod")?.value;
 
-  return {
-    date: `${day} ${month}`,
-    time: `${hour}:${minute} ${dayPeriod}`,
-  };
-}
+    return {
+      date: `${day} ${month}`,
+      time: `${hour}:${minute} ${dayPeriod}`,
+    };
+  }
 
   function getTimeDifference(from, to) {
     const fromDate = new Date(from);
@@ -96,13 +101,12 @@ function convertUTCtoIST(utcDateStr) {
           }
         );
         if (response?.data?.success) {
-          let maxAge = {}
-        if(rememberMe){
-          maxAge = { maxAge: 60 * 60 * 24 * 30 }
-        }
-        else if(!rememberMe){
-          maxAge = {}
-        }
+          let maxAge = {};
+          if (rememberMe) {
+            maxAge = { maxAge: 60 * 60 * 24 * 30 };
+          } else if (!rememberMe) {
+            maxAge = {};
+          }
           setTherapist(response?.data?.data?.practitionerTagged[0]);
           setCookie(
             "selectedCounsellor",
@@ -121,14 +125,13 @@ function convertUTCtoIST(utcDateStr) {
     getTherapistDetails();
   }, [patientSessionToken]);
   const handleBookNowClick = () => {
-    let maxAge = {}
-        if(rememberMe){
-          maxAge = { maxAge: 60 * 60 * 24 * 30 }
-        }
-        else if(!rememberMe){
-          maxAge = {}
-        }
-    setCookie("selectedCounsellor", JSON.stringify(therapist),maxAge);
+    let maxAge = {};
+    if (rememberMe) {
+      maxAge = { maxAge: 60 * 60 * 24 * 30 };
+    } else if (!rememberMe) {
+      maxAge = {};
+    }
+    setCookie("selectedCounsellor", JSON.stringify(therapist), maxAge);
     if (patient.availableCredits === 0) {
       router.push("/patient/select-package");
     } else {
@@ -138,40 +141,42 @@ function convertUTCtoIST(utcDateStr) {
 
   const loadQuicksandFont = () => {
     const link = document.createElement("link");
-    link.href = "https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap";
+    link.href =
+      "https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap";
     link.rel = "stylesheet";
     document.head.appendChild(link);
   };
 
-  
- 
   const handleStartCall = async (sessionId, roomName) => {
     loadQuicksandFont();
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/session/verify`, {
-        "sessionId": sessionId
-      },
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/session/verify`,
+        {
+          sessionId: sessionId,
+        },
         {
           headers: {
             accesstoken: patientSessionToken,
           },
-        })
+        }
+      );
       if (response?.data?.success) {
-        showSuccessToast(response?.data?.data?.message)
+        showSuccessToast(response?.data?.data?.message);
         const call = Daily.createFrame({
           showLeaveButton: true,
           iframeStyle: {
-            position: 'fixed',
-            top: '0',
-            left: '0',
-            width: '100%',
-            height: '100%',
+            position: "fixed",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "100%",
             border: 0,
-    zIndex: 9999,
-    background: '#000',
+            zIndex: 9999,
+            background: "#000",
           },
         });
- 
+
         call.setTheme({
           light: {
             colors: {
@@ -181,7 +186,7 @@ function convertUTCtoIST(utcDateStr) {
             },
             fonts: {
               default: '"Quicksand", sans-serif',
-            }        
+            },
           },
           dark: {
             colors: {
@@ -194,19 +199,18 @@ function convertUTCtoIST(utcDateStr) {
           url: `${process.env.NEXT_PUBLIC_VIDEO_CALL_URL}/${roomName}`,
           token: response?.data?.data?.token,
         });
-        call.on('left-meeting', () => {
+        call.on("left-meeting", () => {
           call.destroy();
-          router.push('/patient/dashboard')
-});
+          router.push("/patient/dashboard");
+        });
       }
     } catch (error) {
-      console.error("error", error)
-      const errorMessage = error?.response?.data?.error?.message || "Something went wrong";
+      console.error("error", error);
+      const errorMessage =
+        error?.response?.data?.error?.message || "Something went wrong";
       showErrorToast(errorMessage);
- 
     }
-  }
- 
+  };
 
   const isWithinTwoMinutesBefore = (fromTime) => {
     if (!fromTime) return false;
@@ -293,7 +297,8 @@ function convertUTCtoIST(utcDateStr) {
                               setShowCounsellorProfile(true);
                             }}
                           >
-                            <AvatarImage className=""
+                            <AvatarImage
+                              className=""
                               src={
                                 patient?.practitionerTagged[0]
                                   ?.generalInformation?.profileImageUrl
@@ -359,7 +364,7 @@ function convertUTCtoIST(utcDateStr) {
                 {/* COLLAPSED FOOTER */}
                 {!isExpanded && (
                   <div className="flex gap-3">
-                    <Button
+                    {/* <Button
                       disabled = {!isWithinTwoMinutesBefore(session?.sessionTime?.from)}
                       className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[14px] font-[600] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center w-[48%] disabled:opacity-60 disabled:cursor-not-allowed"
                       onClick={(e) => {
@@ -368,7 +373,49 @@ function convertUTCtoIST(utcDateStr) {
                       }}
                     >
                       Start Call
-                    </Button>
+                    </Button> */}
+                    <div
+                      className="relative group w-[48%]"
+                      onMouseEnter={() => setHideTooltip(false)} // Reset on every hover
+                      onMouseLeave={() => setHideTooltip(false)} // Optional safety
+                    >
+                      <Button
+                        disabled={
+                          !isWithinTwoMinutesBefore(session?.sessionTime?.from)
+                        }
+                        className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[14px] font-[600] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center w-full disabled:opacity-60 disabled:cursor-not-allowed"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleStartCall(session?._id, session?.videoRoomName);
+                        }}
+                      >
+                        Start Call
+                      </Button>
+
+                      {!isWithinTwoMinutesBefore(session?.sessionTime?.from) &&
+                        !hideTooltip && (
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 z-10 flex flex-col items-center transition-opacity duration-200 group-hover:opacity-100 opacity-0 pointer-events-auto">
+                            <div className="bg-[#776EA5] text-white text-[14px] leading-[20px] px-[13px] py-[8px] rounded-[8px] w-[256px] text-center relative">
+                              Session will start on 12th May at
+                              <br />
+                              11.00AM as scheduled
+                              {/* Cancel (×) button */}
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setHideTooltip(true); // Only hides during this hover
+                                }}
+                                className="absolute right-[10px] top-[6px] text-white text-[16px] font-bold leading-none focus:outline-none"
+                                aria-label="Close tooltip"
+                              >
+                                ×
+                              </button>
+                            </div>
+                            <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-l-transparent border-r-transparent border-t-[#776EA5]"></div>
+                          </div>
+                        )}
+                    </div>
+
                     <div className="text-[#6D6A5D] text-xs font-medium">
                       Previous Session:
                       <br />
