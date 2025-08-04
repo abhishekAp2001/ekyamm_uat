@@ -344,7 +344,7 @@ const P_Mobile_Verification = ({ type }) => {
           </div>
         </div>
         <div className="flex flex-col justify-center items-center w-full">
-          <div className="border-2 bg-[#FFFFFF80] border-[#FFFFFF4D] rounded-4xl py-[47.28px] px-6  mx-4 text-center w-full">
+          <div className="border-2 bg-[#FFFFFF80] border-[#FFFFFF4D] rounded-4xl py-[28.28px] px-6  mx-4 text-center w-full">
             <strong className="text-[16px] text-black font-[600] text-center">
               Create Profile
             </strong>
