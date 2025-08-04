@@ -17,8 +17,10 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { X } from "lucide-react";
-
+import { removeStorage } from "@/lib/utils";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 const CP_buttons = ({ disabled, onSave, buttonText = "Save & Continue" }) => {
+  const {rememberMe} = useRememberMe()
   const router = useRouter();
   const [show,setShow] = useState(false)
   const handleClose = () =>{
@@ -26,11 +28,16 @@ const CP_buttons = ({ disabled, onSave, buttonText = "Save & Continue" }) => {
   }
   const handleCancel = () => {
     router.push("/sales");
-    deleteCookie("cp_type");
-    deleteCookie("cp_clinic_details");
-    deleteCookie("cp_doctor_details");
-    deleteCookie("cp_billing_details");
-    deleteCookie("cp_bank_details");
+    // deleteCookie("cp_type");
+    // deleteCookie("cp_clinic_details");
+    // deleteCookie("cp_doctor_details");
+    // deleteCookie("cp_billing_details");
+    // deleteCookie("cp_bank_details");
+    removeStorage("cp_type",rememberMe)
+    removeStorage("cp_clinic_details",rememberMe)
+    removeStorage("cp_doctor_details",rememberMe)
+    removeStorage("cp_billing_details",rememberMe)
+    removeStorage("cp_bank_details",rememberMe)
   };
 
   return (

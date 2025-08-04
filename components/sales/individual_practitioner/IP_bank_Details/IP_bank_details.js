@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import IP_Header from "../IP_Header/IP_Header";
 import IP_Buttons from "../IP_Buttons/IP_Buttons";
 import { Button } from "../../../ui/button";
-import { base64ToFile } from "@/lib/utils";
+import { base64ToFile, getStorage } from "@/lib/utils";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "../../../ui/drawer";
 import { X } from "lucide-react";
@@ -396,7 +396,8 @@ const IP_bank_details = () => {
     }
   };
   useEffect(() => {
-    const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+    // const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+    const token = getStorage("user", rememberMe);
     const raw = rememberMe ? localStorage.getItem("ip_single_session_fees") : sessionStorage.getItem("ip_single_session_fees")
     const ip_type_token = raw ? JSON.parse(raw) : null;
     if (!token) {

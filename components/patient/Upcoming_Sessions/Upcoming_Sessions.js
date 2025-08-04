@@ -6,7 +6,7 @@ import { Eye, EyeOff, Funnel, Link2, MapPin, Menu, Phone, Plus } from "lucide-re
 import { Accordion } from "../../ui/accordion";
 import DoctorCard from "../DoctorCard";
 import SessionDrawer from "../SessionDrawer";
-import { doctors, pastSessions, upcomingSession } from "@/lib/utils";
+import { doctors, getStorage, pastSessions, upcomingSession } from "@/lib/utils";
 import Sidebar from "../Sidebar/Sidebar";
 import UpcomingSession from "../UpcomingSession";
 import PastSessions from "../PastSessions";
@@ -20,7 +20,9 @@ import { showErrorToast } from "@/lib/toast";
 import { Baseurl } from "@/lib/constants";
 import { getCookie } from "cookies-next";
 import { Loader2 } from "lucide-react";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 const Upcoming_Sessions = ({dashboard = false}) => {
+  const {rememberMe} = useRememberMe();
   const pathname = usePathname();
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -52,10 +54,12 @@ const Upcoming_Sessions = ({dashboard = false}) => {
         
 useEffect(() => {
   if (typeof window === "undefined") return; // Only run on client
-  const cookie = getCookie("patientSessionData");
+  // const cookie = getCookie("patientSessionData");
+  const cookie = getStorage("patientSessionData", rememberMe);
+
   try {
     if (cookie && cookie !== "undefined") {
-      const parsed = JSON.parse(cookie);
+      const parsed = cookie
       if (parsed?.token) setPatientSessionToken(parsed.token);
     }
     else {

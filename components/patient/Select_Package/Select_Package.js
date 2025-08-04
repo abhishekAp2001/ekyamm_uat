@@ -41,7 +41,8 @@ import Image from "next/image";
 import Footer_bar from "../../Footer_bar/Footer_bar";
 import {
   patientSessionData as getPatientSessionData,
-  selectedCounsellorData as getSelectedCounsellorData
+  selectedCounsellorData as getSelectedCounsellorData,
+  setStorage
 } from "@/lib/utils";
 import { setCookie } from "cookies-next";
 import { useRememberMe } from "@/app/context/RememberMeContext";
@@ -239,6 +240,7 @@ const Select_Package = () => {
                     placeholder="Enter Session Fees"
                     className="w-full h-[39px] rounded-[7.26px] bg-white p-4 ps-7 text-sm font-semibold placeholder:text-gray-500 placeholder:font-medium text-black"
                     value={totalPrice}
+                    readOnly
                   />
                   <IndianRupee
                     className="absolute top-2 left-3 text-[#00000066]"
@@ -308,7 +310,8 @@ const Select_Package = () => {
                 else if (!rememberMe) {
                   maxAge = {}
                 }
-                setCookie("session_selection", JSON.stringify({ "total": totalPrice, "session_count": selectedPackageIdx }), maxAge)
+                // setCookie("session_selection", JSON.stringify({ "total": totalPrice, "session_count": selectedPackageIdx }), maxAge)
+                setStorage("session_selection", { "total": totalPrice, "session_count": selectedPackageIdx }, rememberMe, 2592000 );
                 router.push(`/patient/pay-for-sessions`);
               }}
               disabled={selectedPackageIdx === 1}

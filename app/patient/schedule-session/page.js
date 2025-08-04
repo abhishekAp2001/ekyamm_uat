@@ -1,5 +1,7 @@
-
-import Schedule_Session from "@/components/patient/Schedule-Session/Schedule_Session";
+"use client"
+import dynamic from "next/dynamic";
+const Schedule_Session = dynamic(() => import('@/components/patient/Schedule-Session/Schedule_Session'),{ssr: false})
+// import Schedule_Session from "@/components/patient/Schedule-Session/Schedule_Session";
 import React from "react";
 
 const page = () => {

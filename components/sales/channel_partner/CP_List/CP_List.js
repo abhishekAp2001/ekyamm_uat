@@ -8,8 +8,10 @@ import List from "./CPList";
 import CPList from "./CPList";
 import { useRouter } from "next/navigation";
 import { getCookie, hasCookie } from "cookies-next";
-
+import { getStorage } from "@/lib/utils";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 const CP_List = () => {
+  const {rememberMe} = useRememberMe()
   const axios = axiosInstance();
   const router = useRouter()
   const [channelPartnerList, setChannelPartnerList] = useState([]);
@@ -31,7 +33,8 @@ const CP_List = () => {
   }, []);
 
     useEffect(()=>{
-      const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
+      // const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
+      const token = getStorage("user", rememberMe);
       if(!token){
         router.push('/login')
       }

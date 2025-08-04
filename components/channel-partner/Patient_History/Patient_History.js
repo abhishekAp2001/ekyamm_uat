@@ -24,6 +24,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "../../ui/drawer";
+import { getStorage, removeStorage, setStorage } from "@/lib/utils";
 polyfillCountryFlagEmojis();
 
 const Patient_History = ({ type }) => {
@@ -82,10 +83,13 @@ const Patient_History = ({ type }) => {
 
       if (response?.data?.success === true) {
         // showSuccessToast(response?.data?.data?.message || "Patient added.");
-        setCookie(
+        // setCookie(
+        //   "invitePatientInfo",
+        //   JSON.stringify({...response?.data?.data?.patient,patientType: patientPreviousData?.patientType})
+        // );
+        setStorage(
           "invitePatientInfo",
-          JSON.stringify({...response?.data?.data?.patient,patientType: patientPreviousData?.patientType})
-        );
+          {...response?.data?.data?.patient,patientType: patientPreviousData?.patientType})
         router.push(`/channel-partner/${type}/sessions-selection`);
       } else {
         showErrorToast(
@@ -115,7 +119,8 @@ const Patient_History = ({ type }) => {
 
       if (response?.data?.success === true) {
         showSuccessToast(response?.data?.data?.message || "Patient deleted.");
-        deleteCookie("invitePatientInfo");
+        // deleteCookie("invitePatientInfo");
+        removeStorage("invitePatientInfo")
         router.push(`/channel-partner/${type}/patient-registration`);
       } else {
         showErrorToast(
@@ -163,11 +168,13 @@ const Patient_History = ({ type }) => {
   }, []);
 
   useEffect(() => {
-    const cookieData = getCookie("channelPartnerData");
-    const patientData = getCookie("invitePatientInfo");
+    // const cookieData = getCookie("channelPartnerData");
+    // const patientData = getCookie("invitePatientInfo");
+    const cookieData = getStorage("channelPartnerData");
+    const patientData = getStorage("invitePatientInfo");
     if (cookieData) {
       try {
-        const parsedData = JSON.parse(cookieData);
+        const parsedData = cookieData
         // console.log("parsedData", parsedData);
         setChannelPartnerData(parsedData);
       } catch (error) {
@@ -180,7 +187,7 @@ const Patient_History = ({ type }) => {
 
     if (patientData) {
       try {
-        const parsedData = JSON.parse(patientData);
+        const parsedData = patientData
         setFullName(`${parsedData?.firstName} ${parsedData?.lastName}`);
         // console.log('parsedData_history_patient',parsedData)
         setPatientPreviousData(parsedData);
@@ -204,9 +211,10 @@ const Patient_History = ({ type }) => {
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
         <PR_Header
           type={type}
-          patientType={hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType}
+          // patientType={hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType}
+          patientType={getStorage("invitePatientInfo").patientType}
           text={
-            hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType === 1 ? "Existing Patient" : "New Patient Registration"
+            getStorage("invitePatientInfo")?.patientType === 1 ? "Existing Patient" : "New Patient Registration"
           }
           handleCancel={handleCancel}
         />
@@ -323,8 +331,14 @@ const Patient_History = ({ type }) => {
                 <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
                   <DrawerHeader>
                     <DrawerTitle className="text-[16px] font-[600] text-center">
-                      {
+                      {/* {
                          hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType === 1 ? 
+                         "By cancelling, you are confirming to not add additional session for this patient" 
+                         :
+                          "By cancelling, you are confirming to not Invite this patient to avail body-mind-emotional balance"
+                      } */}
+                      {
+                         getStorage("invitePatientInfo").patientType === 1 ? 
                          "By cancelling, you are confirming to not add additional session for this patient" 
                          :
                           "By cancelling, you are confirming to not Invite this patient to avail body-mind-emotional balance"
@@ -332,12 +346,21 @@ const Patient_History = ({ type }) => {
                     </DrawerTitle>
                     <DrawerDescription className="mt-6 flex gap-3 w-full">
                       <Button onClick={()=>{
-                        if(hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType === 1){
-                          deleteCookie("invitePatientInfo")
-                          deleteCookie("sessions_selection")
+                        // if(hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType === 1){
+                        //   deleteCookie("invitePatientInfo")
+                        //   deleteCookie("sessions_selection")
+                        //   router.push(`/channel-partner/${type}/patient-registration`)
+                        // }
+                        // if(hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType === 2){
+                        //   setShow(false)
+                        //   handleCancel()
+                        // }
+                        if(getStorage("invitePatientInfo").patientType === 1){
+                          removeStorage("invitePatientInfo")
+                          removeStorage("sessions_selection")
                           router.push(`/channel-partner/${type}/patient-registration`)
-                        }
-                        if(hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType === 2){
+                          }
+                        if(getStorage("invitePatientInfo").patientType === 2){
                           setShow(false)
                           handleCancel()
                         }

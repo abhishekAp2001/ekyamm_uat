@@ -25,14 +25,14 @@ import axios from "axios";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { isMobile } from "react-device-detect";
 import PP_Header from "../PP_Header/PP_Header";
-import { base64ToFile } from "@/lib/utils";
+import { base64ToFile, getStorage, setStorage } from "@/lib/utils";
 import { X } from "lucide-react";
 import { useRememberMe } from "@/app/context/RememberMeContext";
 
 polyfillCountryFlagEmojis();
 
 const Edit_Patient = ({ type }) => {
-    const{rememberMe} = useRememberMe()
+    const { rememberMe } = useRememberMe()
     const router = useRouter();
     const customAxios = axiosInstance();
     const cameraInputRef = useRef(null);
@@ -130,17 +130,19 @@ const Edit_Patient = ({ type }) => {
 
     // Fetch patient data and verify channel partner
     useEffect(() => {
-        const userCookie = getCookie("patientSessionData");
+        // const userCookie = getCookie("patientSessionData");
+        const userCookie = getStorage("patientSessionData", rememberMe);
         if (!userCookie) {
             router.push(`/patient/${type}/create/password`);
             return;
         }
-        const parsedPatientData = JSON.parse(userCookie);
+        const parsedPatientData = userCookie;
         setPatientData(parsedPatientData);
 
         const getPatient = async () => {
             try {
-                const userData = JSON.parse(getCookie("patientSessionData"));
+                // const userData = JSON.parse(getCookie("patientSessionData"));
+                const userData = getStorage("patientSessionData", rememberMe);
                 const token = userData?.token;
                 const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient/`, {
                     headers: {
@@ -205,7 +207,7 @@ const Edit_Patient = ({ type }) => {
 
     // Handle photo deletion
     const handlePhotoDelete = () => {
-        setFormData((prev) => ({ ...prev, profileImageBase64: "",profileImageUrl:"" }));
+        setFormData((prev) => ({ ...prev, profileImageBase64: "", profileImageUrl: "" }));
         setDrawerOpen(false);
     };
 
@@ -361,11 +363,12 @@ const Edit_Patient = ({ type }) => {
     };
 
     useEffect(() => {
-        const userDataCookie = getCookie("patientSessionData");
+        // const userDataCookie = getCookie("patientSessionData");
+        const userDataCookie = getStorage("patientSessionData", rememberMe);
         let token;
         if (userDataCookie) {
             try {
-                token = JSON.parse(userDataCookie).token;
+                token = userDataCookie.token;
             } catch (error) {
                 console.error("Error parsing userData cookie:", error);
             }
@@ -401,13 +404,14 @@ const Edit_Patient = ({ type }) => {
             );
             if (response?.data?.success) {
                 let maxAge = {}
-        if(rememberMe){
-          maxAge = { maxAge: 60 * 60 * 24 * 30 }
-        }
-        else if(!rememberMe){
-          maxAge = {}
-        }
-                setCookie("PatientInfo", JSON.stringify(response?.data?.data),maxAge);
+                if (rememberMe) {
+                    maxAge = { maxAge: 60 * 60 * 24 * 30 }
+                }
+                else if (!rememberMe) {
+                    maxAge = {}
+                }
+                // setCookie("PatientInfo", JSON.stringify(response?.data?.data), maxAge);
+                setStorage("PatientInfo", response?.data?.data, rememberMe, 2592000 );
                 router.push(`/patient/patient-profile`);
             }
         } catch (error) {
@@ -420,7 +424,7 @@ const Edit_Patient = ({ type }) => {
 
     const uploadImage = async (filename, type) => {
         try {
-            const file = await base64ToFile(filename,  0.6);
+            const file = await base64ToFile(filename, 0.6);
             const form = new FormData();
             form.append("filename", file);
             const response = await axios.post(
@@ -578,8 +582,8 @@ const Edit_Patient = ({ type }) => {
                         <Input
                             placeholder="Enter Last Name"
                             className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${formData.firstName
-                                    ? "bg-white placeholder:text-gray-500"
-                                    : "bg-[#ffffff90] placeholder:text-[#00000040]"
+                                ? "bg-white placeholder:text-gray-500"
+                                : "bg-[#ffffff90] placeholder:text-[#00000040]"
                                 }`}
                             value={formData.lastName}
                             onChange={(e) => handleTextInputChange(e, "lastName")}
@@ -659,8 +663,8 @@ const Edit_Patient = ({ type }) => {
                         <div className="flex items-center">
                             <Label
                                 className={`text-[15px] w-[55%] mb-[7.59px] ${isMobileValid(formData.primaryMobileNumber)
-                                        ? "text-gray-500"
-                                        : "text-[#00000040]"
+                                    ? "text-gray-500"
+                                    : "text-[#00000040]"
                                     }`}
                             >
                                 WhatsApp Number
@@ -686,8 +690,8 @@ const Edit_Patient = ({ type }) => {
                                 <label
                                     htmlFor="sameAsMobile"
                                     className={`text-[12px] ${isMobileValid(formData.primaryMobileNumber)
-                                            ? "text-gray-500"
-                                            : "text-[#00000040]"
+                                        ? "text-gray-500"
+                                        : "text-[#00000040]"
                                         }`}
                                 >
                                     Same as Mobile Number
@@ -748,8 +752,8 @@ const Edit_Patient = ({ type }) => {
                                     sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
                                 }
                                 className={`border rounded-[7.26px] border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
-                                        ? "bg-[#ffffff90] placeholder:text-[#00000040]"
-                                        : "bg-white placeholder:text-gray-500"
+                                    ? "bg-[#ffffff90] placeholder:text-[#00000040]"
+                                    : "bg-white placeholder:text-gray-500"
                                     }`}
                                 maxLength={10}
                             />
@@ -767,8 +771,8 @@ const Edit_Patient = ({ type }) => {
                     <div className="mt-[22px]">
                         <Label
                             className={`text-[15px] mb-[7.59px] ${isMobileValid(formData.primaryMobileNumber)
-                                    ? "text-gray-500"
-                                    : "text-[#00000040]"
+                                ? "text-gray-500"
+                                : "text-[#00000040]"
                                 }`}
                         >
                             Gender *
@@ -806,8 +810,8 @@ const Edit_Patient = ({ type }) => {
                         <Input
                             placeholder="Enter Email address"
                             className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${formData.gender
-                                    ? "bg-white placeholder:text-gray-500"
-                                    : "bg-[#ffffffde] placeholder:text-[#00000040]"
+                                ? "bg-white placeholder:text-gray-500"
+                                : "bg-[#ffffffde] placeholder:text-[#00000040]"
                                 }`}
                             value={formData.email}
                             disabled
@@ -832,8 +836,8 @@ const Edit_Patient = ({ type }) => {
                         <Input
                             placeholder="Enter Pincode"
                             className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${formData.gender
-                                    ? "bg-white placeholder:text-gray-500"
-                                    : "bg-[#ffffffde] placeholder:text-[#00000040]"
+                                ? "bg-white placeholder:text-gray-500"
+                                : "bg-[#ffffffde] placeholder:text-[#00000040]"
                                 }`}
                             onChange={(e) => handlePinCodeChange(e.target.value)}
                             value={formData.addressDetails.pincode}
@@ -859,8 +863,8 @@ const Edit_Patient = ({ type }) => {
                     <div>
                         <Label
                             className={`text-[15px] mb-[7.59px] mt-[22px] ${isPincodeValid(formData.addressDetails.pincode)
-                                    ? "text-gray-500"
-                                    : "text-[#00000040]"
+                                ? "text-gray-500"
+                                : "text-[#00000040]"
                                 }`}
                         >
                             Area
@@ -868,8 +872,8 @@ const Edit_Patient = ({ type }) => {
                         <Input
                             placeholder="Enter Area"
                             className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${isPincodeValid(formData.addressDetails.pincode)
-                                    ? "bg-white placeholder:text-gray-500"
-                                    : "bg-[#ffffff] placeholder:text-[#00000040]"
+                                ? "bg-white placeholder:text-gray-500"
+                                : "bg-[#ffffff] placeholder:text-[#00000040]"
                                 }`}
                             value={formData.addressDetails.area}
                             onChange={(e) =>
@@ -882,8 +886,8 @@ const Edit_Patient = ({ type }) => {
                     <div>
                         <Label
                             className={`text-[15px] mb-[7.59px] mt-[22px] ${isPincodeValid(formData.addressDetails.pincode)
-                                    ? "text-gray-500"
-                                    : "text-[#00000040]"
+                                ? "text-gray-500"
+                                : "text-[#00000040]"
                                 }`}
                         >
                             City
@@ -898,8 +902,8 @@ const Edit_Patient = ({ type }) => {
                     <div>
                         <Label
                             className={`text-[15px] mb-[7.59px] mt-[22px] ${isPincodeValid(formData.addressDetails.pincode)
-                                    ? "text-gray-500"
-                                    : "text-[#00000040]"
+                                ? "text-gray-500"
+                                : "text-[#00000040]"
                                 }`}
                         >
                             State
@@ -960,8 +964,8 @@ const Edit_Patient = ({ type }) => {
                     </Drawer>
                     <Button
                         className={`text-white text-[14px] font-[600] w-[48%] h-[45px] rounded-[8px] ${isFormValid()
-                                ? "bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0]"
-                                : "bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[#FFFFFF] cursor-not-allowed"
+                            ? "bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0]"
+                            : "bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[#FFFFFF] cursor-not-allowed"
                             }`}
                         onClick={handleSave}
                         disabled={!isFormValid()}

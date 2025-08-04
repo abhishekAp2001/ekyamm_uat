@@ -1,29 +1,39 @@
 import React,{useEffect} from 'react'
 import { hasCookie, getCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
+import { getStorage } from '@/lib/utils';
+import { useRememberMe } from '@/app/context/RememberMeContext';
 const Invoice = () => {
+    const { rememberMe } = useRememberMe();
     const router = useRouter()
-    const sessions_selection = hasCookie("session_selection")
-        ? JSON.parse(getCookie("session_selection"))
-        : null;
-    const selectedCounsellor = hasCookie("selectedCounsellor")
-        ? JSON.parse(getCookie("selectedCounsellor"))
-        : null;
-    const patientInfo = hasCookie("PatientInfo")
-        ? JSON.parse(getCookie("PatientInfo"))
-        : null;
-    const invitePatientInfo = hasCookie("invitePatientInfo")
-        ? JSON.parse(getCookie("invitePatientInfo"))
-        : null;
-    const qr_code_info = hasCookie("qrCodeInfo")
-        ? JSON.parse(getCookie("qrCodeInfo"))
-        : null;
-    const paymentStatusInfo = hasCookie("paymentStatusInfo")
-        ? JSON.parse(getCookie("paymentStatusInfo"))
-        : null;
-    const channelPartnerData = hasCookie("channelPartnerData")
-        ? JSON.parse(getCookie("channelPartnerData"))
-        : null;
+    const sessions_selection = getStorage("session_selection",rememberMe)
+    const selectedCounsellor = getStorage("selectedCounsellor",rememberMe)
+    const patientInfo = getStorage("PatientInfo",rememberMe)
+    const invitePatientInfo = getStorage("invitePatientInfo")
+    const qr_code_info = getStorage("qrCodeInfo")
+    const paymentStatusInfo = getStorage("paymentStatusInfo",)
+    const channelPartnerData = getStorage("channelPartnerData",)
+    // const sessions_selection = hasCookie("session_selection")
+    //     ? JSON.parse(getCookie("session_selection"))
+    //     : null;
+    // const selectedCounsellor = hasCookie("selectedCounsellor")
+    //     ? JSON.parse(getCookie("selectedCounsellor"))
+    //     : null;
+    // const patientInfo = hasCookie("PatientInfo")
+    //     ? JSON.parse(getCookie("PatientInfo"))
+    //     : null;
+    // const invitePatientInfo = hasCookie("invitePatientInfo")
+    //     ? JSON.parse(getCookie("invitePatientInfo"))
+    //     : null;
+    // const qr_code_info = hasCookie("qrCodeInfo")
+    //     ? JSON.parse(getCookie("qrCodeInfo"))
+    //     : null;
+    // const paymentStatusInfo = hasCookie("paymentStatusInfo")
+    //     ? JSON.parse(getCookie("paymentStatusInfo"))
+    //     : null;
+    // const channelPartnerData = hasCookie("channelPartnerData")
+    //     ? JSON.parse(getCookie("channelPartnerData"))
+    //     : null;
 
     // useEffect(() => {
     //     if (!sessions_selection || !selectedCounsellor || !patientInfo || !invitePatientInfo || !paymentStatusInfo || !channelPartnerData) {

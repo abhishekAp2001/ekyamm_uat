@@ -25,12 +25,13 @@ import axios from "axios";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { isMobile } from "react-device-detect";
 import PP_Header from "../PP_Header/PP_Header";
-import { base64ToFile } from "@/lib/utils";
+import { base64ToFile, getStorage, setStorage } from "@/lib/utils";
 import { X } from "lucide-react";
-
+import { useRememberMe } from "@/app/context/RememberMeContext";
 polyfillCountryFlagEmojis();
 
 const PP_Details = ({ type }) => {
+  const { rememberMe } = useRememberMe();
   const router = useRouter();
   const customAxios = axiosInstance();
   const cameraInputRef = useRef(null);
@@ -128,12 +129,13 @@ const PP_Details = ({ type }) => {
 
   // Fetch patient data and verify channel partner
   useEffect(() => {
-    const userCookie = getCookie("patientSessionData");
+    // const userCookie = getCookie("patientSessionData");
+    const userCookie = getStorage("patientSessionData", rememberMe);
     if (!userCookie) {
       router.push(`/patient/${type}/create/password`);
       return;
     }
-    const parsedPatientData = JSON.parse(userCookie);
+    const parsedPatientData = userCookie
     setPatientData(parsedPatientData);
 
     const verifyChannelPartner = async (username) => {
@@ -144,6 +146,7 @@ const PP_Details = ({ type }) => {
         });
         if (response?.data?.success) {
           setCookie("channelPartnerData", JSON.stringify(response.data.data));
+          setStorage("channelPartnerData", response.data.data);
           setChannelPartnerData(response.data.data);
           // setFormData((prev) => ({
           //   ...prev,
@@ -166,7 +169,8 @@ const PP_Details = ({ type }) => {
 
     const getPatient = async () => {
       try {
-        const userData = JSON.parse(getCookie("patientSessionData"));
+        // const userData = JSON.parse(getCookie("patientSessionData"));
+        const userData = getStorage("patientSessionData", rememberMe);
         const token = userData?.token;
         const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient/`, {
           headers: {
@@ -416,11 +420,12 @@ const PP_Details = ({ type }) => {
   };
 
   useEffect(() => {
-    const userDataCookie = getCookie("patientSessionData");
+    // const userDataCookie = getCookie("patientSessionData");
+    const userDataCookie = getStorage("patientSessionData", rememberMe);
     let token;
     if (userDataCookie) {
       try {
-        token = JSON.parse(userDataCookie).token;
+        token = userDataCookie.token;
       } catch (error) {
         console.error("Error parsing userData cookie:", error);
       }
@@ -455,7 +460,8 @@ const PP_Details = ({ type }) => {
                 }
             );
             if (response?.data?.success) {
-                setCookie("PatientInfo", JSON.stringify(response?.data?.data));
+                // setCookie("PatientInfo", JSON.stringify(response?.data?.data));
+                setStorage("PatientInfo", response?.data?.data);
                 router.push(`/patient/${type}/family-details`);
             }
         } catch (error) {

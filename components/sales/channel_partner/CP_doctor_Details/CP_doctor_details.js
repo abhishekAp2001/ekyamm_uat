@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { showErrorToast } from "@/lib/toast";
 import { useRememberMe } from "@/app/context/RememberMeContext";
+import { getStorage, setStorage } from "@/lib/utils";
 polyfillCountryFlagEmojis();
 
 const CP_doctor_details = () => {
@@ -86,10 +87,11 @@ const CP_doctor_details = () => {
 
   // Load form data from cookie on component mount
   useEffect(() => {
-    const savedData = getCookie("cp_doctor_details");
+    // const savedData = getCookie("cp_doctor_details");
+    const savedData = getStorage("cp_doctor_details", rememberMe);
     if (savedData) {
       try {
-        const parsedData = JSON.parse(savedData);
+        const parsedData = savedData
         let rawFirstName = parsedData.firstName;
         const titles = ["Dr.", "Prof.", "Mr.", "Ms."];
         for (const title of titles) {
@@ -178,7 +180,8 @@ const CP_doctor_details = () => {
           ? `${formData.title} ${formData.firstName}`
           : formData.firstName,
       };
-      setCookie("cp_doctor_details", saveData, maxAge);
+      // setCookie("cp_doctor_details", saveData, maxAge);
+      setStorage("cp_doctor_details", saveData, rememberMe, 43200);
       router.push("/sales/cp_billing_details");
     } else {
       setTouched({
@@ -203,8 +206,10 @@ const CP_doctor_details = () => {
     })), [countryList]);
 
       useEffect(()=>{
-        const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
-        const cp_type_token = hasCookie("cp_clinic_details") ? JSON.parse(getCookie("cp_clinic_details")) : null
+        // const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
+        const token = getStorage("user", rememberMe);
+        // const cp_type_token = hasCookie("cp_clinic_details") ? JSON.parse(getCookie("cp_clinic_details")) : null
+        const cp_type_token = getStorage("cp_clinic_details", rememberMe);
         if(!token){
           router.push('/login')
         }

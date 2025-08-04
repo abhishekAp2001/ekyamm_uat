@@ -3,7 +3,10 @@ import React from 'react'
 import { getCookie } from 'cookies-next';
 import { useState,useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useRememberMe } from '@/app/context/RememberMeContext';
+import { getStorage } from '@/lib/utils';
 const PastSessions = ({sessions}) => {
+  const { rememberMe } = useRememberMe();
 function convertUTCtoIST(utcDateStr) {
   const date = new Date(utcDateStr);
 
@@ -33,10 +36,11 @@ function convertUTCtoIST(utcDateStr) {
     const [patient, setPatient] = useState(null);
     const router = useRouter()
   useEffect(() => {
-    const cookie = getCookie("PatientInfo");
+    // const cookie = getCookie("PatientInfo");
+    const cookie = getStorage("PatientInfo", rememberMe);
     if (cookie) {
       try {
-        setPatient(JSON.parse(cookie));
+        setPatient(cookie);
       } catch (err) {
         console.error("Error parsing cookie", err);
       }

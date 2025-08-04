@@ -1,5 +1,7 @@
+"use client"
+import dynamic from "next/dynamic";
+const PaymentSuccess = dynamic(() => import('@/components/patient/payment-success/PaymentSuccess'),{ssr: false})
 import React, { Suspense } from 'react'
-import PaymentSuccess from '@/components/patient/payment-success/PaymentSuccess'
 const page = () => {
   return (
     <Suspense>

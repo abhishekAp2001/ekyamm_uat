@@ -1,5 +1,6 @@
-
-import CP_bank_details from '@/components/sales/channel_partner/CP_bank_Details/CP_bank_details'
+"use client"
+import dynamic from "next/dynamic";
+const CP_bank_details = dynamic(() => import('@/components/sales/channel_partner/CP_bank_Details/CP_bank_details'),{ssr: false})
 import React from 'react'
 
 const page = () => {

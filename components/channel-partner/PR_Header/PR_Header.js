@@ -11,6 +11,7 @@ import {
 } from "../../ui/drawer";
 import { Button } from "../../ui/button";
 import { deleteCookie } from "cookies-next";
+import { removeStorage } from "@/lib/utils";
 
 const PR_Header = ({ type, patientType, text, handleCancel }) => {
   const pathname = usePathname();
@@ -26,8 +27,10 @@ const PR_Header = ({ type, patientType, text, handleCancel }) => {
     }
     else{
       if(patientType === 1){
-        deleteCookie("invitePatientInfo")
-        deleteCookie("sessions_selection")
+        // deleteCookie("invitePatientInfo")
+        // deleteCookie("sessions_selection")
+        removeStorage("invitePatientInfo")
+        removeStorage("sessions_selection")
         router.push(`/channel-partner/${type}/patient-registration`)
       }
       if(patientType === 2){

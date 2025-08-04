@@ -34,9 +34,12 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "../../ui/drawer";
+import { getStorage, removeStorage, setStorage } from "@/lib/utils";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 polyfillCountryFlagEmojis();
 
 const Emergency_Details = ({ type }) => {
+  const { rememberMe } = useRememberMe();
   const router = useRouter();
   const customAxios = axiosInstance();
   const [channelPartnerData, setChannelPartnerData] = useState(null);
@@ -151,11 +154,12 @@ const Emergency_Details = ({ type }) => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    const userDataCookie = getCookie("patientSessionData");
+    // const userDataCookie = getCookie("patientSessionData");
+    const userDataCookie = getStorage("patientSessionData", rememberMe);
     let token;
     if (userDataCookie) {
       try {
-        token = JSON.parse(userDataCookie).token;
+        token = userDataCookie.token;
       } catch (error) {
         console.error("Error parsing patientSessionData cookie:", error);
       }
@@ -192,11 +196,16 @@ const Emergency_Details = ({ type }) => {
       );
       if (response.data.success) {
         showSuccessToast("Emergency detail added successfully");
-        deleteCookie("completeUserData");
-        deleteCookie("patientInfo")
-        deleteCookie("patientLoginDetail")
-        deleteCookie("channelPartnerData")
-        setCookie("completeUserData", response.data.data);
+        // deleteCookie("completeUserData");
+        // deleteCookie("patientInfo")
+        // deleteCookie("patientLoginDetail")
+        // deleteCookie("channelPartnerData")
+        removeStorage("completeUserData")
+        removeStorage("patientInfo", rememberMe)
+        removeStorage("patientLoginDetail")
+        removeStorage("channelPartnerData")
+        // setCookie("completeUserData", response.data.data);
+        setStorage("completeUserData", response.data.data);
         router.push(`/patient/dashboard`);
       } else {
         showErrorToast(
@@ -233,6 +242,7 @@ const Emergency_Details = ({ type }) => {
 
         if (response?.data?.success === true) {
           setCookie("channelPartnerData", JSON.stringify(response.data.data));
+          setStorage("channelPartnerData", response.data.data);
           setChannelPartnerData(response.data.data);
         } else {
           showErrorToast(
@@ -255,7 +265,8 @@ const Emergency_Details = ({ type }) => {
   };
 
     useEffect(()=>{
-      const cookie = getCookie("completeUserData")
+      // const cookie = getCookie("completeUserData")
+      const cookie = getStorage("completeUserData");
       if(!cookie){
         router.push(`/patient/${type}/create`)
       }

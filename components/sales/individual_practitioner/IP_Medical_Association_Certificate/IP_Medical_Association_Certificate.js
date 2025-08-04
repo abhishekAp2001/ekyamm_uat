@@ -11,6 +11,7 @@ import { showErrorToast } from "@/lib/toast";
 import { getCookie, hasCookie } from "cookies-next";
 import { useRememberMe } from "@/app/context/RememberMeContext";
 import { useRouter } from "next/navigation";
+import { getStorage } from "@/lib/utils";
 
 const IP_Medical_Association_Certificate = () => {
   const router = useRouter();
@@ -47,7 +48,8 @@ const IP_Medical_Association_Certificate = () => {
   }, []);
 
     useEffect(() => {
-      const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+      // const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+      const token = getStorage("user", rememberMe);
       const raw = rememberMe?localStorage.getItem("ip_medical_association_details"):sessionStorage.getItem("ip_medical_association_details")
     const ip_type_token = raw?JSON.parse(raw):null
       if (!token) {
