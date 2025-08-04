@@ -380,6 +380,7 @@ const P_Mobile_Verification = ({ type }) => {
                     {errors?.primaryMobileNumber}
                   </span>
                 )}
+                
               </div>
               {/* otp */}
               {otpSendStatus ? (
