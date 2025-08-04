@@ -10,6 +10,7 @@ import {
   doctors,
   // currentPatientId as getCurrentPatientId,
   patientSessionToken as getPatientSessionToken,
+  setStorage,
 } from "@/lib/utils";
 import Header from "./Header";
 import { Baseurl } from "@/lib/constants";
@@ -76,7 +77,8 @@ const Patient_Dashboard = () => {
           maxAge = {}
         }
           console.log("setting cookie")
-          setCookie("PatientInfo", JSON.stringify(response?.data?.data),maxAge);
+          // setCookie("PatientInfo", JSON.stringify(response?.data?.data),maxAge);
+          setStorage("PatientInfo", response?.data?.data, rememberMe, 2592000 );
           setPatient(response?.data?.data);
         }
       } catch (err) {

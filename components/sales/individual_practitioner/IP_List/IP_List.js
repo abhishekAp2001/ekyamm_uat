@@ -8,7 +8,10 @@ import Link from "next/link";
 import IPList from "./IPList";
 import { useRouter } from "next/navigation";
 import { hasCookie,getCookie } from "cookies-next";
+import { getStorage } from "@/lib/utils";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 const IP_List = () => {
+  const {rememberMe} = useRememberMe()
   const router = useRouter()
   const axios = axiosInstance()
   const [individualPractitionerList, setIndividualPractitionerList] = useState([]);
@@ -29,7 +32,8 @@ const IP_List = () => {
       fectchAllList();
     }, []);
       useEffect(()=>{
-        const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
+        // const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
+        const token = getStorage("user", rememberMe);
         if(!token){
           router.push('/login')
         }

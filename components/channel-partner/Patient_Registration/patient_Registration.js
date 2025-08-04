@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { Loader2Icon, MapPin } from "lucide-react";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import axios1 from "axios";
+import { getStorage, setStorage } from "@/lib/utils";
 polyfillCountryFlagEmojis()
 
 const Patient_Registration = ({ type }) => {
@@ -110,7 +111,8 @@ const Patient_Registration = ({ type }) => {
 
       if (response?.data?.success === true) {
         const patientData = { ...response?.data?.data?.patient, patientType: 2 }
-        setCookie("invitePatientInfo", JSON.stringify(patientData));
+        // setCookie("invitePatientInfo", JSON.stringify(patientData));
+        setStorage("invitePatientInfo", patientData);
         router.push(`/channel-partner/${type}/patient-history`);
       } else {
         showErrorToast(
@@ -133,10 +135,11 @@ const Patient_Registration = ({ type }) => {
   }, []);
 
   useEffect(() => {
-    const cookieData = getCookie("channelPartnerData");
+    // const cookieData = getCookie("channelPartnerData");
+    const cookieData = getStorage("channelPartnerData");
     if (cookieData) {
       try {
-        const parsedData = JSON.parse(cookieData);
+        const parsedData = cookieData
         setChannelPartnerData(parsedData);
       } catch (error) {
         setChannelPartnerData(null);

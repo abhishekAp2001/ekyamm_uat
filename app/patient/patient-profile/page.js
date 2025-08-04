@@ -1,4 +1,6 @@
-import Patient_Profile from '@/components/patient/Patient_Profile/Patient_Profile'
+"use client"
+import dynamic from "next/dynamic";
+const Patient_Profile = dynamic(() => import('@/components/patient/Patient_Profile/Patient_Profile'),{ssr: false})
 import React from 'react'
 
 const page = () => {

@@ -14,7 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { patientSessionToken as getPatientSessionToken } from "@/lib/utils";
+import { patientSessionToken as getPatientSessionToken, getStorage, setStorage } from "@/lib/utils";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import Profile from "./practitioner/Profile";
 import Certifications from "./Certifications/Certifications";
@@ -38,10 +38,11 @@ const UpcomingSession = ({
   const router = useRouter();
   const [therapist, setTherapist] = useState();
   useEffect(() => {
-    const cookie = getCookie("PatientInfo");
+    // const cookie = getCookie("PatientInfo");
+    const cookie = getStorage("PatientInfo", rememberMe);
     if (cookie) {
       try {
-        setPatient(JSON.parse(cookie));
+        setPatient(cookie);
       } catch (err) {
         console.error("Error parsing cookie", err);
       }
@@ -108,10 +109,16 @@ const UpcomingSession = ({
             maxAge = {};
           }
           setTherapist(response?.data?.data?.practitionerTagged[0]);
-          setCookie(
+          // setCookie(
+          //   "selectedCounsellor",
+          //   JSON.stringify(response?.data?.data?.practitionerTagged[0]),
+          //   maxAge
+          // );
+          setStorage(
             "selectedCounsellor",
-            JSON.stringify(response?.data?.data?.practitionerTagged[0]),
-            maxAge
+            response?.data?.data?.practitionerTagged[0],
+            rememberMe,
+            2592000 
           );
         }
       } catch (err) {
@@ -131,7 +138,13 @@ const UpcomingSession = ({
     } else if (!rememberMe) {
       maxAge = {};
     }
-    setCookie("selectedCounsellor", JSON.stringify(therapist), maxAge);
+    // setCookie("selectedCounsellor", JSON.stringify(therapist), maxAge);
+    setStorage(
+      "selectedCounsellor",
+      therapist,
+      rememberMe,
+      2592000 
+    )
     if (patient.availableCredits === 0) {
       router.push("/patient/select-package");
     } else {

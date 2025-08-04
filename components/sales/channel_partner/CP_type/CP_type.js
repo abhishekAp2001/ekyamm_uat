@@ -16,6 +16,7 @@ import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import Image from "next/image";
 import { useRememberMe } from "@/app/context/RememberMeContext";
+import { getStorage, setStorage } from "@/lib/utils";
 polyfillCountryFlagEmojis();
 
 const CP_type = () => {
@@ -56,10 +57,12 @@ const CP_type = () => {
 
   // Load form data from cookie on component mount
   useEffect(() => {
-    const savedData = getCookie("cp_type");
+    // const savedData = getCookie("cp_type");
+    const savedData = getStorage("cp_type", rememberMe);
+    console.log("Cp_type_data",savedData)
     if (savedData) {
       try {
-        const parsedData = JSON.parse(savedData);
+        const parsedData = savedData
         setFormData(parsedData);
         if (parsedData.primaryMobileNumber === parsedData.whatsappNumber) {
           setSameAsMobile(true);
@@ -217,7 +220,8 @@ const CP_type = () => {
       maxAge = {}
     }
     if (isFormValid()) {
-      setCookie("cp_type", formData, maxAge);
+      // setCookie("cp_type", formData, maxAge);
+      setStorage("cp_type", formData, rememberMe, 43200);
       router.push("/sales/cp_clinic_details");
     } else {
       showErrorToast("Please fill all required fields correctly");
@@ -225,7 +229,8 @@ const CP_type = () => {
   };
 
   useEffect(() => {
-    const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+    // const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+    const token = getStorage("user", rememberMe);
     if (!token) {
       router.push('/login')
     }

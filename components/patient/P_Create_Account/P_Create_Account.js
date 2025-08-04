@@ -10,7 +10,7 @@ import axiosInstance from "@/lib/axiosInstance";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { useRouter } from "next/navigation";
-import { customEncodeString, encryptData, sanitizeInput } from "@/lib/utils";
+import { customEncodeString, encryptData, getStorage, sanitizeInput, setStorage } from "@/lib/utils";
 
 const P_Create_Account = ({ type }) => {
   const customAxios = axiosInstance();
@@ -123,6 +123,10 @@ one symbol, and no spaces.`;
             "patientSessionData",
             JSON.stringify({ userId, token, userType, status })
           );
+          setStorage(
+            "patientSessionData",
+            { userId, token, userType, status },
+          )
           showSuccessToast("Account created successfully!");
           router.push(`/patient/${type}/details`);
         } else {
@@ -131,6 +135,7 @@ one symbol, and no spaces.`;
       } catch (err) {
         console.log(err);
         setCookie("patientSessionData", JSON.stringify({}));
+        
         showErrorToast(
           err?.response?.data?.error?.message || "Error during sign-in"
         );
@@ -142,20 +147,22 @@ one symbol, and no spaces.`;
   );
 
   useEffect(() => {
-    const verifiedUserCookie = getCookie("verifiedUserData");
+    // const verifiedUserCookie = getCookie("verifiedUserData");
+    const verifiedUserCookie = getStorage("verifiedUserData");
     if (!verifiedUserCookie) {
       router.push(`/patient/${type}/create`);
       return;
     }
-    const verifiedUserData = JSON.parse(verifiedUserCookie);
+    const verifiedUserData = verifiedUserCookie
     setVerifiedUser(verifiedUserData);
 
-    const patientCookie = getCookie("patientLoginDetail");
+    // const patientCookie = getCookie("patientLoginDetail");
+    const patientCookie = getStorage("patientLoginDetail");
     if (!patientCookie) {
       router.push(`/patient/${type}/create`);
       return;
     }
-    const patientData = JSON.parse(patientCookie);
+    const patientData = patientCookie
     setPatientData(patientData);
     console.log(
       "channelPartnerData?.verificationToken",
@@ -175,6 +182,7 @@ one symbol, and no spaces.`;
 
         if (response?.data?.success === true) {
           setCookie("channelPartnerData", JSON.stringify(response.data.data));
+          setStorage("channelPartnerData", response.data.data);
           setChannelPartnerData(response.data.data);
           setFormData((prev) => ({
             ...prev,

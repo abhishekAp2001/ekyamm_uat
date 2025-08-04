@@ -30,7 +30,7 @@ import Profile from "../practitioner/Profile";
 import Client_Testimonial from "../Client_Testimonials/Client_Testimonial";
 import Certifications from "../Certifications/Certifications";
 import axios from "axios";
-import { patientSessionToken as getPatientSessionToken } from "@/lib/utils";
+import { patientSessionToken as getPatientSessionToken, getStorage, setStorage } from "@/lib/utils";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { Baseurl, whatsappUrl } from "@/lib/constants";
 import { setCookie } from "cookies-next";
@@ -60,10 +60,11 @@ const sessionData = [
 const Patient_Profile = () => {
   const {rememberMe} = useRememberMe()
   const router = useRouter();
-  const cookieValue = getCookie("PatientInfo");
+  // const cookieValue = getCookie("PatientInfo");
+  const cookieValue = getStorage("PatientInfo", rememberMe);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const patient = cookieValue ? JSON.parse(cookieValue) : {};
+  const patient = cookieValue ? cookieValue : {};
   const [activeIndex, setActiveIndex] = useState(null);
   const [otpSent, setOtpSent] = useState(false);
   const [mobile, setMobile1] = useState("");
@@ -234,7 +235,8 @@ const Patient_Profile = () => {
         else if(!rememberMe){
           maxAge = {}
         }
-        setCookie("PatientInfo", JSON.stringify(response?.data?.data),maxAge);
+        // setCookie("PatientInfo", JSON.stringify(response?.data?.data),maxAge);
+        setStorage("PatientInfo", response?.data?.data, rememberMe, 2592000 );
         setImageDrawer(false)
         router.push(`/patient/patient-profile`);
       }
@@ -517,7 +519,8 @@ const Patient_Profile = () => {
         }
         patient.countryCode_primary = "🇮🇳 +91"
         patient.primaryMobileNumber = mobile
-        setCookie("PatientInfo", JSON.stringify(patient),maxAge)
+        // setCookie("PatientInfo", JSON.stringify(patient),maxAge)
+        setStorage("PatientInfo", patient, rememberMe, 2592000 );
         showSuccessToast("Contact details updated")
         handleVerifiedDrawerClose()
       }
@@ -560,7 +563,8 @@ const Patient_Profile = () => {
           maxAge = {}
         }
         patient.email = email
-        setCookie("PatientInfo", JSON.stringify(patient),maxAge)
+        // setCookie("PatientInfo", JSON.stringify(patient),maxAge)
+        setStorage("PatientInfo", patient, rememberMe, 2592000 );
         showSuccessToast("Contact details updated")
         handleVerifiedDrawerClose()
       }

@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { getCookie, setCookie } from 'cookies-next'
 import BackNav from '@/components/BackNav';
 import { Button } from '@/components/ui/button';
-import { selectedCounsellorData as getSelectedCounsellorData } from '@/lib/utils';
+import { selectedCounsellorData as getSelectedCounsellorData, getStorage, setStorage } from '@/lib/utils';
 import { calculatePaymentDetails, formatAmount } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
@@ -26,10 +26,11 @@ const PaymentConfirmation = () => {
   const [secondsLeft, setSecondsLeft] = useState(30);
 
   useEffect(() => {
-    const cookie = getCookie("session_selection");
+    // const cookie = getCookie("session_selection");
+    const cookie = getStorage("session_selection", rememberMe);
     if (cookie) {
       try {
-        const cookieObj = JSON.parse(cookie);
+        const cookieObj = cookie
         cookieObj.txnId = transactionId;
         let maxAge = {}
         if(rememberMe){
@@ -38,7 +39,8 @@ const PaymentConfirmation = () => {
         else if(!rememberMe){
           maxAge = {}
         }
-        setCookie("session_selection", JSON.stringify(cookieObj),maxAge);
+        // setCookie("session_selection", JSON.stringify(cookieObj),maxAge);
+        setStorage("session_selection", cookieObj, rememberMe, 2592000 );
         setSession(cookieObj);
       } catch (err) {
         console.error("Error parsing cookie", err);
@@ -49,10 +51,11 @@ const PaymentConfirmation = () => {
     }
   }, []);
   useEffect(() => {
-    const cookie = getCookie("PatientInfo");
+    // const cookie = getCookie("PatientInfo");
+    const cookie = getStorage("PatientInfo", rememberMe);
     if (cookie) {
       try {
-        setPatientInfo(JSON.parse(cookie));
+        setPatientInfo(cookie);
       } catch (err) {
         console.error("Error parsing cookie", err);
       }

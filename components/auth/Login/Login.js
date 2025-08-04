@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import axiosInstance from "@/lib/axiosInstance";
 import { toast } from "react-toastify";
-import { customEncodeString, encryptData } from "@/lib/utils";
+import { customEncodeString, encryptData, setStorage } from "@/lib/utils";
 import { hasCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
@@ -60,12 +60,13 @@ const Login = () => {
         ) {
         let maxAge = {}
         if(rememberMe){
-          maxAge = { maxAge: 60 * 60 * 24 * 30 }
+          maxAge = { maxAge: 60 * 60 * 12 }
         }
         else if(!rememberMe){
           maxAge = {}
         }
           setCookie("user", response?.data?.data,maxAge);
+          setStorage("user", response?.data?.data, rememberMe, 43200);
           router.push("/sales");
         }
       }
@@ -83,7 +84,8 @@ const Login = () => {
   };
   useEffect(()=>{
     const checkCookie = ()=>{
-      const cookie = hasCookie("user")
+      // const cookie = hasCookie("user")
+      const cookie = sessionStorage.getItem("user")? sessionStorage.getItem("user"):localStorage.getItem("user")
       if(cookie){
         router.push("/sales")
       }

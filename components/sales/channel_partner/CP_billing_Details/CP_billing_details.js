@@ -19,6 +19,7 @@ import {
 import axiosInstance from "@/lib/axiosInstance";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { useRememberMe } from "@/app/context/RememberMeContext";
+import { getStorage, removeStorage, setStorage } from "@/lib/utils";
 
 const CP_billing_details = () => {
   const {rememberMe} = useRememberMe()
@@ -56,10 +57,11 @@ const CP_billing_details = () => {
 
   // Load form data from cookie on component mount
   useEffect(() => {
-    const savedData = getCookie("cp_billing_details");
+    // const savedData = getCookie("cp_billing_details");
+    const savedData = getStorage("cp_billing_details", rememberMe);
     if (savedData) {
       try {
-        const parsedData = JSON.parse(savedData);
+        const parsedData = savedData;
         // Extract gstStateCode and gstSuffix from gstNumber
         if (parsedData.gstNumber && isGstNumberValid(parsedData.gstNumber)) {
           parsedData.gstStateCode = parsedData.gstNumber.slice(0, 2);
@@ -116,16 +118,18 @@ const CP_billing_details = () => {
   // Handle send invite for monthly billing
   const handleAddChannelPartner = async () => {
     try {
-      const cp_type = hasCookie("cp_type")
-        ? JSON.parse(getCookie("cp_type"))
-        : "";
-      const cp_doctor_details = hasCookie("cp_doctor_details")
-        ? JSON.parse(getCookie("cp_doctor_details"))
-        : "";
-      const cp_clinic_details = hasCookie("cp_clinic_details")
-        ? JSON.parse(getCookie("cp_clinic_details"))
-        : "";
-
+      // const cp_type = hasCookie("cp_type")
+      //   ? JSON.parse(getCookie("cp_type"))
+      //   : "";
+      // const cp_doctor_details = hasCookie("cp_doctor_details")
+      //   ? JSON.parse(getCookie("cp_doctor_details"))
+      //   : "";
+      // const cp_clinic_details = hasCookie("cp_clinic_details")
+      //   ? JSON.parse(getCookie("cp_clinic_details"))
+      //   : "";
+      const cp_type = getStorage("cp_type", rememberMe);
+      const cp_doctor_details = getStorage("cp_doctor_details", rememberMe);
+      const cp_clinic_details = getStorage("cp_clinic_details", rememberMe);
       if(!cp_type || !cp_doctor_details || !cp_clinic_details){
         router.push('/login')
       }
@@ -183,11 +187,16 @@ const CP_billing_details = () => {
       if (response?.data?.success) {
         router.push("/sales");
         showSuccessToast("Profile Created with Unique URL");
-        deleteCookie("cp_type");
-        deleteCookie("cp_clinic_details");
-        deleteCookie("cp_doctor_details");
-        deleteCookie("cp_billing_details");
-        deleteCookie("cp_bank_details");
+        // deleteCookie("cp_type");
+        // deleteCookie("cp_clinic_details");
+        // deleteCookie("cp_doctor_details");
+        // deleteCookie("cp_billing_details");
+        // deleteCookie("cp_bank_details");
+        removeStorage("cp_type",rememberMe)
+        removeStorage("cp_clinic_details",rememberMe)
+        removeStorage("cp_doctor_details",rememberMe)
+        removeStorage("cp_billing_details",rememberMe)
+        removeStorage("cp_bank_details",rememberMe)
       }
     } catch (error) {
       console.error("Error Adding Channel Partner:", error);
@@ -210,10 +219,12 @@ const CP_billing_details = () => {
         }
     if (isFormValid()) {
       if (formData.billingType === "monthly") {
-        setCookie("cp_billing_details", formData,maxAge);
+        // setCookie("cp_billing_details", formData,maxAge);
+        setStorage("cp_billing_details", formData, rememberMe, 43200);
         handleAddChannelPartner();
       } else {
-        setCookie("cp_billing_details", formData,maxAge);
+        // setCookie("cp_billing_details", formData,maxAge);
+        setStorage("cp_billing_details", formData, rememberMe, 43200);
         router.push("/sales/cp_bank_details");
       }
     } else {
@@ -227,8 +238,10 @@ const CP_billing_details = () => {
   };
 
         useEffect(()=>{
-          const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
-          const cp_type_token = hasCookie("cp_doctor_details") ? JSON.parse(getCookie("cp_doctor_details")) : null
+          // const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
+          const token = getStorage("user", rememberMe);
+          // const cp_type_token = hasCookie("cp_doctor_details") ? JSON.parse(getCookie("cp_doctor_details")) : null
+          const cp_type_token = getStorage("cp_doctor_details", rememberMe);
           if(!token){
             router.push('/login')
           }

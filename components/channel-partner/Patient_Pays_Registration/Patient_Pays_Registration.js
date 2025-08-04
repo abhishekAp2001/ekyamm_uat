@@ -17,7 +17,7 @@ import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { Baseurl } from "@/lib/constants";
 import { Eye, EyeOff } from "lucide-react";
 import OTPInput from "react-otp-input";
-import { customEncodeString, encryptData, formatTime } from "@/lib/utils";
+import { customEncodeString, encryptData, formatTime, getStorage, setStorage } from "@/lib/utils";
 polyfillCountryFlagEmojis();
 
 const Patient_Pays_Registration = ({ type }) => {
@@ -108,10 +108,11 @@ const Patient_Pays_Registration = ({ type }) => {
   }, []);
 
   useEffect(() => {
-    const cookieData = getCookie("channelPartnerData");
+    // const cookieData = getCookie("channelPartnerData");
+    const cookieData = getStorage("channelPartnerData");
     if (cookieData) {
       try {
-        const parsedData = JSON.parse(cookieData);
+        const parsedData = cookieData;
         setChannelPartnerData(parsedData);
       } catch (error) {
         setChannelPartnerData(null);
@@ -198,7 +199,15 @@ const Patient_Pays_Registration = ({ type }) => {
         }
       );
       if (response?.data?.success) {
-        setCookie("patientLoginDetail", {
+        // setCookie("patientLoginDetail", {
+        //   primaryMobileNumber: formData.primaryMobileNumber,
+        //   mobileVerified: true,
+        //   email: formData.email,
+        //   country_code: formData.countryCode_primary,
+        //   firstName: formData?.firstName,
+        //   lastName: formData?.lastName,
+        // });
+        setStorage("patientLoginDetail", {
           primaryMobileNumber: formData.primaryMobileNumber,
           mobileVerified: true,
           email: formData.email,

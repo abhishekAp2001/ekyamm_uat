@@ -16,7 +16,7 @@ import axios from "axios";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import axiosInstance from "@/lib/axiosInstance";
 import { getCookie, setCookie } from "cookies-next";
-import { formatTime } from "@/lib/utils";
+import { formatTime, getStorage, setStorage } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 const P_Mobile_Verification = ({ type }) => {
@@ -175,7 +175,8 @@ const P_Mobile_Verification = ({ type }) => {
 
   function redirectAfterOtpValidate(type) {
     showSuccessToast("Verified successfully.");
-    setCookie("patientLoginDetail", JSON.stringify(formData));
+    // setCookie("patientLoginDetail", JSON.stringify(formData));
+    setStorage("patientLoginDetail", formData);
     setTimeout(() => {
       router.push(`/patient/${type}/verified_successfully`);
     }, 100);
@@ -200,7 +201,8 @@ const P_Mobile_Verification = ({ type }) => {
           ...prev,
           mobileVerified: true,
         }));
-        setCookie("verifiedUserData", JSON.stringify(response?.data?.data));
+        // setCookie("verifiedUserData", JSON.stringify(response?.data?.data));
+        setStorage("verifiedUserData", response?.data?.data);
         setVerifiedUserData(response?.data?.data?.verificationToken)
         return true;
       } else {
@@ -236,7 +238,8 @@ const P_Mobile_Verification = ({ type }) => {
           );
         }
       }
-      const verifiedPatientToken = JSON.parse(getCookie("verifiedUserData") || "{}");
+      // const verifiedPatientToken = JSON.parse(getCookie("verifiedUserData") || "{}");
+      const verifiedPatientToken = getStorage("verifiedUserData") || {};
       const response = await customAxios.post(`v2/cp/mobile/otpGenerate`, {
         mobile: mobileNumber,
         type: "cpPatientRegisterOTP",
@@ -269,6 +272,7 @@ const P_Mobile_Verification = ({ type }) => {
 
         if (response?.data?.success == true) {
           setCookie("channelPartnerData", JSON.stringify(response.data.data));
+          setStorage("channelPartnerData", response.data.data);
           setChannelPartnerData(response.data.data);
           if(response?.data?.data?.billingType == "patientPays"){
             router.push('/patient/login')

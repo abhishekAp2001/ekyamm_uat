@@ -9,7 +9,7 @@ import Footer_bar from "../../Footer_bar/Footer_bar";
 import BackNav from "../../BackNav";
 import { MapPin } from "lucide-react";
 import { getCookie, hasCookie } from "cookies-next";
-import { calculatePaymentDetails, clinicSharePercent } from "@/lib/utils";
+import { calculatePaymentDetails, clinicSharePercent, getStorage, setStorage } from "@/lib/utils";
 import Pay_Header from "../../sales/channel_partner/Pay_Header";
 import axiosInstance from "@/lib/axiosInstance";
 import { Baseurl, BaseurlPay } from "@/lib/constants";
@@ -26,21 +26,24 @@ const Payment = ({ type }) => {
   // const [billingType, setBillingType] = useState("");
   const [orderId, setOrderId] = useState("");
   const [totalPayable, setTotalPayable] = useState(0);
-  
-  const sessions_selection = hasCookie("sessions_selection")
-    ? JSON.parse(getCookie("sessions_selection"))
-    : null;
-  const invitePatientInfo = hasCookie("invitePatientInfo")
-    ? JSON.parse(getCookie("invitePatientInfo"))
-    : null;
+  const sessions_selection = getStorage("sessions_selection")
+  const invitePatientInfo = getStorage("invitePatientInfo")
+  // const sessions_selection = hasCookie("sessions_selection")
+  //   ? JSON.parse(getCookie("sessions_selection"))
+  //   : null;
+  // const invitePatientInfo = hasCookie("invitePatientInfo")
+  //   ? JSON.parse(getCookie("invitePatientInfo"))
+  //   : null;
       useEffect(()=>{
         if(!sessions_selection || !invitePatientInfo){
         router.push(`/channel-partner/${type}`)
       }
       },[sessions_selection,type,invitePatientInfo,router])
   useEffect(() => {
-    const cookieData = getCookie("channelPartnerData");
-    const patientData = getCookie("invitePatientInfo");
+    // const cookieData = getCookie("channelPartnerData");
+    const cookieData = getStorage("channelPartnerData");
+    // const patientData = getCookie("invitePatientInfo");
+    const patientData = getStorage("invitePatientInfo");
     if (cookieData) {
       try {
         const parsedData = JSON.parse(cookieData);
@@ -128,7 +131,8 @@ useEffect(() => {
         // practitionerId: "",
       });
       if (response?.data?.success) {
-        setCookie("qrCodeInfo", JSON.stringify(response?.data?.data));
+        // setCookie("qrCodeInfo", JSON.stringify(response?.data?.data));
+        setStorage("qrCodeInfo", response?.data?.data);
         setOrderId(response?.data?.data?.orderId);
         generateQrCode(response?.data?.data?.upiIntent);
       }
@@ -170,7 +174,8 @@ useEffect(() => {
         });
         if (response?.data?.success) {
           if (response?.data?.data?.status == "success") {
-            setCookie("paymentStatusInfo", JSON.stringify(response?.data?.data));
+            // setCookie("paymentStatusInfo", JSON.stringify(response?.data?.data));
+            setStorage("paymentStatusInfo", response?.data?.data);
             router.push(`/channel-partner/${type}/payment-confirmation`)
           }
           if (response?.data?.data?.status !== "success" && response?.data?.data?.status !== "initiated") {

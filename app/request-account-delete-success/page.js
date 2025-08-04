@@ -8,6 +8,7 @@ import "../CSS/styles.css";
 import "./request-account-delete-success.css";
 import Contact_Form from "@/components/sales/Contact_Form/Contact_Form";
 import { getCookie } from "cookies-next";
+import { getStorage } from "@/lib/utils";
  
 const Page =({ onStartClick }) => {
   const formRef = useRef();
@@ -19,7 +20,8 @@ const Page =({ onStartClick }) => {
  
   // Check cookie and redirect if missing
   useEffect(() => {
-    const userEmail = getCookie("user_email")
+    // const userEmail = getCookie("user_email")
+    const userEmail = getStorage("user_email");
     if (!userEmail) {
       router.push('/');
     } else {

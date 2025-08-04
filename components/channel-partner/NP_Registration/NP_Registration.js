@@ -10,35 +10,45 @@ import Footer_bar from "@/components/Footer_bar/Footer_bar";
 import { getCookie, hasCookie, deleteCookie } from "cookies-next";
 import { MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { getStorage, removeStorage } from "@/lib/utils";
 
 const NP_Registration = ({type}) => {
   const router = useRouter()
-  const sessions_selection = hasCookie("sessions_selection")
-    ? JSON.parse(getCookie("sessions_selection"))
-    : null;
-  const channelPartnerData = hasCookie("channelPartnerData")
-    ? JSON.parse(getCookie("channelPartnerData"))
-    : null;
-  const invitePatientInfo = hasCookie("invitePatientInfo")
-    ? JSON.parse(getCookie("invitePatientInfo"))
-    : null;
+  const sessions_selection = getStorage("sessions_selection");
+  const channelPartnerData = getStorage("channelPartnerData");
+  const invitePatientInfo = getStorage("invitePatientInfo");
+  // const sessions_selection = hasCookie("sessions_selection")
+  //   ? JSON.parse(getCookie("sessions_selection"))
+  //   : null;
+  // const channelPartnerData = hasCookie("channelPartnerData")
+  //   ? JSON.parse(getCookie("channelPartnerData"))
+  //   : null;
+  // const invitePatientInfo = hasCookie("invitePatientInfo")
+  //   ? JSON.parse(getCookie("invitePatientInfo"))
+  //   : null;
   useEffect(()=>{
     if(!sessions_selection || !channelPartnerData || !invitePatientInfo){
     router.push('/login')
   }
   },[sessions_selection,channelPartnerData,invitePatientInfo,router])
   const handleClick=()=>{
-    deleteCookie("sessions_selection");
-    deleteCookie("channelPartnerData");
-    deleteCookie("invitePatientInfo");
+    // deleteCookie("sessions_selection");
+    // deleteCookie("channelPartnerData");
+    // deleteCookie("invitePatientInfo");
+    removeStorage("sessions_selection")
+    removeStorage("channelPartnerData")
+    removeStorage("invitePatientInfo")
     router.push(`/channel-partner/${type}`)
   }
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      deleteCookie("sessions_selection");
-      deleteCookie("channelPartnerData");
-      deleteCookie("invitePatientInfo");
+      // deleteCookie("sessions_selection");
+      // deleteCookie("channelPartnerData");
+      // deleteCookie("invitePatientInfo");
+      removeStorage("sessions_selection")
+    removeStorage("channelPartnerData")
+    removeStorage("invitePatientInfo")
       router.push(`/channel-partner/${type}`);
     }, 5000);
 

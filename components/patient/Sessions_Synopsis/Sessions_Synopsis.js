@@ -25,11 +25,13 @@ import { Dialog, DialogContent, DialogTrigger } from "../../ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { getCookie } from "cookies-next";
 import axios from "axios";
-import { patientSessionToken as getPatientSessionToken } from "@/lib/utils";
+import { patientSessionToken as getPatientSessionToken, getStorage } from "@/lib/utils";
 import { showErrorToast } from "@/lib/toast";
 import { Baseurl } from "@/lib/constants";
 import { useRouter } from "next/navigation";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 const Sessions_Synopsis = () => {
+  const { rememberMe } = useRememberMe();
   const [patientSessionToken, setPatientSessionToken] = useState(null);
   const [loading, setLoading] = useState(false);
   const [synopsis, setSynopsis] = useState("");
@@ -85,10 +87,11 @@ const Sessions_Synopsis = () => {
   const [patient, setPatient] = useState(null);
 
 useEffect(() => {
-  const cookie = getCookie("PatientInfo");
+  // const cookie = getCookie("PatientInfo");
+  const cookie = getStorage("PatientInfo", rememberMe);
   if (cookie) {
     try {
-      setPatient(JSON.parse(cookie));
+      setPatient(cookie);
     } catch (err) {
       console.error("Error parsing cookie", err);
     }
