@@ -31,6 +31,7 @@ import { showErrorToast } from "@/lib/toast";
 import { getCookie, hasCookie } from "cookies-next";
 import { useRememberMe } from "@/app/context/RememberMeContext";
 import { Checkbox } from "@/components/ui/checkbox";
+import { getStorage } from "@/lib/utils";
 
 
 const IP_Medical_Association_Details = () => {
@@ -204,7 +205,8 @@ const IP_Medical_Association_Details = () => {
     setDrawerOpen(false)
   }
   useEffect(() => {
-    const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+    // const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+    const token = getStorage("user", rememberMe);
     const raw = rememberMe ? localStorage.getItem("ip_general_information") : sessionStorage.getItem("ip_general_information")
     const ip_type_token = raw ? JSON.parse(raw) : null
     if (!token) {

@@ -1,5 +1,7 @@
-
-import Psychiatrist_profile from '@/components/patient/Psychiatrist_profile/Psychiatrist_profile'
+"use client"
+import dynamic from "next/dynamic";
+const Psychiatrist_profile = dynamic(() => import('@/components/patient/Psychiatrist_profile/Psychiatrist_profile'),{ssr: false})
+// import Psychiatrist_profile from '@/components/patient/Psychiatrist_profile/Psychiatrist_profile'
 import React from 'react'
 
 const page = () => {

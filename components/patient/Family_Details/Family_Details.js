@@ -34,9 +34,12 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "../../ui/drawer";
+import { getStorage, removeStorage, setStorage } from "@/lib/utils";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 polyfillCountryFlagEmojis();
 
 const Family_Details = ({ type }) => {
+  const { rememberMe } = useRememberMe();
   const router = useRouter();
   const customAxios = axiosInstance();
   const [channelPartnerData, setChannelPartnerData] = useState(null);
@@ -150,11 +153,12 @@ const Family_Details = ({ type }) => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    const userDataCookie = getCookie("patientSessionData");
+    // const userDataCookie = getCookie("patientSessionData");
+    const userDataCookie = getStorage("patientSessionData", rememberMe);
     let token;
     if (userDataCookie) {
       try {
-        token = JSON.parse(userDataCookie).token;
+        token = userDataCookie.token;
       } catch (error) {
         console.error("Error parsing patientSessionData cookie:", error);
       }
@@ -188,12 +192,17 @@ const Family_Details = ({ type }) => {
       );
       if (response.data.success) {
         showSuccessToast("Family member added successfully");
-        setCookie("completeUserData", response.data.data);
+        // setCookie("completeUserData", response.data.data);
+        setStorage("completeUserData", response.data.data);
         if (formData.emergencyContact) {
-          deleteCookie("completeUserData")
-          deleteCookie("patientInfo")
-          deleteCookie("patientLoginDetail")
-          deleteCookie("channelPartnerData")
+          // deleteCookie("completeUserData")
+          // deleteCookie("patientInfo")
+          // deleteCookie("patientLoginDetail")
+          // deleteCookie("channelPartnerData")
+          removeStorage("completeUserData")
+          removeStorage("patientInfo",rememberMe)
+          removeStorage("patientLoginDetail")
+          removeStorage("channelPartnerData")
           router.push(`/patient/dashboard`);
         } else {
           router.push(`/patient/${type}/emergency-details`);
@@ -231,6 +240,7 @@ const Family_Details = ({ type }) => {
 
         if (response?.data?.success === true) {
           setCookie("channelPartnerData", JSON.stringify(response.data.data));
+          setStorage("channelPartnerData", response.data.data);
           setChannelPartnerData(response.data.data);
         } else {
           showErrorToast(
@@ -254,7 +264,8 @@ const Family_Details = ({ type }) => {
   };
 
   useEffect(() => {
-    const cookie = getCookie("PatientInfo")
+    // const cookie = getCookie("PatientInfo")
+    const cookie = getStorage("PatientInfo", rememberMe);
     if (!cookie) {
       router.push(`/patient/${type}/create`)
     }

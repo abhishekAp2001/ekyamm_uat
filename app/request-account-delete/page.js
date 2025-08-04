@@ -69,7 +69,7 @@ const Page = () => {
         }
       );
       if (response?.data?.success) {
-        setCookie("user_email", emailTrimmed);
+        sessionStorage.setItem("user_email", emailTrimmed);
         router.push("/request-account-delete-success");
       } else {
         showErrorToast("Failed to send mail");

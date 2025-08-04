@@ -16,6 +16,7 @@ import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { Loader2Icon, MapPin } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import PR_Header from "../PR_Header/PR_Header";
+import { getStorage, setStorage } from "@/lib/utils";
 
 // Custom debounce function
 const customDebounce = (func, delay) => {
@@ -173,7 +174,8 @@ const EP_registration = ({ type }) => {
     // console.log('formData',formData)
     //   return
     try {
-      setCookie("invitePatientInfo", JSON.stringify({...formData,patientType:1}));
+      // setCookie("invitePatientInfo", JSON.stringify({...formData,patientType:1}));
+      setStorage("invitePatientInfo", {...formData,patientType:1});
       router.push(`/channel-partner/${type}/patient-history`);
     } catch (err) {
       showErrorToast(
@@ -210,10 +212,11 @@ const EP_registration = ({ type }) => {
   }, []);
 
   useEffect(() => {
-    const cookieData = getCookie("channelPartnerData");
+    // const cookieData = getCookie("channelPartnerData");
+    const cookieData = getStorage("channelPartnerData");
     if (cookieData) {
       try {
-        const parsedData = JSON.parse(cookieData);
+        const parsedData = cookieData
         setChannelPartnerData(parsedData);
       } catch (error) {
         setChannelPartnerData(null);

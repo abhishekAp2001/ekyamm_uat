@@ -19,6 +19,9 @@ import {
   calculatePaymentDetails,
   clinicSharePercent,
   formatAmount,
+  getStorage,
+  removeStorage,
+  setStorage,
 } from "@/lib/utils";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "../../ui/drawer";
 import PR_Header from "../PR_Header/PR_Header";
@@ -81,7 +84,8 @@ const Cloudnine_Hospital = ({ type }) => {
       };
 
       if (billingType === "onSpot") {
-        setCookie("sessions_selection", JSON.stringify(formData));
+        // setCookie("sessions_selection", JSON.stringify(formData));
+        setStorage("sessions_selection", formData);
         router.push(`/channel-partner/${type}/pay-for-sessions`);
       } else {
         const response = await axios.post(
@@ -89,7 +93,8 @@ const Cloudnine_Hospital = ({ type }) => {
           payload
         );
         if (response?.data?.success) {
-          setCookie("sessions_selection", JSON.stringify(formData));
+          // setCookie("sessions_selection", JSON.stringify(formData));
+          setStorage("sessions_selection", formData);
           showSuccessToast("Patient Invited & Invoice Sent");
           router.push(`/channel-partner/${type}/invoice_sent`);
         }
@@ -224,7 +229,8 @@ const Cloudnine_Hospital = ({ type }) => {
 
       if (response?.data?.success === true) {
         showSuccessToast(response?.data?.data?.message || "Patient deleted.");
-        deleteCookie("invitePatientInfo");
+        // deleteCookie("invitePatientInfo");
+        removeStorage("invitePatientInfo")
         router.push(`/channel-partner/${type}/patient-registration`);
       } else {
         showErrorToast(
@@ -272,11 +278,13 @@ const Cloudnine_Hospital = ({ type }) => {
   }, []);
 
   useEffect(() => {
-    const cookieData = getCookie("channelPartnerData");
-    const patientData = getCookie("invitePatientInfo");
+    // const cookieData = getCookie("channelPartnerData");
+    // const patientData = getCookie("invitePatientInfo");
+    const cookieData = getStorage("channelPartnerData");
+    const patientData = getStorage("invitePatientInfo");
     if (cookieData) {
       try {
-        const parsedData = JSON.parse(cookieData);
+        const parsedData = cookieData
         setChannelPartnerData(parsedData);
         setBillingType(parsedData?.billingType);
       } catch (error) {
@@ -289,7 +297,7 @@ const Cloudnine_Hospital = ({ type }) => {
 
     if (patientData) {
       try {
-        const parsedData = JSON.parse(patientData);
+        const parsedData = patientData
         setFullName(`${parsedData?.firstName} ${parsedData?.lastName}`);
         setPatientPreviousData(parsedData);
         setFormData((prev) => ({
@@ -324,8 +332,9 @@ const Cloudnine_Hospital = ({ type }) => {
         <PR_Header
           type={type}
           patientType={
-            hasCookie("invitePatientInfo") &&
-            JSON.parse(getCookie("invitePatientInfo"))?.patientType
+            // hasCookie("invitePatientInfo") &&
+            // JSON.parse(getCookie("invitePatientInfo"))?.patientType
+            getStorage("invitePatientInfo")?.patientType
           }
           text="Select Package"
           handleCancel={handleCancel}
@@ -494,20 +503,33 @@ const Cloudnine_Hospital = ({ type }) => {
               <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
                 <DrawerHeader>
                   <DrawerTitle className="text-[16px] font-[600] text-center">
-                    {hasCookie("invitePatientInfo") &&
+                    {/* {hasCookie("invitePatientInfo") &&
                     JSON.parse(getCookie("invitePatientInfo"))?.patientType ===
                       1
+                      ? "By cancelling, you are confirming to not add additional session for this patient"
+                      : "By cancelling, you are confirming to not Invite this patient to avail body-mind-emotional balance"} */}
+                      {getStorage("invitePatientInfo") &&
+                      getStorage("invitePatientInfo")?.patientType === 1
                       ? "By cancelling, you are confirming to not add additional session for this patient"
                       : "By cancelling, you are confirming to not Invite this patient to avail body-mind-emotional balance"}
                   </DrawerTitle>
                   <DrawerDescription className="mt-6 flex gap-3 w-full">
                     <Button onClick={()=>{
-                      if(hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType === 1){
-                        deleteCookie("invitePatientInfo")
-                        deleteCookie("sessions_selection")
+                      // if(hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType === 1){
+                      //   deleteCookie("invitePatientInfo")
+                      //   deleteCookie("sessions_selection")
+                      //   router.push(`/channel-partner/${type}/patient-registration`)
+                      // }
+                      // if(hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType === 2){
+                      //   setShow(false)
+                      //   handleCancel()
+                      // }
+                      if(getStorage("invitePatientInfo") && getStorage("invitePatientInfo")?.patientType === 1){
+                        removeStorage("invitePatientInfo")
+                        removeStorage("sessions_selection")
                         router.push(`/channel-partner/${type}/patient-registration`)
                       }
-                      if(hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType === 2){
+                      if(getStorage("invitePatientInfo") && getStorage("invitePatientInfo")?.patientType === 2){
                         setShow(false)
                         handleCancel()
                       }

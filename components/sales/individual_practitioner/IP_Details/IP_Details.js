@@ -32,6 +32,7 @@ import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { getCookie, hasCookie } from "cookies-next";
 import { useRememberMe } from "@/app/context/RememberMeContext";
+import { getStorage } from "@/lib/utils";
 polyfillCountryFlagEmojis();
 
 const IP_Details = () => {
@@ -394,7 +395,8 @@ const IP_Details = () => {
   }, [formData.email, touched.email])
 
   useEffect(() => {
-    const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+    // const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+    const token = getStorage("user", rememberMe);
     if (!token) {
       router.push('/login')
     }

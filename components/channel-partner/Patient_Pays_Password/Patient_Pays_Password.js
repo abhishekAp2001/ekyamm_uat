@@ -10,7 +10,7 @@ import axiosInstance from "@/lib/axiosInstance";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import { useRouter } from "next/navigation";
-import { customEncodeString, encryptData, sanitizeInput } from "@/lib/utils";
+import { customEncodeString, encryptData, getStorage, sanitizeInput, setStorage } from "@/lib/utils";
 import { Label } from "@radix-ui/react-label";
 import axios from "axios";
 
@@ -125,6 +125,7 @@ one symbol, and no spaces.`;
           status: response?.data?.data?.status,
         };
         setCookie("patientSessionData", JSON.stringify(patientSessionData));
+        setStorage("patientSessionData", patientSessionData);
         router.push(`/patient/${type}/details`);
       } else {
         return;
@@ -135,12 +136,13 @@ one symbol, and no spaces.`;
   };
 
   useEffect(() => {
-    const patientCookie = getCookie("patientLoginDetail");
+    // const patientCookie = getCookie("patientLoginDetail");
+    const patientCookie = getStorage("patientLoginDetail");
     if (!patientCookie) {
       router.push(`/patient/${type}/create`);
       return;
     }
-    const patientData = JSON.parse(patientCookie);
+    const patientData = patientCookie
     setPatientData(patientData);
     console.log(
       "channelPartnerData?.verificationToken",
@@ -164,6 +166,7 @@ one symbol, and no spaces.`;
 
         if (response?.data?.success === true) {
           setCookie("channelPartnerData", JSON.stringify(response.data.data));
+          setStorage("channelPartnerData", response.data.data);
           setChannelPartnerData(response.data.data);
           setFormData((prev) => ({
             ...prev,

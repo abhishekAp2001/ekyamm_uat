@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { showErrorToast } from "@/lib/toast";
 import { useRememberMe } from "@/app/context/RememberMeContext";
+import { getStorage, setStorage } from "@/lib/utils";
 
 const CP_clinic_details = () => {
   const router = useRouter();
@@ -40,10 +41,11 @@ const CP_clinic_details = () => {
 
   // Load form data from cookie on component mount
   useEffect(() => {
-    const savedData = getCookie("cp_clinic_details");
+    // const savedData = getCookie("cp_clinic_details");
+    const savedData = getStorage("cp_clinic_details", rememberMe);
     if (savedData) {
       try {
-        const parsedData = JSON.parse(savedData);
+        const parsedData = savedData
         setFormData(parsedData);
         // Mark fields as touched if they have values
         setTouched({
@@ -133,7 +135,8 @@ const CP_clinic_details = () => {
           maxAge = {}
         }
     if (isFormValid()) {
-      setCookie("cp_clinic_details", formData,maxAge);
+      // setCookie("cp_clinic_details", formData,maxAge);
+      setStorage("cp_clinic_details", formData, rememberMe, 43200);
       router.push("/sales/cp_doctor_details");
     } else {
       setTouched({
@@ -146,8 +149,10 @@ const CP_clinic_details = () => {
   };
 
     useEffect(()=>{
-      const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
-      const cp_type_token = hasCookie("cp_type") ? JSON.parse(getCookie("cp_type")) : null
+      // const token = hasCookie("user") ? JSON.parse(getCookie("user")): null
+      const token = getStorage("user", rememberMe);
+      // const cp_type_token = hasCookie("cp_type") ? JSON.parse(getCookie("cp_type")) : null
+      const cp_type_token = getStorage("cp_type", rememberMe);
       if(!token){
         router.push('/login')
       }

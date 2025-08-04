@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 import { showErrorToast } from "@/lib/toast";
 import { getCookie, hasCookie } from "cookies-next";
 import { useRememberMe } from "@/app/context/RememberMeContext";
+import { getStorage } from "@/lib/utils";
 
 const IP_Single_Session_Fees = () => {
   const { rememberMe } = useRememberMe()
@@ -178,7 +179,8 @@ const IP_Single_Session_Fees = () => {
   };
 
   useEffect(() => {
-    const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+    // const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+    const token = getStorage("user", rememberMe);
     const raw = rememberMe ? localStorage.getItem("ip_medical_association_details") : sessionStorage.getItem("ip_medical_association_details")
     const doNotHaveMedicalAssociation = rememberMe ? (localStorage.getItem("doNotHaveMedicalAssociation")==="true") : (sessionStorage.getItem("doNotHaveMedicalAssociation")==="true")
     const ip_type_token = raw ? JSON.parse(raw) : null

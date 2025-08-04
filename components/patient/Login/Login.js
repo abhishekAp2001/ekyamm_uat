@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import axiosInstance from "@/lib/axiosInstance";
 import { toast } from "react-toastify";
-import { customEncodeString, encryptData } from "@/lib/utils";
+import { customEncodeString, encryptData, setStorage } from "@/lib/utils";
 import { hasCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
@@ -71,6 +71,7 @@ const Login = () => {
           maxAge = {}
         }
         setCookie("patientSessionData", response?.data?.data,maxAge);
+        setStorage("patientSessionData", response?.data?.data,rememberMe,2592000 );
         router.push("/patient/dashboard");
       }
     } catch (error) {
@@ -84,7 +85,8 @@ const Login = () => {
   };
     useEffect(()=>{
       const checkCookie = ()=>{
-        const cookie = hasCookie("patientSessionData")
+        // const cookie = hasCookie("patientSessionData")
+        const cookie = sessionStorage.getItem("patientSessionData")? sessionStorage.getItem("patientSessionData"):localStorage.getItem("patientSessionData")
         if(cookie){
           router.push("/patient/dashboard")
         }

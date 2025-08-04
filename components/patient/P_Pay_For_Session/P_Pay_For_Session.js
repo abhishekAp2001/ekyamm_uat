@@ -10,6 +10,7 @@ import {
   calculatePaymentDetails,
   clinicSharePercent,
   formatAmount,
+  getStorage,
 } from "@/lib/utils";
 import Confirm_Header from "../../Confirm_Header";
 import { selectedCounsellorData as getSelectedCounsellorData } from "@/lib/utils";
@@ -19,7 +20,9 @@ import { Baseurl } from "@/lib/constants";
 import { string } from "i/lib/util";
 import { useRouter } from "next/navigation";
 import { showErrorToast } from "@/lib/toast";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 const P_Pay_For_Session = ({ type }) => {
+  const { rememberMe } = useRememberMe();
   const selectedCounsellorData = getSelectedCounsellorData()
   const [session, setSession] = useState(null)
   const price = session?.total
@@ -34,10 +37,11 @@ const P_Pay_For_Session = ({ type }) => {
   const payuFormRef = useRef(null);
   const router = useRouter()
   useEffect(() => {
-    const cookie = getCookie("patientSessionData");
+    // const cookie = getCookie("patientSessionData");
+    const cookie = getStorage("patientSessionData", rememberMe);
     if (cookie) {
       try {
-        setToken(JSON.parse(cookie));
+        setToken(cookie);
       } catch (err) {
         console.error("Error parsing cookie", err);
       }
@@ -47,10 +51,11 @@ const P_Pay_For_Session = ({ type }) => {
     }
   }, []);
   useEffect(() => {
-    const cookie = getCookie("session_selection");
+    // const cookie = getCookie("session_selection");
+    const cookie = getStorage("session_selection",rememberMe);
     if (cookie) {
       try {
-        setSession(JSON.parse(cookie));
+        setSession(cookie);
       } catch (err) {
         console.error("Error parsing cookie", err);
       }
@@ -61,10 +66,11 @@ const P_Pay_For_Session = ({ type }) => {
   }, []);
 
   useEffect(() => {
-    const cookie = getCookie("PatientInfo");
+    // const cookie = getCookie("PatientInfo");
+    const cookie = getStorage("PatientInfo", rememberMe);
     if (cookie) {
       try {
-        setPatientInfo(JSON.parse(cookie));
+        setPatientInfo(cookie);
       } catch (err) {
         console.error("Error parsing cookie", err);
       }

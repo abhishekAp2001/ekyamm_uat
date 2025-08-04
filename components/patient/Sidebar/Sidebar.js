@@ -6,9 +6,11 @@ import SignOutModal from "../SignOutModal/SignOutModal"; // adjust path as neede
 import { useRouter } from "next/navigation";
 import { whatsappUrl } from "@/lib/constants";
 import { getCookie, hasCookie } from "cookies-next";
-
+import { useRememberMe } from "@/app/context/RememberMeContext";
+import { getStorage } from "@/lib/utils";
 const Sidebar = ({ onClose }) => {
   const router = useRouter();
+  const { rememberMe } = useRememberMe();
   const [showSignOutModal, setShowSignOutModal] = useState(false);
   const [user,setUser] = useState(null)
   const [patient,setPatient] = useState(null)
@@ -21,8 +23,10 @@ const Sidebar = ({ onClose }) => {
   };
 
   const handleConfirmSignOut = () => {
-    const patient = getCookie("patientSessionData")
-    const user = getCookie("user")
+    // const patient = getCookie("patientSessionData")
+    const patient = getStorage("patientSessionData", rememberMe);
+    // const user = getCookie("user")
+    const user = getStorage("user", rememberMe);
     document.cookie.split(";").forEach((c) => {
       document.cookie = c
         .replace(/^ +/, "") // Trim leading spaces
@@ -38,9 +42,11 @@ const Sidebar = ({ onClose }) => {
     }
   };
   useEffect(()=>{
-    const user = hasCookie("user")?getCookie("user"):null
+    // const user = hasCookie("user")?getCookie("user"):null
+    const user = getStorage("user", rememberMe);
     setUser(user)
-    const patient = hasCookie("patientSessionData")?getCookie("patientSessionData"):null
+    // const patient = hasCookie("patientSessionData")?getCookie("patientSessionData"):null
+    const patient = getStorage("patientSessionData", rememberMe);
     setPatient(patient)
   },[])
   return (

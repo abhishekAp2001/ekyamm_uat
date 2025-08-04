@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/input-otp";
 import { toast } from "react-toastify";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
-import { formatTime } from "@/lib/utils";
+import { formatTime, getStorage } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { getCookie } from "cookies-next";
 import axiosInstance from "@/lib/axiosInstance";
@@ -273,10 +273,11 @@ const OTP_Send = ({ type }) => {
   }, [otpSendStatus, resendTimer]);
  
   useEffect(() => {
-    const cookieData = getCookie("channelPartnerData");
+    // const cookieData = getCookie("channelPartnerData");
+    const cookieData = getStorage("channelPartnerData");
     if (cookieData) {
       try {
-        const parsedData = JSON.parse(cookieData);
+        const parsedData = cookieData
         setChannelPartnerData(parsedData);
       } catch (error) {
         setChannelPartnerData(null);

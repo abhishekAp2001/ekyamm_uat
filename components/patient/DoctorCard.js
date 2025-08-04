@@ -5,7 +5,7 @@ import {
 } from "@/components/ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { formatAmount } from "@/lib/utils";
+import { formatAmount, setStorage } from "@/lib/utils";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { getCookie } from "cookies-next";
@@ -27,7 +27,8 @@ const DoctorCard = ({
     else if (!rememberMe) {
       maxAge = {}
     }
-    setCookie("selectedCounsellor", JSON.stringify(doc), maxAge);
+    // setCookie("selectedCounsellor", JSON.stringify(doc), maxAge);
+    setStorage("selectedCounsellor", doc, rememberMe, 2592000 );
     if (patient.availableCredits === 0) {
       router.push("/patient/select-package")
     }

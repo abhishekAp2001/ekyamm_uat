@@ -5,7 +5,7 @@ import { Button } from "../../ui/button";
 import { Plus } from "lucide-react";
 import { Skeleton } from "../../ui/skeleton";
 import { useState, useEffect } from "react";
-import { patientSessionToken as getPatientSessionToken } from "@/lib/utils";
+import { patientSessionToken as getPatientSessionToken, setStorage } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { showErrorToast } from "@/lib/toast";
 import { setCookie } from "cookies-next";
@@ -27,7 +27,8 @@ export default function AvailableSession({ loading = false, patient }) {
         else if(!rememberMe){
           maxAge = {}
         }
-    setCookie("selectedCounsellor", JSON.stringify(therapist),maxAge);
+    // setCookie("selectedCounsellor", JSON.stringify(therapist),maxAge);
+    setStorage("selectedCounsellor", therapist, rememberMe, 2592000 );
     router.push("/patient/schedule-session");
   };
   const onAddPackage = () => {
@@ -38,7 +39,8 @@ export default function AvailableSession({ loading = false, patient }) {
         else if(!rememberMe){
           maxAge = {}
         }
-    setCookie("selectedCounsellor", JSON.stringify(therapist),maxAge);
+    // setCookie("selectedCounsellor", JSON.stringify(therapist),maxAge);
+    setStorage("selectedCounsellor", therapist, rememberMe, 2592000 );
     router.push("/patient/select-package");
   };
   useEffect(() => {

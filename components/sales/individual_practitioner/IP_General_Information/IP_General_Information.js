@@ -14,6 +14,7 @@ import { showErrorToast } from "@/lib/toast";
 import { getCookie, hasCookie } from "cookies-next";
 import { useRememberMe } from "@/app/context/RememberMeContext";
 import { Checkbox } from "@/components/ui/checkbox";
+import { getStorage } from "@/lib/utils";
 
 const IP_General_Information = () => {
   const { rememberMe } = useRememberMe()
@@ -173,7 +174,8 @@ const IP_General_Information = () => {
   };
 
   useEffect(() => {
-    const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+    // const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null
+    const token = getStorage("user", rememberMe);
     const raw = rememberMe ? localStorage.getItem("ip_details") : sessionStorage.getItem("ip_details")
     const ip_type_token = raw ? JSON.parse(raw) : null
     if (!token) {

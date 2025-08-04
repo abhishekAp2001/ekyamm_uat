@@ -9,7 +9,7 @@ import Confirm_Header from "../../Confirm_Header";
 import { MapPin } from "lucide-react";
 import { getCookie, hasCookie, deleteCookie } from "cookies-next";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
-import { calculatePaymentDetails, clinicSharePercent, formatAmount } from "@/lib/utils";
+import { calculatePaymentDetails, clinicSharePercent, formatAmount, getStorage, removeStorage } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -21,18 +21,22 @@ const PaymentConfirmation = ({ type }) => {
   const [channelPartnerData, setChannelPartnerData] = useState(null);
   const [totalPayable, setTotalPayable] = useState(0);
   const [secondsLeft, setSecondsLeft] = useState(30);
-  const sessions_selection = hasCookie("sessions_selection")
-    ? JSON.parse(getCookie("sessions_selection"))
-    : null;
-  const payment_status_cookie = hasCookie("paymentStatusInfo")
-    ? JSON.parse(getCookie("paymentStatusInfo"))
-    : null;
-  const invitePatientInfo = hasCookie("invitePatientInfo")
-    ? JSON.parse(getCookie("invitePatientInfo"))
-    : null;
-  const qr_code_info = hasCookie("qrCodeInfo")
-    ? JSON.parse(getCookie("qrCodeInfo"))
-    : null;
+  const sessions_selection = getStorage("sessions_selection");
+  const payment_status_cookie = getStorage("paymentStatusInfo");
+  const invitePatientInfo = getStorage("invitePatientInfo");
+  const qr_code_info = getStorage("qrCodeInfo");
+  // const sessions_selection = hasCookie("sessions_selection")
+  //   ? JSON.parse(getCookie("sessions_selection"))
+  //   : null;
+  // const payment_status_cookie = hasCookie("paymentStatusInfo")
+  //   ? JSON.parse(getCookie("paymentStatusInfo"))
+  //   : null;
+  // const invitePatientInfo = hasCookie("invitePatientInfo")
+  //   ? JSON.parse(getCookie("invitePatientInfo"))
+  //   : null;
+  // const qr_code_info = hasCookie("qrCodeInfo")
+  //   ? JSON.parse(getCookie("qrCodeInfo"))
+  //   : null;
 const hasRedirected = useRef(false);
 useEffect(() => {
   if (!sessions_selection || !qr_code_info || !invitePatientInfo || !payment_status_cookie) {
@@ -47,11 +51,16 @@ useEffect(() => {
 useEffect(() => {
   if (secondsLeft === 0 && !hasRedirected.current) {
     hasRedirected.current = true;
-    deleteCookie("sessions_selection"); 
-    deleteCookie("channelPartnerData");
-    deleteCookie("invitePatientInfo");
-    deleteCookie("qrCodeInfo");
-    deleteCookie("paymentStatusInfo");
+    // deleteCookie("sessions_selection"); 
+    // deleteCookie("channelPartnerData");
+    // deleteCookie("invitePatientInfo");
+    // deleteCookie("qrCodeInfo");
+    // deleteCookie("paymentStatusInfo");
+    removeStorage("sessions_selection")
+    removeStorage("channelPartnerData")
+    removeStorage("invitePatientInfo")
+    removeStorage("qrCodeInfo")
+    removeStorage("paymentStatusInfo")
     router.push(`/channel-partner/${type}`);
     return;
   }
@@ -63,8 +72,10 @@ useEffect(() => {
 }, [secondsLeft, router, type]);
 
   useEffect(() => {
-    const cookieData = getCookie("channelPartnerData");
-    const patientData = getCookie("invitePatientInfo");
+    // const cookieData = getCookie("channelPartnerData");
+    const cookieData = getStorage("channelPartnerData");
+    // const patientData = getCookie("invitePatientInfo");
+    const patientData = getStorage("invitePatientInfo");
     if (cookieData) {
       try {
         const parsedData = JSON.parse(cookieData);

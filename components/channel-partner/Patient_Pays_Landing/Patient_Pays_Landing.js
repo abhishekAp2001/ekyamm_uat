@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { setCookie } from "cookies-next";
 import axios from "axios";
 import { showErrorToast } from "@/lib/toast";
+import { setStorage } from "@/lib/utils";
 const Patient_Pays_Landing = ({ type }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -27,6 +28,7 @@ const Patient_Pays_Landing = ({ type }) => {
 
         if (response?.data?.success === true) {
           setCookie("channelPartnerData", JSON.stringify(response.data.data));
+          setStorage("channelPartnerData", response.data.data);
           setChannelPartnerData(response.data.data);
         } else {
           showErrorToast(

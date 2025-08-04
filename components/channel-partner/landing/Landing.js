@@ -4,6 +4,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import axiosInstance from '@/lib/axiosInstance';
 import { showErrorToast } from '@/lib/toast';
 import { setCookie } from 'cookies-next';
+import { setStorage } from '@/lib/utils';
 const Landing = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -19,6 +20,7 @@ const Landing = () => {
 
         if (response?.data?.success === true) {
           setCookie("channelPartnerData", JSON.stringify(response.data.data));
+          setStorage("channelPartnerData", response.data.data);
           if (response?.data?.data?.billingType == "patientPays") {
             router.push(`/channel-partner/${username}/patient-pay-landing`)
           }
