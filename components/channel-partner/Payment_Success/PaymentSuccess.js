@@ -6,13 +6,14 @@ import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
+import { getStorage } from "@/lib/utils";
 
 const PaymentSuccess = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [hascheck, setHashCheck] = useState(null);
-
+  const channelPartner = getStorage("channelPartnerData")
   useEffect(() => {
     const queryObj = {};
     searchParams.forEach((value, key) => {
@@ -68,14 +69,17 @@ const PaymentSuccess = () => {
   // Redirect logic
   useEffect(() => {
     if (seconds === 0 && hascheck === true) {
-      router.push(`/patient/payment-confirmation?txnid=${txnid}`);
+      router.push(`/channel-partner/${channelPartner.clinicName}/onspot-payment-confirmation?txnid=${txnid}`);
     } else if (seconds === 0 && hascheck === false) {
-      router.push("/patient/dashboard");
+      router.push(`/channel-partner/${channelPartner.clinicName}`);
     }
-  }, [seconds, hascheck, router, txnid]);
+  }, [seconds, hascheck, router, txnid,channelPartner.clinicName]);
 
-    const successclose = ()=>{
-    router.push(`/patient/payment-confirmation?txnid=${txnid}`)
+  const successclose = ()=>{
+    router.push(`/channel-partner/${channelPartner.clinicName}/onspot-payment-confirmation?txnid=${txnid}`)
+  }
+  const failureClose = ()=>{
+    router.push(`/channel-partner/${channelPartner.clinicName}`);
   }
   return (
     <div className="relative">
@@ -111,13 +115,12 @@ const PaymentSuccess = () => {
             Security Error
           </strong>
           <p className="text-black text-sm font-medium">
-            Redirecting to dashboard {seconds} second{seconds !== 1 ? "s" : ""}
+            Redirecting to home page {seconds} second{seconds !== 1 ? "s" : ""}
             ...
           </p>
-          <div className="absolute top-4 right-3">
-            <Link href="/patient/dashboard">
+          <div className="absolute top-4 right-3"
+          onClick={failureClose}>
               <X width={24} height={24} className="w-8 mb-0" />
-            </Link>
           </div>
         </div>
       )}

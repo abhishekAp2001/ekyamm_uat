@@ -28,7 +28,7 @@ const CP_landing = ({ type }) => {
 
         if (response?.data?.success === true) {
           setCookie("channelPartnerData", JSON.stringify(response.data.data));
-          setStorage("channelPartnerData", response.data.data);
+          setStorage("channelPartnerData", response?.data?.data);
           setChannelPartnerData(response.data.data);
           if(response?.data?.data?.billingType == "patientPays"){
             router.push(`/channel-partner/${type}/patient-pay-landing`)

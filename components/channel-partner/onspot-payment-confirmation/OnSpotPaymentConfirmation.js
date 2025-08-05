@@ -9,59 +9,61 @@ import Confirm_Header from "../../Confirm_Header";
 import { MapPin } from "lucide-react";
 import { getCookie, hasCookie, deleteCookie } from "cookies-next";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
-import { calculatePaymentDetails, clinicSharePercent, formatAmount, getStorage, removeStorage } from "@/lib/utils";
+import { calculatePaymentDetails, clinicSharePercent, formatAmount, getStorage, removeStorage, setStorage } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Invoice from "./Invoice";
 import { useReactToPrint } from "react-to-print";
-const PaymentConfirmation = ({ type }) => {
+import { useSearchParams } from "next/navigation";
+const OnSpotPaymentConfirmation = ({ type }) => {
+  const searchParams = useSearchParams()
+  const transactionId = searchParams.get("txnid")
   const targetRef = useRef()
   const router = useRouter()
   const [channelPartnerData, setChannelPartnerData] = useState(null);
   const [totalPayable, setTotalPayable] = useState(0);
   const [secondsLeft, setSecondsLeft] = useState(30);
   const sessions_selection = getStorage("sessions_selection");
-  const payment_status_cookie = getStorage("paymentStatusInfo");
+  console.log("sessions selection",sessions_selection)
   const invitePatientInfo = getStorage("invitePatientInfo");
-  const qr_code_info = getStorage("qrCodeInfo");
-  // const sessions_selection = hasCookie("sessions_selection")
-  //   ? JSON.parse(getCookie("sessions_selection"))
-  //   : null;
-  // const payment_status_cookie = hasCookie("paymentStatusInfo")
-  //   ? JSON.parse(getCookie("paymentStatusInfo"))
-  //   : null;
-  // const invitePatientInfo = hasCookie("invitePatientInfo")
-  //   ? JSON.parse(getCookie("invitePatientInfo"))
-  //   : null;
-  // const qr_code_info = hasCookie("qrCodeInfo")
-  //   ? JSON.parse(getCookie("qrCodeInfo"))
-  //   : null;
+  useEffect(() => {
+    if (sessions_selection) {
+      try {
+        const cookieObj = sessions_selection
+        cookieObj.txnId = transactionId;
+        setStorage("sessions_selection", cookieObj);
+      } catch (err) {
+        console.error("Error parsing cookie", err);
+      }
+    }
+    else if(!sessions_selection){
+      router.push(`/channel-partner/${type}`)
+      router.refresh();
+    }
+  }, []);
 const hasRedirected = useRef(false);
 useEffect(() => {
-  if (!sessions_selection || !qr_code_info || !invitePatientInfo || !payment_status_cookie) {
+  if (!sessions_selection || !invitePatientInfo) {
     if (!hasRedirected.current) {
       hasRedirected.current = true;
       router.push(`/channel-partner/${type}`);
+      router.refresh();
     }
   }
-}, [sessions_selection, qr_code_info, invitePatientInfo, payment_status_cookie, router, type]);
+}, [sessions_selection, invitePatientInfo, router, type]);
 
 
 useEffect(() => {
   if (secondsLeft === 0 && !hasRedirected.current) {
     hasRedirected.current = true;
-    // deleteCookie("sessions_selection"); 
-    // deleteCookie("channelPartnerData");
-    // deleteCookie("invitePatientInfo");
-    // deleteCookie("qrCodeInfo");
-    // deleteCookie("paymentStatusInfo");
     removeStorage("sessions_selection")
     removeStorage("channelPartnerData")
     removeStorage("invitePatientInfo")
     removeStorage("qrCodeInfo")
     removeStorage("paymentStatusInfo")
     router.push(`/channel-partner/${type}`);
+    router.refresh();
     return;
   }
 
@@ -88,12 +90,7 @@ useEffect(() => {
     } else {
       setChannelPartnerData(null);
       router.push(`/channel-partner/${type}`);
-    }
-    if(payment_status_cookie){
-      showSuccessToast("Patient Invited & Sessions Created");
-    }
-    else if(!payment_status_cookie){
-      showErrorToast("No payment made")
+      router.refresh();
     }
   }, [type]);
 
@@ -175,7 +172,7 @@ useEffect(() => {
                   Paid
                 </span>
                 <span className="text-[15px] font-[600] text-black mr-1">
-                  {qr_code_info?.payuRaw?.metaData?.txnId}
+                  {transactionId}
                 </span>
               </div>
             </div>
@@ -253,4 +250,4 @@ useEffect(() => {
   );
 };
 
-export default PaymentConfirmation;
+export default OnSpotPaymentConfirmation;

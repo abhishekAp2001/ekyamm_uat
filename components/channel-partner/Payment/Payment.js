@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "../../ui/button";
@@ -22,7 +22,9 @@ import { Loader2 } from "lucide-react";
 const Payment = ({ type }) => {
   const router = useRouter()
   const [channelPartnerData, setChannelPartnerData] = useState(null);
+  const [formFields, setFormFields] = useState(null);
   const [qrCode, setQrCode] = useState("");
+  const payuFormRef = useRef(null);
   // const [billingType, setBillingType] = useState("");
   const [orderId, setOrderId] = useState("");
   const [totalPayable, setTotalPayable] = useState(0);
@@ -34,11 +36,11 @@ const Payment = ({ type }) => {
   // const invitePatientInfo = hasCookie("invitePatientInfo")
   //   ? JSON.parse(getCookie("invitePatientInfo"))
   //   : null;
-      useEffect(()=>{
-        if(!sessions_selection || !invitePatientInfo){
-        router.push(`/channel-partner/${type}`)
-      }
-      },[sessions_selection,type,invitePatientInfo,router])
+  useEffect(() => {
+    if (!sessions_selection || !invitePatientInfo) {
+      router.push(`/channel-partner/${type}`)
+    }
+  }, [sessions_selection, type, invitePatientInfo, router])
   useEffect(() => {
     // const cookieData = getCookie("channelPartnerData");
     const cookieData = getStorage("channelPartnerData");
@@ -56,7 +58,7 @@ const Payment = ({ type }) => {
       setChannelPartnerData(null);
       router.push(`/channel-partner/${type}`);
     }
-  }, [type,router]);
+  }, [type, router]);
 
   useEffect(() => {
     const calculatePrice = () => {
@@ -73,82 +75,82 @@ const Payment = ({ type }) => {
     sessions_selection?.sessionCreditCount,
   ]);
 
-useEffect(() => {
-  const deviceInfo = {
-    userAgent: navigator.userAgent,
-    platform: navigator.platform,
-    language: navigator.language,
-    screen: {
-      width: screen.width,
-      height: screen.height,
-      orientation: screen.orientation?.type || 'unknown'
-    }
-  };
-
-  function objectToLiteralString(obj, indent = 0) {
-    const spaces = ' '.repeat(indent);
-    let result = '';
-
-    for (const [key, value] of Object.entries(obj)) {
-      if (typeof value === 'object' && value !== null) {
-        result += `${spaces}${key}: {\n${objectToLiteralString(value, indent + 2)}${spaces}},\n`;
-      } else if (typeof value === 'string') {
-        result += `${spaces}${key}: "${value}",\n`;
-      } else {
-        result += `${spaces}${key}: ${value},\n`;
+  useEffect(() => {
+    const deviceInfo = {
+      userAgent: navigator.userAgent,
+      platform: navigator.platform,
+      language: navigator.language,
+      screen: {
+        width: screen.width,
+        height: screen.height,
+        orientation: screen.orientation?.type || 'unknown'
       }
-    }
+    };
 
-    return result;
-  }
+    function objectToLiteralString(obj, indent = 0) {
+      const spaces = ' '.repeat(indent);
+      let result = '';
 
-  const getIP = async () => {
-    try {
-      const response = await fetch('https://api.ipify.org?format=json');
-      const data = await response.json();
-      console.log("IP after get:", data.ip);
-      return data.ip;
-    } catch (error) {
-      console.error("Failed to fetch IP:", error);
-      return "";
-    }
-  };
-
-  const getQrString = async (ip, literalDeviceInfo) => {
-    try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient/sessionCredits`, {
-        channelPartnerUsername: type,
-        cp_patientId: invitePatientInfo?._id,
-        sessionCreditCount: sessions_selection?.sessionCreditCount,
-        sessionPrice: String(sessions_selection?.sessionPrice+(sessions_selection?.sessionPrice*0.1)),
-        // sessionCreditCount: "1",
-        // sessionPrice: "1",
-        clientDetails: {
-          ip: String(ip),
-          deviceInfo: literalDeviceInfo
-        },
-        flow:channelPartnerData?.billingType,
-        // practitionerId: "",
-      });
-      if (response?.data?.success) {
-        // setCookie("qrCodeInfo", JSON.stringify(response?.data?.data));
-        setStorage("qrCodeInfo", response?.data?.data);
-        setOrderId(response?.data?.data?.orderId);
-        generateQrCode(response?.data?.data?.upiIntent);
+      for (const [key, value] of Object.entries(obj)) {
+        if (typeof value === 'object' && value !== null) {
+          result += `${spaces}${key}: {\n${objectToLiteralString(value, indent + 2)}${spaces}},\n`;
+        } else if (typeof value === 'string') {
+          result += `${spaces}${key}: "${value}",\n`;
+        } else {
+          result += `${spaces}${key}: ${value},\n`;
+        }
       }
-    } catch (error) {
-      console.error("Error", error);
+
+      return result;
     }
-  };
 
-  const doFlow = async () => {
-    const literalDeviceInfo = objectToLiteralString(deviceInfo); // ✅ FIX: pass the object!
-    const ip = await getIP();
-    await getQrString(ip, literalDeviceInfo);
-  };
+    const getIP = async () => {
+      try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        console.log("IP after get:", data.ip);
+        return data.ip;
+      } catch (error) {
+        console.error("Failed to fetch IP:", error);
+        return "";
+      }
+    };
 
-  doFlow();
-},[]);
+    const getQrString = async (ip, literalDeviceInfo) => {
+      try {
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient/sessionCredits`, {
+          channelPartnerUsername: type,
+          cp_patientId: invitePatientInfo?._id,
+          sessionCreditCount: sessions_selection?.sessionCreditCount,
+          sessionPrice: String(sessions_selection?.sessionPrice + (sessions_selection?.sessionPrice * 0.1)),
+          // sessionCreditCount: "1",
+          // sessionPrice: "1",
+          clientDetails: {
+            ip: String(ip),
+            deviceInfo: literalDeviceInfo
+          },
+          flow: channelPartnerData?.billingType,
+          // practitionerId: "",
+        });
+        if (response?.data?.success) {
+          // setCookie("qrCodeInfo", JSON.stringify(response?.data?.data));
+          setStorage("qrCodeInfo", response?.data?.data);
+          setOrderId(response?.data?.data?.orderId);
+          generateQrCode(response?.data?.data?.upiIntent);
+        }
+      } catch (error) {
+        console.error("Error", error);
+      }
+    };
+
+    const doFlow = async () => {
+      const literalDeviceInfo = objectToLiteralString(deviceInfo); // ✅ FIX: pass the object!
+      const ip = await getIP();
+      await getQrString(ip, literalDeviceInfo);
+    };
+
+    doFlow();
+  }, []);
 
   const generateQrCode = async (upiIntent) => {
     try {
@@ -191,7 +193,34 @@ useEffect(() => {
     }
 
     return () => clearInterval(interval);
-  }, [orderId, type, invitePatientInfo?._id,router]);
+  }, [orderId, type, invitePatientInfo?._id, router]);
+
+  const UPIPayment = async () => {
+    try {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient/sessionCredits/refill`, {
+        sessionCreditCount: sessions_selection?.sessionCreditCount,
+        sessionPrice: String(sessions_selection?.sessionPrice + (sessions_selection?.sessionPrice * 0.1)),
+        patientId: getStorage("invitePatientInfo")._id,
+      })
+      if (res?.data?.success) {
+        const payuPayload = res.data?.data?.payuPayload;
+        if (!payuPayload) {
+          showErrorToast("No PayU payload received.");
+          return;
+        }
+        payuPayload.fields.surl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/onspot_success`
+        payuPayload.fields.furl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/onspot_failure`
+        setFormFields(payuPayload);
+      }
+    } catch (error) {
+      console.error("error", error)
+    }
+  }
+    useEffect(() => {
+      if (formFields) {
+        payuFormRef.current?.submit();
+      }
+    }, [formFields]);
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
@@ -236,6 +265,12 @@ useEffect(() => {
                 </div>
               </Link>
               <div className="flex justify-center mt-5">
+                <Button className="bg-[#776EA5] text-[15px] font-[700] text-white py-[14.5px]   rounded-[8px] flex items-center justify-center w-[304px] h-[45px]"
+                onClick={()=>{UPIPayment()}}>
+                  Pay with UPI
+                </Button>
+              </div>
+              <div className="flex justify-center mt-5">
                 <Link href={`/channel-partner/${type}/pay-for-sessions`}>
                   <Button className="bg-[#776EA5] text-[15px] font-[700] text-white py-[14.5px]   rounded-[8px] flex items-center justify-center w-[304px] h-[45px]">
                     Back
@@ -248,6 +283,21 @@ useEffect(() => {
             <Footer_bar />
           </div> */}
           </div>
+        </div>
+        <div>
+          {formFields && (
+            <form
+              ref={payuFormRef}
+              action={formFields.action}
+              method="post"
+              style={{ display: "none" }}
+            >
+              {Object.entries(formFields.fields).map(([k, v]) => (
+                <input key={k} type="hidden" name={k} value={v} />
+              ))}
+              <input type="submit" value="Submit" />
+            </form>
+          )}
         </div>
       </div>
     </>
