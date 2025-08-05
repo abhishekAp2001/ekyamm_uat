@@ -146,7 +146,7 @@ const PP_Details = ({ type }) => {
         });
         if (response?.data?.success) {
           setCookie("channelPartnerData", JSON.stringify(response.data.data));
-          setStorage("channelPartnerData", response.data.data);
+          setStorage("channelPartnerData", response?.data?.data);
           setChannelPartnerData(response.data.data);
           // setFormData((prev) => ({
           //   ...prev,

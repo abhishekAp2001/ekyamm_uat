@@ -20,7 +20,7 @@ const Patient_Landing= () => {
 
         if (response?.data?.success == true) {
           setCookie("channelPartnerData", JSON.stringify(response.data.data));
-          setStorage("channelPartnerData", response.data.data);
+          setStorage("channelPartnerData", response?.data?.data);
           if(response?.data?.data?.billingType == "patientPays"){
             router.push('/patient/login')
           }

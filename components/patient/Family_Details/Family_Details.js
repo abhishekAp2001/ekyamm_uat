@@ -193,7 +193,7 @@ const Family_Details = ({ type }) => {
       if (response.data.success) {
         showSuccessToast("Family member added successfully");
         // setCookie("completeUserData", response.data.data);
-        setStorage("completeUserData", response.data.data);
+        setStorage("completeUserData", response?.data?.data);
         if (formData.emergencyContact) {
           // deleteCookie("completeUserData")
           // deleteCookie("patientInfo")
@@ -240,7 +240,7 @@ const Family_Details = ({ type }) => {
 
         if (response?.data?.success === true) {
           setCookie("channelPartnerData", JSON.stringify(response.data.data));
-          setStorage("channelPartnerData", response.data.data);
+          setStorage("channelPartnerData", response?.data?.data);
           setChannelPartnerData(response.data.data);
         } else {
           showErrorToast(

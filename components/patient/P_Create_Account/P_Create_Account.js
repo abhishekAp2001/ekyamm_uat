@@ -182,7 +182,7 @@ one symbol, and no spaces.`;
 
         if (response?.data?.success === true) {
           setCookie("channelPartnerData", JSON.stringify(response.data.data));
-          setStorage("channelPartnerData", response.data.data);
+          setStorage("channelPartnerData", response?.data?.data);
           setChannelPartnerData(response.data.data);
           setFormData((prev) => ({
             ...prev,

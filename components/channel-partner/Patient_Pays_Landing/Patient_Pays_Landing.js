@@ -28,7 +28,7 @@ const Patient_Pays_Landing = ({ type }) => {
 
         if (response?.data?.success === true) {
           setCookie("channelPartnerData", JSON.stringify(response.data.data));
-          setStorage("channelPartnerData", response.data.data);
+          setStorage("channelPartnerData", response?.data?.data);
           setChannelPartnerData(response.data.data);
         } else {
           showErrorToast(
