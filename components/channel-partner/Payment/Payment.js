@@ -230,14 +230,14 @@ const Payment = ({ type }) => {
         <div className="h-full flex flex-col overflow-auto  bg-gradient-to-b from-[#DFDAFB] to-[#F9CCC5]">
           <div className="flex flex-col h-fit mx-auto relative mt-4 mb-4 ">
             <div className="w-full text-[#776EA5] font-semibold text-[20px] leading-[25px] text-center">
-              {channelPartnerData?.clinicName}
+              {getStorage("channelPartnerData")?.clinicName}
             </div>
             <div className="flex items-center justify-center gap-1">
               <div className="bg-[#776EA5] rounded-full w-[16.78px] h-[16.78px] flex justify-center items-center">
                 <MapPin color="white" className="w-[12.15px] h-[12.15px]" />
               </div>
               <span className="text-sm text-[#776EA5] font-medium">
-                {channelPartnerData?.area}
+                {getStorage("channelPartnerData")?.area}
               </span>
             </div>
           </div>

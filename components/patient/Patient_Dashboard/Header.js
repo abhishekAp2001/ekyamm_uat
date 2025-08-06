@@ -35,8 +35,8 @@ const Header = ({ loading = false, patient }) => {
             </div>
             <span className="text-xs text-[#FFFFFF80] font-medium">
               {[
+                patient?.clinicDetails?.area,
                 patient?.clinicDetails?.city,
-                patient?.clinicDetails?.state,
               ]
                 .filter(Boolean)
                 .join(", ")}
