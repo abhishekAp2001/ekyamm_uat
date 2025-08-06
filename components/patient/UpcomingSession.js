@@ -407,7 +407,7 @@ const UpcomingSession = ({
 
                       {!isWithinTwoMinutesBefore(session?.sessionTime?.from) &&
                         !hideTooltip && (
-                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 z-10 flex flex-col items-center transition-opacity duration-200 group-hover:opacity-100 opacity-0 pointer-events-auto">
+                          <div className="absolute bottom-full left-9/12 md:left-1/2 -translate-x-1/2 z-10 flex flex-col items-center transition-opacity duration-200 group-hover:opacity-100 opacity-0 pointer-events-auto">
                             <div className="bg-[#776EA5] text-white text-[14px] leading-[20px] px-[13px] py-[8px] rounded-[8px] w-[256px] text-center relative">
                               Session will start on {convertUTCtoIST(session?.sessionTime?.from).date} at
                               <br />
@@ -567,7 +567,7 @@ const UpcomingSession = ({
                         </Button>
 
                         {!isWithinTwoMinutesBefore(session?.sessionTime?.from) && !hideTooltip && (
-                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 z-10 flex flex-col items-center transition-opacity duration-200 group-hover:opacity-100 opacity-0 pointer-events-auto">
+                          <div className="absolute bottom-full md:left-1/2 -translate-x-1/2 z-10 flex flex-col items-center transition-opacity duration-200 group-hover:opacity-100 opacity-0 pointer-events-auto">
                             <div className="bg-[#776EA5] text-white text-[14px] leading-[20px] px-[13px] py-[8px] rounded-[8px] w-[256px] text-center relative">
                               Session will start on {convertUTCtoIST(session?.sessionTime?.from).date} at
                               <br />
