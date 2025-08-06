@@ -69,17 +69,17 @@ const PaymentSuccess = () => {
   // Redirect logic
   useEffect(() => {
     if (seconds === 0 && hascheck === true) {
-      router.push(`/channel-partner/${channelPartner.clinicName}/onspot-payment-confirmation?txnid=${txnid}`);
+      router.push(`/channel-partner/${channelPartner.userName}/onspot-payment-confirmation?txnid=${txnid}`);
     } else if (seconds === 0 && hascheck === false) {
-      router.push(`/channel-partner/${channelPartner.clinicName}`);
+      router.push(`/channel-partner/${channelPartner.userName}`);
     }
-  }, [seconds, hascheck, router, txnid,channelPartner.clinicName]);
+  }, [seconds, hascheck, router, txnid,channelPartner.userName]);
 
   const successclose = ()=>{
-    router.push(`/channel-partner/${channelPartner.clinicName}/onspot-payment-confirmation?txnid=${txnid}`)
+    router.push(`/channel-partner/${channelPartner.userName}/onspot-payment-confirmation?txnid=${txnid}`)
   }
   const failureClose = ()=>{
-    router.push(`/channel-partner/${channelPartner.clinicName}`);
+    router.push(`/channel-partner/${channelPartner.userName}`);
   }
   return (
     <div className="relative">

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { X, XCircle } from "lucide-react";
 import axios from "axios";
@@ -25,7 +25,7 @@ const PaymentFailure = () => {
         console.error("Error calling webhook:", error);
       }
     };
-      showErrorToast("Payment Failed");
+    showErrorToast("Payment Failed");
     payu();
   }, []);
 
@@ -37,7 +37,7 @@ const PaymentFailure = () => {
 
   useEffect(() => {
     if (seconds === 0) {
-      router.push(`/channel-partner/${channelPartner.clinicName}`);
+      router.push(`/channel-partner/${channelPartner.userName}`);
     }
 
     const timer = setInterval(() => {
@@ -46,8 +46,8 @@ const PaymentFailure = () => {
 
     return () => clearInterval(timer);
   }, [seconds, txnid, router]);
-const failureClose = ()=>{
-    router.push(`/channel-partner/${channelPartner.clinicName}`);
+  const failureClose = () => {
+    router.push(`/channel-partner/${channelPartner.userName}`);
   }
   return (
     <div>
@@ -61,9 +61,9 @@ const failureClose = ()=>{
           ...
         </p>
         <div className="absolute top-4 right-3"
-        onClick={failureClose}>
-              <X width={24} height={24} className="w-8 mb-0" />
-          </div>
+          onClick={failureClose}>
+          <X width={24} height={24} className="w-8 mb-0" />
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import { Button } from "../../ui/button";
 import Link from "next/link";
 import Footer_bar from "../../Footer_bar/Footer_bar";
@@ -14,8 +14,12 @@ import {
 } from "@/lib/utils";
 import Confirm_Header from "../../Confirm_Header";
 import { useRouter } from "next/navigation";
+import { showErrorToast } from "@/lib/toast";
+import axios from "axios";
 
 const PayForSessions = ({ type }) => {
+  const [formFields, setFormFields] = useState(null);
+  const payuFormRef = useRef(null);
   const [total, setTotal] = useState(0);
   const [clinicShare, setClinicShare] = useState(0);
   const [totalPayable, setTotalPayable] = useState(0);
@@ -53,6 +57,33 @@ const PayForSessions = ({ type }) => {
     sessions_selection?.sessionPrice,
     sessions_selection?.sessionCreditCount,
   ]);
+
+    const UPIPayment = async () => {
+    try {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient/sessionCredits/refill`, {
+        sessionCreditCount: sessions_selection?.sessionCreditCount,
+        sessionPrice: String(sessions_selection?.sessionPrice + (sessions_selection?.sessionPrice * 0.1)),
+        patientId: getStorage("invitePatientInfo")._id,
+      })
+      if (res?.data?.success) {
+        const payuPayload = res.data?.data?.payuPayload;
+        if (!payuPayload) {
+          showErrorToast("No PayU payload received.");
+          return;
+        }
+        payuPayload.fields.surl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/onspot_success`
+        payuPayload.fields.furl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/onspot_failure`
+        setFormFields(payuPayload);
+      }
+    } catch (error) {
+      console.error("error", error)
+    }
+  }
+    useEffect(() => {
+      if (formFields) {
+        payuFormRef.current?.submit();
+      }
+    }, [formFields]);
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
@@ -135,15 +166,29 @@ const PayForSessions = ({ type }) => {
                 {totalPayable}
               </span>
             </div>
-            <Link href={`/channel-partner/${type}/payment`}>
-              <Button className="w-full bg-[#776EA5] rounded-[8px]">
+              <Button className="w-full bg-[#776EA5] rounded-[8px]"
+              onClick={()=>{UPIPayment()}}>
                 Pay {totalPayable}
               </Button>
-            </Link>
           </div>
           {/* <div className="bg-gradient-to-b from-[#fce8e5] to-[#fce8e5] flex flex-col items-center gap-3  py-[23px] px-[17px] left-0 right-0 ">
             <Footer_bar />
           </div> */}
+        </div>
+         <div>
+          {formFields && (
+            <form
+              ref={payuFormRef}
+              action={formFields.action}
+              method="post"
+              style={{ display: "none" }}
+            >
+              {Object.entries(formFields.fields).map(([k, v]) => (
+                <input key={k} type="hidden" name={k} value={v} />
+              ))}
+              <input type="submit" value="Submit" />
+            </form>
+          )}
         </div>
       </div>
     </>
