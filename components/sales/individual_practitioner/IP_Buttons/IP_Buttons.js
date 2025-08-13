@@ -43,7 +43,7 @@ const IP_Buttons = ({ disabled, onSave, buttonText = "Save & Continue" }) => {
       </Button> */}
 
        <Drawer open={show} onClose={()=>handleClose()} className="pt-[9.97px] max-w-[576px] m-auto">
-          <DrawerTrigger onClick={()=>setShow(true)} className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]">
+          <DrawerTrigger onClick={()=>setShow(true)} className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px] cursor-pointer">
             Cancel
           </DrawerTrigger>
           <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">

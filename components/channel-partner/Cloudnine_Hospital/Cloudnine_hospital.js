@@ -74,6 +74,7 @@ const Cloudnine_Hospital = ({ type }) => {
   };
 
   const handleGenerateInvoice = async () => {
+    setLoading(true)
     try {
       const payload = {
         channelPartnerUsername: formData?.channelPartnerUsername,
@@ -95,12 +96,17 @@ const Cloudnine_Hospital = ({ type }) => {
         if (response?.data?.success) {
           // setCookie("sessions_selection", JSON.stringify(formData));
           setStorage("sessions_selection", formData);
+          setLoading(false)
           showSuccessToast("Patient Invited & Invoice Sent");
           router.push(`/channel-partner/${type}/invoice_sent`);
         }
       }
     } catch (error) {
+      setLoading(false)
       showErrorToast(response?.data?.error?.message || "Something went wrong.");
+    }
+    finally{
+      setLoading(false)
     }
   };
 

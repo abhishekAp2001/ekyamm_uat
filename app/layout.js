@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useDisableBounce } from "./useDisableBounce";
 import { usePathname } from "next/navigation";
 import { RememberMeProvider } from "./context/RememberMeContext";
+import ScrollToTop from "@/components/ScrollToTop";
 const quicksand = Quicksand({
   variable: "--font-quicksand",
   subsets: ["latin"],
@@ -94,6 +95,7 @@ export default function RootLayout({ children }) {
     }
   `}
       >
+      <ScrollToTop/>
         <RememberMeProvider>
           {children}
         <ToastContainer position="bottom-center" closeButton={false} />

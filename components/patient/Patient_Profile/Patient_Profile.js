@@ -478,7 +478,7 @@ const Patient_Profile = () => {
         return;
       }
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/email/otpGenerateForProfile`, {
-        email: email
+        newEmail: email
       }, {
         headers: {
           accesstoken: patientSessionToken,

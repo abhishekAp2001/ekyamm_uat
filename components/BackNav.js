@@ -7,7 +7,7 @@ const BackNav = ({ title = "", to = "#" }) => {
     <>
       <div>
         <div className="flex items-center p-4 gap-[9px]">
-          <Link href={to}>
+          <Link href={to} className="cursor-pointer">
             <ChevronLeft size={24} className=" text-black-700" />
           </Link>
           <div className="flex-1 text-[16px] font-semibold text-gray-800">

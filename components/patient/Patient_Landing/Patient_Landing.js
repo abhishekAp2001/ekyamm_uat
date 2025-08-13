@@ -5,6 +5,7 @@ import { setCookie } from 'cookies-next';
 import { showErrorToast } from '@/lib/toast';
 import axiosInstance from '@/lib/axiosInstance';
 import { setStorage } from '@/lib/utils';
+import Image from 'next/image';
 const Patient_Landing= () => {
   const customAxios = axiosInstance();
   const router = useRouter();
@@ -44,16 +45,23 @@ const Patient_Landing= () => {
   }, [type]);
 
   return (
-    <div className="flex items-center justify-center h-screen w-full"
+    <div className="flex flex-col items-center justify-center h-screen w-full"
       style={{
         background: `
           linear-gradient(180deg, #DFDAFB 0%, #F9CCC5 100%),
           linear-gradient(0deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5))
         `,
       }}>
-      <p className="text-2xl font-semibold text-gray-800">
-        {type ? `Redirecting…` : 'Missing ?u= parameter'}
-      </p>
+     <Image
+             alt="ekyamm"
+             src="/images/ekyamm.png"
+             width={200} // set your desired width
+             height={200} // set your desired height
+             priority
+           />
+           <p className="mt-4 text-lg font-medium text-gray-700">
+             Loading
+           </p>
     </div>
   );
 }

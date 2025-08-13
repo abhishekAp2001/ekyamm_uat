@@ -42,6 +42,7 @@ const Patient_Pays_Registration = ({ type }) => {
   const [isResendEmailDisabled, setIsResendEmailDisabled] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   const [emailOtpVerified, setEmailOtpVerified] = useState(false);
+  const [encryptedOtp, setEncryptedOtp] = useState("")
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -288,6 +289,8 @@ const Patient_Pays_Registration = ({ type }) => {
           setEmailResendTimer(120);
           setIsResendEmailDisabled(true);
           setEmailOtp("");
+          setEncryptedOtp(response?.data?.data?.encryptedOtp)
+          console.log("encrypt",response?.data?.data?.encryptedOtp)
           showSuccessToast(`OTP sent to your verified email.`);
         }
       }
@@ -305,8 +308,6 @@ const Patient_Pays_Registration = ({ type }) => {
   const validateEmailOTP = async () => {
     try {
       setEmailLoading(true);
-      const encodedOtp = customEncodeString(emailOtp);
-      const encryptedOtp = encryptData(encodedOtp);
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/email/otpValidate`,
         {
