@@ -83,6 +83,7 @@ const CP_bank_details = () => {
         setTouched((prev) => ({ ...prev, bankName: true }));
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("Error fetching bank details:", error);
       setFormData((prev) => ({ ...prev, bankName: "" }));
       if (error.forceLogout) {
@@ -221,7 +222,7 @@ const CP_bank_details = () => {
       const response = await axios.post(`v2/cp/channelPartner/invite`, payload)
       if (response?.data?.success) {
         router.push("/sales")
-        showSuccessToast("Profile Created with Unique URL");
+        showSuccessToast(response?.data?.data?.message || "Profile Created with Unique URL");
         // deleteCookie("cp_type");
         // deleteCookie("cp_clinic_details");
         // deleteCookie("cp_doctor_details");
@@ -234,6 +235,7 @@ const CP_bank_details = () => {
         removeStorage("cp_bank_details",rememberMe)
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("Error Adding Channel Partner:", error);
       if (error.forceLogout) {
         router.push("/login");

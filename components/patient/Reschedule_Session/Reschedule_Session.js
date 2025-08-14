@@ -286,6 +286,7 @@ const Reschedule_Session = () => {
       // console.log('map',map)
       setAvailableDates(map);
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("API error:", error);
     } finally {
       setCalenderLoading(false);
@@ -385,7 +386,7 @@ const Reschedule_Session = () => {
       );
 
       if (response.data.success) {
-        showSuccessToast("Session booked successfully!");
+        showSuccessToast(response?.data?.data?.message || "Session booked successfully!");
         setDrawerOpen(false);
         setSuccessDrawerOpen(true);
         if (response.data.data.createdSessions) {
@@ -399,6 +400,7 @@ const Reschedule_Session = () => {
         showErrorToast("Failed to book session. Please try again.");
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         error?.response?.data?.error?.message || "Something went wrong.1"
       );
@@ -447,6 +449,7 @@ const Reschedule_Session = () => {
 
         setAvailableSlots(data);
       } catch (error) {
+        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         setAvailableSlots({});
       } finally {
         setTimeSlogLoading(false);

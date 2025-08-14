@@ -20,6 +20,7 @@ const PaymentFailure = () => {
           { ...queryObj, isPayuHosted: true }
         );
       } catch (error) {
+        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.error("Error calling webhook:", error);
       }
     };

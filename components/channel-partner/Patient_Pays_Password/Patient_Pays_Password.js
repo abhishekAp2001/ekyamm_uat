@@ -132,8 +132,9 @@ one symbol, and no spaces.`;
         return;
       }
     } catch (error) {
-      showErrorToast(error?.response?.data?.error?.message)
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("Error", error);
+      showErrorToast(error?.response?.data?.error?.message)
     }
   };
 
@@ -182,6 +183,7 @@ one symbol, and no spaces.`;
           );
         }
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         showErrorToast(
           err?.response?.data?.error?.message ||
             "An error occurred while verifying"

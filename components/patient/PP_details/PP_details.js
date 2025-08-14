@@ -465,8 +465,9 @@ const PP_Details = ({ type }) => {
         router.push(`/patient/${type}/family-details`);
       }
     } catch (error) {
-      console.error("Error saving data:", error);
-      showErrorToast(error?.response?.data?.error?.message);
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+            console.error("Error saving data:", error);
+            showErrorToast(error?.response?.data?.error?.message);
     } finally {
       setIsLoading(false);
     }

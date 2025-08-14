@@ -114,6 +114,7 @@ const P_Pay_For_Session = ({ type }) => {
         setFormFields(payuPayload);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("Error", error)
     }
   }

@@ -98,6 +98,7 @@ const Emergency_Details = ({ type }) => {
         setCountryList(response.data.data);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         error?.response?.data?.error?.message || "Error fetching countries"
       );
@@ -195,7 +196,7 @@ const Emergency_Details = ({ type }) => {
         }
       );
       if (response.data.success) {
-        showSuccessToast("Emergency detail added successfully");
+        showSuccessToast(response?.data?.data?.message || "Emergency detail added successfully");
         // deleteCookie("completeUserData");
         // deleteCookie("patientInfo")
         // deleteCookie("patientLoginDetail")
@@ -213,6 +214,7 @@ const Emergency_Details = ({ type }) => {
         );
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(err.response?.data?.error?.message || "Submission failed");
     } finally {
       setLoading(false);
@@ -250,6 +252,7 @@ const Emergency_Details = ({ type }) => {
           );
         }
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         showErrorToast(
           err?.response?.data?.error?.message ||
           "An error occurred while verifying"

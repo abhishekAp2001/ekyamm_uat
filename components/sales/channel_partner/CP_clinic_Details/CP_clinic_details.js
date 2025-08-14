@@ -95,6 +95,7 @@ const CP_clinic_details = () => {
           showErrorToast("Invalid PIN code");
         }
       } catch (error) {
+        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.error("Error fetching location data:", error);
         showErrorToast("Failed to fetch location data");
         setFormData((prev) => ({

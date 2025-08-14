@@ -93,6 +93,7 @@ const Patient_Pays_Registration = ({ type }) => {
         setCountryList(response?.data?.data);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log("error", error);
       if (error.forceLogout) {
         router.push("/login");
@@ -143,8 +144,10 @@ const Patient_Pays_Registration = ({ type }) => {
         return true;
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       setLoading(false);
       console.error("Error", error);
+      showErrorToast(error?.response?.data?.error?.message);
     }
   };
 
@@ -174,7 +177,7 @@ const Patient_Pays_Registration = ({ type }) => {
           setResendTimer(120);
           setIsResendDisabled(true);
           setOtp("");
-          showSuccessToast(`OTP sent to your verified mobile number.`);
+          showSuccessToast( response?.data?.data?.message || `OTP sent to your verified mobile number.`);
         }
       }
       if (!mobileValid) {
@@ -183,8 +186,10 @@ const Patient_Pays_Registration = ({ type }) => {
         showErrorToast("Mobile number is already registered.");
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       setLoading(false);
       console.error("Error", error);
+      showErrorToast(error?.response?.data?.error?.message);
     }
   };
 
@@ -220,11 +225,13 @@ const Patient_Pays_Registration = ({ type }) => {
         setOtpSendStatus(false);
         setOtp("");
         setLoading(false);
-        showSuccessToast("OTP verified successfully");
+        showSuccessToast(response?.data?.data?.message || "OTP verified successfully");
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       setLoading(false);
       console.error("Error", error);
+      showErrorToast(error?.response?.data?.error?.message)
     }
   };
   useEffect(() => {
@@ -258,8 +265,10 @@ const Patient_Pays_Registration = ({ type }) => {
         return true;
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       setEmailLoading(false);
       console.error("Error", error);
+      showErrorToast(error?.response?.data?.error?.message)
     }
   };
 
@@ -291,7 +300,7 @@ const Patient_Pays_Registration = ({ type }) => {
           setEmailOtp("");
           setEncryptedOtp(response?.data?.data?.encryptedOtp)
           console.log("encrypt",response?.data?.data?.encryptedOtp)
-          showSuccessToast(`OTP sent to your verified email.`);
+          showSuccessToast(response?.data?.data?.message || `OTP sent to your verified email.`);
         }
       }
       if (!emailValid) {
@@ -299,7 +308,8 @@ const Patient_Pays_Registration = ({ type }) => {
         showErrorToast("email is already registered.");
       }
     } catch (error) {
-      showErrorToast("Something went wrong, please try again.");
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      showErrorToast(error?.response?.data?.error?.message || "Something went wrong, please try again.");
       setEmailLoading(false);
       console.error("Error", error);
     }
@@ -322,9 +332,11 @@ const Patient_Pays_Registration = ({ type }) => {
         setEmailOtpSendStatus(false);
         setEmailOtp("");
         setEmailLoading(false);
-        showSuccessToast("OTP verified successfully");
+        showSuccessToast(response?.data?.data?.message || "OTP verified successfully");
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      showErrorToast(error?.response?.data?.error?.message);
       setEmailLoading(false);
       console.error("Error", error);
     }

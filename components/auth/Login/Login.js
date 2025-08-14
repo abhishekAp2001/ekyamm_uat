@@ -53,7 +53,7 @@ const Login = () => {
       };
       const response = await axios.post("/v2/auth/user/signin", payload);
       if (response?.data?.success === true) {
-        showSuccessToast("Login Successful");
+        showSuccessToast(response?.data?.data?.message||"Login Successful");
         if (
           response?.data?.data?.userType === "superAdmin" &&
           response?.data?.data?.status === "active"
@@ -71,6 +71,7 @@ const Login = () => {
         }
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.log("error", error);
       if (error.forceLogout) {
         router.push("/login");

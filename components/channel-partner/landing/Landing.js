@@ -36,6 +36,7 @@ const Landing = () => {
           router.push('/');
         }
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         showErrorToast(
           err?.response?.data?.error?.message ||
           "An error occurred while verifying"

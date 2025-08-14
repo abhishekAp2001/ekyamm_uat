@@ -109,6 +109,7 @@ const CP_type = () => {
         setCp_List(response?.data?.data);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       if (error.forceLogout) {
         router.push("/login");
       } else {
@@ -126,10 +127,11 @@ const CP_type = () => {
         type: newType,
       });
       if (response?.data?.success === true) {
-        showSuccessToast("Channel Partner Type Added");
+        showSuccessToast(response?.data?.data?.message || "Channel Partner Type Added");
         await channelPartnerList(search);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log("error", error);
       if (error.forceLogout) {
         router.push("/login");
@@ -154,6 +156,7 @@ const CP_type = () => {
         setIsUserNameAvailable(response?.data?.data?.available);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log(error);
       if (error.forceLogout) {
         router.push("/login");
@@ -177,6 +180,7 @@ const CP_type = () => {
         setIsMobileAvailable(true);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log(error);
       if (error.forceLogout) {
         router.push("/login");
@@ -199,6 +203,7 @@ const CP_type = () => {
         setIsEmailAvailable(true);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log(error);
       if (error.forceLogout) {
         router.push("/login");
@@ -242,6 +247,7 @@ const CP_type = () => {
         setCountryList(response?.data?.data);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log("error", error);
       if (error.forceLogout) {
         router.push("/login");

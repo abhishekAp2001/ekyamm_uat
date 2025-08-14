@@ -96,6 +96,7 @@ const EP_registration = ({ type }) => {
         setCountryList(response?.data?.data);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log("error", error);
       if (error.forceLogout) {
         router.push("/login");
@@ -146,6 +147,7 @@ const EP_registration = ({ type }) => {
         setPatientError("No patient found")
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         error?.response?.data?.error?.message || "Something Went Wrong"
       );
@@ -188,6 +190,7 @@ const EP_registration = ({ type }) => {
       setStorage("invitePatientInfo", {...formData,patientType:1});
       router.push(`/channel-partner/${type}/patient-history`);
     } catch (err) {
+      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         err?.response?.data?.error?.message ||
           "An error occurred while inviting"
@@ -229,6 +232,7 @@ const EP_registration = ({ type }) => {
         const parsedData = cookieData
         setChannelPartnerData(parsedData);
       } catch (error) {
+        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         setChannelPartnerData(null);
       }
     } else {

@@ -93,6 +93,7 @@ const IP_Details = () => {
         setCountryList(response?.data?.data);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log("error", error);
       if (error.forceLogout) {
         router.push("/login");
@@ -294,15 +295,16 @@ const IP_Details = () => {
               sessionStorage.removeItem("doNotHaveMedicalAssociation");
             }
             router.push("/sales");
-            showSuccessToast("Invite Sent");
+            showSuccessToast(response?.data?.data?.message || "Invite Sent");
           }
         }
         else {
           router.push("/sales/ip_general_information");
         }
       } catch (error) {
+        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.error("Error saving data:", error);
-        showErrorToast("Failed to send invite");
+        showErrorToast(error?.response?.data?.error?.message || "Failed to send invite");
       }
     } else {
       setTouched({
@@ -345,6 +347,7 @@ const IP_Details = () => {
         setIsMobileAvailable(true);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log(error);
       if (error.forceLogout) {
         router.push("/login");
@@ -367,6 +370,7 @@ const IP_Details = () => {
         setIsEmailAvailable(true);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log(error);
       if (error.forceLogout) {
         router.push("/login");

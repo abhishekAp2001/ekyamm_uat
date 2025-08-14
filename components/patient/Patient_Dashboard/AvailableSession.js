@@ -61,6 +61,7 @@ export default function AvailableSession({ loading = false, patient }) {
           setTherapist(response?.data?.data?.practitionerTagged[0]);
         }
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.log("err", err);
         showErrorToast(
           err?.response?.data?.error?.message || "Error fetching patient data"
