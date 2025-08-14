@@ -139,6 +139,7 @@ const Payment = ({ type }) => {
           generateQrCode(response?.data?.data?.upiIntent);
         }
       } catch (error) {
+        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.error("Error", error);
       }
     };
@@ -188,6 +189,7 @@ const Payment = ({ type }) => {
           }
         }
       } catch (error) {
+        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.error("Error", error);
       }
     }
@@ -213,6 +215,7 @@ const Payment = ({ type }) => {
         setFormFields(payuPayload);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("error", error)
     }
   }

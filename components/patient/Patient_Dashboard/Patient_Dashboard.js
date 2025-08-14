@@ -81,6 +81,7 @@ const Patient_Dashboard = () => {
           setPatient(response?.data?.data);
         }
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.log("err", err);
         showErrorToast(
           err?.response?.data?.error?.message || "Error fetching patient data"
@@ -109,6 +110,7 @@ const Patient_Dashboard = () => {
           showErrorToast(res.data.error?.message || "Fetch failed");
         }
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         setCounsellors([]);
         console.log("err", err);
         showErrorToast(

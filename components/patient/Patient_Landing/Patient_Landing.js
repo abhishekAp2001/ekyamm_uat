@@ -34,6 +34,7 @@ const Patient_Landing= () => {
           );
         }
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.log(err);
         showErrorToast(
           err?.response?.data?.error?.message ||

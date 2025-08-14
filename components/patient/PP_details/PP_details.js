@@ -117,6 +117,7 @@ const PP_Details = ({ type }) => {
         setCountryList(response?.data?.data);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       if (error.forceLogout) {
         router.push("/login");
       } else {
@@ -197,6 +198,7 @@ const PP_Details = ({ type }) => {
           }));
         }
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         showErrorToast(
           err?.response?.data?.error?.message || "Error fetching patient data"
         );
@@ -465,6 +467,7 @@ const PP_Details = ({ type }) => {
                 router.push(`/patient/${type}/family-details`);
             }
         } catch (error) {
+          if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
             console.error("Error saving data:", error);
             showErrorToast(error?.response?.data?.error?.message);
         } finally {
@@ -491,6 +494,7 @@ const PP_Details = ({ type }) => {
         return imageUrl;
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       if (error.forceLogout) {
         router.push("/patient/login");
       } else {

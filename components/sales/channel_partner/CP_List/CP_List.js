@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { getCookie, hasCookie } from "cookies-next";
 import { getStorage } from "@/lib/utils";
 import { useRememberMe } from "@/app/context/RememberMeContext";
+import { showErrorToast } from "@/lib/toast";
 const CP_List = () => {
   const {rememberMe} = useRememberMe()
   const axios = axiosInstance();
@@ -20,6 +21,7 @@ const CP_List = () => {
       const response = await axios.get(`v2/cp/channelPartner`);
       setChannelPartnerList(response?.data?.data);
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       if (error.forceLogout) {
         router.push("/login");
       } else {

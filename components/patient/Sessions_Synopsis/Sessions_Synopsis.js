@@ -65,6 +65,7 @@ const Sessions_Synopsis = () => {
           setSynopsis(response?.data?.data.sessionSynopsis);
         }
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.log("err", err);
         showErrorToast(
           err?.response?.data?.error?.message || "Error fetching patient data"

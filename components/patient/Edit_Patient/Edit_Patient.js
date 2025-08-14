@@ -118,6 +118,7 @@ const Edit_Patient = ({ type }) => {
                 setCountryList(response?.data?.data);
             }
         } catch (error) {
+            if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
             if (error.forceLogout) {
                 router.push("/login");
             } else {
@@ -180,6 +181,7 @@ const Edit_Patient = ({ type }) => {
                     }));
                 }
             } catch (err) {
+                if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
                 showErrorToast(
                     err?.response?.data?.error?.message || "Error fetching patient data"
                 );
@@ -415,6 +417,7 @@ const Edit_Patient = ({ type }) => {
                 router.push(`/patient/patient-profile`);
             }
         } catch (error) {
+            if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
             console.error("Error saving data:", error);
             showErrorToast(error?.response?.data?.error?.message);
         } finally {
@@ -441,6 +444,7 @@ const Edit_Patient = ({ type }) => {
                 return imageUrl;
             }
         } catch (error) {
+            if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
             if (error.forceLogout) {
                 router.push("/login");
             } else {

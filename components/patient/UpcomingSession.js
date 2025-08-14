@@ -122,6 +122,7 @@ const UpcomingSession = ({
           );
         }
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.log("err", err);
         showErrorToast(
           err?.response?.data?.error?.message || "Error fetching patient data"
@@ -218,6 +219,7 @@ const UpcomingSession = ({
         });
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("error", error);
       const errorMessage =
         error?.response?.data?.error?.message || "Something went wrong";

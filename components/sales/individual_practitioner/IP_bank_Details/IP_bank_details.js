@@ -101,6 +101,7 @@ const IP_bank_details = () => {
         setTouched((prev) => ({ ...prev, bankName: true }));
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("Error fetching bank details:", error);
       setFormData((prev) => ({ ...prev, bankName: "" }));
       if (error.forceLogout) {
@@ -202,6 +203,7 @@ const IP_bank_details = () => {
         return imageUrl;
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       if (error.forceLogout) {
         router.push("/login");
       } else {
@@ -360,9 +362,10 @@ const IP_bank_details = () => {
           sessionStorage.removeItem("doNotHaveMedicalAssociation");
         }
         router.push("/sales");
-        showSuccessToast("Invite Sent");
+        showSuccessToast(response?.data?.data?.message || "Invite Sent");
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("Error Adding Individual Practitioner:", error);
       if (error.forceLogout) {
         router.push("/login");

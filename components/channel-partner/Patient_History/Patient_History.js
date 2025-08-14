@@ -97,6 +97,7 @@ const Patient_History = ({ type }) => {
         );
       }
     } catch (err) {
+      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log(err);
       showErrorToast(
         err?.response?.data?.error?.message ||
@@ -128,6 +129,7 @@ const Patient_History = ({ type }) => {
         );
       }
     } catch (err) {
+      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log(err);
       showErrorToast(
         err?.response?.data?.error?.message || "An error occurred while cancel"
@@ -154,6 +156,7 @@ const Patient_History = ({ type }) => {
           setCountryList(response?.data?.data);
         }
       } catch (error) {
+        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         // console.log("error", error);
         if (error.forceLogout) {
           router.push("/login");
