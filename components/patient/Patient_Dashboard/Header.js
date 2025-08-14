@@ -84,7 +84,7 @@ const Header = ({ loading = false, patient }) => {
 
           <Menu
             color="white"
-            className="w-5 h-5"
+            className="w-5 h-5 cursor-pointer"
             onClick={() => setShowSidebar(true)}
           />
         </div>

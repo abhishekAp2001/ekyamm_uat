@@ -51,7 +51,6 @@ const Filter = ({
     setSelectedLanguages([]);
     setSessionFeeRange({ from: "", to: "" });
     setLanguageInput("");
-    setShowFilter(false)
     onApplyFilter({
   language: "",
   sessionFee: { from: null, to: null },
@@ -151,7 +150,7 @@ const Filter = ({
           <div className="flex items-center p-4 pl-3 gap-[9px]">
             <ChevronLeft
               size={28}
-              className=" text-black-700"
+              className=" text-black-700 cursor-pointer"
               onClick={() => {
                 setShowFilter(false);
               }}
@@ -173,7 +172,7 @@ const Filter = ({
         {/* Session Fee */}
         <div className="bg-white rounded-[12px] p-4 mb-[10px]">
           <Button
-            onClick={handleClearFilters} // <-- add your clear filter handler
+            onClick={handleClearFilters}
             className="border border-[#CC627B] bg-transparent text-[12px] font-[600] text-[#CC627B] px-[10px] py-0   rounded-[8px] flex items-center justify-center w-fit h-[28px] ml-auto"
             variant="ghost"
           >

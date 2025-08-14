@@ -152,7 +152,7 @@ const Add_Patient = () => {
                 >
                   Accept terms and conditions
                 </Label>
-                <Checkbox id="terms" />
+                <Checkbox id="terms" className="cursor-pointer"/>
               </div>
             </div>
 
@@ -209,14 +209,14 @@ const Add_Patient = () => {
               <div className="mb-2 border border-[#e2d7ef] rounded-[12px] bg-[#FFFFFF80] mt-6">
                 <button
                   onClick={() => setOpenConfirmed(!openConfirmed)}
-                  className="w-full text-left p-4  text-base text-black font-semibold flex justify-between items-center"
+                  className="w-full text-left p-4  text-base text-black font-semibold flex justify-between cursor-pointer items-center"
                 >
                   Confirmed Sessions
                     <span>
                     {openConfirmed ? (
-                      <ChevronDown className="w-5 h-5 text-[#00000066]" />
+                      <ChevronDown className="w-5 h-5 text-[#00000066] cursor-pointer" />
                     ) : (
-                      <ChevronRight className="w-5 h-5 text-[#00000066]" />
+                      <ChevronRight className="w-5 h-5 text-[#00000066] cursor-pointer" />
                     )}
                   </span>
                 </button>
@@ -256,14 +256,14 @@ const Add_Patient = () => {
               <div className="mb-3 border border-[#e2d7ef] rounded-[12px] bg-[#FFFFFF80] ">
                 <button
                   onClick={() => setOpenUnconfirmed(!openUnconfirmed)}
-                  className="w-full text-left p-4 text-base text-black font-semibold flex justify-between items-center"
+                  className="cursor-pointer w-full text-left p-4 text-base text-black font-semibold flex justify-between items-center"
                 >
                   Unconfirmed Sessions{" "}
                   <span>
                     {openUnconfirmed ? (
-                      <ChevronDown className="w-5 h-5 text-[#00000066]" />
+                      <ChevronDown className="w-5 h-5 text-[#00000066] cursor-pointer" />
                     ) : (
-                      <ChevronRight className="w-5 h-5 text-[#00000066]" />
+                      <ChevronRight className="w-5 h-5 text-[#00000066] cursor-pointer" />
                     )}
                   </span>
                 </button>
@@ -275,7 +275,7 @@ const Add_Patient = () => {
                           Session 2:
                         </span>
                         <div className="rounded-full  w-fit h-6 inline-block bg-gradient-to-r  from-[#B0A4F5] to-[#EDA197] p-[1px]">
-                          <button className="bg-[#f8f0ef] text-[11px] text-black rounded-full w-full h-full flex items-center justify-center gap-1 px-2">
+                          <button className="cursor-pointer bg-[#f8f0ef] text-[11px] text-black rounded-full w-full h-full flex items-center justify-center gap-1 px-2">
                             + Book Session
                           </button>
                         </div>

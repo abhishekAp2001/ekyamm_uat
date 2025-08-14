@@ -48,7 +48,7 @@ const Page = () => {
    <div className="flex flex-col w-full h-screen bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5] ">
       <Head>
         <title>{getTitle()}</title>
-        <Link rel="icon" href="/images/logo-circle-hands.svg" type="image/png" className='' />
+        <Link rel="icon" href="/images/logo-circle-hands.svg" type="image/png" className='cursor-pointer' />
       </Head> 
       {/* Navbar placeholder */}
       <div id="navbar-placeholder" style={{ padding: 0, margin: 0 }}></div>

@@ -17,7 +17,7 @@ const Time_Up = () => {
         <div className="flex gap-3 justify-center w-full">
           {/* Extend Button */}
           {/* End Session Button */}
-          <button className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[15px] w-[48%] h-[45px] font-medium rounded-[10px] px-4">
+          <button className="cursor-pointer bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[15px] w-[48%] h-[45px] font-medium rounded-[10px] px-4">
             Ok
           </button>
         </div>
@@ -29,12 +29,12 @@ const Time_Up = () => {
 
         <div className="flex gap-3 justify-center w-full">
           {/* Extend Button */}
-          <button className="border border-[#DD4F6C] text-[#DD4F6C] text-[15px] w-[48%] h-[45px] font-medium rounded-[10px] px-4">
+          <button className="cursor-pointer border border-[#DD4F6C] text-[#DD4F6C] text-[15px] w-[48%] h-[45px] font-medium rounded-[10px] px-4">
             Extend by 10 mins.
           </button>
 
           {/* End Session Button */}
-          <button className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[15px] w-[48%] h-[45px] font-medium rounded-[10px] px-4">
+          <button className="cursor-pointer bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[15px] w-[48%] h-[45px] font-medium rounded-[10px] px-4">
             End Session
           </button>
         </div>

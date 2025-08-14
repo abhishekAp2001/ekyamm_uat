@@ -37,7 +37,7 @@ const Section4 = ({ onStartClick }) => {
           </p>
         </div>
 
-        <button className="custom-btn m-auto md:ml-0" onClick={onStartClick}>
+        <button className="custom-btn m-auto md:ml-0 cursor-pointer" onClick={onStartClick}>
           Redefine Care Today !{" "}
           <Image
             src="/images/Arrow.svg"

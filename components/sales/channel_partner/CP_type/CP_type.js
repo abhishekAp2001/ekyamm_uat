@@ -356,7 +356,7 @@ const CP_type = () => {
                 // Error is already toasted in addChannelPartner
               }
             }}
-            className="text-[15px] rounded-[12px] font-semibold border-none outline-none"
+            className="text-[15px] rounded-[12px] font-semibold border-none outline-none cursor-pointer"
           />
           {touched.type && !formData.type && (
             <span className="text-red-500 text-sm mt-1 block">
@@ -706,7 +706,7 @@ const CP_type = () => {
                       }
                     }}
                     disabled={!isMobileValid(formData.primaryMobileNumber) || isMobileAvailable !== true}
-                    className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] "
+                    className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] cursor-pointer"
                   />
                   <label
                     htmlFor="same_as_mobile"

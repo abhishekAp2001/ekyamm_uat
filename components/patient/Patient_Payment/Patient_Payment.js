@@ -15,7 +15,7 @@ const Patient_Payment = () => {
     <div className="min-h-screen bg-gradient-to-b from-[#DFDAFB] to-[#F9CCC5] flex flex-col max-w-[576px] mx-auto">
       {/* Header */}
       <div className="flex items-center p-4 gap-[9px] bg-[#f6f4fd] fixed top-0 left-0 right-0 z-10 max-w-[576px] mx-auto">
-        <ChevronLeft size={24} className=" text-black-700" 
+        <ChevronLeft size={24} className=" text-black-700 cursor-pointer" 
         onClick={()=>{router.push('/patient/pay-for-sessions')}}/>
         <div className="flex-1 text-[16px] font-semibold text-gray-800">
           Payment
@@ -81,14 +81,14 @@ const Patient_Payment = () => {
         <label className="flex items-center mb-6 text-sm text-gray-500 font-[500]">
           <Checkbox
             type="checked"
-            className="mr-2 accent-[#776EA5]"
+            className="mr-2 accent-[#776EA5] cursor-pointer"
           />
           
           Save card details
         </label>
 
         {/* Pay Button */}
-        <button className="w-full h-[45px] py-3 rounded-[8px] text-white font-semibold text-[15px] bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0]">
+        <button className="w-full h-[45px] py-3 rounded-[8px] text-white font-semibold text-[15px] bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] cursor-pointer">
           Pay Now
         </button>
       </div>

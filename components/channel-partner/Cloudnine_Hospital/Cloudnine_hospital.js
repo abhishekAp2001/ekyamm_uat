@@ -428,7 +428,7 @@ const Cloudnine_Hospital = ({ type }) => {
                 <div className="flex items-center gap-2 mb-4" key={_x}>
                   <Checkbox
                     id={`session${_session.count}`}
-                    className="h-4 w-[16.05px] border-[1.5px] border-[#776EA5] rounded-[1.5px]"
+                    className="h-4 w-[16.05px] border-[1.5px] border-[#776EA5] rounded-[1.5px] cursor-pointer"
                     onCheckedChange={() => handleSessionChange(_session.count)}
                     checked={formData.sessionCreditCount === _session.count}
                     disabled={feeLoading}

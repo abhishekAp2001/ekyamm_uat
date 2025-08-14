@@ -50,7 +50,7 @@ const Section3 = ({ onStartClick }) => {
 
       {/* Right side: button */}
       <div className="text-center text-white overflow-hidden ">
-        <button className="custom-btn section2-btn my-4 mb-5" onClick={onStartClick}>
+        <button className="custom-btn section2-btn my-4 mb-5 cursor-pointer" onClick={onStartClick}>
           Get Ekyamm for your Clinic{" "}
           <Image
             src="/images/Arrow.svg"

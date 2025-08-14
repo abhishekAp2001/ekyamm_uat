@@ -771,7 +771,7 @@ const IP_Details = () => {
               <div className="flex gap-[6px] items-center">
                 <Checkbox
                   id='same_as_mobile'
-                  className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"
+                  className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1 cursor-pointer"
                   checked={sameAsMobile}
                   onCheckedChange={(checked) => {
                     setSameAsMobile(checked);
@@ -952,7 +952,7 @@ const IP_Details = () => {
         <div className="mt-5 flex items-center gap-2">
         <Checkbox
           id='do_not_add_me_to_epn'
-          className="w-4 h-4 border border-[#776EA5] rounded-[1.8px]"
+          className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] cursor-pointer"
           checked={doNotAddMeToEpn}
           onCheckedChange={(checked) => setDoNotAddMeToEpn(checked)}
         />

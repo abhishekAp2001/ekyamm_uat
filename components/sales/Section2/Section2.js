@@ -27,7 +27,7 @@ const Section2 = ({ onStartClick }) => {
           <p className="lead section1-p mt-3">
             Empower your patients experience <br /> with Your Clinic Companion
           </p>
-          <button className="custom-btn section2-btn"
+          <button className="custom-btn section2-btn cursor-pointer"
           onClick={onStartClick}>
             Partner Now{" "}
             <Image
@@ -67,7 +67,7 @@ const Section2 = ({ onStartClick }) => {
           <p className="lead section1-p">
             Empower your patients experience <br /> with Your Clinic Companion
           </p>
-          <button className="custom-btn section2-btn brand-btn schedule-btn"  onClick={onStartClick}>
+          <button className="custom-btn section2-btn brand-btn schedule-btn cursor-pointer"  onClick={onStartClick}>
             Partner Now{" "}
             <Image
               src="/images/Arrow.svg"

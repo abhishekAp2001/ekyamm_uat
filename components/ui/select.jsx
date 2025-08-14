@@ -35,13 +35,13 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        " [&_svg:not([class*='text-'])] flex w-fit items-center justify-between gap-2 rounded-md  bg-transparent text-sm whitespace-nowrap outline-none  disabled:cursor-not-allowed disabled:opacity-50 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        " [&_svg:not([class*='text-'])] flex w-fit items-center justify-between gap-2 rounded-md  bg-transparent text-sm whitespace-nowrap outline-none  disabled:cursor-not-allowed disabled:opacity-50 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 cursor-pointer",
         className
       )}
       {...props}>
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDownIcon className="size-4 opacity-50" />
+        <ChevronDownIcon className="size-4 opacity-50 cursor-pointer" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );
@@ -133,7 +133,7 @@ function SelectScrollUpButton({
       data-slot="select-scroll-up-button"
       className={cn("flex cursor-default items-center justify-center py-1", className)}
       {...props}>
-      <ChevronUpIcon className="size-4" />
+      <ChevronUpIcon className="size-4 cursor-pointer" />
     </SelectPrimitive.ScrollUpButton>
   );
 }
@@ -147,7 +147,7 @@ function SelectScrollDownButton({
       data-slot="select-scroll-down-button"
       className={cn("flex cursor-default items-center justify-center py-1", className)}
       {...props}>
-      <ChevronDownIcon className="size-4" />
+      <ChevronDownIcon className="size-4 cursor-pointer" />
     </SelectPrimitive.ScrollDownButton>
   );
 }

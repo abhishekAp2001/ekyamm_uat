@@ -76,7 +76,7 @@ const Select_Package = () => {
               router.push("/patient/dashboard");
             }}
             size={24}
-            className=" text-black-700"
+            className=" text-black-700 cursor-pointer"
           />
           <div className="flex-1 text-[16px] font-semibold text-gray-800">
             Select Package
@@ -214,7 +214,7 @@ const Select_Package = () => {
                       />
                       <Label
                         htmlFor={`package-${sessions}`}
-                        className="text-base font-semibold text-black"
+                        className="text-base font-semibold text-black cursor-pointer"
                       >
                         {sessions} Sessions
                       </Label>

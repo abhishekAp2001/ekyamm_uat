@@ -15,7 +15,7 @@ const Patient_Header = ({ to = null, title = null }) => {
         <div className="flex items-center py-4 px-0 gap-[9px]">
           <ChevronLeft
             size={24}
-            className=" text-black-700"
+            className=" text-black-700 cursor-pointer"
             onClick={() => redirectHandler(to)}
           />
           <div className="flex-1 text-[16px] font-semibold text-gray-800">

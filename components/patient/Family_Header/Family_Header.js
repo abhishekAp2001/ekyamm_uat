@@ -31,7 +31,7 @@ const Family_Header = ({ type }) => {
       <div className="fixed left-0 right-0 z-10 bg-[#e8e6f7] max-w-[576px] m-auto">
         <div className="flex items-center py-4 ps-2 pe-4">
           <Button variant="ghost" onClick={() => setShow(true)}>
-            <ChevronLeft size={24} className="text-black-700" />
+            <ChevronLeft size={24} className="text-black-700 cursor-pointer" />
           </Button>
           <Drawer
             className="pt-[9.97px] max-w-[576px] m-auto"

@@ -41,7 +41,7 @@ const Navbar = ({onStartClick}) => {
           </ul>
  
           {/* Desktop buttons */}
-          <button id="contactUs" className="hidden md:block bg-[#776EA5] text-white border-none px-2 py-2 rounded-[11px] font-quicksand font-medium" onClick={onStartClick}>
+          <button id="contactUs" className="hidden md:block bg-[#776EA5] text-white border-none px-2 py-2 rounded-[11px] font-quicksand font-medium cursor-pointer" onClick={onStartClick}>
             Contact Us
           </button>
           <button id="chatNow" className=" md:hidden bg-[#776EA5] text-white border-none px-2 py-1 rounded-[11px] font-quicksand font-medium text-[12px] ml-2"

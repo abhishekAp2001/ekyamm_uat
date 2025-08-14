@@ -144,7 +144,7 @@ const Doctors = () => {
                         <DrawerClose asChild>
                           <button
                             type="button"
-                            className="absolute right-0 top-0 z-50"
+                            className="absolute right-0 top-0 z-50 cursor-pointer"
                           >
                             <Image
                               src="/images/close.png"
@@ -243,10 +243,10 @@ const Doctors = () => {
                       </div>
 
                       <div className="flex justify-between gap-4 mt-4">
-                        <button className="border border-[#CC627B] text-[#CC627B] rounded-[8px] text-[15px] font-[600] w-1/2 h-[45px]">
+                        <button className="border border-[#CC627B] text-[#CC627B] rounded-[8px] text-[15px] font-[600] w-1/2 h-[45px] cursor-pointer">
                           Cancel
                         </button>
-                        <button className="opacity-35 bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white rounded-[8px] text-[15px] font-[600] w-1/2 h-[45px]">
+                        <button className="opacity-35 bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white rounded-[8px] text-[15px] font-[600] w-1/2 h-[45px] cursor-pointer">
                           Confirm
                         </button>
                       </div>
@@ -266,7 +266,7 @@ const Doctors = () => {
                 style={{ accentColor: "#776EA5" }}
               /> */}
 
-              <Checkbox className="h-4 w-[16.05px] border-[1.5px] border-[#776EA5] rounded-[1.7px]" />
+              <Checkbox className="h-4 w-[16.05px] border-[1.5px] border-[#776EA5] rounded-[1.7px] cursor-pointer" />
             </div>
 
             <div>
@@ -316,7 +316,7 @@ const Doctors = () => {
             </DrawerFooter>
           </DrawerContent>
         </Drawer>
-            <button className="opacity-35 bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white rounded-[8px] text-[15px] font-[600] w-[48%] h-[45px]">
+            <button className="opacity-35 bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white rounded-[8px] text-[15px] font-[600] w-[48%] h-[45px] cursor-pointer">
               Confirm
             </button>
           </div>

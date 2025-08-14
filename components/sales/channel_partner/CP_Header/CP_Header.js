@@ -26,7 +26,7 @@ const CP_Header = () => {
         <div className="flex items-center p-4 gap-[9px]">
           <ChevronLeft
             size={24}
-            className=" text-black-700"
+            className=" text-black-700 cursor-pointer"
             onClick={() => {
               handleBack();
             }}

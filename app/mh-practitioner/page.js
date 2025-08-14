@@ -219,13 +219,13 @@ const Page = () => {
             {/* Desktop buttons */}
             <button
               id="contactUs"
-              className="hidden md:block bg-[#776EA5] text-white border-none px-2 py-2 rounded-[11px] font-quicksand font-medium" onClick={handleButtonClick}
+              className="hidden md:block bg-[#776EA5] text-white border-none px-2 py-2 rounded-[11px] font-quicksand font-medium cursor-pointer" onClick={handleButtonClick}
             >
               Contact Us
             </button>
             <button
               id="chatNow"
-              className=" md:hidden bg-[#776EA5] text-white border-none px-2 py-1 rounded-[11px] font-quicksand font-medium text-[12px] ml-2"
+              className=" md:hidden bg-[#776EA5] text-white border-none px-2 py-1 rounded-[11px] font-quicksand font-medium text-[12px] ml-2 cursor-pointer"
               onClick={handleButtonClick}>
               Chat Now
             </button>
@@ -454,7 +454,7 @@ const Page = () => {
           </h1>
           <p>in less than 30 seconds</p>
           <button
-            className="brand-btn schedule-btn"
+            className="brand-btn schedule-btn cursor-pointer"
             id="request-btn"
             onClick={handleButtonClick}
           >
@@ -479,7 +479,7 @@ const Page = () => {
             Psychiatric Provider Network
           </p>
           <button
-            className="brand-btn schedule-btn"
+            className="brand-btn schedule-btn cursor-pointer"
             style={{ marginTop: "10px" }}
             onClick={handleButtonClick}
           >
@@ -568,7 +568,7 @@ const Page = () => {
             <p style={{ color: 'red', fontSize: '14px' }}>{errors.mobile}</p>
           )}
           <label htmlFor="msg">
-            <b>Message</b>
+            <b>Message</b><span className="compulsory-fields">*</span>
           </label>
           <textarea
             value={formData.message}

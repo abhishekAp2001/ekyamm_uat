@@ -136,14 +136,14 @@ const Login = () => {
                   />
                   {showPassword ? (
                     <Eye
-                      className="w-[14.67px] absolute top-2 right-[14.83px]"
+                      className="w-[14.67px] absolute top-2 right-[14.83px] cursor-pointer"
                       onClick={() => {
                         setShowPassword(!showPassword);
                       }}
                     />
                   ) : (
                     <EyeOff
-                      className="w-[14.67px] absolute top-2 right-[14.83px]"
+                      className="w-[14.67px] absolute top-2 right-[14.83px] cursor-pointer"
                       onClick={() => {
                         setShowPassword(!showPassword);
                       }}
@@ -152,7 +152,7 @@ const Login = () => {
                 </div>
                 <div className="flex justify-between mt-[11.72px]">
                   <div className="flex gap-[6px] items-center">
-                    <Checkbox className="w-4 h-4 border border-[#776EA5] rounded-[1.8px]" id="forgot-password"
+                    <Checkbox className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] cursor-pointer" id="forgot-password"
                     onCheckedChange={(checked) => {
                           setRememberMe(!!checked)
                         }}
