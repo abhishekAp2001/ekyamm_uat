@@ -127,12 +127,13 @@ one symbol, and no spaces.`;
             "patientSessionData",
             { userId, token, userType, status },
           )
-          showSuccessToast("Account created successfully!");
+          showSuccessToast(response?.data?.data?.message || "Account created successfully!");
           router.push(`/patient/${type}/details`);
         } else {
           showErrorToast(response?.data?.error?.message || "Sign-in failed");
         }
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.log(err);
         setCookie("patientSessionData", JSON.stringify({}));
         
@@ -196,6 +197,7 @@ one symbol, and no spaces.`;
           );
         }
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         showErrorToast(
           err?.response?.data?.error?.message ||
             "An error occurred while verifying"

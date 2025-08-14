@@ -97,6 +97,7 @@ const Family_Details = ({ type }) => {
         setCountryList(response.data.data);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         error?.response?.data?.error?.message || "Error fetching countries"
       );
@@ -191,7 +192,7 @@ const Family_Details = ({ type }) => {
         { headers: { accesstoken: token } }
       );
       if (response.data.success) {
-        showSuccessToast("Family member added successfully");
+        showSuccessToast(response?.data?.data?.message || "Family member added successfully");
         // setCookie("completeUserData", response.data.data);
         setStorage("completeUserData", response?.data?.data);
         if (formData.emergencyContact) {
@@ -200,7 +201,7 @@ const Family_Details = ({ type }) => {
           // deleteCookie("patientLoginDetail")
           // deleteCookie("channelPartnerData")
           removeStorage("completeUserData")
-          removeStorage("patientInfo",rememberMe)
+          removeStorage("patientInfo", rememberMe)
           removeStorage("patientLoginDetail")
           removeStorage("channelPartnerData")
           router.push(`/patient/dashboard`);
@@ -211,6 +212,7 @@ const Family_Details = ({ type }) => {
         showErrorToast(response.data.message || "Failed to add family member");
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(error.response?.data?.error?.message || "Submission failed");
     } finally {
       setLoading(false);
@@ -248,6 +250,7 @@ const Family_Details = ({ type }) => {
           );
         }
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         showErrorToast(
           err?.response?.data?.error?.message ||
           "An error occurred while verifying"
@@ -429,6 +432,16 @@ const Family_Details = ({ type }) => {
                     minHeight: "39px",
                     width: "max-content",
                     backgroundColor: formData.lastName ? "#fff" : "#f6f5fd",
+                    cursor: "pointer",
+                    boxShadow: "none",
+                    borderColor: "transparent",
+                    "&:hover": {
+                      borderColor: "transparent",
+                    },
+                  }),
+                  option: (base) => ({
+                    ...base,
+                    cursor: "pointer",
                   }),
                   menu: (base) => ({ ...base, width: "200px" }),
                 }}
@@ -467,8 +480,8 @@ const Family_Details = ({ type }) => {
               <Label
                 htmlFor="whatsappNumber"
                 className={`text-[15px] mb-2 ${isMobileValid(formData.primaryMobileNumber)
-                    ? "text-gray-500"
-                    : "text-[#00000040]"
+                  ? "text-gray-500"
+                  : "text-[#00000040]"
                   }`}
               >
                 WhatsApp Number
@@ -490,7 +503,7 @@ const Family_Details = ({ type }) => {
                   disabled={!isMobileValid(formData.primaryMobileNumber)}
                   className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] cursor-pointer"
                 />
-                <label className="text-[12px] text-gray-500 font-medium"
+                <label className="text-[12px] text-gray-500 font-medium cursor-pointer"
                   htmlFor="sameAsMobile">
                   Same as Mobile Number
                 </label>
@@ -525,6 +538,16 @@ const Family_Details = ({ type }) => {
                         isMobileValid(formData.primaryMobileNumber)
                         ? "#fff"
                         : "#f6f5fd",
+                    cursor: "pointer",
+                    boxShadow: "none",
+                    borderColor: "transparent",
+                    "&:hover": {
+                      borderColor: "transparent",
+                    },
+                  }),
+                  option: (base) => ({
+                    ...base,
+                    cursor: "pointer",
                   }),
                   menu: (base) => ({ ...base, width: "200px" }),
                 }}
@@ -541,8 +564,8 @@ const Family_Details = ({ type }) => {
                   sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
                 }
                 className={`rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
-                    ? "bg-[#ffffff90]"
-                    : "bg-white"
+                  ? "bg-[#ffffff90]"
+                  : "bg-white"
                   }`}
                 maxLength={10}
               />
@@ -571,7 +594,7 @@ const Family_Details = ({ type }) => {
               }
               className="w-4 h-4 border border-[#776EA5] rounded-[2px] cursor-pointer"
             />
-            <label className="text-[14px] text-[#776EA5] font-bold"
+            <label className="text-[14px] text-[#776EA5] font-bold cursor-pointer"
               htmlFor="emergencyContact">
               Make this as an Emergency Contact
             </label>

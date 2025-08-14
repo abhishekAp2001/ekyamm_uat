@@ -186,7 +186,7 @@ const CP_billing_details = () => {
       const response = await axios.post(`v2/cp/channelPartner/invite`, payload);
       if (response?.data?.success) {
         router.push("/sales");
-        showSuccessToast("Profile Created with Unique URL");
+        showSuccessToast(response?.data?.data?.message || "Profile Created with Unique URL");
         // deleteCookie("cp_type");
         // deleteCookie("cp_clinic_details");
         // deleteCookie("cp_doctor_details");
@@ -199,6 +199,7 @@ const CP_billing_details = () => {
         removeStorage("cp_bank_details",rememberMe)
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("Error Adding Channel Partner:", error);
       if (error.forceLogout) {
         router.push("/login");
@@ -273,7 +274,7 @@ const CP_billing_details = () => {
                   id="r1"
                   className=" "
                 />
-                <Label htmlFor="r1" className="text-[15px] font-semibold">
+                <Label htmlFor="r1" className="text-[15px] font-semibold cursor-pointer">
                   Monthly Billing
                 </Label>
               </div>
@@ -283,7 +284,7 @@ const CP_billing_details = () => {
                   id="r2"
                   className=" "
                 />
-                <Label htmlFor="r2" className="text-[15px] font-semibold">
+                <Label htmlFor="r2" className="text-[15px] font-semibold cursor-pointer">
                   On-Spot Payment
                 </Label>
               </div>
@@ -293,7 +294,7 @@ const CP_billing_details = () => {
                   id="r3"
                   className=""
                 />
-                <Label htmlFor="r3" className="text-[15px] font-semibold">
+                <Label htmlFor="r3" className="text-[15px] font-semibold cursor-pointer">
                   Patient Pays
                 </Label>
               </div>

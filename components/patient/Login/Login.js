@@ -62,7 +62,7 @@ const Login = () => {
       };
       const response = await axios.post("/v2/cp/user/signin", payload);
       if (response?.data?.success === true) {
-        showSuccessToast("Login Successfully");
+        showSuccessToast(response?.data?.data?.message || "Login Successfully");
         let maxAge = {}
         if(rememberMe){
           maxAge = { maxAge: 60 * 60 * 24 * 30 }
@@ -75,6 +75,7 @@ const Login = () => {
         router.push("/patient/dashboard");
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       setError(
         error?.response?.data?.error?.message || "Wrong Username/Password"
       );
@@ -147,7 +148,7 @@ const Login = () => {
                     onCheckedChange={(checked) => {
                           setRememberMe(!!checked)
                         }}/>
-                    <label htmlFor="forgot-password" className="text-[12px] text-gray-500">
+                    <label htmlFor="forgot-password" className="text-[12px] text-gray-500 cursor-pointer">
                       Remember Me
                     </label>
                   </div>

@@ -8,7 +8,7 @@ import { showErrorToast } from "@/lib/toast";
 import { getCookie, setCookie } from "cookies-next";
 import { MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { setStorage } from "@/lib/utils";
+import { clearStorageAndCookies, setStorage } from "@/lib/utils";
 
 const CP_landing = ({ type }) => {
   const [channelPartnerData, setChannelPartnerData] = useState(null);
@@ -17,6 +17,7 @@ const CP_landing = ({ type }) => {
   const axios = axiosInstance();
   const router = useRouter()
   useEffect(() => {
+    clearStorageAndCookies(["PatientInfo", "patientSessionData", "selectedCounsellor", "user"])
     const verifyChannelPartner = async (username) => {
       setLoading(true);
       setError(null);
@@ -40,6 +41,7 @@ const CP_landing = ({ type }) => {
           router.push('/')
         }
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         // console.log(err);
         showErrorToast(
           err?.response?.data?.error?.message ||

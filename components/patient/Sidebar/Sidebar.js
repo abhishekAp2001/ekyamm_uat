@@ -76,7 +76,7 @@ const Sidebar = ({ onClose }) => {
           {/* Menu Items */}
           <div className="h-auto w-[162px] flex flex-col gap-[24px]">
             {/* Dashboard */}
-            <div className="flex flex-col gap-[8px]"
+            <div className="flex flex-col gap-[8px] cursor-pointer"
             onClick={onClose}>
               <div className="w-[162px] flex items-center gap-2">
                 <Image
@@ -94,7 +94,7 @@ const Sidebar = ({ onClose }) => {
 
             {/* Clinic Details */}
             {patient && patient !== null && (
-              <div className="flex flex-col gap-[8px]"
+              <div className="flex flex-col gap-[8px] cursor-pointer"
             onClick={()=>{router.push('/patient/psychiatrist-profile')}}>
               <div className="w-[162px] flex items-center gap-2">
                 <Image
@@ -114,7 +114,7 @@ const Sidebar = ({ onClose }) => {
             {/* Settings + Sign Out */}
             <div className="w-auto h-[74px] flex flex-col gap-[26px]">
               {patient && patient !== null && (
-                <div className="w-[162px] flex items-center gap-2"
+                <div className="w-[162px] flex items-center gap-2 cursor-pointer"
               onClick={()=>{router.push('/patient/patient-profile')}}>
                 <Image
                   src="/images/setting.png"

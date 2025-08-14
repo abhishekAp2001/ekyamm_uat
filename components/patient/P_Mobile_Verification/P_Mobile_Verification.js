@@ -16,7 +16,7 @@ import axios from "axios";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import axiosInstance from "@/lib/axiosInstance";
 import { getCookie, setCookie } from "cookies-next";
-import { formatTime, getStorage, setStorage } from "@/lib/utils";
+import { clearStorageAndCookies, formatTime, getStorage, setStorage } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 const P_Mobile_Verification = ({ type }) => {
@@ -87,7 +87,7 @@ const P_Mobile_Verification = ({ type }) => {
           setResendTimer(120);
           setIsResendDisabled(true);
           setOtp("");
-          showSuccessToast("OTP has been shared to your mobile number.");
+          // showSuccessToast("OTP has been shared to your mobile number.");
         }
         setOtpSendStatus(true);
       }
@@ -154,6 +154,7 @@ const P_Mobile_Verification = ({ type }) => {
       });
       // if (result.data.result === "success")
       if (response?.data?.success) {
+        showSuccessToast(response?.data?.data?.message || "Verified successfully.");
         return true;
       } else {
         // console.log(result);
@@ -162,7 +163,7 @@ const P_Mobile_Verification = ({ type }) => {
       return false;
     } catch (err) {
       console.log("err", err);
-
+      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         err.response?.data?.error?.message ||
           "An error occurred while generating OTP"
@@ -174,7 +175,7 @@ const P_Mobile_Verification = ({ type }) => {
   };
 
   function redirectAfterOtpValidate(type) {
-    showSuccessToast("Verified successfully.");
+    // showSuccessToast("Verified successfully.");
     // setCookie("patientLoginDetail", JSON.stringify(formData));
     setStorage("patientLoginDetail", formData);
     setTimeout(() => {
@@ -210,6 +211,7 @@ const P_Mobile_Verification = ({ type }) => {
         showErrorToast(`${response?.data?.error?.message}`);
       }
     } catch (err) {
+      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         err.response?.data?.error?.message ||
           "An error occurred while generating OTP"
@@ -248,11 +250,13 @@ const P_Mobile_Verification = ({ type }) => {
       });
 
       if (response?.data?.success) {
+        showSuccessToast(response?.data?.data?.message || "OTP has been shared to your mobile number.");
         return true;
       } else {
         showErrorToast(response?.data?.data?.message);
       }
     } catch (err) {
+      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         err.response?.data?.message || "An error occurred while generating OTP"
       );
@@ -263,6 +267,7 @@ const P_Mobile_Verification = ({ type }) => {
   };
 
   useEffect(() => {
+    clearStorageAndCookies(["user"])
     const verifyChannelPartner = async (username) => {
       setLoading(true);
       try {
@@ -283,6 +288,7 @@ const P_Mobile_Verification = ({ type }) => {
           );
         }
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.log(err);
         showErrorToast(
           err?.response?.data?.error?.message ||

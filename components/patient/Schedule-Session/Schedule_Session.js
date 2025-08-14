@@ -125,6 +125,7 @@ const Schedule_Session = () => {
       // console.log('map',map)
       setAvailableDates(map);
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("API error:", error);
     } finally {
       setCalenderLoading(false);
@@ -229,7 +230,7 @@ const Schedule_Session = () => {
       );
 
       if (response.data.success) {
-        showSuccessToast("Session booked successfully!");
+        showSuccessToast(response?.data?.data?.message || "Session booked successfully!");
         setDrawerOpen(false);
         setSuccessDrawerOpen(true);
         if (response.data.data.createdSessions) {
@@ -243,6 +244,7 @@ const Schedule_Session = () => {
         showErrorToast("Failed to book session. Please try again.");
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         error?.response?.data?.error?.message || "Something went wrong.1"
       );
@@ -291,6 +293,7 @@ const Schedule_Session = () => {
 
         setAvailableSlots(data);
       } catch (error) {
+        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         setAvailableSlots({});
       } finally {
         setTimeSlogLoading(false);
@@ -680,9 +683,10 @@ const handleTimeFormat = (dateTime) => {
               />
             </div> */}
             
-            <label className="flex items-center gap-2 cursor-pointer text-[#8F8F8F]">
+            <label className="flex items-center gap-2 cursor-pointer text-[#8F8F8F]" htmlFor="weekly">
   <span className="select-none">Weekly Recurring Sessions</span>
   <Checkbox
+    id='weekly'
     className="h-4 w-[16.05px] border-[1.5px] border-[#776EA5] rounded-[1.7px] cursor-pointer"
     checked={isRecurring}
     onCheckedChange={(checked) => setIsRecurring(checked)}

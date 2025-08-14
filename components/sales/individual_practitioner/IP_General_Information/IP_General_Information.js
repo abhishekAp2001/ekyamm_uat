@@ -93,6 +93,7 @@ const IP_General_Information = () => {
         setLanguageList(response?.data?.data);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log(error);
       if (error.forceLogout) {
         router.push("/login");
@@ -254,7 +255,7 @@ const IP_General_Information = () => {
                 />
                 <CirclePlus
                   size={20}
-                  className={`w-5 h-5 absolute top-2 right-2 ${isYearsOfExperienceValid()
+                  className={`w-5 h-5 absolute top-2 right-2 cursor-pointer ${isYearsOfExperienceValid()
                     ? "text-gray-500"
                     : "text-[#00000040]"
                     }`}
@@ -319,7 +320,7 @@ const IP_General_Information = () => {
                 />
                 <CirclePlus
                   size={20}
-                  className={`w-5 h-5 absolute top-2 right-2 ${isSpecializationValid()
+                  className={`w-5 h-5 absolute top-2 right-2 cursor-pointer ${isSpecializationValid()
                     ? "text-gray-500"
                     : "text-[#00000040]"
                     }`}
@@ -410,7 +411,7 @@ const IP_General_Information = () => {
                 />
                 <CirclePlus
                   size={20}
-                  className={`w-5 h-5 absolute top-2 right-2 ${isWhatToExpectValid() ? "text-gray-500" : "text-[#00000040]"
+                  className={`cursor-pointer w-5 h-5 absolute top-2 right-2 ${isWhatToExpectValid() ? "text-gray-500" : "text-[#00000040]"
                     }`}
                   onClick={() =>
                     isWhatToExpectValid() &&
@@ -478,7 +479,7 @@ const IP_General_Information = () => {
                     {language}
                     <CirclePlus
                       size={11}
-                      className="w-[11px] h-[11px] text-white suggested_languages ml-[-4px]"
+                      className="cursor-pointer w-[11px] h-[11px] text-white suggested_languages ml-[-4px]"
                     />
                   </Button>
                 ))}

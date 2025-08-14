@@ -59,7 +59,7 @@ const CP_type = () => {
   useEffect(() => {
     // const savedData = getCookie("cp_type");
     const savedData = getStorage("cp_type", rememberMe);
-    console.log("Cp_type_data",savedData)
+    console.log("Cp_type_data", savedData)
     if (savedData) {
       try {
         const parsedData = savedData
@@ -109,6 +109,7 @@ const CP_type = () => {
         setCp_List(response?.data?.data);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       if (error.forceLogout) {
         router.push("/login");
       } else {
@@ -126,10 +127,11 @@ const CP_type = () => {
         type: newType,
       });
       if (response?.data?.success === true) {
-        showSuccessToast("Channel Partner Type Added");
+        showSuccessToast(response?.data?.data?.message || "Channel Partner Type Added");
         await channelPartnerList(search);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log("error", error);
       if (error.forceLogout) {
         router.push("/login");
@@ -154,6 +156,7 @@ const CP_type = () => {
         setIsUserNameAvailable(response?.data?.data?.available);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log(error);
       if (error.forceLogout) {
         router.push("/login");
@@ -177,6 +180,7 @@ const CP_type = () => {
         setIsMobileAvailable(true);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log(error);
       if (error.forceLogout) {
         router.push("/login");
@@ -199,6 +203,7 @@ const CP_type = () => {
         setIsEmailAvailable(true);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log(error);
       if (error.forceLogout) {
         router.push("/login");
@@ -242,6 +247,7 @@ const CP_type = () => {
         setCountryList(response?.data?.data);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log("error", error);
       if (error.forceLogout) {
         router.push("/login");
@@ -596,6 +602,16 @@ const CP_type = () => {
                       backgroundColor: isEmailValid(formData.email) && isEmailAvailable === true
                         ? "#fff"
                         : "#f6f5fd",
+                      cursor: "pointer",
+                      boxShadow: "none",
+                      borderColor: "transparent",
+                      "&:hover": {
+                        borderColor: "transparent",
+                      },
+                    }),
+                    option: (base) => ({
+                      ...base,
+                      cursor: "pointer",
                     }),
                     menu: (base) => ({ ...base, width: "200px" }),
                   }}
@@ -710,7 +726,7 @@ const CP_type = () => {
                   />
                   <label
                     htmlFor="same_as_mobile"
-                    className={`text-[12px] ${isMobileValid(formData.primaryMobileNumber) && isMobileAvailable === true
+                    className={`cursor-pointer text-[12px] ${isMobileValid(formData.primaryMobileNumber) && isMobileAvailable === true
                       ? "text-gray-500 "
                       : "text-[#00000040]"
                       }`}
@@ -750,6 +766,16 @@ const CP_type = () => {
                           isMobileValid(formData.primaryMobileNumber) && isMobileAvailable === true
                           ? "#fff"
                           : "#f6f5fd",
+                      cursor: "pointer",
+                      boxShadow: "none",
+                      borderColor: "transparent",
+                      "&:hover": {
+                        borderColor: "transparent",
+                      },
+                    }),
+                    option: (base) => ({
+                      ...base,
+                      cursor: "pointer",
                     }),
                     menu: (base) => ({ ...base, width: "200px" }),
                   }}
@@ -828,6 +854,16 @@ const CP_type = () => {
                       backgroundColor: isMobileValid(formData.whatsappNumber)
                         ? "#fff"
                         : "#f6f5fd",
+                      cursor: "pointer",
+                      boxShadow: "none",
+                      borderColor: "transparent",
+                      "&:hover": {
+                        borderColor: "transparent",
+                      },
+                    }),
+                    option: (base) => ({
+                      ...base,
+                      cursor: "pointer",
                     }),
                     menu: (base) => ({ ...base, width: "200px" }),
                   }}

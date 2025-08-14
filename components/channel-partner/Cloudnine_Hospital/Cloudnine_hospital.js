@@ -97,13 +97,14 @@ const Cloudnine_Hospital = ({ type }) => {
           // setCookie("sessions_selection", JSON.stringify(formData));
           setStorage("sessions_selection", formData);
           setLoading(false)
-          showSuccessToast("Patient Invited & Invoice Sent");
+          showSuccessToast(response?.data?.data?.message || "Patient Invited & Invoice Sent");
           router.push(`/channel-partner/${type}/invoice_sent`);
         }
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       setLoading(false)
-      showErrorToast(response?.data?.error?.message || "Something went wrong.");
+      showErrorToast(error?.response?.data?.error?.message || "Something went wrong.");
     }
     finally{
       setLoading(false)
@@ -172,6 +173,7 @@ const Cloudnine_Hospital = ({ type }) => {
         );
       }
     } catch (err) {
+      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log(err);
       showErrorToast(
         err?.response?.data?.error?.message ||
@@ -207,6 +209,7 @@ const Cloudnine_Hospital = ({ type }) => {
         );
       }
     } catch (err) {
+      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log(err);
       showErrorToast(
         err?.response?.data?.error?.message ||
@@ -244,6 +247,7 @@ const Cloudnine_Hospital = ({ type }) => {
         );
       }
     } catch (err) {
+      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log(err);
       showErrorToast(
         err?.response?.data?.error?.message || "An error occurred while cancel"
@@ -270,6 +274,7 @@ const Cloudnine_Hospital = ({ type }) => {
           setCountryList(response?.data?.data);
         }
       } catch (error) {
+        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         // console.log("error", error);
         if (error.forceLogout) {
           router.push("/login");
@@ -294,6 +299,7 @@ const Cloudnine_Hospital = ({ type }) => {
         setChannelPartnerData(parsedData);
         setBillingType(parsedData?.billingType);
       } catch (error) {
+        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         setChannelPartnerData(null);
       }
     } else {
@@ -312,6 +318,7 @@ const Cloudnine_Hospital = ({ type }) => {
         }));
         // console.log("patient", parsedData);
       } catch (error) {
+        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         setPatientPreviousData(null);
       }
     } else {
@@ -397,7 +404,17 @@ const Cloudnine_Hospital = ({ type }) => {
                       minHeight: "39px",
                       width: "max-content",
                       backgroundColor: formData.lastName ? "#fff" : "#fcf9fb",
-                    }),
+                    cursor: "pointer",
+                    boxShadow: "none",
+                    borderColor: "transparent",
+                    "&:hover": {
+                      borderColor: "transparent",
+                    },
+                  }),
+                  option: (base) => ({
+                    ...base,
+                    cursor: "pointer",
+                  }),
                     menu: (base) => ({ ...base, width: "200px" }),
                   }}
                   formatOptionLabel={(option, { context }) =>
@@ -436,7 +453,7 @@ const Cloudnine_Hospital = ({ type }) => {
                   />
                   <Label
                     htmlFor={`session${_session.count}`}
-                    className="text-[15px] text-gray-500 font-semibold"
+                    className="text-[15px] text-gray-500 font-semibold cursor-pointer"
                   >
                     {`${_session.name}`}
                   </Label>

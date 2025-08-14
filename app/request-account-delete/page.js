@@ -75,8 +75,9 @@ const Page = () => {
         showErrorToast("Failed to send mail");
       }
     } catch (err) {
+      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorMsg(err.message);
-      showErrorToast("Failed to send mail");
+      showErrorToast(err?.response?.data?.error?.message || "Failed to send mail");
     } finally {
       setIsRequesting(false);
     }

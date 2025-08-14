@@ -86,6 +86,7 @@ const Patient_Registration = ({ type }) => {
         setCountryList(response?.data?.data);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log("error", error);
       if (error.forceLogout) {
         router.push("/login");
@@ -120,6 +121,7 @@ const Patient_Registration = ({ type }) => {
         );
       }
     } catch (err) {
+      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log(err);
       showErrorToast(
         err?.response?.data?.error?.message ||
@@ -162,6 +164,7 @@ const Patient_Registration = ({ type }) => {
         setIsMobileAvailable(true);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log(error);
       if (error.forceLogout) {
         router.push("/login");
@@ -184,6 +187,7 @@ const Patient_Registration = ({ type }) => {
         setIsEmailAvailable(true);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log(error);
       if (error.forceLogout) {
         router.push("/login");
@@ -378,8 +382,18 @@ const Patient_Registration = ({ type }) => {
                       height: "39px",
                       minHeight: "39px",
                       width: "max-content",
-                      backgroundColor: formData.lastName ? "#fff" : "#fff"
-                    }),
+                      backgroundColor: formData.lastName ? "#fff" : "#fff",
+                   cursor: "pointer",
+                    boxShadow: "none",
+                    borderColor: "transparent",
+                    "&:hover": {
+                      borderColor: "transparent",
+                    },
+                  }),
+                  option: (base) => ({
+                    ...base,
+                    cursor: "pointer",
+                  }),
                     menu: (base) => ({ ...base, width: "200px" }),
                   }}
                   formatOptionLabel={(option, { context }) =>

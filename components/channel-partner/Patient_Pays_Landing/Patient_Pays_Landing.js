@@ -7,13 +7,14 @@ import { useState, useEffect } from "react";
 import { setCookie } from "cookies-next";
 import axios from "axios";
 import { showErrorToast } from "@/lib/toast";
-import { setStorage } from "@/lib/utils";
+import { clearStorageAndCookies, setStorage } from "@/lib/utils";
 const Patient_Pays_Landing = ({ type }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [channelPartnerData, setChannelPartnerData] = useState(null);
   const router = useRouter();
   useEffect(() => {
+    clearStorageAndCookies(["user"])
     const verifyChannelPartner = async (username) => {
       setLoading(true);
       setError(null);
@@ -36,6 +37,7 @@ const Patient_Pays_Landing = ({ type }) => {
           );
         }
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         // console.log(err);
         showErrorToast(
           err?.response?.data?.error?.message ||
@@ -218,6 +220,7 @@ const Patient_Pays_Landing = ({ type }) => {
               </div>
               <Button
                 variant="outline"
+                
                 className="flex-1 bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[20px] text-white rounded-[7.26px] w-[198px] h-[45px]"
                 onClick={() => {
                   router.push(

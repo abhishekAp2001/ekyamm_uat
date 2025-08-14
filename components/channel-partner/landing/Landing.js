@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import axiosInstance from '@/lib/axiosInstance';
 import { showErrorToast } from '@/lib/toast';
 import { setCookie } from 'cookies-next';
-import { setStorage } from '@/lib/utils';
+import { clearStorageAndCookies, setStorage } from '@/lib/utils';
 import Image from 'next/image';
 
 const Landing = () => {
@@ -14,6 +14,7 @@ const Landing = () => {
   const axios = axiosInstance();
 
   useEffect(() => {
+  clearStorageAndCookies(["PatientInfo", "patientSessionData", "selectedCounsellor", "user"])
     const verifyChannelPartner = async (username) => {
       try {
         const response = await axios.post(`v2/cp/channelPartner/verify`, {
@@ -35,6 +36,7 @@ const Landing = () => {
           router.push('/');
         }
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         showErrorToast(
           err?.response?.data?.error?.message ||
           "An error occurred while verifying"

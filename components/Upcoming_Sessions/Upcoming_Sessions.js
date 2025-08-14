@@ -68,6 +68,7 @@ const Upcoming_Sessions = ({dashboard = false}) => {
                 setSessions(response?.data?.data);
               }
             } catch (err) {
+              if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
               console.log("err", err);
               showErrorToast(
                 err?.response?.data?.error?.message || "Error fetching patient data"
@@ -167,7 +168,7 @@ const Upcoming_Sessions = ({dashboard = false}) => {
             width={28}
             height={18}
             alt="right-icon"
-            className="bg-transparent"
+            className="bg-transparent cursor-pointer"
           />
         </div>
       )}

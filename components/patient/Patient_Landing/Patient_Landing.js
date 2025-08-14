@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { setCookie } from 'cookies-next';
 import { showErrorToast } from '@/lib/toast';
 import axiosInstance from '@/lib/axiosInstance';
-import { setStorage } from '@/lib/utils';
+import { clearStorageAndCookies, setStorage } from '@/lib/utils';
 import Image from 'next/image';
 const Patient_Landing= () => {
   const customAxios = axiosInstance();
@@ -13,6 +13,7 @@ const Patient_Landing= () => {
   const type = searchParams.get("u");
 
   useEffect(() => {
+    clearStorageAndCookies(["user"])
     const verifyChannelPartner = async (username) => {
       try {
         const response = await customAxios.post(`v2/cp/channelPartner/verify`, {
@@ -34,6 +35,7 @@ const Patient_Landing= () => {
           );
         }
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.log(err);
         showErrorToast(
           err?.response?.data?.error?.message ||

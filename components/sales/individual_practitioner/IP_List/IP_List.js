@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { hasCookie,getCookie } from "cookies-next";
 import { getStorage } from "@/lib/utils";
 import { useRememberMe } from "@/app/context/RememberMeContext";
+import { showErrorToast } from "@/lib/toast";
 const IP_List = () => {
   const {rememberMe} = useRememberMe()
   const router = useRouter()
@@ -20,6 +21,7 @@ const IP_List = () => {
         const response = await axios.get(`v2/sales/individualPractitioner`)
         setIndividualPractitionerList(response?.data?.data);
       } catch (error) {
+        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         if (error.forceLogout) {
           router.push("/login");
         } else {

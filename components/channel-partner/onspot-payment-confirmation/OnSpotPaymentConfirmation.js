@@ -34,6 +34,7 @@ const OnSpotPaymentConfirmation = ({ type }) => {
         cookieObj.txnId = transactionId;
         setStorage("sessions_selection", cookieObj);
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.error("Error parsing cookie", err);
       }
     }
@@ -84,6 +85,7 @@ useEffect(() => {
         setChannelPartnerData(parsedData);
         // setBillingType(parsedData?.billingType);
       } catch (error) {
+        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         // console.log('error',error)
         setChannelPartnerData(null);
       }

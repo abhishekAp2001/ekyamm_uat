@@ -159,6 +159,7 @@ const Patient_Profile = () => {
           setTherapist(response?.data?.data.practitionerTagged[0]);
         }
       } catch (err) {
+        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.error("err", err);
         showErrorToast(
           err?.response?.data?.error?.message || "Error fetching patient data"
@@ -241,6 +242,7 @@ const Patient_Profile = () => {
         router.push(`/patient/patient-profile`);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(error?.response?.data?.error?.message);
     } finally {
       setIsLoading(false);
@@ -269,6 +271,7 @@ const Patient_Profile = () => {
         return imageUrl;
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("error", error)
       if (error.forceLogout) {
         router.push("/login");
@@ -289,14 +292,15 @@ const Patient_Profile = () => {
         },
       })
       if (response?.data?.success) {
-        showSuccessToast("OTP sent to registered mobile number")
+        showSuccessToast(response?.data?.data?.message || "OTP sent to registered mobile number")
       }
       if (!response?.data?.success) {
         showErrorToast("Unable to send OTP")
         setDrawerOpen(false)
       }
     } catch (error) {
-      showErrorToast("Unable to send OTP")
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      showErrorToast(error?.response?.data?.error?.message || "Unable to send OTP")
       console.error("Error", error)
     }
   }
@@ -312,7 +316,7 @@ const Patient_Profile = () => {
       })
       setIsLoading(false)
       if (response?.data?.success) {
-        showSuccessToast("OTP Verified succesfully")
+        showSuccessToast(response?.data?.data?.message || "OTP Verified succesfully")
         setVerifiedDrawerOpen(true)
         setOtp("")
       }
@@ -320,7 +324,8 @@ const Patient_Profile = () => {
         showErrorToast("Invalid OTP")
       }
     } catch (error) {
-      showErrorToast("Invalid OTP")
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      showErrorToast(error?.response?.data?.error?.message || "Invalid OTP")
       setIsLoading(false)
       console.error("Error", error)
     }
@@ -353,14 +358,15 @@ const Patient_Profile = () => {
       if (response?.data?.success) {
         setNewOtpSent(true)
         setSecondsLeft(120)
-        showSuccessToast("OTP sent to new mobile number")
+        showSuccessToast(response?.data?.data?.message || "OTP sent to new mobile number")
       }
       if (!response?.data?.success) {
         showErrorToast("Unable to send OTP")
         setDrawerOpen(false)
       }
     } catch (error) {
-      showErrorToast("Unable to send OTP")
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      showErrorToast(error?.response?.data?.error?.message || "Unable to send OTP")
       console.error("Error", error)
     }
   }
@@ -380,14 +386,15 @@ const Patient_Profile = () => {
       if (response?.data?.success) {
         setNewVerifiedDrawer(true)
         setNewMobileDrawer(false)
-        showSuccessToast("OTP Verified succesfully")
+        showSuccessToast(response?.data?.data?.message || "OTP Verified succesfully")
         setOtp("")
       }
       if (!response?.data?.success) {
         showErrorToast("Invalid OTP")
       }
     } catch (error) {
-      showErrorToast("Invalid OTP")
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      showErrorToast(error?.response?.data?.error?.message || "Invalid OTP")
       setIsLoading(false)
       console.error("Error", error)
     }
@@ -405,14 +412,15 @@ const Patient_Profile = () => {
         },
       })
       if (response?.data?.success) {
-        showSuccessToast("OTP sent to registered email")
+        showSuccessToast(response?.data?.data?.message || "OTP sent to registered email")
       }
       if (!response?.data?.success) {
         showErrorToast("Unable to send OTP")
         setDrawerOpen(false)
       }
     } catch (error) {
-      showErrorToast("Unable to send OTP")
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      showErrorToast(error?.response?.data?.error?.message || "Unable to send OTP")
       console.error("Error", error)
     }
   }
@@ -429,7 +437,7 @@ const Patient_Profile = () => {
       })
       setIsLoading(false)
       if (response?.data?.success) {
-        showSuccessToast("OTP Verified succesfully")
+        showSuccessToast(response?.data?.data?.message || "OTP Verified succesfully")
         setVerifiedDrawerOpen(true)
         setOtp("")
       }
@@ -437,7 +445,8 @@ const Patient_Profile = () => {
         showErrorToast("Invalid OTP")
       }
     } catch (error) {
-      showErrorToast("Invalid OTP")
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      showErrorToast(error?.response?.data?.error?.message || "Invalid OTP")
       setIsLoading(false)
       console.error("Error", error)
     }
@@ -457,14 +466,15 @@ const Patient_Profile = () => {
       if (response?.data?.success) {
         setNewMobileDrawer(false)
         setNewVerifiedDrawer(true)
-        showSuccessToast("OTP Verified succesfully")
+        showSuccessToast(response?.data?.data?.message || "OTP Verified succesfully")
         setOtp("")
       }
       if (!response?.data?.success) {
         showErrorToast("Invalid OTP")
       }
     } catch (error) {
-      showErrorToast("Invalid OTP")
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      showErrorToast(error?.response?.data?.error?.message || "Invalid OTP")
       setIsLoading(false)
       console.error("Error", error)
     }
@@ -487,14 +497,15 @@ const Patient_Profile = () => {
       if (response?.data?.success) {
         setNewOtpSent(true)
         setSecondsLeft(120)
-        showSuccessToast("OTP sent to new email")
+        showSuccessToast(response?.data?.data?.message || "OTP sent to new email")
       }
       if (!response?.data?.success) {
         showErrorToast("Unable to send OTP")
         setDrawerOpen(false)
       }
     } catch (error) {
-      showErrorToast("Unable to send OTP")
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      showErrorToast(error?.response?.data?.error?.message || "Unable to send OTP")
       console.error("Error", error)
     }
   }
@@ -521,7 +532,7 @@ const Patient_Profile = () => {
         patient.primaryMobileNumber = mobile
         // setCookie("PatientInfo", JSON.stringify(patient),maxAge)
         setStorage("PatientInfo", patient, rememberMe, 2592000 );
-        showSuccessToast("Contact details updated")
+        showSuccessToast(response?.data?.data?.message || "Contact details updated")
         handleVerifiedDrawerClose()
       }
       else {
@@ -530,6 +541,7 @@ const Patient_Profile = () => {
         );
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("Error", error);
       if (error.response?.data?.error?.message) {
         showErrorToast(error.response.data.error.message);
@@ -565,7 +577,7 @@ const Patient_Profile = () => {
         patient.email = email
         // setCookie("PatientInfo", JSON.stringify(patient),maxAge)
         setStorage("PatientInfo", patient, rememberMe, 2592000 );
-        showSuccessToast("Contact details updated")
+        showSuccessToast(response?.data?.data?.message || "Contact details updated")
         handleVerifiedDrawerClose()
       }
       else {
@@ -574,6 +586,7 @@ const Patient_Profile = () => {
         );
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("Error", error);
       if (error.response?.data?.error?.message) {
         showErrorToast(error.response.data.error.message);
@@ -618,7 +631,7 @@ const Patient_Profile = () => {
             width={28}
             height={18}
             alt="right-icon"
-            className="bg-transparent"
+            className="bg-transparent cursor-pointer"
           />
         </div>
       </div>
@@ -717,7 +730,7 @@ const Patient_Profile = () => {
                 width={10}
                 height={10}
                 alt="edit"
-                className="mx-2"
+                className="mx-2 cursor-pointer"
               />
             </div>
           </div>
@@ -733,7 +746,7 @@ const Patient_Profile = () => {
                 width={10}
                 height={10}
                 alt="edit"
-                className=""
+                className="cursor-pointer"
               />
             </div>
 

@@ -65,6 +65,7 @@ const Filter = ({
           setLanguageList(response?.data?.data);
         }
       } catch (error) {
+        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.log(error);
         if (error.forceLogout) {
           router.push("/login");
@@ -134,6 +135,7 @@ const Filter = ({
           setFees(response?.data?.data?.fees)
         }
       } catch (error) {
+        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.error(error);
       }
     }
@@ -222,7 +224,7 @@ const Filter = ({
                   className={`text-[16px] ${selectedGender === gender
                       ? "font-[600] text-black"
                       : "font-[500] text-gray-500"
-                    }`}
+                    } cursor-pointer`}
                 >
                   {gender.charAt(0).toUpperCase() + gender.slice(1)}
                 </Label>
@@ -248,7 +250,7 @@ const Filter = ({
               />
               <CirclePlus
                 size={20}
-                className={`w-5 h-5 absolute top-2 right-2`}
+                className={`cursor-pointer w-5 h-5 absolute top-2 right-2`}
                 onClick={() => handleAddToList(languageInput, setLanguageInput)}
               />
             </div>
@@ -286,7 +288,7 @@ const Filter = ({
                   <CirclePlus
                     size={11}
                     color="#FFF"
-                    className="w-[11px] h-[11px] text-white suggested_languages ml-[-4px] circle_plus"
+                    className="cursor-pointer w-[11px] h-[11px] text-white suggested_languages ml-[-4px] circle_plus"
                   />
                 </Button>
               ))}

@@ -148,7 +148,7 @@ const Add_Patient = () => {
               <div className="flex items-center gap-2">
                 <Label
                   htmlFor="terms"
-                  className="text-[15px] text-gray-500  font-medium"
+                  className="text-[15px] text-gray-500  font-medium cursor-pointer"
                 >
                   Accept terms and conditions
                 </Label>

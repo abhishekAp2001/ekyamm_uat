@@ -43,7 +43,7 @@ const OTP_Send = ({ type }) => {
           setResendTimer(120);
           setIsResendDisabled(true);
           setOtp("");
-          showSuccessToast(`OTP sent to your verified mobile number.`);
+          // showSuccessToast(`OTP sent to your verified mobile number.`);
         }
       } else {
         if (await sendEmailOtp()) {
@@ -51,7 +51,7 @@ const OTP_Send = ({ type }) => {
           setResendTimer(120);
           setIsResendDisabled(true);
           setOtp("");
-          showSuccessToast(`OTP sent to your verified email.`);
+          // showSuccessToast(`OTP sent to your verified email.`);
         }
       }
     } catch (error) {
@@ -62,7 +62,7 @@ const OTP_Send = ({ type }) => {
   };
  
   function redirectAfterOtpValidate(type) {
-    showSuccessToast("OTP verified successfully!");
+    // showSuccessToast("OTP verified successfully!");
     setTimeout(() => {
       router.push(`/channel-partner/${type}/verified_successfully`);
     }, 100);
@@ -117,11 +117,13 @@ const OTP_Send = ({ type }) => {
       });
  
       if (response?.data?.success === true) {
+        showSuccessToast(response?.data?.data?.message ||`OTP sent to your verified email.`);
         return true;
       } else {
         showErrorToast(response?.data?.error?.message || "Otp Not Sent.");
       }
     } catch (err) {
+      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         err?.response?.data?.error?.message ||
           "An error occurred while sending."
@@ -172,13 +174,15 @@ const OTP_Send = ({ type }) => {
       });
       // if (result.data.result === "success")
       if (response?.data?.success) {
+        showSuccessToast(response?.data?.data?.message || "OTP sent to your verified mobile number.")
         return true;
       } else {
         showErrorToast(`Failed to generate OTP`);
       }
     } catch (err) {
+      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
-        err.response?.data?.reason || "An error occurred while generating OTP"
+        err?.response?.data?.error?.message || "An error occurred while generating OTP"
       );
     } finally {
       setLoading(false);
@@ -219,6 +223,7 @@ const OTP_Send = ({ type }) => {
       });
       // if (result.data.result === "success")
       if (response?.data?.success) {
+        showSuccessToast(response?.data?.data?.message || "OTP verified successfully!");
         return true;
       } else {
         // console.log(result);
@@ -226,8 +231,9 @@ const OTP_Send = ({ type }) => {
       }
       return false;
     } catch (err) {
+      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
-        err.response?.data?.reason || "An error occurred while Verifying OTP"
+        err?.response?.data?.error?.message || "An error occurred while Verifying OTP"
       );
     } finally {
       setLoading(false);
@@ -245,12 +251,13 @@ const OTP_Send = ({ type }) => {
       });
  
       if (response?.data?.success === true) {
-        // showErrorToast("Verified successfully");
+        showSuccessToast(response?.data?.data?.message || "OTP verified successfully!");
         return true;
       } else {
         showErrorToast(response?.data?.error?.message || "Invalid otp");
       }
     } catch (err) {
+      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         err?.response?.data?.error?.message ||
           "An error occurred while verifying"

@@ -93,6 +93,7 @@ const IP_Details = () => {
         setCountryList(response?.data?.data);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log("error", error);
       if (error.forceLogout) {
         router.push("/login");
@@ -294,15 +295,16 @@ const IP_Details = () => {
               sessionStorage.removeItem("doNotHaveMedicalAssociation");
             }
             router.push("/sales");
-            showSuccessToast("Invite Sent");
+            showSuccessToast(response?.data?.data?.message || "Invite Sent");
           }
         }
         else {
           router.push("/sales/ip_general_information");
         }
       } catch (error) {
+        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.error("Error saving data:", error);
-        showErrorToast("Failed to send invite");
+        showErrorToast(error?.response?.data?.error?.message || "Failed to send invite");
       }
     } else {
       setTouched({
@@ -345,6 +347,7 @@ const IP_Details = () => {
         setIsMobileAvailable(true);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log(error);
       if (error.forceLogout) {
         router.push("/login");
@@ -367,6 +370,7 @@ const IP_Details = () => {
         setIsEmailAvailable(true);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log(error);
       if (error.forceLogout) {
         router.push("/login");
@@ -677,11 +681,26 @@ const IP_Details = () => {
                     height: "39px",
                     minHeight: "39px",
                     width: "max-content",
+                    cursor: "pointer",
                     backgroundColor: isEmailValid(formData.email) && isEmailAvailable === true
                       ? "#fff"
                       : "#faf5f8",
+                  cursor: "pointer",
+                    boxShadow: "none",
+                    borderColor: "transparent",
+                    "&:hover": {
+                      borderColor: "transparent",
+                    },
+                  }),
+                  option: (base) => ({
+                    ...base,
+                    cursor: "pointer",
                   }),
                   menu: (base) => ({ ...base, width: "200px" }),
+                  option: (base) => ({
+                    ...base,
+                    cursor: "pointer",
+                  }),
                 }}
                 formatOptionLabel={(option, { context }) =>
                   context === "menu"
@@ -790,7 +809,7 @@ const IP_Details = () => {
                   disabled={!isMobileValid(formData.primaryMobileNumber) || isMobileAvailable === false}
                 />
                 <label
-                  className={`text-[12px] ${isMobileValid(formData.primaryMobileNumber) && isMobileAvailable === true
+                  className={`cursor-pointer text-[12px] ${isMobileValid(formData.primaryMobileNumber) && isMobileAvailable === true
                     ? "text-gray-500"
                     : "text-[#00000040]"
                     }`}
@@ -825,11 +844,27 @@ const IP_Details = () => {
                     height: "39px",
                     minHeight: "39px",
                     width: "max-content",
+                    cursor: "pointer",
+                    boxShadow: "none",
+                    borderColor: "transparent",
+                    "&:hover": {
+                      borderColor: "transparent",
+                    },
                     backgroundColor:
                       sameAsMobile ||
                         isMobileValid(formData.primaryMobileNumber) && isMobileAvailable === true
                         ? "#fff"
                         : "#faf5f8",
+                    cursor: "pointer",
+                    boxShadow: "none",
+                    borderColor: "transparent",
+                    "&:hover": {
+                      borderColor: "transparent",
+                    },
+                  }),
+                  option: (base) => ({
+                    ...base,
+                    cursor: "pointer",
                   }),
                   menu: (base) => ({ ...base, width: "200px" }),
                 }}
@@ -909,6 +944,16 @@ const IP_Details = () => {
                     backgroundColor: isMobileValid(formData.whatsappNumber)
                       ? "#fff"
                       : "#faf5f8",
+                  cursor: "pointer",
+                    boxShadow: "none",
+                    borderColor: "transparent",
+                    "&:hover": {
+                      borderColor: "transparent",
+                    },
+                  }),
+                  option: (base) => ({
+                    ...base,
+                    cursor: "pointer",
                   }),
                   menu: (base) => ({ ...base, width: "200px" }),
                 }}
@@ -949,15 +994,15 @@ const IP_Details = () => {
                 </span>
               )}
           </div>
-        <div className="mt-5 flex items-center gap-2">
-        <Checkbox
-          id='do_not_add_me_to_epn'
-          className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] cursor-pointer"
-          checked={doNotAddMeToEpn}
-          onCheckedChange={(checked) => setDoNotAddMeToEpn(checked)}
-        />
-          <Label htmlFor="do_not_add_me_to_epn">Do not add me to EPN</Label>
-         </div>
+          <div className="mt-5 flex items-center gap-2">
+            <Checkbox
+              id='do_not_add_me_to_epn'
+              className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] cursor-pointer"
+              checked={doNotAddMeToEpn}
+              onCheckedChange={(checked) => setDoNotAddMeToEpn(checked)}
+            />
+            <Label htmlFor="do_not_add_me_to_epn" className="cursor-pointer">Do not add me to EPN</Label>
+          </div>
         </div>
         <IP_Buttons
           disabled={!isFormValid()}

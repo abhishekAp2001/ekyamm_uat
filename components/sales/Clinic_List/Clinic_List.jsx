@@ -19,6 +19,7 @@ const Clinic_List = () => {
       const response = await axios.get(`v2/sales/psychiatrist`);
       setClinicList(response?.data?.data);
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       if (error.forceLogout) {
         router.push("/login");
       } else {

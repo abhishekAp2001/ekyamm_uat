@@ -93,6 +93,7 @@ const Patient_Pays_Registration = ({ type }) => {
         setCountryList(response?.data?.data);
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log("error", error);
       if (error.forceLogout) {
         router.push("/login");
@@ -143,8 +144,10 @@ const Patient_Pays_Registration = ({ type }) => {
         return true;
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       setLoading(false);
       console.error("Error", error);
+      showErrorToast(error?.response?.data?.error?.message);
     }
   };
 
@@ -174,7 +177,7 @@ const Patient_Pays_Registration = ({ type }) => {
           setResendTimer(120);
           setIsResendDisabled(true);
           setOtp("");
-          showSuccessToast(`OTP sent to your verified mobile number.`);
+          showSuccessToast( response?.data?.data?.message || `OTP sent to your verified mobile number.`);
         }
       }
       if (!mobileValid) {
@@ -183,8 +186,10 @@ const Patient_Pays_Registration = ({ type }) => {
         showErrorToast("Mobile number is already registered.");
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       setLoading(false);
       console.error("Error", error);
+      showErrorToast(error?.response?.data?.error?.message);
     }
   };
 
@@ -220,11 +225,13 @@ const Patient_Pays_Registration = ({ type }) => {
         setOtpSendStatus(false);
         setOtp("");
         setLoading(false);
-        showSuccessToast("OTP verified successfully");
+        showSuccessToast(response?.data?.data?.message || "OTP verified successfully");
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       setLoading(false);
       console.error("Error", error);
+      showErrorToast(error?.response?.data?.error?.message)
     }
   };
   useEffect(() => {
@@ -258,8 +265,10 @@ const Patient_Pays_Registration = ({ type }) => {
         return true;
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       setEmailLoading(false);
       console.error("Error", error);
+      showErrorToast(error?.response?.data?.error?.message)
     }
   };
 
@@ -291,7 +300,7 @@ const Patient_Pays_Registration = ({ type }) => {
           setEmailOtp("");
           setEncryptedOtp(response?.data?.data?.encryptedOtp)
           console.log("encrypt",response?.data?.data?.encryptedOtp)
-          showSuccessToast(`OTP sent to your verified email.`);
+          showSuccessToast(response?.data?.data?.message || `OTP sent to your verified email.`);
         }
       }
       if (!emailValid) {
@@ -299,7 +308,8 @@ const Patient_Pays_Registration = ({ type }) => {
         showErrorToast("email is already registered.");
       }
     } catch (error) {
-      showErrorToast("Something went wrong, please try again.");
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      showErrorToast(error?.response?.data?.error?.message || "Something went wrong, please try again.");
       setEmailLoading(false);
       console.error("Error", error);
     }
@@ -322,9 +332,11 @@ const Patient_Pays_Registration = ({ type }) => {
         setEmailOtpSendStatus(false);
         setEmailOtp("");
         setEmailLoading(false);
-        showSuccessToast("OTP verified successfully");
+        showSuccessToast(response?.data?.data?.message || "OTP verified successfully");
       }
     } catch (error) {
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      showErrorToast(error?.response?.data?.error?.message);
       setEmailLoading(false);
       console.error("Error", error);
     }
@@ -465,7 +477,7 @@ const Patient_Pays_Registration = ({ type }) => {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="absolute right-0 top-1/2 transform -translate-y-1/2"
+                        className="absolute right-0 top-1/2 transform -translate-y-1/2 cursor-pointer"
                         onClick={() => setShowEmailOtp(!showEmailOtp)}
                         aria-label={showEmailOtp ? "Hide OTP" : "Show OTP"}
                       >
@@ -493,14 +505,14 @@ const Patient_Pays_Registration = ({ type }) => {
                 <div className="flex gap-3 mt-5">
                   <Button
                     type="button"
-                    className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] rounded-[8px] flex-1 h-[45px]"
+                    className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] rounded-[8px] flex-1 h-[45px] cursor-pointer"
                     onClick={isResendEmailDisabled ? null : sendEmailOTP}
                   >
                     Resend OTP
                   </Button>
                   <Button
                     type="button"
-                    className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white rounded-[8px] flex-1 h-[45px]"
+                    className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white rounded-[8px] flex-1 h-[45px] cursor-pointer"
                     disabled={emailOtp.length !== 6}
                     onClick={() => {
                       validateEmailOTP();
@@ -515,7 +527,7 @@ const Patient_Pays_Registration = ({ type }) => {
                 isEmailValid(formData.email) && (
                   <Button
                     type="button"
-                    className="w-full mt-5 h-[45px] bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white py-[14.5px] rounded-[8px] flex items-center justify-center"
+                    className="w-full mt-5 h-[45px] bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white py-[14.5px] rounded-[8px] flex items-center justify-center cursor-pointer"
                     onClick={() => {
                       sendEmailOTP();
                     }}
@@ -574,7 +586,17 @@ const Patient_Pays_Registration = ({ type }) => {
                       minHeight: "39px",
                       width: "max-content",
                       backgroundColor: formData.lastName ? "#fff" : "#fff",
-                    }),
+                   cursor: "pointer",
+                    boxShadow: "none",
+                    borderColor: "transparent",
+                    "&:hover": {
+                      borderColor: "transparent",
+                    },
+                  }),
+                  option: (base) => ({
+                    ...base,
+                    cursor: "pointer",
+                  }),
                     menu: (base) => ({ ...base, width: "200px" }),
                   }}
                   formatOptionLabel={(option, { context }) =>
@@ -653,7 +675,7 @@ const Patient_Pays_Registration = ({ type }) => {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="absolute right-0 top-1/2 transform -translate-y-1/2"
+                        className="absolute right-0 top-1/2 transform -translate-y-1/2 cursor-pointer"
                         onClick={() => setShowOtp(!showOtp)}
                         aria-label={showOtp ? "Hide OTP" : "Show OTP"}
                       >
@@ -681,14 +703,14 @@ const Patient_Pays_Registration = ({ type }) => {
                 <div className="flex gap-3 mt-5">
                   <Button
                     type="button"
-                    className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] rounded-[8px] flex-1 h-[45px]"
+                    className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] rounded-[8px] flex-1 h-[45px] cursor-pointer"
                     onClick={isResendDisabled ? null : sendMobileOTP}
                   >
                     Resend OTP
                   </Button>
                   <Button
                     type="button"
-                    className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white rounded-[8px] flex-1 h-[45px]"
+                    className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white rounded-[8px] flex-1 h-[45px] cursor-pointer"
                     disabled={otp.length !== 6}
                     onClick={() => {
                       validateMobileOTP();
@@ -703,7 +725,7 @@ const Patient_Pays_Registration = ({ type }) => {
                 isMobileValid(formData.primaryMobileNumber) && (
                   <Button
                     type="button"
-                    className="w-full mt-5 h-[45px] bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white py-[14.5px] rounded-[8px] flex items-center justify-center"
+                    className="w-full mt-5 h-[45px] bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white py-[14.5px] rounded-[8px] flex items-center justify-center cursor-pointer"
                     onClick={() => {
                       sendMobileOTP();
                     }}
@@ -739,7 +761,7 @@ const Patient_Pays_Registration = ({ type }) => {
   <div className="flex justify-between items-center mt-[24.69px] gap-3">
     <Button
       type="submit"
-      className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] rounded-[8px] flex items-center justify-center w-full h-[45px]"
+      className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] rounded-[8px] flex items-center justify-center w-full h-[45px] cursor-pointer"
       onClick={() => {
         router.push(
           `/channel-partner/${type}/patient-pay-registration/password`
@@ -757,9 +779,9 @@ const Patient_Pays_Registration = ({ type }) => {
             <Link
               disabled={loading}
               href={`/patient/login`}
-              className="text-[15px] "
+              className="text-[15px]"
             >
-              <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px] rounded-[8px] flex items-center justify-center w-[141px] h-[45px]">
+              <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px] rounded-[8px] flex items-center justify-center w-[141px] h-[45px] cursor-pointer">
                 Already a User ?
               </Button>
             </Link>
