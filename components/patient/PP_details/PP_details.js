@@ -45,7 +45,7 @@ const PP_Details = ({ type }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [token, setToken] = useState("");
   const [show, setShow] = useState(false);
-  
+
   const [formData, setFormData] = useState({
     profileImageBase64: "",
     firstName: "",
@@ -160,7 +160,7 @@ const PP_Details = ({ type }) => {
       } catch (err) {
         showErrorToast(
           err?.response?.data?.error?.message ||
-            "An error occurred while verifying"
+          "An error occurred while verifying"
         );
       } finally {
         setLoading(false);
@@ -404,7 +404,7 @@ const PP_Details = ({ type }) => {
 
   const handleSave = async () => {
     if (isFormValid()) {
-      localStorage.setItem("pp_details",JSON.stringify(formData))
+      localStorage.setItem("pp_details", JSON.stringify(formData))
       handleUpdatePatientDetails();
     } else {
       setTouched({
@@ -438,39 +438,39 @@ const PP_Details = ({ type }) => {
     }
   }, []);
 
-    const handleUpdatePatientDetails = async () => {
-        setIsLoading(true);
-        try {
-            let updatedFormData = { ...formData }
-            if (formData?.profileImageBase64) {
-                const imageUrl =
-                    (await uploadImage(formData?.profileImageBase64, "profile")) || "";
-                updatedFormData.profileImageUrl = imageUrl;
-            }
-            const { profileImageBase64, ...payload } = updatedFormData;
-            const response = await axios.put(
-                process.env.NEXT_PUBLIC_BASE_URL + `/v2/cp/patient/update`,
-                {
-                    patientDetails: payload,
-                },
-                {
-                    headers: {
-                        accesstoken: token,
-                    },
-                }
-            );
-            if (response?.data?.success) {
-                // setCookie("PatientInfo", JSON.stringify(response?.data?.data));
-                setStorage("PatientInfo", response?.data?.data);
-                router.push(`/patient/${type}/family-details`);
-            }
-        } catch (error) {
-            console.error("Error saving data:", error);
-            showErrorToast(error?.response?.data?.error?.message);
-        } finally {
-            setIsLoading(false);
+  const handleUpdatePatientDetails = async () => {
+    setIsLoading(true);
+    try {
+      let updatedFormData = { ...formData }
+      if (formData?.profileImageBase64) {
+        const imageUrl =
+          (await uploadImage(formData?.profileImageBase64, "profile")) || "";
+        updatedFormData.profileImageUrl = imageUrl;
+      }
+      const { profileImageBase64, ...payload } = updatedFormData;
+      const response = await axios.put(
+        process.env.NEXT_PUBLIC_BASE_URL + `/v2/cp/patient/update`,
+        {
+          patientDetails: payload,
+        },
+        {
+          headers: {
+            accesstoken: token,
+          },
         }
-    };
+      );
+      if (response?.data?.success) {
+        // setCookie("PatientInfo", JSON.stringify(response?.data?.data));
+        setStorage("PatientInfo", response?.data?.data);
+        router.push(`/patient/${type}/family-details`);
+      }
+    } catch (error) {
+      console.error("Error saving data:", error);
+      showErrorToast(error?.response?.data?.error?.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const uploadImage = async (filename, type) => {
     try {
@@ -529,7 +529,7 @@ const PP_Details = ({ type }) => {
               />
             </DrawerTrigger>
             <DrawerContent className="bg-gradient-to-b from-[#e7e4f8] via-[#f0e1df] via-70% to-[#feedea] rounded-t-[12px]"
-            style={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}>
+              style={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}>
               <DrawerHeader>
                 <DrawerDescription className="flex flex-col gap-3">
                   {isMobile && (
@@ -619,19 +619,17 @@ const PP_Details = ({ type }) => {
           {/* Last Name */}
           <div>
             <Label
-              className={`text-[15px] mb-[7.59px] mt-[22px] ${
-                formData.firstName ? "text-gray-500" : "text-[#00000040]"
-              }`}
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${formData.firstName ? "text-gray-500" : "text-[#00000040]"
+                }`}
             >
               Last Name *
             </Label>
             <Input
               placeholder="Enter Last Name"
-              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                formData.firstName
+              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${formData.firstName
                   ? "bg-white placeholder:text-gray-500"
                   : "bg-[#ffffff90] placeholder:text-[#00000040]"
-              }`}
+                }`}
               value={formData.lastName}
               onChange={(e) => handleTextInputChange(e, "lastName")}
               onBlur={() => handleBlur("lastName")}
@@ -647,9 +645,8 @@ const PP_Details = ({ type }) => {
           {/* Primary Mobile Number */}
           <div className="mt-[22px]">
             <Label
-              className={`text-[15px] mb-[7.59px] ${
-                formData.lastName ? "text-gray-500" : "text-[#00000040]"
-              }`}
+              className={`text-[15px] mb-[7.59px] ${formData.lastName ? "text-gray-500" : "text-[#00000040]"
+                }`}
             >
               Primary Mobile Number *
             </Label>
@@ -670,6 +667,16 @@ const PP_Details = ({ type }) => {
                     minHeight: "39px",
                     width: "max-content",
                     backgroundColor: "#fff",
+                    cursor: "pointer",
+                    boxShadow: "none",
+                    borderColor: "transparent",
+                    "&:hover": {
+                      borderColor: "transparent",
+                    },
+                  }),
+                  option: (base) => ({
+                    ...base,
+                    cursor: "pointer",
                   }),
                   menu: (base) => ({ ...base, width: "200px" }),
                 }}
@@ -710,11 +717,10 @@ const PP_Details = ({ type }) => {
           <div className="mt-[22px]">
             <div className="flex items-center justify-between">
               <Label
-                className={`text-[15px]  mb-[7.59px] ${
-                  isMobileValid(formData.primaryMobileNumber)
+                className={`text-[15px]  mb-[7.59px] ${isMobileValid(formData.primaryMobileNumber)
                     ? "text-gray-500"
                     : "text-[#00000040]"
-                }`}
+                  }`}
               >
                 WhatsApp Number
               </Label>
@@ -738,11 +744,10 @@ const PP_Details = ({ type }) => {
                 />
                 <label
                   htmlFor="sameAsMobile"
-                  className={`text-[12px] ${
-                    isMobileValid(formData.primaryMobileNumber)
+                  className={`cursor-pointer text-[12px] ${isMobileValid(formData.primaryMobileNumber)
                       ? "text-gray-500"
                       : "text-[#00000040]"
-                  }`}
+                    }`}
                 >
                   Same as Mobile Number
                 </label>
@@ -776,9 +781,19 @@ const PP_Details = ({ type }) => {
                     width: "max-content",
                     backgroundColor:
                       sameAsMobile ||
-                      !isMobileValid(formData.primaryMobileNumber)
+                        !isMobileValid(formData.primaryMobileNumber)
                         ? "#faf5f8"
                         : "#fff",
+                    cursor: "pointer",
+                    boxShadow: "none",
+                    borderColor: "transparent",
+                    "&:hover": {
+                      borderColor: "transparent",
+                    },
+                  }),
+                  option: (base) => ({
+                    ...base,
+                    cursor: "pointer",
                   }),
                   menu: (base) => ({ ...base, width: "200px" }),
                 }}
@@ -801,11 +816,10 @@ const PP_Details = ({ type }) => {
                 disabled={
                   sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
                 }
-                className={`border rounded-[7.26px] border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
-                  sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
+                className={`border rounded-[7.26px] border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
                     ? "bg-[#ffffff90] placeholder:text-[#00000040]"
                     : "bg-white placeholder:text-gray-500"
-                }`}
+                  }`}
                 maxLength={10}
               />
             </div>
@@ -821,17 +835,16 @@ const PP_Details = ({ type }) => {
           {/* Gender */}
           <div className="mt-[22px]">
             <Label
-              className={`text-[15px] mb-[7.59px] ${
-                isMobileValid(formData.primaryMobileNumber)
+              className={`text-[15px] mb-[7.59px] ${isMobileValid(formData.primaryMobileNumber)
                   ? "text-gray-500"
                   : "text-[#00000040]"
-              }`}
+                }`}
             >
               Gender *
             </Label>
             <div className="flex gap-6 items-center text-gray-600 text-[15px]">
               {["male", "female", "other"].map((value) => (
-                <Label key={value} className="flex items-center gap-2">
+                <Label key={value} className="flex items-center gap-2 cursor-pointer">
                   <Input
                     type="radio"
                     name="gender"
@@ -839,7 +852,7 @@ const PP_Details = ({ type }) => {
                     checked={formData.gender === value}
                     onChange={() => handleGenderChange(value)}
                     disabled={!isMobileValid(formData.primaryMobileNumber)}
-                    className="form-radio text-[#776EA5] bg-transparent accent-[#000000] w-4 h-4"
+                    className="form-radio text-[#776EA5] bg-transparent accent-[#000000] w-4 h-4 cursor-pointer"
                   />
                   {value.charAt(0).toUpperCase() + value.slice(1)}
                 </Label>
@@ -861,11 +874,10 @@ const PP_Details = ({ type }) => {
             </Label>
             <Input
               placeholder="Enter Email address"
-              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                formData.gender
+              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${formData.gender
                   ? "bg-white placeholder:text-gray-500"
                   : "bg-[#ffffffde] placeholder:text-[#00000040]"
-              }`}
+                }`}
               value={formData.email}
               disabled
             />
@@ -881,19 +893,17 @@ const PP_Details = ({ type }) => {
           {/* Address Details */}
           <div>
             <Label
-              className={`text-[15px] mb-[7.59px] mt-[22px] ${
-                formData.gender ? "text-gray-500" : "text-[#00000040]"
-              }`}
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${formData.gender ? "text-gray-500" : "text-[#00000040]"
+                }`}
             >
               Pincode *
             </Label>
             <Input
               placeholder="Enter Pincode"
-              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                formData.gender
+              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${formData.gender
                   ? "bg-white placeholder:text-gray-500"
                   : "bg-[#ffffffde] placeholder:text-[#00000040]"
-              }`}
+                }`}
               onChange={(e) => handlePinCodeChange(e.target.value)}
               value={formData.addressDetails.pincode}
               disabled={!formData.gender}
@@ -917,21 +927,19 @@ const PP_Details = ({ type }) => {
           </div>
           <div>
             <Label
-              className={`text-[15px] mb-[7.59px] mt-[22px] ${
-                isPincodeValid(formData.addressDetails.pincode)
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${isPincodeValid(formData.addressDetails.pincode)
                   ? "text-gray-500"
                   : "text-[#00000040]"
-              }`}
+                }`}
             >
               Area
             </Label>
             <Input
               placeholder="Enter Area"
-              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                isPincodeValid(formData.addressDetails.pincode)
+              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${isPincodeValid(formData.addressDetails.pincode)
                   ? "bg-white placeholder:text-gray-500"
                   : "bg-[#ffffff] placeholder:text-[#00000040]"
-              }`}
+                }`}
               value={formData.addressDetails.area}
               onChange={(e) =>
                 handleTextInputChange(e, "addressDetails", "area")
@@ -942,11 +950,10 @@ const PP_Details = ({ type }) => {
           </div>
           <div>
             <Label
-              className={`text-[15px] mb-[7.59px] mt-[22px] ${
-                isPincodeValid(formData.addressDetails.pincode)
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${isPincodeValid(formData.addressDetails.pincode)
                   ? "text-gray-500"
                   : "text-[#00000040]"
-              }`}
+                }`}
             >
               City
             </Label>
@@ -959,11 +966,10 @@ const PP_Details = ({ type }) => {
           </div>
           <div>
             <Label
-              className={`text-[15px] mb-[7.59px] mt-[22px] ${
-                isPincodeValid(formData.addressDetails.pincode)
+              className={`text-[15px] mb-[7.59px] mt-[22px] ${isPincodeValid(formData.addressDetails.pincode)
                   ? "text-gray-500"
                   : "text-[#00000040]"
-              }`}
+                }`}
             >
               State
             </Label>
@@ -985,13 +991,13 @@ const PP_Details = ({ type }) => {
             Cancel
           </Button> */}
 
-            <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
+          <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
             onClick={() => setShow(true)}>
-              Cancel
-            </Button>
+            Cancel
+          </Button>
           <Drawer className="pt-[9.97px] max-w-[576px] m-auto"
-          open={show}
-          onClose={handleClose}>
+            open={show}
+            onClose={handleClose}>
             <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
               <DrawerHeader>
                 <DrawerTitle className="text-[16px] font-[600] text-center">
@@ -999,12 +1005,12 @@ const PP_Details = ({ type }) => {
                 </DrawerTitle>
                 <DrawerDescription className="mt-6 flex gap-3 w-full">
                   <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
-                  onClick={() => router.push("/patient/login")}>
+                    onClick={() => router.push("/patient/login")}>
                     Confirm
                   </Button>
 
                   <Button className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
-                  onClick={() => handleClose()}>
+                    onClick={() => handleClose()}>
                     Continue
                   </Button>
                 </DrawerDescription>
@@ -1022,11 +1028,10 @@ const PP_Details = ({ type }) => {
             </DrawerContent>
           </Drawer>
           <Button
-            className={`text-white text-[14px] font-[600] w-[48%] h-[45px] rounded-[8px] ${
-              isFormValid()
+            className={`text-white text-[14px] font-[600] w-[48%] h-[45px] rounded-[8px] ${isFormValid()
                 ? "bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0]"
                 : "bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[#FFFFFF] cursor-not-allowed"
-            }`}
+              }`}
             onClick={handleSave}
             disabled={!isFormValid()}
           >

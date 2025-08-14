@@ -411,7 +411,7 @@ const Edit_Patient = ({ type }) => {
                     maxAge = {}
                 }
                 // setCookie("PatientInfo", JSON.stringify(response?.data?.data), maxAge);
-                setStorage("PatientInfo", response?.data?.data, rememberMe, 2592000 );
+                setStorage("PatientInfo", response?.data?.data, rememberMe, 2592000);
                 router.push(`/patient/patient-profile`);
             }
         } catch (error) {
@@ -622,6 +622,16 @@ const Edit_Patient = ({ type }) => {
                                         minHeight: "39px",
                                         width: "max-content",
                                         backgroundColor: "#fff",
+                                        cursor: "pointer",
+                                        boxShadow: "none",
+                                        borderColor: "transparent",
+                                        "&:hover": {
+                                            borderColor: "transparent",
+                                        },
+                                    }),
+                                    option: (base) => ({
+                                        ...base,
+                                        cursor: "pointer",
                                     }),
                                     menu: (base) => ({ ...base, width: "200px" }),
                                 }}
@@ -689,7 +699,7 @@ const Edit_Patient = ({ type }) => {
                                 />
                                 <label
                                     htmlFor="sameAsMobile"
-                                    className={`text-[12px] ${isMobileValid(formData.primaryMobileNumber)
+                                    className={`cursor-pointer text-[12px] ${isMobileValid(formData.primaryMobileNumber)
                                         ? "text-gray-500"
                                         : "text-[#00000040]"
                                         }`}
@@ -729,6 +739,16 @@ const Edit_Patient = ({ type }) => {
                                                 !isMobileValid(formData.primaryMobileNumber)
                                                 ? "#faf5f8"
                                                 : "#fff",
+                                        cursor: "pointer",
+                                        boxShadow: "none",
+                                        borderColor: "transparent",
+                                        "&:hover": {
+                                            borderColor: "transparent",
+                                        },
+                                    }),
+                                    option: (base) => ({
+                                        ...base,
+                                        cursor: "pointer",
                                     }),
                                     menu: (base) => ({ ...base, width: "200px" }),
                                 }}
@@ -779,7 +799,7 @@ const Edit_Patient = ({ type }) => {
                         </Label>
                         <div className="flex gap-6 items-center text-gray-600 text-[15px]">
                             {["male", "female", "other"].map((value) => (
-                                <Label key={value} className="flex items-center gap-2">
+                                <Label key={value} className="flex items-center gap-2 cursor-pointer">
                                     <Input
                                         type="radio"
                                         name="gender"
@@ -787,7 +807,7 @@ const Edit_Patient = ({ type }) => {
                                         checked={formData.gender === value}
                                         onChange={() => handleGenderChange(value)}
                                         disabled={!isMobileValid(formData.primaryMobileNumber)}
-                                        className="form-radio text-[#776EA5] bg-transparent accent-[#000000] w-4 h-4"
+                                        className="cursor-pointer form-radio text-[#776EA5] bg-transparent accent-[#000000] w-4 h-4"
                                     />
                                     {value.charAt(0).toUpperCase() + value.slice(1)}
                                 </Label>

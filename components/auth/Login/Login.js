@@ -157,7 +157,7 @@ const Login = () => {
                           setRememberMe(!!checked)
                         }}
                         />
-                    <label htmlFor="forgot-password" className="text-[12px] text-gray-500">
+                    <label htmlFor="forgot-password" className="text-[12px] text-gray-500 cursor-pointer">
                       Remember Me
                     </label>
                   </div>

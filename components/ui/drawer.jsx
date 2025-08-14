@@ -31,7 +31,7 @@ function DrawerPortal({
 function DrawerClose({
   ...props
 }) {
-  return <DrawerPrimitive.Close data-slot="drawer-close" {...props} />;
+  return <DrawerPrimitive.Close data-slot="drawer-close" className="cursor-pointer" {...props} />;
 }
 
 function DrawerOverlay({

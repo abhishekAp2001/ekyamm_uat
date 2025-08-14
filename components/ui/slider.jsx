@@ -54,7 +54,7 @@ function Slider({
         <SliderPrimitive.Thumb
           key={index}
           data-slot="slider-thumb"
-          className="relative border-[#776EA5] bg-[#776EA5] block size-4 shrink-0 rounded-full border shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+          className="relative border-[#776EA5] bg-[#776EA5] block size-4 shrink-0 rounded-full border shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 cursor-pointer"
         >
           <span className="absolute -top-4 left-1/2 -translate-x-1/2 text-xs font-semibold text-[#776EA5] select-none">
              ₹{fees.length > 0 ? fees[_values[index]] : _values[index]}

@@ -211,6 +211,7 @@ const Select_Package = () => {
                           setTotalPrice(rate);
                           setSelectedPackage(sessions);
                         }}
+                        className="cursor-pointer"
                       />
                       <Label
                         htmlFor={`package-${sessions}`}

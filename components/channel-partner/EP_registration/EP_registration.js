@@ -286,6 +286,16 @@ const EP_registration = ({ type }) => {
                     height: "39px",
                     minHeight: "39px",
                     width: "max-content",
+                  cursor: "pointer",
+                    boxShadow: "none",
+                    borderColor: "transparent",
+                    "&:hover": {
+                      borderColor: "transparent",
+                    },
+                  }),
+                  option: (base) => ({
+                    ...base,
+                    cursor: "pointer",
                   }),
                   menu: (base) => ({ ...base, width: "200px" }),
                 }}
