@@ -29,7 +29,7 @@ function AvatarImage({
     <AvatarPrimitive.Image
     data-slot="avatar-image"
     className={cn(
-      "w-full h-full rounded-full",
+      "w-full h-full rounded-full object-contain bg-white",
       className
     )}
     {...props}
