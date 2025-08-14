@@ -618,7 +618,7 @@ const Patient_Profile = () => {
             width={28}
             height={18}
             alt="right-icon"
-            className="bg-transparent"
+            className="bg-transparent cursor-pointer"
           />
         </div>
       </div>
@@ -717,7 +717,7 @@ const Patient_Profile = () => {
                 width={10}
                 height={10}
                 alt="edit"
-                className="mx-2"
+                className="mx-2 cursor-pointer"
               />
             </div>
           </div>
@@ -733,7 +733,7 @@ const Patient_Profile = () => {
                 width={10}
                 height={10}
                 alt="edit"
-                className=""
+                className="cursor-pointer"
               />
             </div>
 

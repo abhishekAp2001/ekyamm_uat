@@ -397,7 +397,17 @@ const Cloudnine_Hospital = ({ type }) => {
                       minHeight: "39px",
                       width: "max-content",
                       backgroundColor: formData.lastName ? "#fff" : "#fcf9fb",
-                    }),
+                    cursor: "pointer",
+                    boxShadow: "none",
+                    borderColor: "transparent",
+                    "&:hover": {
+                      borderColor: "transparent",
+                    },
+                  }),
+                  option: (base) => ({
+                    ...base,
+                    cursor: "pointer",
+                  }),
                     menu: (base) => ({ ...base, width: "200px" }),
                   }}
                   formatOptionLabel={(option, { context }) =>
@@ -436,7 +446,7 @@ const Cloudnine_Hospital = ({ type }) => {
                   />
                   <Label
                     htmlFor={`session${_session.count}`}
-                    className="text-[15px] text-gray-500 font-semibold"
+                    className="text-[15px] text-gray-500 font-semibold cursor-pointer"
                   >
                     {`${_session.name}`}
                   </Label>

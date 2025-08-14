@@ -59,7 +59,7 @@ const CP_type = () => {
   useEffect(() => {
     // const savedData = getCookie("cp_type");
     const savedData = getStorage("cp_type", rememberMe);
-    console.log("Cp_type_data",savedData)
+    console.log("Cp_type_data", savedData)
     if (savedData) {
       try {
         const parsedData = savedData
@@ -596,6 +596,16 @@ const CP_type = () => {
                       backgroundColor: isEmailValid(formData.email) && isEmailAvailable === true
                         ? "#fff"
                         : "#f6f5fd",
+                      cursor: "pointer",
+                      boxShadow: "none",
+                      borderColor: "transparent",
+                      "&:hover": {
+                        borderColor: "transparent",
+                      },
+                    }),
+                    option: (base) => ({
+                      ...base,
+                      cursor: "pointer",
                     }),
                     menu: (base) => ({ ...base, width: "200px" }),
                   }}
@@ -710,7 +720,7 @@ const CP_type = () => {
                   />
                   <label
                     htmlFor="same_as_mobile"
-                    className={`text-[12px] ${isMobileValid(formData.primaryMobileNumber) && isMobileAvailable === true
+                    className={`cursor-pointer text-[12px] ${isMobileValid(formData.primaryMobileNumber) && isMobileAvailable === true
                       ? "text-gray-500 "
                       : "text-[#00000040]"
                       }`}
@@ -750,6 +760,16 @@ const CP_type = () => {
                           isMobileValid(formData.primaryMobileNumber) && isMobileAvailable === true
                           ? "#fff"
                           : "#f6f5fd",
+                      cursor: "pointer",
+                      boxShadow: "none",
+                      borderColor: "transparent",
+                      "&:hover": {
+                        borderColor: "transparent",
+                      },
+                    }),
+                    option: (base) => ({
+                      ...base,
+                      cursor: "pointer",
                     }),
                     menu: (base) => ({ ...base, width: "200px" }),
                   }}
@@ -828,6 +848,16 @@ const CP_type = () => {
                       backgroundColor: isMobileValid(formData.whatsappNumber)
                         ? "#fff"
                         : "#f6f5fd",
+                      cursor: "pointer",
+                      boxShadow: "none",
+                      borderColor: "transparent",
+                      "&:hover": {
+                        borderColor: "transparent",
+                      },
+                    }),
+                    option: (base) => ({
+                      ...base,
+                      cursor: "pointer",
                     }),
                     menu: (base) => ({ ...base, width: "200px" }),
                   }}

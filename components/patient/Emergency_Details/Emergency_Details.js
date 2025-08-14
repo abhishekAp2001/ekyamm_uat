@@ -184,7 +184,7 @@ const Emergency_Details = ({ type }) => {
         whatsappNumber: formData.whatsappNumber,
       },
     };
-    localStorage.setItem("emergency_details",JSON.stringify(payload))
+    localStorage.setItem("emergency_details", JSON.stringify(payload))
     // router.push(`/patient/dashboard`);
     try {
       const response = await axios.post(
@@ -252,7 +252,7 @@ const Emergency_Details = ({ type }) => {
       } catch (err) {
         showErrorToast(
           err?.response?.data?.error?.message ||
-            "An error occurred while verifying"
+          "An error occurred while verifying"
         );
       } finally {
         setLoading(false);
@@ -264,16 +264,16 @@ const Emergency_Details = ({ type }) => {
     setShow(false);
   };
 
-    useEffect(()=>{
-      // const cookie = getCookie("completeUserData")
-      const cookie = getStorage("completeUserData");
-      if(!cookie){
-        router.push(`/patient/${type}/create`)
-      }
-    },[])
+  useEffect(() => {
+    // const cookie = getCookie("completeUserData")
+    const cookie = getStorage("completeUserData");
+    if (!cookie) {
+      router.push(`/patient/${type}/create`)
+    }
+  }, [])
   return (
     <div className="bg-gradient-to-t from-[#e5e3f5] via-[#f1effd] via-50% to-[#e5e3f5] h-full flex flex-col max-w-[576px] mx-auto">
-      <Emergency_Header type={type}/>
+      <Emergency_Header type={type} />
       <div className="min-h-screen pt-[10%] pb-[20%] lg:pb-[14%] overflow-auto px-[17px]">
         <div className="mt-3 lg:mt-0 bg-[#FFFFFF80] rounded-[12px] p-4 px-3">
           <strong className="text-[15px] text-black font-semibold">
@@ -315,9 +315,8 @@ const Emergency_Details = ({ type }) => {
           <div>
             <Label
               htmlFor="firstName"
-              className={`text-[15px] mb-2 mt-[22px] ${
-                formData.relation ? "text-gray-500" : "text-[#00000040]"
-              }`}
+              className={`text-[15px] mb-2 mt-[22px] ${formData.relation ? "text-gray-500" : "text-[#00000040]"
+                }`}
             >
               First Name *
             </Label>
@@ -329,9 +328,8 @@ const Emergency_Details = ({ type }) => {
               onChange={(e) => handleTextInputChange(e, "firstName")}
               onBlur={() => handleBlur("firstName")}
               disabled={!formData.relation}
-              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                formData.relation ? "bg-white" : "bg-[#ffffff90]"
-              }`}
+              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${formData.relation ? "bg-white" : "bg-[#ffffff90]"
+                }`}
             />
             {touched.firstName && !formData.firstName && (
               <span className="text-red-500 text-sm mt-1 block">
@@ -344,9 +342,8 @@ const Emergency_Details = ({ type }) => {
           <div>
             <Label
               htmlFor="lastName"
-              className={`text-[15px] mb-2 mt-[22px] ${
-                formData.firstName ? "text-gray-500" : "text-[#00000040]"
-              }`}
+              className={`text-[15px] mb-2 mt-[22px] ${formData.firstName ? "text-gray-500" : "text-[#00000040]"
+                }`}
             >
               Last Name *
             </Label>
@@ -358,9 +355,8 @@ const Emergency_Details = ({ type }) => {
               onChange={(e) => handleTextInputChange(e, "lastName")}
               onBlur={() => handleBlur("lastName")}
               disabled={!formData.firstName}
-              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                formData.firstName ? "bg-white" : "bg-[#ffffff90]"
-              }`}
+              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${formData.firstName ? "bg-white" : "bg-[#ffffff90]"
+                }`}
             />
             {touched.lastName && !formData.lastName && (
               <span className="text-red-500 text-sm mt-1 block">
@@ -373,9 +369,8 @@ const Emergency_Details = ({ type }) => {
           <div>
             <Label
               htmlFor="email"
-              className={`text-[15px] mb-2 mt-[22px] ${
-                formData.lastName ? "text-gray-500" : "text-[#00000040]"
-              }`}
+              className={`text-[15px] mb-2 mt-[22px] ${formData.lastName ? "text-gray-500" : "text-[#00000040]"
+                }`}
             >
               Email Address
             </Label>
@@ -387,9 +382,8 @@ const Emergency_Details = ({ type }) => {
               onChange={(e) => handleTextInputChange(e, "email")}
               onBlur={() => handleBlur("email")}
               disabled={!formData.lastName}
-              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${
-                formData.lastName ? "bg-white" : "bg-[#ffffff90]"
-              }`}
+              className={`rounded-[7.26px] text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 h-[39px] ${formData.lastName ? "bg-white" : "bg-[#ffffff90]"
+                }`}
             />
 
             {touched.email &&
@@ -405,9 +399,8 @@ const Emergency_Details = ({ type }) => {
           <div className="mt-[22px]">
             <Label
               htmlFor="primaryMobileNumber"
-              className={`text-[15px] mb-2 ${
-                !formData.lastName ? "text-gray-500" : "text-[#00000040]"
-              }`}
+              className={`text-[15px] mb-2 ${!formData.lastName ? "text-gray-500" : "text-[#00000040]"
+                }`}
             >
               Primary Mobile Number *
             </Label>
@@ -437,6 +430,16 @@ const Emergency_Details = ({ type }) => {
                     minHeight: "39px",
                     width: "max-content",
                     backgroundColor: formData.lastName ? "#fff" : "#f6f5fd",
+                    cursor: "pointer",
+                    boxShadow: "none",
+                    borderColor: "transparent",
+                    "&:hover": {
+                      borderColor: "transparent",
+                    },
+                  }),
+                  option: (base) => ({
+                    ...base,
+                    cursor: "pointer",
                   }),
                   menu: (base) => ({ ...base, width: "200px" }),
                 }}
@@ -450,9 +453,8 @@ const Emergency_Details = ({ type }) => {
                 onChange={(e) => handleInputChange(e, "primaryMobileNumber")}
                 onBlur={() => handleBlur("primaryMobileNumber")}
                 disabled={!formData.lastName}
-                className={`rounded-[7.26px]  border-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
-                  formData.lastName ? "bg-white" : "bg-[#ffffff90]"
-                }`}
+                className={`rounded-[7.26px]  border-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${formData.lastName ? "bg-white" : "bg-[#ffffff90]"
+                  }`}
                 maxLength={10}
               />
             </div>
@@ -475,17 +477,16 @@ const Emergency_Details = ({ type }) => {
             <div className="flex items-center justify-between">
               <Label
                 htmlFor="whatsappNumber"
-                className={`text-[15px] mb-2 ${
-                  isMobileValid(formData.primaryMobileNumber)
-                    ? "text-gray-500"
-                    : "text-[#00000040]"
-                }`}
+                className={`text-[15px] mb-2 ${isMobileValid(formData.primaryMobileNumber)
+                  ? "text-gray-500"
+                  : "text-[#00000040]"
+                  }`}
               >
                 WhatsApp Number
               </Label>
               <div className="flex gap-[6px] items-center">
                 <Checkbox
-                id="same_as_mobile"
+                  id="same_as_mobile"
                   checked={sameAsMobile}
                   onCheckedChange={(checked) => {
                     setSameAsMobile(checked);
@@ -500,8 +501,8 @@ const Emergency_Details = ({ type }) => {
                   disabled={!isMobileValid(formData.primaryMobileNumber)}
                   className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] cursor-pointer"
                 />
-                <label className="text-[12px] text-gray-500 font-medium"
-                htmlFor="same_as_mobile">
+                <label className="text-[12px] text-gray-500 font-medium cursor-pointer"
+                  htmlFor="same_as_mobile">
                   Same as Mobile Number
                 </label>
               </div>
@@ -532,9 +533,19 @@ const Emergency_Details = ({ type }) => {
                     width: "max-content",
                     backgroundColor:
                       !sameAsMobile &&
-                      isMobileValid(formData.primaryMobileNumber)
+                        isMobileValid(formData.primaryMobileNumber)
                         ? "#fff"
                         : "#f6f5fd",
+                    cursor: "pointer",
+                    boxShadow: "none",
+                    borderColor: "transparent",
+                    "&:hover": {
+                      borderColor: "transparent",
+                    },
+                  }),
+                  option: (base) => ({
+                    ...base,
+                    cursor: "pointer",
                   }),
                   menu: (base) => ({ ...base, width: "200px" }),
                 }}
@@ -550,11 +561,10 @@ const Emergency_Details = ({ type }) => {
                 disabled={
                   sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
                 }
-                className={`rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${
-                  sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
-                    ? "bg-[#ffffff90]"
-                    : "bg-white"
-                }`}
+                className={`rounded-[7.26px] rounded-l-none border-l-0 text-[15px] text-black font-semibold placeholder:text-[15px] py-3 px-4 w-full h-[39px] ${sameAsMobile || !isMobileValid(formData.primaryMobileNumber)
+                  ? "bg-[#ffffff90]"
+                  : "bg-white"
+                  }`}
                 maxLength={10}
               />
             </div>
@@ -595,13 +605,13 @@ const Emergency_Details = ({ type }) => {
           >
             Cancel
           </Button> */}
-            <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
+          <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
             onClick={() => setShow(true)}>
-              Cancel
-            </Button>
+            Cancel
+          </Button>
           <Drawer className="pt-[9.97px] max-w-[576px] m-auto"
-          open={show}
-          onClose={handleClose}
+            open={show}
+            onClose={handleClose}
           >
             <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer">
               <DrawerHeader>
@@ -610,12 +620,12 @@ const Emergency_Details = ({ type }) => {
                 </DrawerTitle>
                 <DrawerDescription className="mt-6 flex gap-3 w-full">
                   <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
-                  onClick={() => router.push(`/patient/${type}/family-details`)}>
+                    onClick={() => router.push(`/patient/${type}/family-details`)}>
                     Confirm
                   </Button>
 
                   <Button className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
-                  onClick={() => handleClose()}>
+                    onClick={() => handleClose()}>
                     Continue
                   </Button>
                 </DrawerDescription>

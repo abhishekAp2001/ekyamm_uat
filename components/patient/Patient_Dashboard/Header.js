@@ -52,7 +52,7 @@ const Header = ({ loading = false, patient }) => {
 
         <div className="flex justify-between items-center mt-2 relative inset-0 z-30">
           <div className="flex items-center gap-2">
-            <Avatar className='w-8 h-4 rounded-[25px] contents'
+            <Avatar className='w-8 h-4 rounded-[25px] contents cursor-pointer'
               onClick={() => router.push("/patient/patient-profile")}>
               <AvatarImage
                 className="h-8 w-8 mix-blend-multiply rounded-[25px] pt-0 overflow-auto"

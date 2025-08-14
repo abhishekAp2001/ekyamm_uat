@@ -270,7 +270,17 @@ const Patient_History = ({ type }) => {
                       minHeight: "39px",
                       width: "max-content",
                       backgroundColor: formData.lastName ? "#fff" : "#fcf9fb",
-                    }),
+                    cursor: "pointer",
+                    boxShadow: "none",
+                    borderColor: "transparent",
+                    "&:hover": {
+                      borderColor: "transparent",
+                    },
+                  }),
+                  option: (base) => ({
+                    ...base,
+                    cursor: "pointer",
+                  }),
                     menu: (base) => ({ ...base, width: "200px" }),
                   }}
                   formatOptionLabel={(option, { context }) =>
