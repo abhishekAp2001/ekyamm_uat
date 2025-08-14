@@ -79,6 +79,7 @@ const Psychiatrist_profile = () => {
             onClick={() => {
               router.push("/patient/dashboard");
             }}
+            className="cursor-pointer"
           />
         </div>
       </div>

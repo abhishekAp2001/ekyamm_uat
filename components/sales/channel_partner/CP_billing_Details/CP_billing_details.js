@@ -274,7 +274,7 @@ const CP_billing_details = () => {
                   id="r1"
                   className=" "
                 />
-                <Label htmlFor="r1" className="text-[15px] font-semibold">
+                <Label htmlFor="r1" className="text-[15px] font-semibold cursor-pointer">
                   Monthly Billing
                 </Label>
               </div>
@@ -284,7 +284,7 @@ const CP_billing_details = () => {
                   id="r2"
                   className=" "
                 />
-                <Label htmlFor="r2" className="text-[15px] font-semibold">
+                <Label htmlFor="r2" className="text-[15px] font-semibold cursor-pointer">
                   On-Spot Payment
                 </Label>
               </div>
@@ -294,7 +294,7 @@ const CP_billing_details = () => {
                   id="r3"
                   className=""
                 />
-                <Label htmlFor="r3" className="text-[15px] font-semibold">
+                <Label htmlFor="r3" className="text-[15px] font-semibold cursor-pointer">
                   Patient Pays
                 </Label>
               </div>

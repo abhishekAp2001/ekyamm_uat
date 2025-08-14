@@ -256,7 +256,7 @@ const IP_Single_Session_Fees = () => {
                     }
                     disabled={!isAmountValid(formData.singleSession)}
                   />
-                  <label className="text-[16px] text-gray-500 font-semibold"
+                  <label className="cursor-pointer text-[16px] text-gray-500 font-semibold"
                     htmlFor={index}>
                     {pkg.sessions} Sessions
                   </label>
@@ -338,7 +338,7 @@ const IP_Single_Session_Fees = () => {
             className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1 cursor-pointer"
             checked={dontHaveGst}
           />
-            <Label htmlFor="have_gst">I do not have a GST number</Label>
+            <Label htmlFor="have_gst" className="cursor-pointer">I do not have a GST number</Label>
           </div>
           {!dontHaveGst && (
             <div className="mt-3">

@@ -23,7 +23,7 @@ const SS_Header = () => {
             width={28}
             height={18}
             alt="right-icon"
-            className="bg-transparent"
+            className="bg-transparent cursor-pointer"
           />
         </div>
       </div>

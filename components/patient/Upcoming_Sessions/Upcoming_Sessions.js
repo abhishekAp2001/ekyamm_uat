@@ -120,7 +120,7 @@ const Upcoming_Sessions = ({ dashboard = false }) => {
               width={28}
               height={18}
               alt="right-icon"
-              className="bg-transparent"
+              className="bg-transparent cursor-pointer"
             />
           </div>
         </>

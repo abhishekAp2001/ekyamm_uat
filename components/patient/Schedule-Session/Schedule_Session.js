@@ -683,9 +683,10 @@ const handleTimeFormat = (dateTime) => {
               />
             </div> */}
             
-            <label className="flex items-center gap-2 cursor-pointer text-[#8F8F8F]">
+            <label className="flex items-center gap-2 cursor-pointer text-[#8F8F8F]" htmlFor="weekly">
   <span className="select-none">Weekly Recurring Sessions</span>
   <Checkbox
+    id='weekly'
     className="h-4 w-[16.05px] border-[1.5px] border-[#776EA5] rounded-[1.7px] cursor-pointer"
     checked={isRecurring}
     onCheckedChange={(checked) => setIsRecurring(checked)}

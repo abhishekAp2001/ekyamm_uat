@@ -126,6 +126,7 @@ one symbol, and no spaces.`;
         };
         setCookie("patientSessionData", JSON.stringify(patientSessionData));
         setStorage("patientSessionData", patientSessionData);
+        showSuccessToast(response?.data?.data?.message || "OTP sent")
         router.push(`/patient/${type}/details`);
       } else {
         return;
@@ -392,7 +393,7 @@ one symbol, and no spaces.`;
                       formData.password.trim() !==
                         formData.confirmPassword.trim()
                     }
-                    className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]   rounded-[8px] flex items-center justify-center w-full h-[45px]"
+                    className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]   rounded-[8px] flex items-center justify-center w-full h-[45px] cursor-pointer"
                   >
                     {loading ? (
                       <Loader2

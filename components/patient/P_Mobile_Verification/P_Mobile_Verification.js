@@ -16,7 +16,7 @@ import axios from "axios";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import axiosInstance from "@/lib/axiosInstance";
 import { getCookie, setCookie } from "cookies-next";
-import { formatTime, getStorage, setStorage } from "@/lib/utils";
+import { clearStorageAndCookies, formatTime, getStorage, setStorage } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 const P_Mobile_Verification = ({ type }) => {
@@ -267,6 +267,7 @@ const P_Mobile_Verification = ({ type }) => {
   };
 
   useEffect(() => {
+    clearStorageAndCookies(["user"])
     const verifyChannelPartner = async (username) => {
       setLoading(true);
       try {
