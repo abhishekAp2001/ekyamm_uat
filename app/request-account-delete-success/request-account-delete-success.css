@@ -51,6 +51,7 @@
             font-size: 14px;
             position: relative;
             /* right: 10%; */
+            cursor: pointer;
         }
 
         #header-section{
@@ -198,7 +199,7 @@
             border: none;
             outline: none;
             background: linear-gradient(90deg, #BBA3E4 0%, #E7A1A0 100%);
-
+            cursor: pointer;
             font-family: 'Quicksand';
             font-size: 16px;
             font-weight: 600;
@@ -288,6 +289,7 @@
                 align-items: center;
                 display: flex;
                 border-radius: 6px;
+                cursor: pointer;
             }
             #store-img-section{
                 position: relative;
@@ -361,6 +363,7 @@
                 font-size: 14px;
                 font-weight: 200;
                 width: 100%;
+                cursor: pointer;
             }
 
             #content p, #content li, #content h1, #content h2{

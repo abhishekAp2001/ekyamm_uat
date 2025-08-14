@@ -721,7 +721,7 @@ const PP_Details = ({ type }) => {
               <div className="flex gap-[6px] items-center">
                 <Checkbox
                   id="sameAsMobile"
-                  className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"
+                  className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1 cursor-pointer"
                   checked={sameAsMobile}
                   onCheckedChange={(checked) => {
                     setSameAsMobile(checked);

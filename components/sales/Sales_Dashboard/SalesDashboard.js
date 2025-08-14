@@ -47,7 +47,7 @@ const SalesDashboard = () => {
           <Menu
             color="white"
             width={24}
-            className="mr-5"
+            className="mr-5 cursor-pointer"
             onClick={() => setShowSidebar(true)}
           />
           {showSidebar && (

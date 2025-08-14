@@ -23,6 +23,7 @@
 #section2-subtext button{
     width: auto;
     align-items: flex-start;
+    cursor: pointer;
 }
 #section2-img{
     display: block;

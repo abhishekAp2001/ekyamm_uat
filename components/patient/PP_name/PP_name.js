@@ -84,7 +84,7 @@ const PP_name = () => {
           <div className="mt-8  mb-6 flex justify-center w-full">
             <Link href={'/patient-registration/patient-details'} className="w-full">
             <button
-              className="w-full h-[38px] rounded-[8px] border border-[#BBA3E4] bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white font-semibold text-[14px]"
+              className="w-full h-[38px] rounded-[8px] border border-[#BBA3E4] bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white font-semibold text-[14px] cursor-pointer"
               type="button"
             >
               Register

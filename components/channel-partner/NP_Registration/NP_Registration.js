@@ -40,20 +40,6 @@ const NP_Registration = ({type}) => {
     removeStorage("invitePatientInfo")
     router.push(`/channel-partner/${type}`)
   }
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      // deleteCookie("sessions_selection");
-      // deleteCookie("channelPartnerData");
-      // deleteCookie("invitePatientInfo");
-      removeStorage("sessions_selection")
-    removeStorage("channelPartnerData")
-    removeStorage("invitePatientInfo")
-      router.push(`/channel-partner/${type}`);
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, [router, type]);
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">

@@ -12,7 +12,7 @@ const SignOutModal = ({ onCancel, onConfirm }) => {
         {/* Close Icon */}
         <button
           onClick={onCancel}
-          className="absolute top-4 right-4 text-black hover:text-gray-600 transition"
+          className="absolute top-4 right-4 text-black hover:text-gray-600 transition cursor-pointer"
           aria-label="Close modal"
         >
           <X size={20} />
@@ -32,14 +32,14 @@ const SignOutModal = ({ onCancel, onConfirm }) => {
       <div className="w-full h-[40.51px] flex justify-center gap-[12px] mx-auto mb-[26px]">
   <button
     onClick={onCancel}
-    className="w-full h-[40.51px] border border-[#CC627B] text-[#CC627B] rounded-[8px] text-[14px] font-[600] font-[Quicksand] leading-[16px] flex items-center justify-center mr-auto"
+    className="w-full h-[40.51px] border border-[#CC627B] text-[#CC627B] rounded-[8px] text-[14px] font-[600] font-[Quicksand] leading-[16px] flex items-center justify-center mr-auto cursor-pointer"
   >
     Cancel
   </button>
 
   <button
     onClick={onConfirm}
-    className="w-full h-[40.51px] bg-gradient-to-r from-[#B0A4F5] to-[#EDA197] text-white rounded-[8px] text-[14px] font-[600] font-[Quicksand] leading-[16px] flex items-center justify-center ml-auto"
+    className="w-full h-[40.51px] bg-gradient-to-r from-[#B0A4F5] to-[#EDA197] text-white rounded-[8px] text-[14px] font-[600] font-[Quicksand] leading-[16px] flex items-center justify-center ml-auto cursor-pointer"
   >
     Sign out
   </button>

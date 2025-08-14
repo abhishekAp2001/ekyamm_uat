@@ -41,9 +41,8 @@ const IPList = ({ list }) => {
                           .map((word) => word[0])
                           .join("")
                           .toUpperCase()
-                      : `${list?.generalInformation?.firstName?.[0] || ""}${
-                          list?.generalInformation?.lastName?.[0] || ""
-                        }`.toUpperCase()}
+                      : `${(list?.generalInformation?.firstName?.replace(/^(Dr\.?|Mr\.?|Mrs\.?|Ms\.?)\s*/i, "")?.[0] || "")}${(list?.generalInformation?.lastName?.[0] || "")}`.toUpperCase()
+}
                   </AvatarFallback>
                 </Avatar>
               </DialogTrigger>

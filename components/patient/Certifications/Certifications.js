@@ -51,7 +51,7 @@ const Certifications = ({ setShowCertifications, doc }) => {
       <div className="flex items-center gap-2 mb-4 fixed top-0 left-0 right-0 px-4 bg-[#] max-w-[576px] mx-auto">
         <div className="py-4 flex items-center gap-2">
           <ChevronLeft
-            className="w-5 h-5 text-black"
+            className="w-5 h-5 text-black cursor-pointer"
             onClick={() => {
               setShowCertifications(false);
             }}

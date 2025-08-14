@@ -232,7 +232,7 @@ const CP_doctor_details = () => {
               onCheckedChange={(checked) =>
                 setFormData((prev) => ({ ...prev, doNotDisplay: checked }))
               }
-              className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"
+              className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1 cursor-pointer"
             />
             <label className="text-[12px] text-[#776EA5] font-bold" htmlFor="display_doctor_details">
               Do Not Display Contact Details on Profile
@@ -454,7 +454,7 @@ const CP_doctor_details = () => {
                     }
                   }}
                   disabled={!isMobileValid(formData.primaryMobileNumber)}
-                  className={`w-4 h-4 border border-[#776EA5] rounded-[1.8px] ${
+                  className={`w-4 h-4 border border-[#776EA5] rounded-[1.8px] cursor-pointer ${
                   isMobileValid(formData.primaryMobileNumber)
                     ? "text-gray-500"
                     : "text-[#00000040]"

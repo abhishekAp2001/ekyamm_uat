@@ -17,7 +17,7 @@ const Client_Testimonial = ({ setShowClientTestimonials, doc }) => {
         <div className="flex items-center gap-[9px] p-4">
           <ChevronLeft
             size={24}
-            className="text-black-700"
+            className="text-black-700 cursor-pointer"
             onClick={() => {
               setShowClientTestimonials(false);
             }}

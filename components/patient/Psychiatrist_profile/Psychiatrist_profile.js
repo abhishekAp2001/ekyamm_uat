@@ -238,7 +238,7 @@ const Psychiatrist_profile = () => {
                       {clinic?.doctorDetails?.lastName}
                     </span>
                   </div>
-                  <ChevronLeft className="rotate-180 text-[#8F8F8F]" />
+                  <ChevronLeft className="rotate-180 text-[#8F8F8F] cursor-pointer" />
                 </div>
 
                 {/* Drawer Trigger */}

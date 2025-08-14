@@ -42,6 +42,7 @@ const Patient_Pays_Registration = ({ type }) => {
   const [isResendEmailDisabled, setIsResendEmailDisabled] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   const [emailOtpVerified, setEmailOtpVerified] = useState(false);
+  const [encryptedOtp, setEncryptedOtp] = useState("")
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -288,6 +289,8 @@ const Patient_Pays_Registration = ({ type }) => {
           setEmailResendTimer(120);
           setIsResendEmailDisabled(true);
           setEmailOtp("");
+          setEncryptedOtp(response?.data?.data?.encryptedOtp)
+          console.log("encrypt",response?.data?.data?.encryptedOtp)
           showSuccessToast(`OTP sent to your verified email.`);
         }
       }
@@ -305,8 +308,6 @@ const Patient_Pays_Registration = ({ type }) => {
   const validateEmailOTP = async () => {
     try {
       setEmailLoading(true);
-      const encodedOtp = customEncodeString(emailOtp);
-      const encryptedOtp = encryptData(encodedOtp);
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/email/otpValidate`,
         {
@@ -472,13 +473,13 @@ const Patient_Pays_Registration = ({ type }) => {
                           <Eye
                             width={20}
                             height={20}
-                            className="h-4 w-4 text-[#776EA5]"
+                            className="h-4 w-4 text-[#776EA5] cursor-pointer"
                           />
                         ) : (
                           <EyeOff
                             width={20}
                             height={20}
-                            className="h-4 w-4 text-[#776EA5]"
+                            className="h-4 w-4 text-[#776EA5] cursor-pointer"
                           />
                         )}
                       </Button>
@@ -660,13 +661,13 @@ const Patient_Pays_Registration = ({ type }) => {
                           <Eye
                             width={20}
                             height={20}
-                            className="h-4 w-4 text-[#776EA5]"
+                            className="h-4 w-4 text-[#776EA5] cursor-pointer"
                           />
                         ) : (
                           <EyeOff
                             width={20}
                             height={20}
-                            className="h-4 w-4 text-[#776EA5]"
+                            className="h-4 w-4 text-[#776EA5] cursor-pointer"
                           />
                         )}
                       </Button>
@@ -725,23 +726,31 @@ const Patient_Pays_Registration = ({ type }) => {
                 </div>
               )}
             </div>
-            {otpVerified ? (
-              <div className="flex justify-between items-center mt-[24.69px]  gap-3">
-                <Button
-                  type="submit"
-                  className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]   rounded-[8px] flex items-center justify-center w-full h-[45px]"
-                  onClick={() => {
-                    router.push(
-                      `/channel-partner/${type}/patient-pay-registration/password`
-                    );
-                  }}
-                >
-                  Create Password
-                </Button>
-              </div>
-            ) : (
-              <></>
-            )}
+            {(
+  // Case 1: No email entered → show when mobile OTP verified
+  (!formData.email && otpVerified) ||
+
+  // Case 2: Email entered but OTP never sent → show when mobile OTP verified
+  (formData.email && !emailOtpSendStatus && otpVerified) ||
+
+  // Case 3: Email entered, OTP sent → show only when both verified
+  (formData.email && emailOtpSendStatus && otpVerified && emailOtpVerified)
+) && (
+  <div className="flex justify-between items-center mt-[24.69px] gap-3">
+    <Button
+      type="submit"
+      className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] rounded-[8px] flex items-center justify-center w-full h-[45px]"
+      onClick={() => {
+        router.push(
+          `/channel-partner/${type}/patient-pay-registration/password`
+        );
+      }}
+    >
+      Create Password
+    </Button>
+  </div>
+)}
+
           </div>
 
           <div className="flex justify-center items-center gap-[18px] mt-[25px] px-1 ml-[31px] mr-[31px]">

@@ -225,7 +225,7 @@ const Contact_Form = forwardRef((props, ref) => {
             </div>
           )}
           <label>
-            <b>Message</b>
+            <b>Message</b><span className="compulsory-fields">*</span>
           </label>
           <textarea
             className="w-full border p-2"
@@ -246,7 +246,7 @@ const Contact_Form = forwardRef((props, ref) => {
           )}
           <button
             type="submit"
-            className="btn w-full bg-blue-600 text-white py-2 rounded"
+            className="btn w-full bg-blue-600 text-white py-2 rounded cursor-pointer"
             onClick={() => {
               handleContactFormSubmit();
             }}

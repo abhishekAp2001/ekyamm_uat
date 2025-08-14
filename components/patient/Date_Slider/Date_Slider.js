@@ -16,7 +16,7 @@ const Date_Slider = ({ selectedDate = new Date() }) => {
     <div className="flex items-center justify-center px-6">
       <button
         onClick={goToPreviousDate}
-        className=" text-[20px] text-[#00000066] font-[300]"
+        className=" text-[20px] text-[#00000066] font-[300] cursor-pointer"
       >
         ❮
       </button>
@@ -32,7 +32,7 @@ const Date_Slider = ({ selectedDate = new Date() }) => {
 
       <button
         onClick={goToNextDate}
-        className="text-[20px] text-[#00000066] font-[300]"
+        className="text-[20px] text-[#00000066] font-[300] cursor-pointer"
       >
         ❯
       </button>

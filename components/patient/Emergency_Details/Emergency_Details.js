@@ -498,7 +498,7 @@ const Emergency_Details = ({ type }) => {
                     }
                   }}
                   disabled={!isMobileValid(formData.primaryMobileNumber)}
-                  className="w-4 h-4 border border-[#776EA5] rounded-[1.8px]"
+                  className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] cursor-pointer"
                 />
                 <label className="text-[12px] text-gray-500 font-medium"
                 htmlFor="same_as_mobile">

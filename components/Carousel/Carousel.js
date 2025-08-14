@@ -41,7 +41,7 @@ const getImages = (onStartClick) => [
             />
             <button
               id="schedule-demo2"
-              className="schedule-btn md:mt-4 flex items-center gap-2 text-[24px] p-[10px]"
+              className="schedule-btn md:mt-4 flex items-center gap-2 text-[24px] p-[10px] cursor-pointer"
               onClick={onStartClick} // ✅ Call the prop
             >
               Schedule Demo
@@ -74,7 +74,7 @@ const getImages = (onStartClick) => [
             </span>
           </p>
           <button
-            className="brand-btn schedule-btn mt-4 flex items-center gap-2"
+            className="brand-btn schedule-btn mt-4 flex items-center gap-2 cursor-pointer"
             onClick={onStartClick} // ✅ Call the prop
           >
             Schedule Demo
@@ -138,7 +138,7 @@ const Carousel = ({ onStartClick }) => {
               key={item.id}
               onClick={() => setActiveIndex(index)}
               className={cn(
-                "h-[3px] w-[30px] rounded-full bg-gray-300",
+                "h-[3px] w-[30px] rounded-full bg-gray-300 cursor-pointer",
                 activeIndex === index && "bg-white"
               )}
             />

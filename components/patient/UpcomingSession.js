@@ -349,7 +349,7 @@ const UpcomingSession = ({
                           </div>
                         </div>
                       </div>
-                      <ChevronDown className="w-5 h-5 text-gray-500" />
+                      <ChevronDown className="w-5 h-5 text-gray-500 cursor-pointer" />
                     </div>
                     <div className="flex flex-col my-2">
                       <p className="text-[#6D6A5D] text-xs font-medium">
@@ -417,7 +417,7 @@ const UpcomingSession = ({
                                   e.stopPropagation();
                                   setHideTooltip(true);
                                 }}
-                                className="absolute right-[10px] top-[6px] text-white text-[16px] font-bold leading-none focus:outline-none"
+                                className="absolute right-[10px] top-[6px] text-white text-[16px] font-bold leading-none focus:outline-none cursor-pointer"
                                 aria-label="Close tooltip"
                               >
                                 ×
@@ -515,7 +515,7 @@ const UpcomingSession = ({
                       </div>
                       {/* Chevron icon (rotated) */}
                       <ChevronDown
-                        className={`w-5 h-5 text-gray-500 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""
+                        className={`cursor-pointer w-5 h-5 text-gray-500 transition-transform duration-300 ${isExpanded ? "rotate-180 cursor-pointer" : ""
                           }`}
                       />
                     </div>
@@ -577,7 +577,7 @@ const UpcomingSession = ({
                                   e.stopPropagation();
                                   setHideTooltip(true);
                                 }}
-                                className="absolute right-[10px] top-[6px] text-white text-[16px] font-bold leading-none focus:outline-none"
+                                className="absolute right-[10px] top-[6px] text-white text-[16px] font-bold leading-none focus:outline-none cursor-pointer"
                                 aria-label="Close tooltip"
                               >
                                 ×

@@ -36,6 +36,7 @@ const EP_registration = ({ type }) => {
   const [countryList, setCountryList] = useState([]);
   const [searchUsers, setSearchUsers] = useState([]);
   const [loading, setLoading] = useState(false); // Track API loading state
+  const [patientError, setPatientError] = useState("")
   const [formData, setFormData] = useState({
     _id: "",
     firstName: "",
@@ -132,8 +133,17 @@ const EP_registration = ({ type }) => {
       );
       if (response?.data?.success === true) {
         setSearchUsers(response?.data?.data);
+        if(response?.data?.data.length === 0){
+          showErrorToast("No patient found")
+          setPatientError("No patient found")
+        }
+        else{
+          setPatientError("")
+        }
       } else {
         setSearchUsers([]);
+        showErrorToast("No patient found")
+        setPatientError("No patient found")
       }
     } catch (error) {
       showErrorToast(
@@ -308,6 +318,11 @@ const EP_registration = ({ type }) => {
             {touched.primaryMobileNumber && !formData.primaryMobileNumber && (
               <span className="text-red-500 text-sm mt-1 block">
                 Mobile number is required
+              </span>
+            )}
+            {patientError && isMobileValid(formData.primaryMobileNumber) &&(
+              <span className="text-red-500 text-sm mt-1 block">
+                {patientError}
               </span>
             )}
           </div>

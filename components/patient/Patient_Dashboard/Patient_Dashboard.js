@@ -54,7 +54,6 @@ const Patient_Dashboard = () => {
     setLoading(true);
     // Simulate API call or processing delay
     setFilterParams(params);
-    setShowFilter(false);
     setLoading(false);
   };
 

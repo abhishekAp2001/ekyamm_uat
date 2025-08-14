@@ -428,7 +428,7 @@ const IP_Medical_Association_Details = () => {
               }
             }}
             id='have_medical_association'
-            className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"
+            className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1 cursor-pointer"
             checked={dontHaveMedicalAssociation}
           />
           <Label htmlFor="have_medical_association">I do not have a medical association</Label>

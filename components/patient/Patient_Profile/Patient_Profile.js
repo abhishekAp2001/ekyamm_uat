@@ -478,7 +478,7 @@ const Patient_Profile = () => {
         return;
       }
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/email/otpGenerateForProfile`, {
-        email: email
+        newEmail: email
       }, {
         headers: {
           accesstoken: patientSessionToken,
@@ -797,7 +797,7 @@ const Patient_Profile = () => {
           ].map((item, idx) => (
             <div key={idx} className="mb-4">
               <button
-                className="bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[8px] p-2 h-[56px] w-full text-left flex items-center justify-between"
+                className="bg-gradient-to-r from-[#BBA3E433] to-[#EDA19733] rounded-[8px] p-2 h-[56px] w-full text-left flex items-center justify-between cursor-pointer"
                 style={
                   item.disabled ? { opacity: 0.5, cursor: "not-allowed" } : {}
                 }

@@ -133,7 +133,7 @@ const Page = ({ onStartClick }) => {
               alt="Company Logo"
               width={250}
               height={60}
-              className="cursor-pointer max-w-[142px] h-auto md:max-w-[240px]"
+              className="cursor-pointer max-w-[142px] h-auto md:max-w-[240px] "
             />
           </Link>
 
@@ -156,14 +156,14 @@ const Page = ({ onStartClick }) => {
             {/* Desktop buttons */}
             <button
               id="contactUs"
-              className="hidden md:block bg-[#776EA5] text-white border-none px-2 py-2 rounded-[11px] font-quicksand font-medium"
+              className="hidden md:block bg-[#776EA5] text-white border-none px-2 py-2 rounded-[11px] font-quicksand font-medium cursor-pointer"
               onClick={handleButtonClick}
             >
               Contact Us
             </button>
             <button
               id="chatNow"
-              className=" md:hidden bg-[#776EA5] text-white border-none px-2 py-1 rounded-[11px] font-quicksand font-medium text-[12px] ml-2"
+              className=" md:hidden bg-[#776EA5] text-white border-none px-2 py-1 rounded-[11px] font-quicksand font-medium text-[12px] ml-2 cursor-pointer"
               onClick={handleButtonClick}
             >
               Chat Now

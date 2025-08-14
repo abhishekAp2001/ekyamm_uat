@@ -31,7 +31,7 @@ const Section =  ({ onStartClick }) => {
             Ekyamm empowers your treatment plans by seamlessly integrating emotional well-being support into the treatment journey.
           </p>
         </div>
-        <button className="custom-btn m-auto md:ml-0 brand-btn schedule-btn"  onClick={onStartClick}>
+        <button className="cursor-pointer custom-btn m-auto md:ml-0 brand-btn schedule-btn"  onClick={onStartClick}>
           Start Now{" "}
           <Image
             src="/images/Arrow.svg"

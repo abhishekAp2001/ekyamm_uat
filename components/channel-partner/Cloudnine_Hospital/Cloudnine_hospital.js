@@ -74,6 +74,7 @@ const Cloudnine_Hospital = ({ type }) => {
   };
 
   const handleGenerateInvoice = async () => {
+    setLoading(true)
     try {
       const payload = {
         channelPartnerUsername: formData?.channelPartnerUsername,
@@ -95,12 +96,17 @@ const Cloudnine_Hospital = ({ type }) => {
         if (response?.data?.success) {
           // setCookie("sessions_selection", JSON.stringify(formData));
           setStorage("sessions_selection", formData);
+          setLoading(false)
           showSuccessToast("Patient Invited & Invoice Sent");
           router.push(`/channel-partner/${type}/invoice_sent`);
         }
       }
     } catch (error) {
+      setLoading(false)
       showErrorToast(response?.data?.error?.message || "Something went wrong.");
+    }
+    finally{
+      setLoading(false)
     }
   };
 
@@ -422,7 +428,7 @@ const Cloudnine_Hospital = ({ type }) => {
                 <div className="flex items-center gap-2 mb-4" key={_x}>
                   <Checkbox
                     id={`session${_session.count}`}
-                    className="h-4 w-[16.05px] border-[1.5px] border-[#776EA5] rounded-[1.5px]"
+                    className="h-4 w-[16.05px] border-[1.5px] border-[#776EA5] rounded-[1.5px] cursor-pointer"
                     onCheckedChange={() => handleSessionChange(_session.count)}
                     checked={formData.sessionCreditCount === _session.count}
                     disabled={feeLoading}

@@ -212,7 +212,7 @@ const Patient_History = ({ type }) => {
         <PR_Header
           type={type}
           // patientType={hasCookie("invitePatientInfo") && JSON.parse(getCookie("invitePatientInfo"))?.patientType}
-          patientType={getStorage("invitePatientInfo").patientType}
+          patientType={getStorage("invitePatientInfo")?.patientType}
           text={
             getStorage("invitePatientInfo")?.patientType === 1 ? "Existing Patient" : "New Patient Registration"
           }
@@ -338,7 +338,7 @@ const Patient_History = ({ type }) => {
                           "By cancelling, you are confirming to not Invite this patient to avail body-mind-emotional balance"
                       } */}
                       {
-                         getStorage("invitePatientInfo").patientType === 1 ? 
+                         getStorage("invitePatientInfo")?.patientType === 1 ? 
                          "By cancelling, you are confirming to not add additional session for this patient" 
                          :
                           "By cancelling, you are confirming to not Invite this patient to avail body-mind-emotional balance"
@@ -355,12 +355,12 @@ const Patient_History = ({ type }) => {
                         //   setShow(false)
                         //   handleCancel()
                         // }
-                        if(getStorage("invitePatientInfo").patientType === 1){
+                        if(getStorage("invitePatientInfo")?.patientType === 1){
                           removeStorage("invitePatientInfo")
                           removeStorage("sessions_selection")
                           router.push(`/channel-partner/${type}/patient-registration`)
                           }
-                        if(getStorage("invitePatientInfo").patientType === 2){
+                        if(getStorage("invitePatientInfo")?.patientType === 2){
                           setShow(false)
                           handleCancel()
                         }

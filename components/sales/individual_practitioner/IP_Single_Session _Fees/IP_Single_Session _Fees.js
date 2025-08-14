@@ -249,7 +249,7 @@ const IP_Single_Session_Fees = () => {
                 <div className="flex gap-2 items-center">
                   <Checkbox
                     id={index}
-                    className="w-4 h-4 border-[1.5px] border-[#776EA5] rounded-[1.8px] ms-1"
+                    className="w-4 h-4 border-[1.5px] border-[#776EA5] rounded-[1.8px] ms-1 cursor-pointer"
                     checked={pkg.enabled}
                     onCheckedChange={(checked) =>
                       handlePackageChange(index, "enabled", checked)
@@ -335,7 +335,7 @@ const IP_Single_Session_Fees = () => {
               }
             }}
             id='have_gst'
-            className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1"
+            className="w-4 h-4 border border-[#776EA5] rounded-[1.8px] ms-1 cursor-pointer"
             checked={dontHaveGst}
           />
             <Label htmlFor="have_gst">I do not have a GST number</Label>

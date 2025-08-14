@@ -45,7 +45,7 @@ const IP_List = () => {
         <div className="sticky top-0 left-0 right-0 z-10 bg-[#efecfa]">
           <div className="flex items-center p-4 px-0 gap-[9px]">
             <Link href="/sales">
-            <ChevronLeft size={24} className=" text-black-700" />
+            <ChevronLeft size={24} className=" text-black-700 cursor-pointer" />
             </Link>
             <div className="flex-1 text-[16px] font-semibold text-gray-800">
               Individual Practitioner List
