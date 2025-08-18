@@ -267,7 +267,7 @@ const P_Mobile_Verification = ({ type }) => {
   };
 
   useEffect(() => {
-    clearStorageAndCookies(["user"])
+    clearStorageAndCookies([])
     const verifyChannelPartner = async (username) => {
       setLoading(true);
       try {

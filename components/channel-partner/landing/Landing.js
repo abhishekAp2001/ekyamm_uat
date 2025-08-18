@@ -14,7 +14,7 @@ const Landing = () => {
   const axios = axiosInstance();
 
   useEffect(() => {
-  clearStorageAndCookies(["PatientInfo", "patientSessionData", "selectedCounsellor", "user"])
+  clearStorageAndCookies(["PatientInfo", "patientSessionData", "selectedCounsellor", "user","rememberMe"])
     const verifyChannelPartner = async (username) => {
       try {
         const response = await axios.post(`v2/cp/channelPartner/verify`, {

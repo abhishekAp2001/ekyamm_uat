@@ -10,6 +10,8 @@ import Footer from "@/components/sales/Footer/Footer";
 import Carousel from "@/components/Carousel/Carousel";
 
 import { X } from "lucide-react";
+import axios from "axios";
+import { showErrorToast, showSuccessToast } from "@/lib/toast";
 const Page = () => {
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -52,23 +54,38 @@ const Page = () => {
     }
     return valid;
   }
-  const handleContactFormSubmit = () => {
-    if (isFormValid()) {
-      setIsFormOpen(false);
+  const handleContactFormSubmit = async () => {
+    try {
+      if (isFormValid()) {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/sales/enquiry`, {
+        "name": formData?.name,
+        "email": formData?.email,
+        "mobile": formData?.mobile,
+        "message": formData?.message
+      })
+      if(response?.data?.success === true) {
+        showSuccessToast(response?.data?.message || "Form submitted successfully");
+        setIsFormOpen(false);
       setFormData({
         name: "",
         email: "",
         mobile: "",
         message: "",
-      })
-      setErrors({
-        email: '',
-        mobile: '',
-        name: '',
-        message: '',
       });
+      setErrors({
+        email: "",
+        mobile: "",
+        name: "",
+        message: "",
+      });
+      }
     }
-  }
+    } catch (error) {
+      console.error("Error submitting contact form:", error);
+      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      showErrorToast(error.response.data.error.message || "Failed to send email");
+    }
+  };
   // Mobile detection
   useEffect(() => {
     const mobileCheck = () => {

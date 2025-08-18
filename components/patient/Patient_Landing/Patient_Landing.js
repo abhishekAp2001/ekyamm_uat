@@ -13,7 +13,7 @@ const Patient_Landing= () => {
   const type = searchParams.get("u");
 
   useEffect(() => {
-    clearStorageAndCookies(["user"])
+    clearStorageAndCookies([])
     const verifyChannelPartner = async (username) => {
       try {
         const response = await customAxios.post(`v2/cp/channelPartner/verify`, {

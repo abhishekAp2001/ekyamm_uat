@@ -14,7 +14,7 @@ const Patient_Pays_Landing = ({ type }) => {
   const [channelPartnerData, setChannelPartnerData] = useState(null);
   const router = useRouter();
   useEffect(() => {
-    clearStorageAndCookies(["user"])
+    clearStorageAndCookies([])
     const verifyChannelPartner = async (username) => {
       setLoading(true);
       setError(null);

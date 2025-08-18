@@ -17,7 +17,7 @@ const CP_landing = ({ type }) => {
   const axios = axiosInstance();
   const router = useRouter()
   useEffect(() => {
-    clearStorageAndCookies(["PatientInfo", "patientSessionData", "selectedCounsellor", "user"])
+    clearStorageAndCookies(["PatientInfo", "patientSessionData", "selectedCounsellor", "user","rememberMe"]);
     const verifyChannelPartner = async (username) => {
       setLoading(true);
       setError(null);
