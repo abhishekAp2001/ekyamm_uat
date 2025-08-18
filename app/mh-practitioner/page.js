@@ -34,55 +34,83 @@ const Page = () => {
   const isEmailValid = (email) => /\S+@\S+\.\S+/.test(email);
   const isMobileValid = (mobile) => /^\d{10}$/.test(mobile);
 
+  const validateField = (field, value) => {
+    let error = "";
+
+    switch (field) {
+      case "name":
+        if (!value.trim()) error = "Name is required";
+        break;
+      case "email":
+        if (!isEmailValid(value)) error = "Invalid Email";
+        break;
+      case "mobile":
+        if (!isMobileValid(value)) error = "Invalid Mobile Number";
+        break;
+      case "message":
+        if (!value.trim()) error = "Message is required";
+        break;
+      default:
+        break;
+    }
+
+    setErrors((prev) => ({ ...prev, [field]: error }));
+  };
+
+  // --- Submit Validation ---
   const isFormValid = () => {
     let valid = true;
-    if(!formData.name){
+    const newErrors = { name: "", email: "", mobile: "", message: "" };
+
+    if (!formData.name) {
       valid = false;
-      setErrors({...errors,name:'Name is required'})
-    }
-    if(!formData.message){
-      valid = false;
-      setErrors({...errors,message:'Message is required'})
+      newErrors.name = "Name is required";
     }
     if (!isEmailValid(formData.email)) {
       valid = false;
-      setErrors({ ...errors, email: 'Invalid Email' });
+      newErrors.email = "Invalid Email";
     }
     if (!isMobileValid(formData.mobile)) {
       valid = false;
-      setErrors({ ...errors, mobile: 'Invalid Mobile Number' });
+      newErrors.mobile = "Invalid Mobile Number";
     }
+    if (!formData.message) {
+      valid = false;
+      newErrors.message = "Message is required";
+    }
+
+    setErrors(newErrors);
     return valid;
-  }
+  };
   const handleContactFormSubmit = async () => {
     try {
       if (isFormValid()) {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/sales/enquiry`, {
-        "name": formData?.name,
-        "email": formData?.email,
-        "mobile": formData?.mobile,
-        "message": formData?.message
-      })
-      if(response?.data?.success === true) {
-        showSuccessToast(response?.data?.message || "Form submitted successfully");
-        setIsFormOpen(false);
-      setFormData({
-        name: "",
-        email: "",
-        mobile: "",
-        message: "",
-      });
-      setErrors({
-        email: "",
-        mobile: "",
-        name: "",
-        message: "",
-      });
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/sales/enquiry`, {
+          "name": formData?.name,
+          "email": formData?.email,
+          "mobile": formData?.mobile,
+          "message": formData?.message
+        })
+        if (response?.data?.success === true) {
+          showSuccessToast(response?.data?.message || "Form submitted successfully");
+          setIsFormOpen(false);
+          setFormData({
+            name: "",
+            email: "",
+            mobile: "",
+            message: "",
+          });
+          setErrors({
+            email: "",
+            mobile: "",
+            name: "",
+            message: "",
+          });
+        }
       }
-    }
     } catch (error) {
       console.error("Error submitting contact form:", error);
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(error.response.data.error.message || "Failed to send email");
     }
   };
@@ -123,30 +151,30 @@ const Page = () => {
 
   const closeForm = () => {
     setIsFormOpen(false);
-        setFormData({
-          name: "",
-          email: "",
-          mobile: "",
-          message: "",
-        })
-        setErrors({
-          email: '',
-          mobile: '',
-          name: '',
-          message: '',
-        });setIsFormOpen(false);
-        setFormData({
-          name: "",
-          email: "",
-          mobile: "",
-          message: "",
-        })
-        setErrors({
-          email: '',
-          mobile: '',
-          name: '',
-          message: '',
-        });
+    setFormData({
+      name: "",
+      email: "",
+      mobile: "",
+      message: "",
+    })
+    setErrors({
+      email: '',
+      mobile: '',
+      name: '',
+      message: '',
+    }); setIsFormOpen(false);
+    setFormData({
+      name: "",
+      email: "",
+      mobile: "",
+      message: "",
+    })
+    setErrors({
+      email: '',
+      mobile: '',
+      name: '',
+      message: '',
+    });
   }
 
   const handleButtonClick = () => {
@@ -218,7 +246,7 @@ const Page = () => {
               id="menu-desktop"
               className="hidden md:flex list-none flex-row m-0 p-0"
             >
-              <li  className="mr-[35px] font-bold text-[18px] leading-none text-[#776EA5]">
+              <li className="mr-[35px] font-bold text-[18px] leading-none text-[#776EA5]">
                 <a
                   href="./mh-practitioner"
                   className="no-underline text-inherit text-[16px]"
@@ -254,7 +282,7 @@ const Page = () => {
           id="menu-mobile"
           className="flex md:hidden list-none flex-row p-0 px-[2.5%]"
         >
-          <li  className="mr-[35px] font-bold text-[18px] leading-none text-[#776EA5]">
+          <li className="mr-[35px] font-bold text-[18px] leading-none text-[#776EA5]">
             <Link
               href="/mh-practitioner"
               className="no-underline text-inherit text-[14px]"
@@ -528,6 +556,8 @@ const Page = () => {
         </div>
         <div className="form-container">
           <h1>Get In Touch!</h1>
+
+          {/* Name */}
           <label htmlFor="name">
             <b>Name</b> <span className="compulsory-fields">*</span>
           </label>
@@ -536,62 +566,62 @@ const Page = () => {
             placeholder="Enter your Name"
             name="name"
             value={formData.name}
-            onChange={(e) => setFormData({
-              ...formData,
-              name: e.target.value
-            })}
+            onChange={(e) => {
+              setFormData({ ...formData, name: e.target.value });
+              validateField("name", e.target.value);
+            }}
             required
           />
-          {errors.name && (
-            <p style={{ color: 'red', fontSize: '14px' }}>{errors.name}</p>
-          )}
+          {errors.name && <p style={{ color: "red", fontSize: "14px" }}>{errors.name}</p>}
+
+          {/* Email */}
           <label htmlFor="email">
             <b>Email</b> <span className="compulsory-fields">*</span>
           </label>
           <input
             value={formData.email}
             onChange={(e) => {
-              e.target.value = e.target.value.toLowerCase();
-              setFormData(
-              { ...formData, email: e.target.value.toLocaleLowerCase() }
-            )}}
+              const val = e.target.value.toLowerCase();
+              setFormData({ ...formData, email: val });
+              validateField("email", val);
+            }}
             type="email"
             placeholder="Enter your Email"
             name="email"
             required
           />
-          {errors.email && (
-            <p style={{ color: 'red', fontSize: '14px' }}>{errors.email}</p>
-          )}
+          {errors.email && <p style={{ color: "red", fontSize: "14px" }}>{errors.email}</p>}
+
+          {/* Mobile */}
           <label htmlFor="number">
             <b>Mobile</b> <span className="compulsory-fields">*</span>
           </label>
           <input
-  className="w-full border p-2 mb-2"
-  value={formData.mobile}
-  onChange={(e) =>
-    setFormData({
-      ...formData,
-      mobile: e.target.value.replace(/\D/g, '').slice(0, 10)
-    })
-  }
-  type="tel"
-  placeholder="Enter your Mobile"
-  name="number"
-  required
-  inputMode="numeric"
-/>
-          {errors.mobile && (
-            <p style={{ color: 'red', fontSize: '14px' }}>{errors.mobile}</p>
-          )}
+            className="w-full border p-2 mb-2"
+            value={formData.mobile}
+            onChange={(e) => {
+              const val = e.target.value.replace(/\D/g, "").slice(0, 10);
+              setFormData({ ...formData, mobile: val });
+              validateField("mobile", val);
+            }}
+            type="tel"
+            placeholder="Enter your Mobile"
+            name="number"
+            required
+            inputMode="numeric"
+          />
+          {errors.mobile && <p style={{ color: "red", fontSize: "14px" }}>{errors.mobile}</p>}
+
+          {/* Message */}
           <label htmlFor="msg">
-            <b>Message</b><span className="compulsory-fields">*</span>
+            <b>Message</b> <span className="compulsory-fields">*</span>
           </label>
           <textarea
             value={formData.message}
-            onChange={(e) => setFormData({
-              ...formData, message: e.target.value
-            })}
+            onChange={(e) => {
+              setFormData({ ...formData, message: e.target.value });
+              validateField("message", e.target.value);
+            }}
             name="msg"
             id="msg"
             placeholder="Enter your message"
@@ -599,37 +629,15 @@ const Page = () => {
             rows="5"
             required
           ></textarea>
-          {errors.message && (
-            <p style={{ color: 'red', fontSize: '14px' }}>{errors.message}</p>
-          )}
-          <button type="submit" className="btn"
-            onClick={() => { handleContactFormSubmit() }}>
+          {errors.message && <p style={{ color: "red", fontSize: "14px" }}>{errors.message}</p>}
+
+          {/* Submit */}
+          <button type="submit" className="btn cursor-pointer" onClick={() => handleContactFormSubmit()}>
             Submit
           </button>
-          <div align="center" id="form-footer">
-            For all inquiries, please feel free to reach out at:
-            <br />
-            <div
-              align="center"
-              className="flex items-center justify-center m-auto gap-1"
-            >
-              <Image
-                src="/images/Group 924.png"
-                alt="icon1"
-                width={15}
-                height={15}
-              />
-              <Link
-                href="https://api.whatsapp.com/send/?phone=9920934198&text&type=phone_number&app_absent=0"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                +91 99209 34198
-              </Link>
-            </div>
-          </div>
         </div>
       </div>
+
     </>
   );
 };

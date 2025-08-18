@@ -37,19 +37,6 @@ const Contact_Form = forwardRef((props, ref) => {
       name: "",
       message: "",
     });
-    setIsFormOpen(false);
-    setFormData({
-      name: "",
-      email: "",
-      mobile: "",
-      message: "",
-    });
-    setErrors({
-      email: "",
-      mobile: "",
-      name: "",
-      message: "",
-    });
   };
 
   useEffect(() => {
@@ -82,6 +69,8 @@ const Contact_Form = forwardRef((props, ref) => {
       return () => document.removeEventListener("gesturestart", preventZoom);
     }
   }, []);
+
+  // ------------------- FORM STATE -------------------
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -94,66 +83,94 @@ const Contact_Form = forwardRef((props, ref) => {
     name: "",
     message: "",
   });
+
   const isEmailValid = (email) => /\S+@\S+\.\S+/.test(email);
   const isMobileValid = (mobile) => /^\d{10}$/.test(mobile);
 
-  const isFormValid = () => {
-    let valid = true;
-    if (!formData.name) {
-      valid = false;
-      setErrors({ ...errors, name: "Name is required" });
+  // ✅ Validate a single field
+  const validateField = (field, value) => {
+    let message = "";
+    if (field === "name" && !value.trim()) {
+      message = "Name is required";
     }
-    if (!formData.message) {
-      valid = false;
-      setErrors({ ...errors, message: "Message is required" });
+    if (field === "email" && !isEmailValid(value)) {
+      message = "Invalid Email";
     }
-    if (!isEmailValid(formData.email)) {
-      valid = false;
-      setErrors({ ...errors, email: "Invalid Email" });
+    if (field === "mobile" && !isMobileValid(value)) {
+      message = "Invalid Mobile Number";
     }
-    if (!isMobileValid(formData.mobile)) {
-      valid = false;
-      setErrors({ ...errors, mobile: "Invalid Mobile Number" });
+    if (field === "message" && !value.trim()) {
+      message = "Message is required";
     }
-    return valid;
+    return message;
   };
+
+  // ✅ Validate all fields on submit
+  const isFormValid = () => {
+    let newErrors = {
+      name: validateField("name", formData.name),
+      email: validateField("email", formData.email),
+      mobile: validateField("mobile", formData.mobile),
+      message: validateField("message", formData.message),
+    };
+
+    setErrors(newErrors);
+    return Object.values(newErrors).every((err) => err === "");
+  };
+
+  // ✅ On input change: update state + validate field immediately
+  const handleChange = (field, value) => {
+    let newFormData = { ...formData, [field]: value };
+
+    if (field === "mobile") {
+      newFormData.mobile = value.replace(/\D/g, "").slice(0, 10);
+    }
+    if (field === "email") {
+      newFormData.email = value.toLowerCase();
+    }
+
+    setFormData(newFormData);
+
+    // live validation
+    setErrors((prev) => ({
+      ...prev,
+      [field]: validateField(field, newFormData[field]),
+    }));
+  };
+
+  // ------------------- SUBMIT HANDLER -------------------
   const handleContactFormSubmit = async () => {
     try {
       if (isFormValid()) {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/v2/sales/enquiry`, {
-        "name": formData?.name,
-        "email": formData?.email,
-        "mobile": formData?.mobile,
-        "message": formData?.message
-      })
-      if(response?.data?.success === true) {
-        showSuccessToast(response?.data?.message || "Form submitted successfully");
-        setIsFormOpen(false);
-      setFormData({
-        name: "",
-        email: "",
-        mobile: "",
-        message: "",
-      });
-      setErrors({
-        email: "",
-        mobile: "",
-        name: "",
-        message: "",
-      });
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/v2/sales/enquiry`,
+          {
+            name: formData?.name,
+            email: formData?.email,
+            mobile: formData?.mobile,
+            message: formData?.message,
+          }
+        );
+        if (response?.data?.success === true) {
+          showSuccessToast(
+            response?.data?.message || "Form submitted successfully"
+          );
+          closeForm();
+        }
       }
-    }
     } catch (error) {
       console.error("Error submitting contact form:", error);
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
-      showErrorToast(error.response.data.error.message || "Failed to send email");
+      if (error?.status == 500)
+        return showErrorToast("Something Went Wrong !!!");
+      showErrorToast(
+        error.response?.data?.error?.message || "Failed to send email"
+      );
     }
   };
+
+  // ------------------- UI -------------------
   return (
     <>
-      {/* <button onClick={handleButtonClick} className="brand-btn schedule-btn">
-        Contact Us
-      </button> */}
       <div
         id="overlay"
         style={{ display: isFormOpen ? "block" : "none" }}
@@ -173,6 +190,8 @@ const Contact_Form = forwardRef((props, ref) => {
             <X width={23} height={23} />
           </div>
           <h1 className="text-xl font-semibold ">Get In Touch!</h1>
+
+          {/* Name */}
           <label>
             <b>Name</b> <span className="compulsory-fields">*</span>
           </label>
@@ -182,30 +201,21 @@ const Contact_Form = forwardRef((props, ref) => {
             placeholder="Enter your Name"
             name="name"
             value={formData.name}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                name: e.target.value,
-              })
-            }
+            onChange={(e) => handleChange("name", e.target.value)}
             required
           />
           {errors.name && (
             <p style={{ color: "red", fontSize: "14px" }}>{errors.name}</p>
           )}
+
+          {/* Email */}
           <label>
             <b>Email</b> <span className="compulsory-fields">*</span>
           </label>
           <input
             className="w-full border p-2 mb-2"
             value={formData.email}
-            onChange={(e) => {
-              e.target.value = e.target.value.toLowerCase();
-              setFormData({
-                ...formData,
-                email: e.target.value.toLocaleLowerCase(),
-              });
-            }}
+            onChange={(e) => handleChange("email", e.target.value)}
             type="email"
             placeholder="Enter your Email"
             name="email"
@@ -214,6 +224,8 @@ const Contact_Form = forwardRef((props, ref) => {
           {errors.email && (
             <p style={{ color: "red", fontSize: "14px" }}>{errors.email}</p>
           )}
+
+          {/* Mobile */}
           {mobile_field && (
             <div>
               <label>
@@ -222,12 +234,7 @@ const Contact_Form = forwardRef((props, ref) => {
               <input
                 className="w-full border p-2 mb-2"
                 value={formData.mobile}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    mobile: e.target.value.replace(/\D/g, "").slice(0, 10),
-                  })
-                }
+                onChange={(e) => handleChange("mobile", e.target.value)}
                 type="tel"
                 placeholder="Enter your Mobile"
                 name="number"
@@ -241,18 +248,16 @@ const Contact_Form = forwardRef((props, ref) => {
               )}
             </div>
           )}
+
+          {/* Message */}
           <label>
-            <b>Message</b><span className="compulsory-fields">*</span>
+            <b>Message</b>
+            <span className="compulsory-fields">*</span>
           </label>
           <textarea
             className="w-full border p-2"
             value={formData.message}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                message: e.target.value,
-              })
-            }
+            onChange={(e) => handleChange("message", e.target.value)}
             name="msg"
             placeholder="Enter your message"
             rows="4"
@@ -261,6 +266,8 @@ const Contact_Form = forwardRef((props, ref) => {
           {errors.message && (
             <p style={{ color: "red", fontSize: "14px" }}>{errors.message}</p>
           )}
+
+          {/* Submit */}
           <button
             type="submit"
             className="btn w-full bg-blue-600 text-white py-2 rounded cursor-pointer"
@@ -271,6 +278,7 @@ const Contact_Form = forwardRef((props, ref) => {
             Submit
           </button>
 
+          {/* Footer */}
           <div align="center" id="form-footer" className="mt-4 text-sm">
             For all inquiries, please feel free to reach out at:
             <div className="flex items-center justify-center gap-1 mt-1">
@@ -296,7 +304,5 @@ const Contact_Form = forwardRef((props, ref) => {
   );
 });
 
-// add display name for better debugging in React DevTools
 Contact_Form.displayName = "Contact_Form";
-
 export default Contact_Form;
