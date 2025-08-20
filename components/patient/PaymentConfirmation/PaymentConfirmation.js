@@ -83,7 +83,7 @@ const PaymentConfirmation = () => {
 
   useEffect(() => {
     if (secondsLeft === 0) {
-      // router.push(`/patient/dashboard`);
+      router.push(`/patient/dashboard`);
       return;
     }
     const timer = setTimeout(() => {

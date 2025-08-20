@@ -112,17 +112,17 @@ useEffect(() => {
       // Prepare share data
       const shareData = {
         title: "Sessions Synopsis",
-        text: selectedItem?.synopsisNote || "No synopsis available",
+        text: `Session Synopsis\n\nNote: ${selectedItem?.synopsisNote || "No synopsis available"}\n\nImage: ${selectedItem?.synopsisNoteImageUrl || ""}`,
         
       };
 
       // If image exists, fetch it and attach as a File
-      if (selectedItem?.synopsisNoteImageUrl) {
-        const response = await fetch(selectedItem.synopsisNoteImageUrl);
-        const blob = await response.blob();
-        const file = new File([blob], "synopsis.png", { type: blob.type });
-        shareData.files = [file];
-      }
+      // if (selectedItem?.synopsisNoteImageUrl) {
+      //   const response = await fetch(selectedItem.synopsisNoteImageUrl);
+      //   const blob = await response.blob();
+      //   const file = new File([blob], "synopsis.png", { type: blob.type });
+      //   shareData.files = [file];
+      // }
 
       await navigator.share(shareData);
       console.log("Shared successfully!");
