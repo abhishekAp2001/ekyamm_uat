@@ -196,7 +196,7 @@ const UpcomingSession = ({
             colors: {
               accent: "#bba3e4",
               accentText: "#ffffff",
-              baseText: "#9811AD", 
+              baseText: "#776EA5", 
               background: "#ECD3E0",
             },
             fonts: {
@@ -207,6 +207,11 @@ const UpcomingSession = ({
             colors: {
               accent: "#776EA5",
               background: "#ECD3E0",
+              accentText: "#ffffff",
+              baseText: "#776EA5", 
+            },
+            fonts: {
+              default: '"Quicksand", sans-serif',
             },
           },
         });

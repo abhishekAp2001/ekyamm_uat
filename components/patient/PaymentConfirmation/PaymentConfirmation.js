@@ -80,17 +80,16 @@ const PaymentConfirmation = () => {
     price,
     sessions
   ]);
-
-  // useEffect(() => {
-  //   if (secondsLeft === 0) {
-  //     // router.push(`/patient/dashboard`);
-  //     return;
-  //   }
-  //   const timer = setTimeout(() => {
-  //     setSecondsLeft((s) => s - 1);
-  //   }, 1000);
-  //   return () => clearTimeout(timer);
-  // }, [secondsLeft, router]);
+  useEffect(() => {
+    if (secondsLeft === 0) {
+      router.push(`/patient/dashboard`);
+      return;
+    }
+    const timer = setTimeout(() => {
+      setSecondsLeft((s) => s - 1);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [secondsLeft, router]);
 
   const handlePrint = useReactToPrint({
     contentRef: targetRef,
