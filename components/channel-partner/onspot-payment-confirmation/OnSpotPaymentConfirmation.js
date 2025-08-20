@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 import { Button } from "../../ui/button";
 import Link from "next/link";
@@ -27,7 +27,6 @@ const OnSpotPaymentConfirmation = ({ type }) => {
   const [totalPayable, setTotalPayable] = useState(0);
   const [secondsLeft, setSecondsLeft] = useState(30);
   const sessions_selection = getStorage("sessions_selection");
-  console.log("sessions selection",sessions_selection)
   const invitePatientInfo = getStorage("invitePatientInfo");
   useEffect(() => {
     if (sessions_selection) {
@@ -36,45 +35,45 @@ const OnSpotPaymentConfirmation = ({ type }) => {
         cookieObj.txnId = transactionId;
         setStorage("sessions_selection", cookieObj);
       } catch (err) {
-        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
+        if (err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.error("Error parsing cookie", err);
       }
     }
-    else if(!sessions_selection){
+    else if (!sessions_selection) {
       router.push(`/channel-partner/${type}`)
       router.refresh();
     }
   }, []);
-const hasRedirected = useRef(false);
-useEffect(() => {
-  if (!sessions_selection || !invitePatientInfo) {
-    if (!hasRedirected.current) {
+  const hasRedirected = useRef(false);
+  useEffect(() => {
+    if (!sessions_selection || !invitePatientInfo) {
+      if (!hasRedirected.current) {
+        hasRedirected.current = true;
+        router.push(`/channel-partner/${type}`);
+        router.refresh();
+      }
+    }
+  }, [sessions_selection, invitePatientInfo, router, type]);
+
+
+  useEffect(() => {
+    if (secondsLeft === 0 && !hasRedirected.current) {
       hasRedirected.current = true;
+      removeStorage("sessions_selection")
+      removeStorage("channelPartnerData")
+      removeStorage("invitePatientInfo")
+      removeStorage("qrCodeInfo")
+      removeStorage("paymentStatusInfo")
       router.push(`/channel-partner/${type}`);
       router.refresh();
+      return;
     }
-  }
-}, [sessions_selection, invitePatientInfo, router, type]);
 
-
-useEffect(() => {
-  if (secondsLeft === 0 && !hasRedirected.current) {
-    hasRedirected.current = true;
-    removeStorage("sessions_selection")
-    removeStorage("channelPartnerData")
-    removeStorage("invitePatientInfo")
-    removeStorage("qrCodeInfo")
-    removeStorage("paymentStatusInfo")
-    router.push(`/channel-partner/${type}`);
-    router.refresh();
-    return;
-  }
-
-  const timer = setTimeout(() => {
-    setSecondsLeft((s) => s - 1);
-  }, 1000);
-  return () => clearTimeout(timer);
-}, [secondsLeft, router, type]);
+    const timer = setTimeout(() => {
+      setSecondsLeft((s) => s - 1);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [secondsLeft, router, type]);
 
   useEffect(() => {
     // const cookieData = getCookie("channelPartnerData");
@@ -87,7 +86,7 @@ useEffect(() => {
         setChannelPartnerData(parsedData);
         // setBillingType(parsedData?.billingType);
       } catch (error) {
-        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+        if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         // console.log('error',error)
         setChannelPartnerData(null);
       }
@@ -135,20 +134,39 @@ useEffect(() => {
   });
 
   const handleDownload = () => {
-  const paymentStatusInfo = getStorage("paymentStatusInfo")
-  const sessions_selection = getStorage("session_selection",rememberMe)
-  const InvoiceNumber = paymentStatusInfo?.invoiceId?.trim() ? paymentStatusInfo.invoiceId : sessions_selection?.txnId
-  const element = targetRef.current // or targetRef.current
-  const opt = {
-    margin:       0.5,
-    filename:     `${invitePatientInfo?.firstName} ${invitePatientInfo?.lastName}- ${InvoiceNumber}.pdf`,
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2 },
-    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-  };
+    const sessions_selection = getStorage("sessions_selection", rememberMe);
 
-  html2pdf().set(opt).from(element).save();
-};
+    const InvoiceNumber = sessions_selection?.txnId;
+
+    const element = targetRef.current;
+    if (!element) {
+      console.error("Invoice element not found");
+      return;
+    }
+
+    // Temporarily make the invoice visible for PDF generation
+    element.style.visibility = 'visible';
+    element.style.position = 'static';
+
+    const opt = {
+      margin: 0.5,
+      filename: `${invitePatientInfo?.firstName} ${invitePatientInfo?.lastName}-${InvoiceNumber}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: true },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+    };
+
+    html2pdf()
+      .set(opt)
+      .from(element)
+      .save()
+      .then(() => {
+        // Restore hidden state after PDF generation
+        element.style.visibility = 'hidden';
+        element.style.position = 'absolute';
+        element.style.top = '-9999px';
+      });
+  };
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
@@ -244,8 +262,8 @@ useEffect(() => {
 
               <div className=" mt-3">
                 <Link href="#">
-                  <Button onClick={()=>{
-                    handlePrint()
+                  <Button onClick={() => {
+                    handleDownload()
                   }} className="bg-[#776EA5] text-[15px] font-[700] text-white rounded-[8px] flex items-center justify-center w-full h-[45px]">
                     Download Receipt
                   </Button>
@@ -263,8 +281,8 @@ useEffect(() => {
           </div>
         </div>
       </div>
-      <div ref={targetRef}>
-      <Invoice />
+      <div style={{ display: 'none' }} >
+        <Invoice ref={targetRef} />
       </div>
     </>
   );

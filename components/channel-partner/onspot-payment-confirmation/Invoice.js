@@ -1,9 +1,10 @@
-import React,{useEffect} from 'react'
+'use client'
+import React,{forwardRef,useEffect} from 'react'
 import { hasCookie, getCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 import { getStorage } from '@/lib/utils';
 import { useRememberMe } from '@/app/context/RememberMeContext';
-const Invoice = () => {
+const Invoice = forwardRef((props,ref) => {
     const { rememberMe } = useRememberMe();
     const router = useRouter()
     const sessions_selection = getStorage("sessions_selection",rememberMe)
@@ -53,12 +54,12 @@ const Invoice = () => {
     const totalAmount = sessions_selection?.sessionCreditCount * sessions_selection?.sessionPrice
     
     return (
-        <div className='print-only text-black'>
+        <div className='print-only text-black' ref={ref}>
             <div className="invoice-box" id="invoice">
                 <table cellPadding={0} cellSpacing={0}>
                     <tbody><tr>
                         <td>
-                            <img src="https://www.ekyamm.com/public/images/ekyamm-white.png" height={100} alt />
+                            <img src="/ekyamm-white.png" height={100} alt />
                         </td>
                         <td>
                             <h3>Tax Invoice</h3>
@@ -193,95 +194,84 @@ const Invoice = () => {
                     </center>
                 </footer>
             </div>
-            <style jsx >
-                {`
-
-        .print-only {
-            visibility: hidden; /* Hide on screen */
-            position: absolute; /* Prevent layout interference */
-            top: -5999px;
-            left: 0;
-            width: 100%;
-          }
-            body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-    }
-    .invoice-box {
-        border: 5px solid #000;
-      /* max-width: 100%; */
-      max-width: 800px;
-      margin: auto;
-      padding: 30px;
-    }
-    .invoice-box table {
-      width: 100%;
-      line-height: inherit;
-      text-align: left;
-    }
-    .invoice-box table td {
-      padding: 5px;
-      vertical-align: top;
-    }
-    .invoice-box table tr.top table td {
-      padding-bottom: 20px;
-    }
-    .invoice-box table tr.information table td {
-      padding-bottom: 40px;
-    }
-    .invoice-box table tr.heading td {
-      background: #eee;
-      font-weight: bold;
-      border: 1px solid #000;
-      /* border-bottom: 1px solid #ddd; */
-    }
-    .invoice-box table tr.details td {
-      padding-bottom: 20px;
-      border: 1px solid #000;
-    }
-    .invoice-box table tr.item td {
-      /* border-bottom: 1px solid #eee; */
-    }
-    .invoice-box table tr.item.last td {
-      border-bottom: none;
-    }
-    .invoice-box table tr.total td:nth-child(2) {
-      /* border-top: 2px solid #eee; */
-      font-weight: bold;
-    }
-    footer{
-        padding-top: 5rem;
-    }
-
-    table.invoice_main_table {
-        width: 100%;
-        border-collapse: collapse;
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-    }
-
-    table.invoice_main_table, .invoice_main_table th, .invoice_main_table td {
-        border: 1px solid #000;
-    }
-
-    .invoice_main_table th, .invoice_main_table td {
-        padding: 6px;
-        text-align: left;
-    }
-
-    .invoice_main_table .total td {
-        font-weight: bold;
-    }
-            @media print {
-            .print-only {
-              visibility: visible; /* Show when printing */
-              position: static; /* Restore normal positioning */
-            }
+<style jsx>{`
+        .invoice-container {
+          position: absolute;
+          top: -9999px;
+          left: 0;
+          width: 100%;
+          visibility: hidden;
         }
-        `}
-            </style>
+        .invoice-box {
+          max-width: 800px;
+          margin: auto;
+          padding: 30px;
+          border: 5px solid #000;
+          font-family: Arial, sans-serif;
+          font-size: 14px;
+        }
+        .invoice-box table {
+          width: 100%;
+          line-height: inherit;
+          text-align: left;
+        }
+        .invoice-box table td {
+          padding: 5px;
+          vertical-align: top;
+        }
+        .invoice-box table tr.top table td {
+          padding-bottom: 20px;
+        }
+        .invoice-box table tr.information table td {
+          padding-bottom: 40px;
+        }
+        .invoice-box table tr.heading td {
+          background: #eee;
+          font-weight: bold;
+          border: 1px solid #000;
+        }
+        .invoice-box table tr.item td {
+          border: 1px solid #000;
+        }
+        .invoice-box table tr.total td {
+          font-weight: bold;
+        }
+        table.invoice_main_table {
+          width: 100%;
+          border-collapse: collapse;
+          font-family: Arial, sans-serif;
+          font-size: 14px;
+        }
+        table.invoice_main_table,
+        .invoice_main_table th,
+        .invoice_main_table td {
+          border: 1px solid #000;
+        }
+        .invoice_main_table th,
+        .invoice_main_table td {
+          padding: 6px;
+          text-align: left;
+        }
+        footer {
+          padding-top: 5rem;
+          text-align: center;
+        }
+        @media print {
+          .invoice-container {
+            visibility: visible;
+            position: static;
+            top: 0;
+          }
+          .invoice-box {
+            border: none;
+            padding: 10mm;
+          }
+        }
+      `}</style>
         </div>
     )
-}
-
+})
+Invoice.displayName = "Invoice";
 export default Invoice
+
+

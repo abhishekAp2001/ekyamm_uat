@@ -135,20 +135,41 @@ useEffect(() => {
   `,
   });
 
-    const handleDownload = () => {
-    const paymentStatusInfo = getStorage("paymentStatusInfo")
-    const sessions_selection = getStorage("session_selection",rememberMe)
-    const InvoiceNumber = paymentStatusInfo?.invoiceId?.trim() ? paymentStatusInfo.invoiceId : sessions_selection?.txnId
-    const element = targetRef.current // or targetRef.current
+const handleDownload = () => {
+    const patient = getStorage("PatientInfo", rememberMe);
+    const paymentStatusInfo = getStorage("paymentStatusInfo");
+    const sessions_selection = getStorage("session_selection", rememberMe);
+
+    const InvoiceNumber = sessions_selection?.txnId;
+
+    const element = targetRef.current;
+    if (!element) {
+      console.error("Invoice element not found");
+      return;
+    }
+
+    // Temporarily make the invoice visible for PDF generation
+    element.style.visibility = 'visible';
+    element.style.position = 'static';
+
     const opt = {
-      margin:       0.5,
-      filename:     `${invitePatientInfo?.firstName} ${invitePatientInfo?.lastName}- ${InvoiceNumber}.pdf`,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2 },
-      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      margin: 0.5,
+      filename: `${invitePatientInfo?.firstName} ${invitePatientInfo?.lastName}-${InvoiceNumber}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: true },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
     };
-  
-    html2pdf().set(opt).from(element).save();
+
+    html2pdf()
+      .set(opt)
+      .from(element)
+      .save()
+      .then(() => {
+        // Restore hidden state after PDF generation
+        element.style.visibility = 'hidden';
+        element.style.position = 'absolute';
+        element.style.top = '-9999px';
+      });
   };
   return (
     <>
@@ -245,7 +266,7 @@ useEffect(() => {
               <div className=" mt-3">
                 <Link href="#">
                   <Button onClick={()=>{
-                    handlePrint()
+                    handleDownload()
                   }} className="bg-[#776EA5] text-[15px] font-[700] text-white rounded-[8px] flex items-center justify-center w-full h-[45px]">
                     Download Receipt
                   </Button>
@@ -263,9 +284,9 @@ useEffect(() => {
           </div>
         </div>
       </div>
-      <div ref={targetRef}>
-      <Invoice />
-      </div>
+      <div style={{ display: 'none' }} >
+              <Invoice ref={targetRef} />
+            </div>
     </>
   );
 };
