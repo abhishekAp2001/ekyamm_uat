@@ -80,7 +80,6 @@ const PaymentConfirmation = () => {
     price,
     sessions
   ]);
-
   useEffect(() => {
     if (secondsLeft === 0) {
       router.push(`/patient/dashboard`);
@@ -103,22 +102,41 @@ const PaymentConfirmation = () => {
   
     const handleDownload = () => {
     const patient = getStorage("PatientInfo", rememberMe);
-    const paymentStatusInfo = getStorage("paymentStatusInfo")
-    const sessions_selection = getStorage("session_selection",rememberMe)
-    const InvoiceNumber = paymentStatusInfo?.invoiceId?.trim() ? paymentStatusInfo.invoiceId : sessions_selection?.txnId
+    const paymentStatusInfo = getStorage("paymentStatusInfo", rememberMe);
+    const sessions_selection = getStorage("session_selection", rememberMe);
+
+    const InvoiceNumber = paymentStatusInfo?.invoiceId?.trim()
+      ? paymentStatusInfo.invoiceId
+      : sessions_selection?.txnId;
+
     const element = targetRef.current;
-  element.style.display = "block";
+    if (!element) {
+      console.error("Invoice element not found");
+      return;
+    }
+
+    // Temporarily make the invoice visible for PDF generation
+    element.style.visibility = 'visible';
+    element.style.position = 'static';
+
     const opt = {
-      margin:       0.5,
-      filename:     `${patient?.firstName} ${patient?.lastName}- ${InvoiceNumber}.pdf`,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2 },
-      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      margin: 0.5,
+      filename: `${patient?.firstName} ${patient?.lastName}-${InvoiceNumber}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2, scrollX: 0, scrollY: 0, useCORS: true },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
     };
-  
-    html2pdf().set(opt).from(element).save().then(() => {
-      element.style.display = "none";
-    });;
+
+    html2pdf()
+      .set(opt)
+      .from(element)
+      .save()
+      .then(() => {
+        // Restore hidden state after PDF generation
+        element.style.visibility = 'hidden';
+        element.style.position = 'absolute';
+        element.style.top = '-9999px';
+      });
   };
   return (
     <>
@@ -229,7 +247,7 @@ const PaymentConfirmation = () => {
               </span>
             </div>
             <Button className="w-full bg-[#776EA5] rounded-[8px] h-[40px] text-[15px]"
-              onClick={() => { handlePrint() }}>
+              onClick={() => { handleDownload() }}>
               Download Receipt
             </Button>
             <Button className="w-full bg-white rounded-[8px] mt-2 h-[40px] text-[17px] border-1 border-[#776EA5] text-[#776EA5] font-bold"
@@ -245,8 +263,8 @@ const PaymentConfirmation = () => {
           </div>
         </div>
       </div>
-      <div ref={targetRef}>
-        <Invoice />
+      <div style={{ display: 'none' }} >
+        <Invoice ref={targetRef} />
       </div>
     </>
   );
