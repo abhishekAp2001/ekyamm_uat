@@ -196,6 +196,7 @@ const UpcomingSession = ({
             colors: {
               accent: "#bba3e4",
               accentText: "#ffffff",
+              baseText: "#9811AD", 
               background: "#ECD3E0",
             },
             fonts: {
@@ -212,6 +213,7 @@ const UpcomingSession = ({
         call.join({
           url: `${process.env.NEXT_PUBLIC_VIDEO_CALL_URL}/${roomName}`,
           token: response?.data?.data?.token,
+          userName: `${patient?.firstName} ${patient?.lastName}`,
         });
         call.on("left-meeting", () => {
           call.destroy();
@@ -268,7 +270,6 @@ const UpcomingSession = ({
 
     return `${fromTime} – ${toTime}`;
   }
-
   return (
     <>
       <div>
@@ -406,7 +407,6 @@ const UpcomingSession = ({
                       >
                         Start Call
                       </Button>
-
                       {!isWithinTwoMinutesBefore(session?.sessionTime?.from) &&
                         !hideTooltip && (
                           <div className="absolute bottom-full left-9/12 md:left-1/2 -translate-x-1/2 z-10 flex flex-col items-center transition-opacity duration-200 group-hover:opacity-100 opacity-0 pointer-events-auto">

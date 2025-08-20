@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import Image from "next/image";
 import { addDays, format, isSameMonth, parseISO, set, subDays } from "date-fns";
-
+import { toZonedTime } from "date-fns-tz";
 import { ChevronLeft, ChevronUpIcon, Loader, Loader2, X, ChevronRight, ChevronDown, Check } from "lucide-react";
 import {
   Drawer,
@@ -68,7 +68,7 @@ const Schedule_Session = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [availableDates, setAvailableDates] = useState({});
   const [availableSlots, setAvailableSlots] = useState({});
-  console.log("times",availableSlots)
+  console.log("times", availableSlots)
   const isDateAvailable = (date) => {
     const key = format(date, "yyyy-MM-dd");
     return availableDates[key] === true;
@@ -98,7 +98,7 @@ const Schedule_Session = () => {
     try {
       let bodyData = {
         practitionerId:
-           selectedCounsellorData?.loginId || "",
+          selectedCounsellorData?.loginId || "",
         year: year,
         month: month,
       };
@@ -125,7 +125,7 @@ const Schedule_Session = () => {
       // console.log('map',map)
       setAvailableDates(map);
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("API error:", error);
     } finally {
       setCalenderLoading(false);
@@ -133,16 +133,16 @@ const Schedule_Session = () => {
     }
   };
 
-  const canSubmit = 
-  patientSessionData?.firstName && 
-  patientSessionData?.lastName &&
-  selectedCounsellorData?.loginId &&
-  selectedCounsellorData?.generalInformation?.firstName &&
-  selectedCounsellorData?.generalInformation?.lastName &&
-  selectedCounsellorData?.generalInformation?.email &&
-  selectedFromTime &&
-  selectedToTime &&
-  !loading;
+  const canSubmit =
+    patientSessionData?.firstName &&
+    patientSessionData?.lastName &&
+    selectedCounsellorData?.loginId &&
+    selectedCounsellorData?.generalInformation?.firstName &&
+    selectedCounsellorData?.generalInformation?.lastName &&
+    selectedCounsellorData?.generalInformation?.email &&
+    selectedFromTime &&
+    selectedToTime &&
+    !loading;
 
   const validateForm = () => {
     if (!patientSessionData?.firstName || !patientSessionData?.lastName) {
@@ -201,9 +201,8 @@ const Schedule_Session = () => {
         },
         practitioner: {
           practitionerId: selectedCounsellorData?.loginId || "",
-          name: `${
-            selectedCounsellorData?.generalInformation?.firstName || ""
-          } ${selectedCounsellorData?.generalInformation?.lastName || ""}`,
+          name: `${selectedCounsellorData?.generalInformation?.firstName || ""
+            } ${selectedCounsellorData?.generalInformation?.lastName || ""}`,
           email: selectedCounsellorData?.generalInformation?.email || "",
         },
         sessionDetail: sessionDetail.trim(),
@@ -235,16 +234,16 @@ const Schedule_Session = () => {
         setSuccessDrawerOpen(true);
         if (response.data.data.createdSessions) {
           setCreatedSessions(response.data.data.createdSessions)
-          } else {
-            setCreatedSessions([response.data.data.createdSession])
-          };
+        } else {
+          setCreatedSessions([response.data.data.createdSession])
+        };
         setUnavailableSessions(response?.data?.unavailableSlots || []);
         // router.push("/patient/dashboard");
       } else {
         showErrorToast("Failed to book session. Please try again.");
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         error?.response?.data?.error?.message || "Something went wrong.1"
       );
@@ -272,7 +271,7 @@ const Schedule_Session = () => {
         const formattedDate = `${year}-${month}-${day}`;
         let bodyData = {
           practitionerId:
-             selectedCounsellorData?.loginId || "",
+            selectedCounsellorData?.loginId || "",
           sessionDate: formattedDate,
         };
         let headers = {
@@ -293,14 +292,14 @@ const Schedule_Session = () => {
 
         setAvailableSlots(data);
       } catch (error) {
-        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+        if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         setAvailableSlots({});
       } finally {
         setTimeSlogLoading(false);
       }
     };
     if (selectedDate) {
-      console.log("selectedDate",selectedDate)
+      console.log("selectedDate", selectedDate)
       fetchAvailabilitySlots();
     }
   }, [selectedDate]);
@@ -315,38 +314,38 @@ const Schedule_Session = () => {
     setSuccessDrawerOpen(false);
   }
 
-const handleTimeFormat = (dateTime) => {
-  const utcDate = new Date(dateTime);
+  const handleTimeFormat = (dateTime) => {
+    const utcDate = new Date(dateTime);
 
-  const formatter = new Intl.DateTimeFormat('en-IN', {
-    timeZone: 'Asia/Kolkata',
-    weekday: 'short',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true,
-  });
+    const formatter = new Intl.DateTimeFormat('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      weekday: 'short',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    });
 
-  const parts = formatter.formatToParts(utcDate);
+    const parts = formatter.formatToParts(utcDate);
 
-  const dayName = parts.find(p => p.type === 'weekday')?.value;
-  const day = parts.find(p => p.type === 'day')?.value;
-  const month = parts.find(p => p.type === 'month')?.value;
-  const year = parts.find(p => p.type === 'year')?.value;
-  const hour = parts.find(p => p.type === 'hour')?.value;
-  const minute = parts.find(p => p.type === 'minute')?.value;
-  const ampm = parts.find(p => p.type === 'dayPeriod')?.value;
+    const dayName = parts.find(p => p.type === 'weekday')?.value;
+    const day = parts.find(p => p.type === 'day')?.value;
+    const month = parts.find(p => p.type === 'month')?.value;
+    const year = parts.find(p => p.type === 'year')?.value;
+    const hour = parts.find(p => p.type === 'hour')?.value;
+    const minute = parts.find(p => p.type === 'minute')?.value;
+    const ampm = parts.find(p => p.type === 'dayPeriod')?.value;
 
-  const formattedTime = `${hour}:${minute} ${ampm}`;
-  const formattedDate = `${dayName}, ${day} ${month} ${year}`;
+    const formattedTime = `${hour}:${minute} ${ampm}`;
+    const formattedDate = `${dayName}, ${day} ${month} ${year}`;
 
-  return {
-    time: formattedTime,
-    date: formattedDate,
+    return {
+      time: formattedTime,
+      date: formattedDate,
+    };
   };
-};
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] relative max-w-[576px] mx-auto">
@@ -359,7 +358,7 @@ const handleTimeFormat = (dateTime) => {
           }}
         />
         <strong className="ml-2 text-[16px] font-semibold text-gray-800">
-          Schedule Session 
+          Schedule Session
         </strong>
       </div>
       <div className="pt-15 px-4 pb-20 flex justify-center relative">
@@ -373,27 +372,24 @@ const handleTimeFormat = (dateTime) => {
                 <Avatar>
                   <AvatarImage
                     className="rounded-full w-[42px] h-[42px]"
-                    src={patientSessionData?.profileImageUrl||"/images/profile.png"}
-                    alt={`${patientSessionData?.firstName || ""} ${
-                      patientSessionData?.lastName || ""
-                    }`}
+                    src={patientSessionData?.profileImageUrl || "/images/profile.png"}
+                    alt={`${patientSessionData?.firstName || ""} ${patientSessionData?.lastName || ""
+                      }`}
                   />
                 </Avatar>
                 <div>
                   <Label className="text-[16px] text-gray-500 font-[600] font-['Quicksand']">
-                    {`${patientSessionData?.firstName || ""} ${
-                      patientSessionData?.lastName || ""
-                    }`}
+                    {`${patientSessionData?.firstName || ""} ${patientSessionData?.lastName || ""
+                      }`}
                   </Label>
                   <Label className="text-[15px] text-gray-500 font-[500] font-['Quicksand']">
-                    {`${
-                      patientSessionData?.countryCode_primary.match(/\d+$/)
+                    {`${patientSessionData?.countryCode_primary.match(/\d+$/)
                         ? "+" +
-                          patientSessionData.countryCode_primary.match(
-                            /\d+$/
-                          )[0]
+                        patientSessionData.countryCode_primary.match(
+                          /\d+$/
+                        )[0]
                         : "+91"
-                    } ${patientSessionData?.primaryMobileNumber || ""}`}
+                      } ${patientSessionData?.primaryMobileNumber || ""}`}
                   </Label>
                 </div>
               </div>
@@ -413,20 +409,16 @@ const handleTimeFormat = (dateTime) => {
                       selectedCounsellorData?.generalInformation
                         ?.profileImageUrl || ""
                     }
-                    alt={`${
-                      selectedCounsellorData?.generalInformation?.firstName ||
+                    alt={`${selectedCounsellorData?.generalInformation?.firstName ||
                       ""
-                    } ${
-                      selectedCounsellorData?.generalInformation?.lastName || ""
-                    }`}
+                      } ${selectedCounsellorData?.generalInformation?.lastName || ""
+                      }`}
                   />
                   <AvatarFallback>
-                    {`${
-                      selectedCounsellorData?.generalInformation?.firstName ||
+                    {`${selectedCounsellorData?.generalInformation?.firstName ||
                       ""
-                    } ${
-                      selectedCounsellorData?.generalInformation?.lastName || ""
-                    }`
+                      } ${selectedCounsellorData?.generalInformation?.lastName || ""
+                      }`
                       .split(" ")
                       .map((n) => n[0])
                       .join("")}
@@ -434,27 +426,23 @@ const handleTimeFormat = (dateTime) => {
                 </Avatar>
                 <div>
                   <Label className="text-[16px] text-gray-500 font-[600] font-['Quicksand']">
-                    {`${
-                      selectedCounsellorData?.generalInformation?.firstName ||
+                    {`${selectedCounsellorData?.generalInformation?.firstName ||
                       ""
-                    } ${
-                      selectedCounsellorData?.generalInformation?.lastName || ""
-                    }`}
+                      } ${selectedCounsellorData?.generalInformation?.lastName || ""
+                      }`}
                   </Label>
                   <Label className="text-[15px] text-gray-500 font-[500] font-['Quicksand']">
-                    {`${
-                      selectedCounsellorData?.generalInformation?.countryCode_primary.match(
-                        /\d+$/
-                      )
+                    {`${selectedCounsellorData?.generalInformation?.countryCode_primary.match(
+                      /\d+$/
+                    )
                         ? "+" +
-                          selectedCounsellorData?.generalInformation?.countryCode_primary.match(
-                            /\d+$/
-                          )[0]
+                        selectedCounsellorData?.generalInformation?.countryCode_primary.match(
+                          /\d+$/
+                        )[0]
                         : "+91"
-                    } ${
-                      selectedCounsellorData?.generalInformation
+                      } ${selectedCounsellorData?.generalInformation
                         ?.primaryMobileNumber || ""
-                    }`}
+                      }`}
                   </Label>
                 </div>
               </div>
@@ -499,7 +487,7 @@ const handleTimeFormat = (dateTime) => {
                       />
                     </div>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0 relative"side="bottom" align="start">
+                  <PopoverContent className="w-auto p-0 relative" side="bottom" align="start">
                     <div className="relative">
                       <Calendar
                         mode="single"
@@ -553,7 +541,10 @@ const handleTimeFormat = (dateTime) => {
                         placeholder="HH : MM"
                         value={
                           selectedFromTime
-                            ? format(parseISO(selectedFromTime), "hh:mm a")
+                            ? format(
+                              toZonedTime(new Date(selectedFromTime), "Asia/Kolkata"),
+                              "hh:mm a"
+                            )
                             : ""
                         }
                         onBlur={() => handleBlur("sessionTime")}
@@ -662,7 +653,7 @@ const handleTimeFormat = (dateTime) => {
                   </DrawerContent>
                 </Drawer>
                 {touched.sessionTime &&
-                (!selectedFromTime || !selectedToTime) ? (
+                  (!selectedFromTime || !selectedToTime) ? (
                   <span className="text-red-500 text-sm mt-1 block">
                     Please select a slot
                   </span>
@@ -682,16 +673,16 @@ const handleTimeFormat = (dateTime) => {
                 onCheckedChange={(checked) => setIsRecurring(checked)}
               />
             </div> */}
-            
+
             <label className="flex items-center gap-2 cursor-pointer text-[#8F8F8F]" htmlFor="weekly">
-  <span className="select-none">Weekly Recurring Sessions</span>
-  <Checkbox
-    id='weekly'
-    className="h-4 w-[16.05px] border-[1.5px] border-[#776EA5] rounded-[1.7px] cursor-pointer"
-    checked={isRecurring}
-    onCheckedChange={(checked) => setIsRecurring(checked)}
-  />
-</label>
+              <span className="select-none">Weekly Recurring Sessions</span>
+              <Checkbox
+                id='weekly'
+                className="h-4 w-[16.05px] border-[1.5px] border-[#776EA5] rounded-[1.7px] cursor-pointer"
+                checked={isRecurring}
+                onCheckedChange={(checked) => setIsRecurring(checked)}
+              />
+            </label>
 
 
             <div>
@@ -729,136 +720,136 @@ const handleTimeFormat = (dateTime) => {
             </button>
           </div>
           <div className="mt-8 flex space-x-4 px-4 fixed bottom-0 left-0 right-0 pb-5 bg-[#fee9e7] max-w-[576px] mx-auto">
-          <Drawer className="pt-[9.97px] max-w-[576px] m-auto"
-            open={successDrawerOpen}
-            onClose = {handleSuccessDrawerClose}>
-            <Button
-              variant="outline"
-              className="flex-1 border border-[#CC627B] text-sm text-[#CC627B] rounded-[7.26px]  w-[48%] h-[45px]"
-            >
-              Cancel
-            </Button>
-            <DrawerTrigger className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] h-[45px]  rounded-[8px] flex items-center justify-center w-[48%]">
-              Confirm
-            </DrawerTrigger>
-            <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer p-4 rounded-t-[20px]">
-              <div className="flex justify-center w-full">
-                <DrawerHeader className="p-0">
-                  <DrawerTitle className="text-base text-center font-semibold">
-                    Select Session Time
-                  </DrawerTitle>
-                </DrawerHeader>
-                <DrawerClose>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-black absolute top-2 right-2"
-                    onClick={() => handleCloseDrawer()}
+            <Drawer className="pt-[9.97px] max-w-[576px] m-auto"
+              open={successDrawerOpen}
+              onClose={handleSuccessDrawerClose}>
+              <Button
+                variant="outline"
+                className="flex-1 border border-[#CC627B] text-sm text-[#CC627B] rounded-[7.26px]  w-[48%] h-[45px]"
+              >
+                Cancel
+              </Button>
+              <DrawerTrigger className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] h-[45px]  rounded-[8px] flex items-center justify-center w-[48%]">
+                Confirm
+              </DrawerTrigger>
+              <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer p-4 rounded-t-[20px]">
+                <div className="flex justify-center w-full">
+                  <DrawerHeader className="p-0">
+                    <DrawerTitle className="text-base text-center font-semibold">
+                      Select Session Time
+                    </DrawerTitle>
+                  </DrawerHeader>
+                  <DrawerClose>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-black absolute top-2 right-2"
+                      onClick={() => handleCloseDrawer()}
+                    >
+                      <X
+                        className="w-5 h-5 text-black"
+                        color="black"
+                        fontWeight={700}
+                      />
+                    </Button>
+                  </DrawerClose>
+                </div>
+
+                <div className="mb-2 border border-[#e2d7ef] rounded-[12px] bg-[#FFFFFF80] mt-6">
+                  <button
+                    onClick={() => setOpenConfirmed(!openConfirmed)}
+                    className="cursor-pointer w-full text-left p-4  text-base text-black font-semibold flex justify-between items-center"
                   >
-                    <X
-                      className="w-5 h-5 text-black"
-                      color="black"
-                      fontWeight={700}
-                    />
-                  </Button>
-                </DrawerClose>
-              </div>
-
-              <div className="mb-2 border border-[#e2d7ef] rounded-[12px] bg-[#FFFFFF80] mt-6">
-                <button
-                  onClick={() => setOpenConfirmed(!openConfirmed)}
-                  className="cursor-pointer w-full text-left p-4  text-base text-black font-semibold flex justify-between items-center"
-                >
-                  Confirmed Sessions
+                    Confirmed Sessions
                     <span>
-                    {openConfirmed ? (
-                      <ChevronDown className="w-5 h-5 text-[#00000066] cursor-pointer" />
-                    ) : (
-                      <ChevronRight className="w-5 h-5 text-[#00000066] cursor-pointer" />
-                    )}
-                  </span>
-                </button>
-                {openConfirmed && (
-                  <div className="px-4 pb-3 text-sm text-[#555] space-y-2">
-                    { createdSessions.length > 0 ? (
-                      createdSessions.map((session, index) => (
-                    <div className="flex justify-between items-center" key={index}>
-                      <span className="text-xs text-[#CC627B]">
-                        Session {index + 1}: {handleTimeFormat(session.sessionTime.from).date} | {handleTimeFormat(session.sessionTime.from).time}
-                      </span>
-                      <span className="text-[#1DA563] text-xs font-medium flex items-center gap-1">
-                        <Check className="bg-[#11805D] text-white w-[12px] h-[12px] p-[1px] rounded-full" />
-                        Confirmed
-                      </span>
-                    </div>
-                    ))
-                    ):(<>
-                      <span className="text-xs text-[#CC627B]">
-                        No confirmed Sessions
-                      </span>  
-                      </>)
-                    }
-                  </div>
-                )}
-              </div>
-
-              <div className="mb-3 border border-[#e2d7ef] rounded-[12px] bg-[#FFFFFF80] ">
-                <button
-                  onClick={() => setOpenUnconfirmed(!openUnconfirmed)}
-                  className="cursor-pointer w-full text-left p-4 text-base text-black font-semibold flex justify-between items-center"
-                >
-                  Unconfirmed Sessions{" "}
-                  <span>
-                    {openUnconfirmed ? (
-                      <ChevronDown className="w-5 h-5 text-[#00000066] cursor-pointer" />
-                    ) : (
-                      <ChevronRight className="w-5 h-5 text-[#00000066] cursor-pointer" />
-                    )}
-                  </span>
-                </button>
-                {openUnconfirmed && (
-                  <div className="px-4 pb-3 text-sm text-[#555] space-y-2">
-                    <div className="flex justify-between items-center">
-                      {unavailableSessions.length > 0 ? (
-                        unavailableSessions.map((session, index) => (
-                        <>
-                        <div className="flex items-center gap-1" key={index}>
-                        <span className="text-xs text-[#CC627B]">
-                          Session {index + 1}: {handleTimeFormat(session.sessionTime.from).date} | {handleTimeFormat(session.sessionTime.from).time}
-                        </span>
-                        <div className="rounded-full  w-fit h-6 inline-block bg-gradient-to-r  from-[#B0A4F5] to-[#EDA197] p-[1px]">
-                          <button className="cursor-pointer bg-[#f8f0ef] text-[11px] text-black rounded-full w-full h-full flex items-center justify-center gap-1 px-2">
-                            + Book Session
-                          </button>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-red-500 text-sm font-medium flex gap-[2px] items-center">
-                          {" "}
-                          <Image
-                            src="/images/error_circle.png"
-                            width={16}
-                            height={16}
-                            className="w-4"
-                            alt="error"
-                          />{" "}
-                          Not Available
-                        </span>
-                      </div>
-                      </>
+                      {openConfirmed ? (
+                        <ChevronDown className="w-5 h-5 text-[#00000066] cursor-pointer" />
+                      ) : (
+                        <ChevronRight className="w-5 h-5 text-[#00000066] cursor-pointer" />
+                      )}
+                    </span>
+                  </button>
+                  {openConfirmed && (
+                    <div className="px-4 pb-3 text-sm text-[#555] space-y-2">
+                      {createdSessions.length > 0 ? (
+                        createdSessions.map((session, index) => (
+                          <div className="flex justify-between items-center" key={index}>
+                            <span className="text-xs text-[#CC627B]">
+                              Session {index + 1}: {handleTimeFormat(session.sessionTime.from).date} | {handleTimeFormat(session.sessionTime.from).time}
+                            </span>
+                            <span className="text-[#1DA563] text-xs font-medium flex items-center gap-1">
+                              <Check className="bg-[#11805D] text-white w-[12px] h-[12px] p-[1px] rounded-full" />
+                              Confirmed
+                            </span>
+                          </div>
                         ))
                       ) : (<>
-                      <span className="text-xs text-[#CC627B]">
-                        No Unconfirmed Sessions
-                      </span>  
-                      </>)}
+                        <span className="text-xs text-[#CC627B]">
+                          No confirmed Sessions
+                        </span>
+                      </>)
+                      }
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
 
-              <DrawerFooter className="flex justify-between pt-2 p-0">
-                <div className="flex items-center gap-3">
+                <div className="mb-3 border border-[#e2d7ef] rounded-[12px] bg-[#FFFFFF80] ">
+                  <button
+                    onClick={() => setOpenUnconfirmed(!openUnconfirmed)}
+                    className="cursor-pointer w-full text-left p-4 text-base text-black font-semibold flex justify-between items-center"
+                  >
+                    Unconfirmed Sessions{" "}
+                    <span>
+                      {openUnconfirmed ? (
+                        <ChevronDown className="w-5 h-5 text-[#00000066] cursor-pointer" />
+                      ) : (
+                        <ChevronRight className="w-5 h-5 text-[#00000066] cursor-pointer" />
+                      )}
+                    </span>
+                  </button>
+                  {openUnconfirmed && (
+                    <div className="px-4 pb-3 text-sm text-[#555] space-y-2">
+                      <div className="flex justify-between items-center">
+                        {unavailableSessions.length > 0 ? (
+                          unavailableSessions.map((session, index) => (
+                            <>
+                              <div className="flex items-center gap-1" key={index}>
+                                <span className="text-xs text-[#CC627B]">
+                                  Session {index + 1}: {handleTimeFormat(session.sessionTime.from).date} | {handleTimeFormat(session.sessionTime.from).time}
+                                </span>
+                                <div className="rounded-full  w-fit h-6 inline-block bg-gradient-to-r  from-[#B0A4F5] to-[#EDA197] p-[1px]">
+                                  <button className="cursor-pointer bg-[#f8f0ef] text-[11px] text-black rounded-full w-full h-full flex items-center justify-center gap-1 px-2">
+                                    + Book Session
+                                  </button>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-red-500 text-sm font-medium flex gap-[2px] items-center">
+                                  {" "}
+                                  <Image
+                                    src="/images/error_circle.png"
+                                    width={16}
+                                    height={16}
+                                    className="w-4"
+                                    alt="error"
+                                  />{" "}
+                                  Not Available
+                                </span>
+                              </div>
+                            </>
+                          ))
+                        ) : (<>
+                          <span className="text-xs text-[#CC627B]">
+                            No Unconfirmed Sessions
+                          </span>
+                        </>)}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <DrawerFooter className="flex justify-between pt-2 p-0">
+                  <div className="flex items-center gap-3">
                     <Button
                       variant="outline"
                       className="border border-[#CC627B] text-[#CC627B] rounded-[7.26px] w-[48%] h-[45px]"
@@ -876,13 +867,13 @@ const handleTimeFormat = (dateTime) => {
                         router.push('/patient/dashboard');
                       }}
                     >
-                    Go To Dashboard
-                  </Button>
-                </div>
-              </DrawerFooter>
-            </DrawerContent>
-          </Drawer>
-        </div>
+                      Go To Dashboard
+                    </Button>
+                  </div>
+                </DrawerFooter>
+              </DrawerContent>
+            </Drawer>
+          </div>
         </div>
       </div>
     </div>

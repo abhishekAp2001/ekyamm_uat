@@ -11,6 +11,7 @@ import { useReactToPrint } from "react-to-print";
 import Invoice from '@/components/channel-partner/PaymentConfirmation/Invoice';
 import Footer_bar from '@/components/Footer_bar/Footer_bar';
 import { useRememberMe } from '@/app/context/RememberMeContext';
+import html2pdf from "html2pdf.js";
 const PaymentConfirmation = () => {
   const {rememberMe} = useRememberMe()
   const targetRef = useRef()
@@ -82,7 +83,7 @@ const PaymentConfirmation = () => {
 
   useEffect(() => {
     if (secondsLeft === 0) {
-      router.push(`/patient/dashboard`);
+      // router.push(`/patient/dashboard`);
       return;
     }
     const timer = setTimeout(() => {
@@ -100,6 +101,25 @@ const PaymentConfirmation = () => {
     `,
   });
   
+    const handleDownload = () => {
+    const patient = getStorage("PatientInfo", rememberMe);
+    const paymentStatusInfo = getStorage("paymentStatusInfo")
+    const sessions_selection = getStorage("session_selection",rememberMe)
+    const InvoiceNumber = paymentStatusInfo?.invoiceId?.trim() ? paymentStatusInfo.invoiceId : sessions_selection?.txnId
+    const element = targetRef.current;
+  element.style.display = "block";
+    const opt = {
+      margin:       0.5,
+      filename:     `${patient?.firstName} ${patient?.lastName}- ${InvoiceNumber}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+  
+    html2pdf().set(opt).from(element).save().then(() => {
+      element.style.display = "none";
+    });;
+  };
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">

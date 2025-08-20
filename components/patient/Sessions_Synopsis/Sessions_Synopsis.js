@@ -101,6 +101,35 @@ useEffect(() => {
     router.push('patient/login')
   }
 }, []);
+
+  const handleShareClick = async () => {
+    if (!navigator.share) {
+      alert("Sharing is not supported in this browser.");
+      return;
+    }
+
+    try {
+      // Prepare share data
+      const shareData = {
+        title: "Sessions Synopsis",
+        text: selectedItem?.synopsisNote || "No synopsis available",
+        
+      };
+
+      // If image exists, fetch it and attach as a File
+      if (selectedItem?.synopsisNoteImageUrl) {
+        const response = await fetch(selectedItem.synopsisNoteImageUrl);
+        const blob = await response.blob();
+        const file = new File([blob], "synopsis.png", { type: blob.type });
+        shareData.files = [file];
+      }
+
+      await navigator.share(shareData);
+      console.log("Shared successfully!");
+    } catch (err) {
+      console.error("Error sharing:", err);
+    }
+  }
   return (
     <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">
       <SS_Header />
@@ -200,16 +229,16 @@ useEffect(() => {
                               selectedItem?.synopsisNoteImageUrl? (
                                 <Image
                               src={selectedItem?.synopsisNoteImageUrl}
-                              width={18}
-                              height={18}
+                              width={55}
+                              height={55}
                               alt="preview"
                               className="bg-transparent"
                             />)
                               :(
                                 <Image
                                   src="/images/preview.png"
-                                  width={18}
-                                  height={18}
+                                  width={55}
+                                  height={55}
                                   alt="preview"
                                   className="bg-transparent"
                                 />
@@ -244,7 +273,8 @@ useEffect(() => {
                         Cancel
                       </Button>
                     </DrawerClose>
-                    <Button className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white py-[14.5px] rounded-[8px] w-[48%] h-[45px]">
+                    <Button className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white py-[14.5px] rounded-[8px] w-[48%] h-[45px]"
+                    onClick={()=>{handleShareClick()}}>
                       Share
                     </Button>
                   </div>

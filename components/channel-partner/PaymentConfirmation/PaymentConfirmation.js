@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef} from "react";
 
 import { Button } from "../../ui/button";
 import Link from "next/link";
-
+import html2pdf from "html2pdf.js";
 import Footer_bar from "../../Footer_bar/Footer_bar";
 import Confirm_Header from "../../Confirm_Header";
 import { MapPin } from "lucide-react";
@@ -15,7 +15,9 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Invoice from "./Invoice";
 import { useReactToPrint } from "react-to-print";
+import { useRememberMe } from "@/app/context/RememberMeContext";
 const PaymentConfirmation = ({ type }) => {
+  const { rememberMe } = useRememberMe();
   const targetRef = useRef()
   const router = useRouter()
   const [channelPartnerData, setChannelPartnerData] = useState(null);
@@ -133,6 +135,21 @@ useEffect(() => {
   `,
   });
 
+    const handleDownload = () => {
+    const paymentStatusInfo = getStorage("paymentStatusInfo")
+    const sessions_selection = getStorage("session_selection",rememberMe)
+    const InvoiceNumber = paymentStatusInfo?.invoiceId?.trim() ? paymentStatusInfo.invoiceId : sessions_selection?.txnId
+    const element = targetRef.current // or targetRef.current
+    const opt = {
+      margin:       0.5,
+      filename:     `${invitePatientInfo?.firstName} ${invitePatientInfo?.lastName}- ${InvoiceNumber}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+  
+    html2pdf().set(opt).from(element).save();
+  };
   return (
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px] mx-auto">

@@ -177,36 +177,6 @@ const Invoice = () => {
                             }</td>
 
                         </tr>
-                        <tr className="item">
-                            <td>2</td>
-                            <td style={{ fontWeight: 'bold' }}>
-                                Patient Name: {invitePatientInfo?.firstName
-                                    ? `${invitePatientInfo.firstName} ${invitePatientInfo.lastName}`
-                                    : `${patientInfo?.firstName} ${patientInfo?.lastName}`
-                                }
-                                <br />
-                                Has booked session with {selectedCounsellor?.generalInformation?.firstName
-                                    ? `${selectedCounsellor.generalInformation.firstName} ${selectedCounsellor.generalInformation.lastName}`
-                                    : "Ms. Sushma Trivedi"
-                                } on 10 April, 2025
-                            </td>
-
-                            <td>{paymentStatusInfo?.sessionCount ?? sessions_selection?.sessionCreditCount}</td>
-                            <td>₹{paymentStatusInfo?.sessionPrice ?? sessions_selection?.sessionPrice}</td>
-                            <td>{paymentStatusInfo?.totalAmount ?? totalAmount}</td>
-                            <td>18%</td>
-                            <td>₹{paymentStatusInfo?.totalAmount
-                                ? calculateGST(paymentStatusInfo.totalAmount)
-                                : calculateGST(totalAmount)
-                            }</td>
-                            <td>₹0</td>
-                            <td>₹{
-                                paymentStatusInfo?.totalAmount
-                                    ? paymentStatusInfo.totalAmount + calculateGST(paymentStatusInfo.totalAmount)
-                                    : totalAmount + calculateGST(totalAmount)
-                            }</td>
-
-                        </tr>
                         <tr className="total">
                             <td colSpan={8} style={{ textAlign: 'right' }}>Grand Total:</td>
                             <td>₹{

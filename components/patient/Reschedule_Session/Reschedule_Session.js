@@ -152,7 +152,7 @@ import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import Image from "next/image";
 import { addDays, format, isSameMonth, parseISO, set, subDays } from "date-fns";
-
+import { toZonedTime } from "date-fns-tz";
 import { ChevronLeft, ChevronUpIcon, Loader, Loader2, X, ChevronRight, ChevronDown, Check } from "lucide-react";
 import {
   Drawer,
@@ -197,10 +197,10 @@ const Reschedule_Session = () => {
   const sessionId = searchParams.get("sessionId")
   const [selectedFromTime, setSelectedFromTime] = useState(dateTime);
   function addOneHour(isoString) {
-  const date = new Date(isoString);
-  date.setHours(date.getHours() + 1);
-  return date.toISOString();
-}
+    const date = new Date(isoString);
+    date.setHours(date.getHours() + 1);
+    return date.toISOString();
+  }
   const [selectedToTime, setSelectedToTime] = useState(addOneHour(dateTime));
 
   function convertToLocalDate(dateString) {
@@ -286,7 +286,7 @@ const Reschedule_Session = () => {
       // console.log('map',map)
       setAvailableDates(map);
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("API error:", error);
     } finally {
       setCalenderLoading(false);
@@ -355,20 +355,20 @@ const Reschedule_Session = () => {
     }
 
     const payload = {
-    "sessionId": sessionId,
-    "updatedSessionDetails": {
+      "sessionId": sessionId,
+      "updatedSessionDetails": {
         "sessionMode": sessionMode,
         "sessionTime": {
-            "from": selectedFromTime,
-            "to": selectedToTime
+          "from": selectedFromTime,
+          "to": selectedToTime
         },
         "practitioner": {
-            "practitionerId": selectedCounsellorData?._id,
-            "name": selectedCounsellorData?.generalInformation?.firstName,
-            "email": selectedCounsellorData?.generalInformation?.email
+          "practitionerId": selectedCounsellorData?._id,
+          "name": selectedCounsellorData?.generalInformation?.firstName,
+          "email": selectedCounsellorData?.generalInformation?.email
         }
+      }
     }
-}
 
     try {
       setLoading(true);
@@ -400,7 +400,7 @@ const Reschedule_Session = () => {
         showErrorToast("Failed to book session. Please try again.");
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         error?.response?.data?.error?.message || "Something went wrong.1"
       );
@@ -449,7 +449,7 @@ const Reschedule_Session = () => {
 
         setAvailableSlots(data);
       } catch (error) {
-        if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+        if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
         setAvailableSlots({});
       } finally {
         setTimeSlogLoading(false);
@@ -471,38 +471,38 @@ const Reschedule_Session = () => {
     setSuccessDrawerOpen(false);
   }
 
-const handleTimeFormat = (dateTime) => {
-  const utcDate = new Date(dateTime);
+  const handleTimeFormat = (dateTime) => {
+    const utcDate = new Date(dateTime);
 
-  const formatter = new Intl.DateTimeFormat('en-IN', {
-    timeZone: 'Asia/Kolkata',
-    weekday: 'short',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true,
-  });
+    const formatter = new Intl.DateTimeFormat('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      weekday: 'short',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    });
 
-  const parts = formatter.formatToParts(utcDate);
+    const parts = formatter.formatToParts(utcDate);
 
-  const dayName = parts.find(p => p.type === 'weekday')?.value;
-  const day = parts.find(p => p.type === 'day')?.value;
-  const month = parts.find(p => p.type === 'month')?.value;
-  const year = parts.find(p => p.type === 'year')?.value;
-  const hour = parts.find(p => p.type === 'hour')?.value;
-  const minute = parts.find(p => p.type === 'minute')?.value;
-  const ampm = parts.find(p => p.type === 'dayPeriod')?.value;
+    const dayName = parts.find(p => p.type === 'weekday')?.value;
+    const day = parts.find(p => p.type === 'day')?.value;
+    const month = parts.find(p => p.type === 'month')?.value;
+    const year = parts.find(p => p.type === 'year')?.value;
+    const hour = parts.find(p => p.type === 'hour')?.value;
+    const minute = parts.find(p => p.type === 'minute')?.value;
+    const ampm = parts.find(p => p.type === 'dayPeriod')?.value;
 
-  const formattedTime = `${hour}:${minute} ${ampm}`;
-  const formattedDate = `${dayName}, ${day} ${month} ${year}`;
+    const formattedTime = `${hour}:${minute} ${ampm}`;
+    const formattedDate = `${dayName}, ${day} ${month} ${year}`;
 
-  return {
-    time: formattedTime,
-    date: formattedDate,
+    return {
+      time: formattedTime,
+      date: formattedDate,
+    };
   };
-};
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] relative max-w-[576px] mx-auto">
       <div className="fixed top-0 left-0 right-0 h-[64px] z-50 flex items-center px-4 bg-gradient-to-b from-[#eeecfb] to-[#eeecfb] max-w-[576px] mx-auto">
@@ -540,11 +540,11 @@ const handleTimeFormat = (dateTime) => {
                   </Label>
                   <Label className="text-[15px] text-gray-500 font-[500] font-['Quicksand']">
                     {`${patientSessionData?.countryCode_primary.match(/\d+$/)
-                        ? "+" +
-                        patientSessionData.countryCode_primary.match(
-                          /\d+$/
-                        )[0]
-                        : "+91"
+                      ? "+" +
+                      patientSessionData.countryCode_primary.match(
+                        /\d+$/
+                      )[0]
+                      : "+91"
                       } ${patientSessionData?.primaryMobileNumber || ""}`}
                   </Label>
                 </div>
@@ -591,11 +591,11 @@ const handleTimeFormat = (dateTime) => {
                     {`${selectedCounsellorData?.generalInformation?.countryCode_primary.match(
                       /\d+$/
                     )
-                        ? "+" +
-                        selectedCounsellorData?.generalInformation?.countryCode_primary.match(
-                          /\d+$/
-                        )[0]
-                        : "+91"
+                      ? "+" +
+                      selectedCounsellorData?.generalInformation?.countryCode_primary.match(
+                        /\d+$/
+                      )[0]
+                      : "+91"
                       } ${selectedCounsellorData?.generalInformation
                         ?.primaryMobileNumber || ""
                       }`}
@@ -610,7 +610,7 @@ const handleTimeFormat = (dateTime) => {
               <Label className="block text-[#8F8F8F] mb-1">Session Type</Label>
               <Input
                 type="text"
-                placeholder="Enter session type" 
+                placeholder="Enter session type"
                 value="Counselling ( 1 Hr )"
                 readOnly
                 className="w-full h-10 rounded-[7.26px] bg-[#ffffff84] px-3 py-2  border border-[#E6E6E6] text-gray-400 text-[12px] font-semibold focus:border-none focus:ring-0 focus-visible:border-none focus-visible:ring-0 focus-visible:outline-0"
@@ -697,7 +697,10 @@ const handleTimeFormat = (dateTime) => {
                         placeholder="HH : MM"
                         value={
                           selectedFromTime
-                            ? format(parseISO(selectedFromTime), "hh:mm a")
+                            ? format(
+                              toZonedTime(new Date(selectedFromTime), "Asia/Kolkata"),
+                              "hh:mm a"
+                            )
                             : ""
                         }
                         onBlur={() => handleBlur("sessionTime")}
