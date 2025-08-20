@@ -39,9 +39,15 @@ const PaymentFailure = () => {
       router.push(`/patient/dashboard`);
     }
 
-    const timer = setInterval(() => {
-      setSeconds((prev) => prev - 1);
-    }, 1000);
+     const timer = setInterval(() => {
+    setSeconds((prev) => {
+      if (prev <= 1) {
+        clearInterval(timer);
+        return 0;
+      }
+      return prev - 1;
+    });
+  }, 1000);
 
     return () => clearInterval(timer);
   }, [seconds, txnid, router]);
