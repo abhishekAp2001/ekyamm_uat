@@ -228,7 +228,7 @@ const Sessions_Synopsis = () => {
                           >
                             {
                               selectedItem?.synopsisNoteImageUrl ? (
-                                <div className="relative w-[55px] h-[102px]">
+                                <div className="relative w-[100%] h-[102px]">
                                   <Image
                                     src={selectedItem?.synopsisNoteImageUrl}
                                     width={55}
@@ -238,20 +238,13 @@ const Sessions_Synopsis = () => {
                                     objectFit="cover"
                                   />
                                   <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-md">
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      className="h-6 w-6 text-white"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
-                                      strokeWidth={2}
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M15 10l4.553 2.276a1 1 0 010 1.448L15 16m0-6v6m-6-6l-4.553 2.276a1 1 0 000 1.448L9 16m0-6v6"
-                                      />
-                                    </svg>
+                                     <Image
+                                    src="/images/preview.png"
+                                    width={55}
+                                    height={55}
+                                    alt="preview"
+                                    className="bg-transparent"
+                                  />
                                   </div>
                                 </div>)
                                 : (
