@@ -37,6 +37,12 @@ import { setCookie } from "cookies-next";
 import { base64ToFile } from "@/lib/utils";
 import { useRememberMe } from "@/app/context/RememberMeContext";
 import OTPInput from "react-otp-input";
+// import { Button } from "@/components/ui/button"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 const sessionData = [
   {
     date: "24th Apr",
@@ -829,33 +835,31 @@ const Patient_Profile = () => {
                   />
                   {item.label}
                   {item.info && (
-                    <div className="relative group inline-block">
-                      <Image
-                        src="/images/group1.png"
-                        width={13}
-                        height={13}
-                        alt="info"
-                        className="ml-1 w-[13.6px] h-[13.6px] "
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (window.matchMedia("(hover: none)").matches) {
-                            setOpenTooltipIndex(openTooltipIndex === idx ? null : idx);
-                          }
-                        }}
-                      />
-                      {item.tooltip && (
-                        <strong
-                          className={`
-                  absolute bottom-full mb-1 left-[-100%] translate-[-44%_0px]
-                  px-2 py-1 rounded bg-black text-white text-xs
-                  transition whitespace-nowrap z-10
-                  ${openTooltipIndex === idx ? 'opacity-100' : 'opacity-0'}
-                  group-hover:opacity-100
-                `}
-                        >
-                          {item.tooltip}
-                        </strong>
-                      )}
+                    <div className="relative inline-block">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="outline" className='border-0'>
+                            <Image
+                              src="/images/group1.png"
+                              width={13}
+                              height={13}
+                              alt="info"
+                              className="ml-1 w-[13.6px] h-[13.6px] "
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (window.matchMedia("(hover: none)").matches) {
+                                  setOpenTooltipIndex(openTooltipIndex === idx ? null : idx);
+                                }
+                              }}
+                            />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p className="">{item.tooltip}</p>
+                        </TooltipContent>
+                      </Tooltip>
+
+                      
                     </div>
                   )}
                 </span>
@@ -1138,30 +1142,30 @@ const Patient_Profile = () => {
                             </InputOTPGroup>
                           </InputOTP> */}
                           <OTPInput
-                        type="text"
-                        inputType="number"
-                        value={otp}
-                        onChange={setOtp}
-                        numInputs={6}
-                        renderSeparator={<span className="w-4" />}
-                        renderInput={(props) => (
-                          <input
-                            {...props}
-                            type={"text"}
-                            className="border-[1.54px] border-[#776EA5] rounded-[9.23px] text-[16px] text-[#776EA5] text-center focus:outline-none focus:ring-2 focus:ring-[#776EA5] otp-input "
-                            onPaste={(e) => {
-                              e.preventDefault();
-                              const pasted = e.clipboardData.getData("Text").trim();
-                              if (pasted) {
-                                // Keep only numbers and trim to numInputs
-                                const clean = pasted.replace(/\D/g, "").slice(0, 6);
-                                setOtp(clean);
-                              }
-                            }}
+                            type="text"
+                            inputType="number"
+                            value={otp}
+                            onChange={setOtp}
+                            numInputs={6}
+                            renderSeparator={<span className="w-4" />}
+                            renderInput={(props) => (
+                              <input
+                                {...props}
+                                type={"text"}
+                                className="border-[1.54px] border-[#776EA5] rounded-[9.23px] text-[16px] text-[#776EA5] text-center focus:outline-none focus:ring-2 focus:ring-[#776EA5] otp-input "
+                                onPaste={(e) => {
+                                  e.preventDefault();
+                                  const pasted = e.clipboardData.getData("Text").trim();
+                                  if (pasted) {
+                                    // Keep only numbers and trim to numInputs
+                                    const clean = pasted.replace(/\D/g, "").slice(0, 6);
+                                    setOtp(clean);
+                                  }
+                                }}
+                              />
+                            )}
+                            containerStyle="flex justify-between gap-[2px] items-center w-[90%]"
                           />
-                        )}
-                        containerStyle="flex justify-between gap-[2px] items-center w-[90%]"
-                      />
                         </div>
                       </div>
 
