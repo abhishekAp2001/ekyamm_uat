@@ -21,6 +21,8 @@ import Certifications from "./Certifications/Certifications";
 import Client_Testimonial from "./Client_Testimonials/Client_Testimonial";
 import Daily from "@daily-co/daily-js";
 import { useRememberMe } from "@/app/context/RememberMeContext";
+import { toZonedTime } from "date-fns-tz";
+import { format } from "date-fns";
 const UpcomingSession = ({
   showUpcomingButtons = true,
   upcomingsessions,
@@ -50,32 +52,26 @@ const UpcomingSession = ({
       router.push("/patient/login");
     }
   }, []);
-  function convertUTCtoIST(utcDateStr) {
-    const date = new Date(utcDateStr);
 
-    const options = {
-      timeZone: "Asia/Kolkata",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-      day: "numeric",
-      month: "long",
-    };
+function convertUTCtoIST(utcDateStr) {
+  const date = new Date(utcDateStr);
 
-    const formatter = new Intl.DateTimeFormat("en-IN", options);
-    const parts = formatter.formatToParts(date);
+  // Convert UTC -> IST
+  const istDate = toZonedTime(date, "Asia/Kolkata");
 
-    const day = parts.find((p) => p.type === "day")?.value;
-    const month = parts.find((p) => p.type === "month")?.value;
-    const hour = parts.find((p) => p.type === "hour")?.value;
-    const minute = parts.find((p) => p.type === "minute")?.value;
-    const dayPeriod = parts.find((p) => p.type === "dayPeriod")?.value;
+  // Extract day and month
+  const day = format(istDate, "d");            // e.g. 22
+  const month = format(istDate, "MMMM");       // e.g. August
 
-    return {
-      date: `${day} ${month}`,
-      time: `${hour}:${minute} ${dayPeriod}`,
-    };
-  }
+  // Extract time in hh:mm AM/PM format
+  const time = format(istDate, "h:mm a");      // e.g. 8:30 PM
+
+  return {
+    date: `${day} ${month}`,
+    time: time,
+  };
+}
+
 
   function getTimeDifference(from, to) {
     const fromDate = new Date(from);

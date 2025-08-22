@@ -37,28 +37,32 @@ function InputOTPSlot({
   className,
   ...props
 }) {
-  const inputOTPContext = React.useContext(OTPInputContext)
-  const { char, hasFakeCaret, isActive } = inputOTPContext?.slots[index] ?? {}
+  const inputOTPContext = React.useContext(OTPInputContext);
+  const slot = inputOTPContext?.slots[index] ?? {};
+  const { char, hasFakeCaret, isActive, ...slotProps } = slot; // Spread slotProps
 
   return (
     <div
+      {...slotProps} // 👈 Include slotProps for focus/click handling
       data-slot="input-otp-slot"
       data-active={isActive}
       className={cn(
-        "border-input relative flex h-9 w-9 items-center justify-center border-y border-r text-sm shadow-xs transition-all outline-none  data-[active=true]:z-10 ",
+        "border-input relative flex h-9 w-9 items-center justify-center border-y border-r text-sm shadow-xs transition-all outline-none data-[active=true]:z-10",
         className
       )}
-      {...props}>
+      {...props}
+    >
       {char}
       {hasFakeCaret && (
-        <div
-          className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div className="animate-caret-blink bg-foreground h-4 w-px duration-1000" />
         </div>
       )}
     </div>
   );
 }
+
+
 
 function InputOTPSeparator({
   ...props

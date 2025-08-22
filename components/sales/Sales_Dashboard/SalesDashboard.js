@@ -21,7 +21,7 @@ import Sidebar from "@/components/patient/Sidebar/Sidebar";
 import { getCookie, hasCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { useRememberMe } from "@/app/context/RememberMeContext";
-import { getStorage } from "@/lib/utils";
+import { clearStorageAndCookies, getStorage } from "@/lib/utils";
 const SalesDashboard = () => {
   const { rememberMe } = useRememberMe();
   const router = useRouter();
@@ -34,6 +34,7 @@ const SalesDashboard = () => {
       ? "Afternoon"
       : "Evening";
   useEffect(() => {
+    clearStorageAndCookies(["user","rememberMe"]);
     // const token = hasCookie("user") ? JSON.parse(getCookie("user")) : null;
     const token = getStorage("user", rememberMe);
     if (!token) {

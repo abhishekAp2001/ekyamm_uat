@@ -76,7 +76,7 @@ const CP_clinic_details = () => {
           setFormData((prev) => ({
             ...prev,
             area: Name,
-            city: Block === "NA" ? District : Block,
+            city: District === "NA" ? Block : District,
             state: State,
           }));
           setTouched((prev) => ({

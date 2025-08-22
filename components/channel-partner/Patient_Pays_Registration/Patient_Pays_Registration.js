@@ -93,7 +93,7 @@ const Patient_Pays_Registration = ({ type }) => {
         setCountryList(response?.data?.data);
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       // console.log("error", error);
       if (error.forceLogout) {
         router.push("/login");
@@ -144,7 +144,7 @@ const Patient_Pays_Registration = ({ type }) => {
         return true;
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       setLoading(false);
       console.error("Error", error);
       showErrorToast(error?.response?.data?.error?.message);
@@ -177,7 +177,7 @@ const Patient_Pays_Registration = ({ type }) => {
           setResendTimer(120);
           setIsResendDisabled(true);
           setOtp("");
-          showSuccessToast( response?.data?.data?.message || `OTP sent to your verified mobile number.`);
+          showSuccessToast(response?.data?.data?.message || `OTP sent to your verified mobile number.`);
         }
       }
       if (!mobileValid) {
@@ -186,7 +186,7 @@ const Patient_Pays_Registration = ({ type }) => {
         showErrorToast("Mobile number is already registered.");
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       setLoading(false);
       console.error("Error", error);
       showErrorToast(error?.response?.data?.error?.message);
@@ -228,7 +228,7 @@ const Patient_Pays_Registration = ({ type }) => {
         showSuccessToast(response?.data?.data?.message || "OTP verified successfully");
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       setLoading(false);
       console.error("Error", error);
       showErrorToast(error?.response?.data?.error?.message)
@@ -265,7 +265,7 @@ const Patient_Pays_Registration = ({ type }) => {
         return true;
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       setEmailLoading(false);
       console.error("Error", error);
       showErrorToast(error?.response?.data?.error?.message)
@@ -299,7 +299,7 @@ const Patient_Pays_Registration = ({ type }) => {
           setIsResendEmailDisabled(true);
           setEmailOtp("");
           setEncryptedOtp(response?.data?.data?.encryptedOtp)
-          console.log("encrypt",response?.data?.data?.encryptedOtp)
+          console.log("encrypt", response?.data?.data?.encryptedOtp)
           showSuccessToast(response?.data?.data?.message || `OTP sent to your verified email.`);
         }
       }
@@ -308,7 +308,7 @@ const Patient_Pays_Registration = ({ type }) => {
         showErrorToast("email is already registered.");
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(error?.response?.data?.error?.message || "Something went wrong, please try again.");
       setEmailLoading(false);
       console.error("Error", error);
@@ -335,7 +335,7 @@ const Patient_Pays_Registration = ({ type }) => {
         showSuccessToast(response?.data?.data?.message || "OTP verified successfully");
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(error?.response?.data?.error?.message);
       setEmailLoading(false);
       console.error("Error", error);
@@ -356,16 +356,16 @@ const Patient_Pays_Registration = ({ type }) => {
     <>
       <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-full flex flex-col max-w-[576px] mx-auto">
         <div className="flex flex-col justify-center items-center pt-6">
-        <strong className="text-[20px] text-[#776EA5] font-semibold">
-              {channelPartnerData?.clinicName || "Greetings Hospital"}
-            </strong>
-        <div className="flex justify-center items-center gap-[2px]">
-          <div className="bg-[#776EA5] rounded-full w-[16.78px] h-[16.78px] flex justify-center items-center">
-            <MapPin color="white" className="w-[12.15px] h-[12.15px]" /></div>
-          <span className="text-sm text-[#776EA5] font-medium">
-            {channelPartnerData?.area}
-          </span>
-        </div>
+          <strong className="text-[20px] text-[#776EA5] font-semibold">
+            {channelPartnerData?.clinicName || "Greetings Hospital"}
+          </strong>
+          <div className="flex justify-center items-center gap-[2px]">
+            <div className="bg-[#776EA5] rounded-full w-[16.78px] h-[16.78px] flex justify-center items-center">
+              <MapPin color="white" className="w-[12.15px] h-[12.15px]" /></div>
+            <span className="text-sm text-[#776EA5] font-medium">
+              {channelPartnerData?.area}
+            </span>
+          </div>
         </div>
         <div className="h-full pt-[4%] lg:pt-[4%] pb-[20%] lg:pb-[12%]  overflow-auto px-[16px]">
           <div className="bg-[#FFFFFFB2] rounded-[12px] p-5 mt-[25px] relative">
@@ -470,9 +470,19 @@ const Patient_Pays_Registration = ({ type }) => {
                             {...props}
                             type={showEmailOtp ? "text" : "password"}
                             className="border-[1.54px] border-[#776EA5] rounded-[9.23px] text-[16px] text-[#776EA5] text-center focus:outline-none focus:ring-2 focus:ring-[#776EA5] otp-input "
+                            onPaste={(e) => {
+                              e.preventDefault();
+                              const pasted = e.clipboardData.getData("Text").trim();
+                              if (pasted) {
+                                const clean = pasted.replace(/\D/g, "").slice(0, 6);
+                                setEmailOtp(clean);
+                              }
+                            }}
+                            autoComplete="new-password"
                           />
                         )}
                         containerStyle="flex justify-between gap-[2px] items-center w-[90%]"
+
                       />
                       <Button
                         variant="ghost"
@@ -503,16 +513,30 @@ const Patient_Pays_Registration = ({ type }) => {
               )}
               {emailOtpSendStatus && !emailOtpVerified ? (
                 <div className="flex gap-3 mt-5">
+                <div className="flex-1 flex flex-col items-center">
                   <Button
                     type="button"
-                    className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] rounded-[8px] flex-1 h-[45px] cursor-pointer"
+                    className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] rounded-[8px] flex-1 h-[45px] cursor-pointer w-full"
+                    disabled={isResendEmailDisabled}
                     onClick={isResendEmailDisabled ? null : sendEmailOTP}
                   >
                     Resend OTP
                   </Button>
+                  {emailOtpSendStatus && !emailOtpVerified && (
+                    <div className="text-xs text-gray-500 font-medium text-center mt-2">
+                      {emailResendTimer > 0 ? (
+                        `Resend OTP in ${formatTime(emailResendTimer)}`
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  )}
+                  </div>
+                  {/* Verify OTP */}
+                  <div className="flex-1">
                   <Button
                     type="button"
-                    className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white rounded-[8px] flex-1 h-[45px] cursor-pointer"
+                    className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white rounded-[8px] flex-1 h-[45px] cursor-pointer w-full"
                     disabled={emailOtp.length !== 6}
                     onClick={() => {
                       validateEmailOTP();
@@ -520,6 +544,7 @@ const Patient_Pays_Registration = ({ type }) => {
                   >
                     Verify OTP
                   </Button>
+                  </div>
                 </div>
               ) : (
                 !emailOtpVerified &&
@@ -540,7 +565,7 @@ const Patient_Pays_Registration = ({ type }) => {
                   </Button>
                 )
               )}
-              {emailOtpSendStatus && !emailOtpVerified && (
+              {/* {emailOtpSendStatus && !emailOtpVerified && (
                 <div className="text-xs text-gray-500 font-medium text-center mt-2">
                   {emailResendTimer > 0 ? (
                     `Resend OTP in ${formatTime(emailResendTimer)}`
@@ -548,7 +573,7 @@ const Patient_Pays_Registration = ({ type }) => {
                     <></>
                   )}
                 </div>
-              )}
+              )} */}
             </div>
 
             <div>
@@ -586,17 +611,17 @@ const Patient_Pays_Registration = ({ type }) => {
                       minHeight: "39px",
                       width: "max-content",
                       backgroundColor: formData.lastName ? "#fff" : "#fff",
-                   cursor: "pointer",
-                    boxShadow: "none",
-                    borderColor: "transparent",
-                    "&:hover": {
+                      cursor: "pointer",
+                      boxShadow: "none",
                       borderColor: "transparent",
-                    },
-                  }),
-                  option: (base) => ({
-                    ...base,
-                    cursor: "pointer",
-                  }),
+                      "&:hover": {
+                        borderColor: "transparent",
+                      },
+                    }),
+                    option: (base) => ({
+                      ...base,
+                      cursor: "pointer",
+                    }),
                     menu: (base) => ({ ...base, width: "200px" }),
                   }}
                   formatOptionLabel={(option, { context }) =>
@@ -668,6 +693,16 @@ const Patient_Pays_Registration = ({ type }) => {
                             {...props}
                             type={showOtp ? "text" : "password"}
                             className="border-[1.54px] border-[#776EA5] rounded-[9.23px] text-[16px] text-[#776EA5] text-center focus:outline-none focus:ring-2 focus:ring-[#776EA5] otp-input "
+                            onPaste={(e) => {
+                              e.preventDefault();
+                              const pasted = e.clipboardData.getData("Text").trim();
+                              if (pasted) {
+                                // Keep only numbers and trim to numInputs
+                                const clean = pasted.replace(/\D/g, "").slice(0, 6);
+                                setOtp(clean);
+                              }
+                            }}
+                            autoComplete="new-password"
                           />
                         )}
                         containerStyle="flex justify-between gap-[2px] items-center w-[90%]"
@@ -701,24 +736,39 @@ const Patient_Pays_Registration = ({ type }) => {
               )}
               {otpSendStatus && !otpVerified ? (
                 <div className="flex gap-3 mt-5">
-                  <Button
-                    type="button"
-                    className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] rounded-[8px] flex-1 h-[45px] cursor-pointer"
-                    onClick={isResendDisabled ? null : sendMobileOTP}
-                  >
-                    Resend OTP
-                  </Button>
-                  <Button
-                    type="button"
-                    className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white rounded-[8px] flex-1 h-[45px] cursor-pointer"
-                    disabled={otp.length !== 6}
-                    onClick={() => {
-                      validateMobileOTP();
-                    }}
-                  >
-                    Verify OTP
-                  </Button>
+                  {/* Resend OTP */}
+                  <div className="flex-1 flex flex-col items-center">
+                    <Button
+                      type="button"
+                      className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] rounded-[8px] w-full h-[45px] cursor-pointer"
+                      disabled={isResendDisabled}
+                      onClick={isResendDisabled ? null : sendMobileOTP}
+                    >
+                      Resend OTP
+                    </Button>
+                    {otpSendStatus && !otpVerified && (
+                      <div className="text-xs text-gray-500 font-medium text-center mt-2">
+                        {resendTimer > 0 ? `Resend OTP in ${formatTime(resendTimer)}` : null}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Verify OTP */}
+                  <div className="flex-1">
+                    <Button
+                      type="button"
+                      className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white rounded-[8px] w-full h-[45px] cursor-pointer"
+                      disabled={otp.length !== 6}
+                      onClick={() => {
+                        validateMobileOTP();
+                      }}
+                    >
+                      Verify OTP
+                    </Button>
+                  </div>
                 </div>
+
+
               ) : (
                 !otpVerified &&
                 formData.primaryMobileNumber &&
@@ -738,7 +788,7 @@ const Patient_Pays_Registration = ({ type }) => {
                   </Button>
                 )
               )}
-              {otpSendStatus && !otpVerified && (
+              {/* {otpSendStatus && !otpVerified && (
                 <div className="text-xs text-gray-500 font-medium text-center mt-2">
                   {resendTimer > 0 ? (
                     `Resend OTP in ${formatTime(resendTimer)}`
@@ -746,32 +796,26 @@ const Patient_Pays_Registration = ({ type }) => {
                     <></>
                   )}
                 </div>
-              )}
+              )} */}
             </div>
             {(
-  // Case 1: No email entered → show when mobile OTP verified
-  (!formData.email && otpVerified) ||
-
-  // Case 2: Email entered but OTP never sent → show when mobile OTP verified
-  (formData.email && !emailOtpSendStatus && otpVerified) ||
-
-  // Case 3: Email entered, OTP sent → show only when both verified
-  (formData.email && emailOtpSendStatus && otpVerified && emailOtpVerified)
-) && (
-  <div className="flex justify-between items-center mt-[24.69px] gap-3">
-    <Button
-      type="submit"
-      className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] rounded-[8px] flex items-center justify-center w-full h-[45px] cursor-pointer"
-      onClick={() => {
-        router.push(
-          `/channel-partner/${type}/patient-pay-registration/password`
-        );
-      }}
-    >
-      Create Password
-    </Button>
-  </div>
-)}
+              (!formData.email && otpVerified) ||
+              (formData.email && otpVerified && emailOtpVerified)
+            ) && (
+                <div className="flex justify-between items-center mt-[24.69px] gap-3">
+                  <Button
+                    type="submit"
+                    className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] rounded-[8px] flex items-center justify-center w-full h-[45px] cursor-pointer"
+                    onClick={() => {
+                      router.push(
+                        `/channel-partner/${type}/patient-pay-registration/password`
+                      );
+                    }}
+                  >
+                    Create Password
+                  </Button>
+                </div>
+              )}
 
           </div>
 

@@ -124,7 +124,7 @@ const EP_registration = ({ type }) => {
         searchString,
       };
       const response = await axios.get(
-        `https://dev.ekyamm.com/v2/cp/patient/search`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/v2/cp/patient/search`,
         {
           headers: {
             "Content-Type": "application/json",

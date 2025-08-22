@@ -357,6 +357,7 @@ one symbol, and no spaces.`;
                         ? "confirm-password-error"
                         : undefined
                     }
+                    onPaste={(e) => e.preventDefault()} 
                   />
 
                   {showPassword ? (

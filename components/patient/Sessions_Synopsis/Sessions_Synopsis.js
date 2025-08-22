@@ -49,7 +49,7 @@ const Sessions_Synopsis = () => {
     const token = getPatientSessionToken();
     setPatientSessionToken(token);
   }, []);
-  
+
   useEffect(() => {
     if (!patientSessionToken) return;
     const getPatientSynopsis = async () => {
@@ -65,7 +65,7 @@ const Sessions_Synopsis = () => {
           setSynopsis(response?.data?.data.sessionSynopsis);
         }
       } catch (err) {
-        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
+        if (err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.log("err", err);
         showErrorToast(
           err?.response?.data?.error?.message || "Error fetching patient data"
@@ -87,20 +87,20 @@ const Sessions_Synopsis = () => {
   }
   const [patient, setPatient] = useState(null);
 
-useEffect(() => {
-  // const cookie = getCookie("PatientInfo");
-  const cookie = getStorage("PatientInfo", rememberMe);
-  if (cookie) {
-    try {
-      setPatient(cookie);
-    } catch (err) {
-      console.error("Error parsing cookie", err);
+  useEffect(() => {
+    // const cookie = getCookie("PatientInfo");
+    const cookie = getStorage("PatientInfo", rememberMe);
+    if (cookie) {
+      try {
+        setPatient(cookie);
+      } catch (err) {
+        console.error("Error parsing cookie", err);
+      }
     }
-  }
-  else if(!cookie){
-    router.push('patient/login')
-  }
-}, []);
+    else if (!cookie) {
+      router.push('patient/login')
+    }
+  }, []);
 
   const handleShareClick = async () => {
     if (!navigator.share) {
@@ -113,7 +113,7 @@ useEffect(() => {
       const shareData = {
         title: "Sessions Synopsis",
         text: `Session Synopsis\n\nNote: ${selectedItem?.synopsisNote || "No synopsis available"}\n\nImage: ${selectedItem?.synopsisNoteImageUrl || ""}`,
-        
+
       };
 
       // If image exists, fetch it and attach as a File
@@ -139,7 +139,7 @@ useEffect(() => {
           <div className="flex items-center gap-4">
             <Avatar className="w-[42px] h-[42px]">
               <AvatarImage
-                src={patient?.profileImageUrl||"/images/profile.png"}
+                src={patient?.profileImageUrl || "/images/profile.png"}
                 alt={`${patient?.firstName} ${patient?.lastName}`}
                 className="rounded-full object-fill"
               />
@@ -154,33 +154,33 @@ useEffect(() => {
         </div>
 
         {/* Accordion List */}
-        { loading ? (<div className="flex justify-center"><Loader2 className="w-6 h-6 animate-spin" aria-hidden="true" /></div>):(
-                  <Accordion type="single" collapsible className="flex flex-col gap-3">
-          {synopsis && synopsis?.length > 0 ? (
-            synopsis?.map((item, idx) => (
-            <AccordionItem
-              key={idx}
-              value={`item-${idx}`}
-              className="bg-[#FFFFFF80] rounded-[9px]"
-            >
-              <AccordionTrigger className="px-4 py-4 text-[14px] font-[600] text-black flex justify-between"
-              onClick={() => {
-                    setSelectedItem(item);
-                    setDrawerOpen(true);
-                  }}
-              >
-                {formatUTCDateSimple(item.date)}
-              </AccordionTrigger>
-              <AccordionContent className="px-4 pb-4 text-sm text-gray-600">
-                {item?.synopsisNote}
-              </AccordionContent>
-            </AccordionItem>
-          ))
-          ):(
-            <div>
-            </div>
-          )}
-        </Accordion>
+        {loading ? (<div className="flex justify-center"><Loader2 className="w-6 h-6 animate-spin" aria-hidden="true" /></div>) : (
+          <Accordion type="single" collapsible className="flex flex-col gap-3">
+            {synopsis && synopsis?.length > 0 ? (
+              synopsis?.map((item, idx) => (
+                <AccordionItem
+                  key={idx}
+                  value={`item-${idx}`}
+                  className="bg-[#FFFFFF80] rounded-[9px]"
+                >
+                  <AccordionTrigger className="px-4 py-4 text-[14px] font-[600] text-black flex justify-between"
+                    onClick={() => {
+                      setSelectedItem(item);
+                      setDrawerOpen(true);
+                    }}
+                  >
+                    {formatUTCDateSimple(item.date)}
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4 pb-4 text-sm text-gray-600">
+                    {item?.synopsisNote}
+                  </AccordionContent>
+                </AccordionItem>
+              ))
+            ) : (
+              <div>
+              </div>
+            )}
+          </Accordion>
         )}
 
 
@@ -189,8 +189,9 @@ useEffect(() => {
           {/* <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] rounded-[8px] w-full h-[45px]">
             Done
           </Button> */}
-          <Button className="border border-[#CC627B] bg-transparent text-[14px] font-[600] text-[#CC627B] rounded-[8px] w-full h-[45px] mb-[26px]">
-                Done
+          <Button className="border border-[#CC627B] bg-transparent text-[14px] font-[600] text-[#CC627B] rounded-[8px] w-full h-[45px] mb-[26px]"
+            onClick={() => router.push('/patient/patient-profile')}>
+            Done
           </Button>
           <Drawer className="pt-[9.97px]" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
             <DrawerContent className="bg-gradient-to-b from-[#e7e4f8] via-[#f0e1df] via-70% to-[#feedea] bottom-drawer p-[22.5px_34px_20px_34px]">
@@ -226,23 +227,42 @@ useEffect(() => {
                             className="absolute inset-0 top-[35px] flex items-center justify-center"
                           >
                             {
-                              selectedItem?.synopsisNoteImageUrl? (
-                                <Image
-                              src={selectedItem?.synopsisNoteImageUrl}
-                              width={55}
-                              height={55}
-                              alt="preview"
-                              className="bg-transparent"
-                            />)
-                              :(
-                                <Image
-                                  src="/images/preview.png"
-                                  width={55}
-                                  height={55}
-                                  alt="preview"
-                                  className="bg-transparent"
-                                />
-                              )
+                              selectedItem?.synopsisNoteImageUrl ? (
+                                <div className="relative w-[55px] h-[102px]">
+                                  <Image
+                                    src={selectedItem?.synopsisNoteImageUrl}
+                                    width={55}
+                                    height={55}
+                                    alt="preview"
+                                    className="bg-transparent w-100 h-[102px]"
+                                    objectFit="cover"
+                                  />
+                                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-md">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="h-6 w-6 text-white"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke="currentColor"
+                                      strokeWidth={2}
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M15 10l4.553 2.276a1 1 0 010 1.448L15 16m0-6v6m-6-6l-4.553 2.276a1 1 0 000 1.448L9 16m0-6v6"
+                                      />
+                                    </svg>
+                                  </div>
+                                </div>)
+                                : (
+                                  <Image
+                                    src="/images/preview.png"
+                                    width={55}
+                                    height={55}
+                                    alt="preview"
+                                    className="bg-transparent"
+                                  />
+                                )
                             }
                           </Button>
                         </DialogTrigger>
@@ -274,7 +294,7 @@ useEffect(() => {
                       </Button>
                     </DrawerClose>
                     <Button className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[14px] font-[600] text-white py-[14.5px] rounded-[8px] w-[48%] h-[45px]"
-                    onClick={()=>{handleShareClick()}}>
+                      onClick={() => { handleShareClick() }}>
                       Share
                     </Button>
                   </div>

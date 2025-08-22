@@ -278,7 +278,7 @@ const Edit_Patient = ({ type }) => {
                         addressDetails: {
                             ...prev.addressDetails,
                             area: Name,
-                            city: Block === "NA" ? District : Block,
+                            city: District === "NA" ? Block : District,
                             state: State,
                         },
                     }));

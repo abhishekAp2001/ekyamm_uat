@@ -384,11 +384,11 @@ const Schedule_Session = () => {
                   </Label>
                   <Label className="text-[15px] text-gray-500 font-[500] font-['Quicksand']">
                     {`${patientSessionData?.countryCode_primary.match(/\d+$/)
-                        ? "+" +
-                        patientSessionData.countryCode_primary.match(
-                          /\d+$/
-                        )[0]
-                        : "+91"
+                      ? "+" +
+                      patientSessionData.countryCode_primary.match(
+                        /\d+$/
+                      )[0]
+                      : "+91"
                       } ${patientSessionData?.primaryMobileNumber || ""}`}
                   </Label>
                 </div>
@@ -435,11 +435,11 @@ const Schedule_Session = () => {
                     {`${selectedCounsellorData?.generalInformation?.countryCode_primary.match(
                       /\d+$/
                     )
-                        ? "+" +
-                        selectedCounsellorData?.generalInformation?.countryCode_primary.match(
-                          /\d+$/
-                        )[0]
-                        : "+91"
+                      ? "+" +
+                      selectedCounsellorData?.generalInformation?.countryCode_primary.match(
+                        /\d+$/
+                      )[0]
+                      : "+91"
                       } ${selectedCounsellorData?.generalInformation
                         ?.primaryMobileNumber || ""
                       }`}
@@ -492,9 +492,17 @@ const Schedule_Session = () => {
                       <Calendar
                         mode="single"
                         selected={selectedDate}
-                        onSelect={(selectedDate) => {
-                          setSelectedDate(selectedDate);
-                          if (selectedDate) {
+                        onSelect={(date) => {
+                          if (!date) return;
+
+                          // Always set, even if same date
+                          setSelectedDate(date);
+                          setDrawerOpen(true);
+                          setCalenderOpen(false);
+                        }}
+                        onDayClick={(date) => {
+                          // fallback: force drawer open on same-date click
+                          if (date.getTime() === selectedDate?.getTime()) {
                             setDrawerOpen(true);
                             setCalenderOpen(false);
                           }
@@ -502,15 +510,11 @@ const Schedule_Session = () => {
                         onMonthChange={handleMonthChange}
                         disabled={(date) => {
                           const key = format(date, "yyyy-MM-dd");
-                          const isOutsideCurrentMonth =
-                            date.getMonth() !== currentMonth.getMonth();
-
-                          return (
-                            isOutsideCurrentMonth ||
-                            availableDates[key] === false
-                          );
+                          const isOutsideCurrentMonth = date.getMonth() !== currentMonth.getMonth();
+                          return isOutsideCurrentMonth || availableDates[key] === false;
                         }}
                       />
+
                       {calenderLoading && (
                         <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/60 backdrop-blur-sm">
                           <Loader className="w-6 h-6 text-purple-600 animate-spin" />
@@ -722,7 +726,12 @@ const Schedule_Session = () => {
           <div className="mt-8 flex space-x-4 px-4 fixed bottom-0 left-0 right-0 pb-5 bg-[#fee9e7] max-w-[576px] mx-auto">
             <Drawer className="pt-[9.97px] max-w-[576px] m-auto"
               open={successDrawerOpen}
-              onClose={handleSuccessDrawerClose}>
+              onClose={() => {
+                handleCloseDrawer();
+                if (unavailableSessions.length === 0) {
+                  router.push("/patient/dashboard"); // redirect only when no unavailable sessions
+                }
+              }}>
               <Button
                 variant="outline"
                 className="flex-1 border border-[#CC627B] text-sm text-[#CC627B] rounded-[7.26px]  w-[48%] h-[45px]"
@@ -855,7 +864,9 @@ const Schedule_Session = () => {
                       className="border border-[#CC627B] text-[#CC627B] rounded-[7.26px] w-[48%] h-[45px]"
                       onClick={() => {
                         handleCloseDrawer();
-                        router.push('/patient/dashboard');
+                        if (unavailableSessions.length === 0) {
+                          router.push("/patient/dashboard"); // redirect only when no unavailable sessions
+                        }
                       }}
                     >
                       Cancel

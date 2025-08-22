@@ -51,11 +51,11 @@ const Filter = ({
     setSelectedLanguages([]);
     setSessionFeeRange({ from: "", to: "" });
     setLanguageInput("");
-    onApplyFilter({
-  language: "",
-  sessionFee: { from: null, to: null },
-  gender: "",
-});
+//     onApplyFilter({
+//   language: "",
+//   sessionFee: { from: null, to: null },
+//   gender: "",
+// });
   };
   useEffect(() => {
     const getLanguageList = async () => {
@@ -119,6 +119,7 @@ const Filter = ({
   gender: selectedGender || "",
 };
     onApplyFilter(params);
+    setShowFilter(false);
   };
 
   useEffect(() => {

@@ -70,11 +70,12 @@ const DoctorCard = ({
                 }}
               >{`${doc?.generalInformation?.firstName} ${doc?.generalInformation?.lastName}`}</h2>
               {doc?.practiceDetails?.yearsOfExperience ? (
-                <div className="w-[59px] h-[16px] bg-[#F9CCC5] rounded-[8px] flex items-center justify-center">
-                  <span className="text-[8px] font-medium">
-                    {doc?.practiceDetails?.yearsOfExperience}+ Years Exp
-                  </span>
-                </div>
+                <div className="px-2 h-[16px] bg-[#F9CCC5] rounded-[8px] flex items-center justify-center whitespace-nowrap">
+  <span className="text-[8px] font-medium leading-none">
+    {doc?.practiceDetails?.yearsOfExperience}+ Years Exp
+  </span>
+</div>
+
               ) : (
                 <></>
               )}

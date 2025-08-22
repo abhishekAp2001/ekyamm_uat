@@ -163,10 +163,10 @@ const P_Mobile_Verification = ({ type }) => {
       return false;
     } catch (err) {
       console.log("err", err);
-      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         err.response?.data?.error?.message ||
-          "An error occurred while generating OTP"
+        "An error occurred while generating OTP"
       );
     } finally {
       setLoading(false);
@@ -211,10 +211,10 @@ const P_Mobile_Verification = ({ type }) => {
         showErrorToast(`${response?.data?.error?.message}`);
       }
     } catch (err) {
-      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         err.response?.data?.error?.message ||
-          "An error occurred while generating OTP"
+        "An error occurred while generating OTP"
       );
     } finally {
       setLoading(false);
@@ -256,7 +256,7 @@ const P_Mobile_Verification = ({ type }) => {
         showErrorToast(response?.data?.data?.message);
       }
     } catch (err) {
-      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         err.response?.data?.message || "An error occurred while generating OTP"
       );
@@ -279,7 +279,7 @@ const P_Mobile_Verification = ({ type }) => {
           setCookie("channelPartnerData", JSON.stringify(response.data.data));
           setStorage("channelPartnerData", response?.data?.data);
           setChannelPartnerData(response.data.data);
-          if(response?.data?.data?.billingType == "patientPays"){
+          if (response?.data?.data?.billingType == "patientPays") {
             router.push('/patient/login')
           }
         } else {
@@ -288,11 +288,11 @@ const P_Mobile_Verification = ({ type }) => {
           );
         }
       } catch (err) {
-        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
+        if (err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.log(err);
         showErrorToast(
           err?.response?.data?.error?.message ||
-            "An error occurred while verifying"
+          "An error occurred while verifying"
         );
       } finally {
         setLoading(false);
@@ -339,11 +339,10 @@ const P_Mobile_Verification = ({ type }) => {
               >
                 <div
                   className={`w-[11px] h-[11px] rounded-full border-2 transition-all duration-300 
-              ${
-                index <= currentStep
-                  ? "bg-green-500 border-green-500"
-                  : "bg-[#9B9B9B] border-gray-400"
-              } 
+              ${index <= currentStep
+                      ? "bg-green-500 border-green-500"
+                      : "bg-[#9B9B9B] border-gray-400"
+                    } 
               group-hover:scale-110`}
                 ></div>
                 <div className="text-[8px] text-center mt-2 text-gray-700 whitespace-nowrap">
@@ -386,14 +385,14 @@ const P_Mobile_Verification = ({ type }) => {
                     {errors?.primaryMobileNumber}
                   </span>
                 )}
-                
+
               </div>
               {/* otp */}
               {otpSendStatus ? (
                 <>
                   <div className="my-[15px]">
                     <div className="text-[12px] text-gray-500 font-medium text-left mb-1 relative ">
-                      Enter OTP 
+                      Enter OTP
                     </div>
 
                     <div className="relative flex items-center">
@@ -409,6 +408,15 @@ const P_Mobile_Verification = ({ type }) => {
                             {...props}
                             type={showOtp ? "text" : "password"}
                             className="border-[1.54px] border-[#776EA5] rounded-[9.23px] text-[16px] text-[#776EA5] text-center focus:outline-none focus:ring-2 focus:ring-[#776EA5] otp-input "
+                            onPaste={(e) => {
+                              e.preventDefault();
+                              const pasted = e.clipboardData.getData("Text").trim();
+                              if (pasted) {
+                                // Keep only numbers and trim to numInputs
+                                const clean = pasted.replace(/\D/g, "").slice(0, 6);
+                                setOtp(clean);
+                              }
+                            }}
                           />
                         )}
                         containerStyle="flex justify-between gap-[2px] items-center w-[90%]"
@@ -444,7 +452,7 @@ const P_Mobile_Verification = ({ type }) => {
               <div className="flex flex-col mt-[24.69px]  gap-2">
                 <div className="flex justify-between items-center ">
                   <Button className="border border-[#CC627B] bg-transparent text-[14px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
-                  onClick={() => router.push(`/patient/login`)}>
+                    onClick={() => router.push(`/patient/login`)}>
                     Already a User?
                   </Button>
                   <Button
@@ -467,7 +475,7 @@ const P_Mobile_Verification = ({ type }) => {
                     )}
                   </Button>
                 </div>
-                <div className="flex justify-center ml-37">
+                <div className="flex justify-center">
                   {otpSendStatus && (
                     <div className="text-xs text-gray-500 font-medium">
                       {resendTimer > 0 ? (

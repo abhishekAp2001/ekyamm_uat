@@ -211,18 +211,12 @@ const Reschedule_Session = () => {
   const [timeSlogLoading, setTimeSlogLoading] = useState(false);
   const [sessionDetail, setSessionDetail] = useState("");
   const [calenderOpen, setCalenderOpen] = useState(false);
-  const [isRecurring, setIsRecurring] = useState(false);
 
 
   const [patientSessionToken, setPatientSessionToken] = useState(
     getPatientSessionToken()
   );
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [successDrawerOpen, setSuccessDrawerOpen] = useState(false);
-  const [openConfirmed, setOpenConfirmed] = useState(true);
-  const [openUnconfirmed, setOpenUnconfirmed] = useState(true);
-  const [createdSessions, setCreatedSessions] = useState([]);
-  const [unavailableSessions, setUnavailableSessions] = useState([]);
   const handleCloseDrawer = () => {
     setDrawerOpen(false);
   };
@@ -363,7 +357,7 @@ const Reschedule_Session = () => {
           "to": selectedToTime
         },
         "practitioner": {
-          "practitionerId": selectedCounsellorData?._id,
+          "practitionerId": selectedCounsellorData?.loginId,
           "name": selectedCounsellorData?.generalInformation?.firstName,
           "email": selectedCounsellorData?.generalInformation?.email
         }
@@ -388,14 +382,7 @@ const Reschedule_Session = () => {
       if (response.data.success) {
         showSuccessToast(response?.data?.data?.message || "Session booked successfully!");
         setDrawerOpen(false);
-        setSuccessDrawerOpen(true);
-        if (response.data.data.createdSessions) {
-          setCreatedSessions(response.data.data.createdSessions)
-        } else {
-          setCreatedSessions([response.data.data.createdSession])
-        };
-        setUnavailableSessions(response?.data?.unavailableSlots || []);
-        // router.push("/patient/dashboard");
+        router.push("/patient/dashboard");
       } else {
         showErrorToast("Failed to book session. Please try again.");
       }
@@ -467,9 +454,6 @@ const Reschedule_Session = () => {
       fetchAvailability(currentMonth);
     }
   };
-  const handleSuccessDrawerClose = () => {
-    setSuccessDrawerOpen(false);
-  }
 
   const handleTimeFormat = (dateTime) => {
     const utcDate = new Date(dateTime);
@@ -514,7 +498,7 @@ const Reschedule_Session = () => {
           }}
         />
         <strong className="ml-2 text-[16px] font-semibold text-gray-800">
-          Schedule Session
+          Rechedule Session
         </strong>
       </div>
       <div className="pt-15 px-4 pb-20 flex justify-center relative">
@@ -648,9 +632,17 @@ const Reschedule_Session = () => {
                       <Calendar
                         mode="single"
                         selected={selectedDate}
-                        onSelect={(selectedDate) => {
-                          setSelectedDate(selectedDate);
-                          if (selectedDate) {
+                        onSelect={(date) => {
+                          if (!date) return;
+
+                          // Always set, even if same date
+                          setSelectedDate(date);
+                          setDrawerOpen(true);
+                          setCalenderOpen(false);
+                        }}
+                        onDayClick={(date) => {
+                          // fallback: force drawer open on same-date click
+                          if (date.getTime() === selectedDate?.getTime()) {
                             setDrawerOpen(true);
                             setCalenderOpen(false);
                           }
@@ -658,13 +650,8 @@ const Reschedule_Session = () => {
                         onMonthChange={handleMonthChange}
                         disabled={(date) => {
                           const key = format(date, "yyyy-MM-dd");
-                          const isOutsideCurrentMonth =
-                            date.getMonth() !== currentMonth.getMonth();
-
-                          return (
-                            isOutsideCurrentMonth ||
-                            availableDates[key] === false
-                          );
+                          const isOutsideCurrentMonth = date.getMonth() !== currentMonth.getMonth();
+                          return isOutsideCurrentMonth || availableDates[key] === false;
                         }}
                       />
                       {calenderLoading && (
@@ -827,7 +814,6 @@ const Reschedule_Session = () => {
                 value={sessionDetail}
                 onChange={(e) => setSessionDetail(e.target.value)}
                 placeholder="Enter session details here"
-                disabled
                 className="w-full h-[100px] rounded-[7.26px] bg-white px-3 py-2 border border-[#E6E6E6] opacity-80"
               />
             </div>
@@ -854,161 +840,7 @@ const Reschedule_Session = () => {
               )}
             </button>
           </div>
-          <div className="mt-8 flex space-x-4 px-4 fixed bottom-0 left-0 right-0 pb-5 bg-[#fee9e7] max-w-[576px] mx-auto">
-            <Drawer className="pt-[9.97px] max-w-[576px] m-auto"
-              open={successDrawerOpen}
-              onClose={handleSuccessDrawerClose}>
-              <Button
-                variant="outline"
-                className="flex-1 border border-[#CC627B] text-sm text-[#CC627B] rounded-[7.26px]  w-[48%] h-[45px]"
-              >
-                Cancel
-              </Button>
-              <DrawerTrigger className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px] h-[45px]  rounded-[8px] flex items-center justify-center w-[48%]">
-                Confirm
-              </DrawerTrigger>
-              <DrawerContent className="bg-gradient-to-b  from-[#e7e4f8] via-[#f0e1df] via-70%  to-[#feedea] bottom-drawer p-4 rounded-t-[20px]">
-                <div className="flex justify-center w-full">
-                  <DrawerHeader className="p-0">
-                    <DrawerTitle className="text-base text-center font-semibold">
-                      Select Session Time
-                    </DrawerTitle>
-                  </DrawerHeader>
-                  <DrawerClose>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-black absolute top-2 right-2"
-                      onClick={() => handleCloseDrawer()}
-                    >
-                      <X
-                        className="w-5 h-5 text-black"
-                        color="black"
-                        fontWeight={700}
-                      />
-                    </Button>
-                  </DrawerClose>
-                </div>
 
-                <div className="mb-2 border border-[#e2d7ef] rounded-[12px] bg-[#FFFFFF80] mt-6">
-                  <button
-                    onClick={() => setOpenConfirmed(!openConfirmed)}
-                    className="cursor-pointer w-full text-left p-4  text-base text-black font-semibold flex justify-between items-center"
-                  >
-                    Confirmed Sessions
-                    <span>
-                      {openConfirmed ? (
-                        <ChevronDown className="w-5 h-5 text-[#00000066] cursor-pointer" />
-                      ) : (
-                        <ChevronRight className="w-5 h-5 text-[#00000066] cursor-pointer" />
-                      )}
-                    </span>
-                  </button>
-                  {openConfirmed && (
-                    <div className="px-4 pb-3 text-sm text-[#555] space-y-2">
-                      {createdSessions.length > 0 ? (
-                        createdSessions.map((session, index) => (
-                          <div className="flex justify-between items-center" key={index}>
-                            <span className="text-xs text-[#CC627B]">
-                              Session {index + 1}: {handleTimeFormat(session.sessionTime.from).date} | {handleTimeFormat(session.sessionTime.from).time}
-                            </span>
-                            <span className="text-[#1DA563] text-xs font-medium flex items-center gap-1">
-                              <Check className="bg-[#11805D] text-white w-[12px] h-[12px] p-[1px] rounded-full" />
-                              Confirmed
-                            </span>
-                          </div>
-                        ))
-                      ) : (<>
-                        <span className="text-xs text-[#CC627B]">
-                          No confirmed Sessions
-                        </span>
-                      </>)
-                      }
-                    </div>
-                  )}
-                </div>
-
-                <div className="mb-3 border border-[#e2d7ef] rounded-[12px] bg-[#FFFFFF80] ">
-                  <button
-                    onClick={() => setOpenUnconfirmed(!openUnconfirmed)}
-                    className="cursor-pointer w-full text-left p-4 text-base text-black font-semibold flex justify-between items-center"
-                  >
-                    Unconfirmed Sessions{" "}
-                    <span>
-                      {openUnconfirmed ? (
-                        <ChevronDown className="w-5 h-5 text-[#00000066] cursor-pointer" />
-                      ) : (
-                        <ChevronRight className="w-5 h-5 text-[#00000066] cursor-pointer" />
-                      )}
-                    </span>
-                  </button>
-                  {openUnconfirmed && (
-                    <div className="px-4 pb-3 text-sm text-[#555] space-y-2">
-                      <div className="flex justify-between items-center">
-                        {unavailableSessions.length > 0 ? (
-                          unavailableSessions.map((session, index) => (
-                            <>
-                              <div className="flex items-center gap-1" key={index}>
-                                <span className="text-xs text-[#CC627B]">
-                                  Session {index + 1}: {handleTimeFormat(session.sessionTime.from).date} | {handleTimeFormat(session.sessionTime.from).time}
-                                </span>
-                                <div className="rounded-full  w-fit h-6 inline-block bg-gradient-to-r  from-[#B0A4F5] to-[#EDA197] p-[1px]">
-                                  <button className="cursor-pointer bg-[#f8f0ef] text-[11px] text-black rounded-full w-full h-full flex items-center justify-center gap-1 px-2">
-                                    + Book Session
-                                  </button>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <span className="text-red-500 text-sm font-medium flex gap-[2px] items-center">
-                                  {" "}
-                                  <Image
-                                    src="/images/error_circle.png"
-                                    width={16}
-                                    height={16}
-                                    className="w-4"
-                                    alt="error"
-                                  />{" "}
-                                  Not Available
-                                </span>
-                              </div>
-                            </>
-                          ))
-                        ) : (<>
-                          <span className="text-xs text-[#CC627B]">
-                            No Unconfirmed Sessions
-                          </span>
-                        </>)}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <DrawerFooter className="flex justify-between pt-2 p-0">
-                  <div className="flex items-center gap-3">
-                    <Button
-                      variant="outline"
-                      className="border border-[#CC627B] text-[#CC627B] rounded-[7.26px] w-[48%] h-[45px]"
-                      onClick={() => {
-                        handleCloseDrawer();
-                        router.push('/patient/dashboard');
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[15px] font-[600] py-[14.5px] h-[45px] rounded-[8px] w-[48%]"
-                      onClick={() => {
-                        handleCloseDrawer();
-                        router.push('/patient/dashboard');
-                      }}
-                    >
-                      Go To Dashboard
-                    </Button>
-                  </div>
-                </DrawerFooter>
-              </DrawerContent>
-            </Drawer>
-          </div>
         </div>
       </div>
     </div>

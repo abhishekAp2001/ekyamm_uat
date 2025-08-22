@@ -401,7 +401,7 @@ const Family_Details = ({ type }) => {
           <div className="mt-[22px]">
             <Label
               htmlFor="primaryMobileNumber"
-              className={`text-[15px] mb-2 ${!formData.lastName ? "text-gray-500" : "text-[#00000040]"
+              className={`text-[15px] mb-2 ${!formData.lastName ?  "text-[#00000040]" :  "text-gray-500"
                 }`}
             >
               Primary Mobile Number *
@@ -609,10 +609,10 @@ const Family_Details = ({ type }) => {
           >
             Cancel
           </Button> */}
-          <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
+          {/* <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
             onClick={() => setShow(true)}>
             Cancel
-          </Button>
+          </Button> */}
           <Drawer className="pt-[9.97px] max-w-[576px] m-auto"
             open={show}
             onClose={handleClose}
@@ -651,7 +651,7 @@ const Family_Details = ({ type }) => {
           <Button
             disabled={!isFormValid() || loading}
             onClick={handleSubmit}
-            className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px] flex-nowrap whitespace-normal"
+            className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]  rounded-[8px] flex items-center justify-center w-full h-[45px] flex-nowrap whitespace-normal"
           >
             {loading ? (
               <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />

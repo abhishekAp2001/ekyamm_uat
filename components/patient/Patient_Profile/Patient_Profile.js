@@ -36,6 +36,7 @@ import { Baseurl, whatsappUrl } from "@/lib/constants";
 import { setCookie } from "cookies-next";
 import { base64ToFile } from "@/lib/utils";
 import { useRememberMe } from "@/app/context/RememberMeContext";
+import OTPInput from "react-otp-input";
 const sessionData = [
   {
     date: "24th Apr",
@@ -58,7 +59,7 @@ const sessionData = [
 ];
 
 const Patient_Profile = () => {
-  const {rememberMe} = useRememberMe()
+  const { rememberMe } = useRememberMe()
   const router = useRouter();
   // const cookieValue = getCookie("PatientInfo");
   const cookieValue = getStorage("PatientInfo", rememberMe);
@@ -159,7 +160,7 @@ const Patient_Profile = () => {
           setTherapist(response?.data?.data.practitionerTagged[0]);
         }
       } catch (err) {
-        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
+        if (err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.error("err", err);
         showErrorToast(
           err?.response?.data?.error?.message || "Error fetching patient data"
@@ -230,19 +231,19 @@ const Patient_Profile = () => {
       );
       if (response?.data?.success) {
         let maxAge = {}
-        if(rememberMe){
+        if (rememberMe) {
           maxAge = { maxAge: 60 * 60 * 24 * 30 }
         }
-        else if(!rememberMe){
+        else if (!rememberMe) {
           maxAge = {}
         }
         // setCookie("PatientInfo", JSON.stringify(response?.data?.data),maxAge);
-        setStorage("PatientInfo", response?.data?.data, rememberMe, 2592000 );
+        setStorage("PatientInfo", response?.data?.data, rememberMe, 2592000);
         setImageDrawer(false)
         router.push(`/patient/patient-profile`);
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(error?.response?.data?.error?.message);
     } finally {
       setIsLoading(false);
@@ -251,12 +252,12 @@ const Patient_Profile = () => {
 
   const uploadImage = async (filename, type) => {
     try {
-      console.log("filename",filename)
+      console.log("filename", filename)
       const file = await base64ToFile(filename, 0.6);
-      console.log("File",file)
+      console.log("File", file)
       const form = new FormData();
       form.append("filename", file);
-      console.log("PAYLOAD",form)
+      console.log("PAYLOAD", form)
       const response = await axios.post(
         process.env.NEXT_PUBLIC_BASE_URL + `/v2/psychiatrist/uploadImage`,
         form,
@@ -271,7 +272,7 @@ const Patient_Profile = () => {
         return imageUrl;
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("error", error)
       if (error.forceLogout) {
         router.push("/login");
@@ -299,7 +300,7 @@ const Patient_Profile = () => {
         setDrawerOpen(false)
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(error?.response?.data?.error?.message || "Unable to send OTP")
       console.error("Error", error)
     }
@@ -324,7 +325,7 @@ const Patient_Profile = () => {
         showErrorToast("Invalid OTP")
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(error?.response?.data?.error?.message || "Invalid OTP")
       setIsLoading(false)
       console.error("Error", error)
@@ -365,7 +366,7 @@ const Patient_Profile = () => {
         setDrawerOpen(false)
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(error?.response?.data?.error?.message || "Unable to send OTP")
       console.error("Error", error)
     }
@@ -393,7 +394,7 @@ const Patient_Profile = () => {
         showErrorToast("Invalid OTP")
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(error?.response?.data?.error?.message || "Invalid OTP")
       setIsLoading(false)
       console.error("Error", error)
@@ -419,7 +420,7 @@ const Patient_Profile = () => {
         setDrawerOpen(false)
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(error?.response?.data?.error?.message || "Unable to send OTP")
       console.error("Error", error)
     }
@@ -445,7 +446,7 @@ const Patient_Profile = () => {
         showErrorToast("Invalid OTP")
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(error?.response?.data?.error?.message || "Invalid OTP")
       setIsLoading(false)
       console.error("Error", error)
@@ -473,7 +474,7 @@ const Patient_Profile = () => {
         showErrorToast("Invalid OTP")
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(error?.response?.data?.error?.message || "Invalid OTP")
       setIsLoading(false)
       console.error("Error", error)
@@ -504,7 +505,7 @@ const Patient_Profile = () => {
         setDrawerOpen(false)
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(error?.response?.data?.error?.message || "Unable to send OTP")
       console.error("Error", error)
     }
@@ -522,16 +523,16 @@ const Patient_Profile = () => {
       console.log("Res", response)
       if (response?.data?.success) {
         let maxAge = {}
-        if(rememberMe){
+        if (rememberMe) {
           maxAge = { maxAge: 60 * 60 * 24 * 30 }
         }
-        else if(!rememberMe){
+        else if (!rememberMe) {
           maxAge = {}
         }
         patient.countryCode_primary = "🇮🇳 +91"
         patient.primaryMobileNumber = mobile
         // setCookie("PatientInfo", JSON.stringify(patient),maxAge)
-        setStorage("PatientInfo", patient, rememberMe, 2592000 );
+        setStorage("PatientInfo", patient, rememberMe, 2592000);
         showSuccessToast(response?.data?.data?.message || "Contact details updated")
         handleVerifiedDrawerClose()
       }
@@ -541,7 +542,7 @@ const Patient_Profile = () => {
         );
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("Error", error);
       if (error.response?.data?.error?.message) {
         showErrorToast(error.response.data.error.message);
@@ -568,15 +569,15 @@ const Patient_Profile = () => {
       console.log("Res", response)
       if (response?.data?.success) {
         let maxAge = {}
-        if(rememberMe){
+        if (rememberMe) {
           maxAge = { maxAge: 60 * 60 * 24 * 30 }
         }
-        else if(!rememberMe){
+        else if (!rememberMe) {
           maxAge = {}
         }
         patient.email = email
         // setCookie("PatientInfo", JSON.stringify(patient),maxAge)
-        setStorage("PatientInfo", patient, rememberMe, 2592000 );
+        setStorage("PatientInfo", patient, rememberMe, 2592000);
         showSuccessToast(response?.data?.data?.message || "Contact details updated")
         handleVerifiedDrawerClose()
       }
@@ -586,7 +587,7 @@ const Patient_Profile = () => {
         );
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("Error", error);
       if (error.response?.data?.error?.message) {
         showErrorToast(error.response.data.error.message);
@@ -618,7 +619,8 @@ const Patient_Profile = () => {
     return `${paddedMinutes}:${paddedSeconds}`;
   };
   return (
-    <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px]">
+    <div className="bg-gradient-to-t from-[#fce8e5] to-[#eeecfb] h-screen flex flex-col max-w-[576px]"
+      onClick={() => setOpenTooltipIndex(null)}>
       <div className="">
         <div className="flex items-center justify-between py-5 ps-3 pe-5">
           {/* Left Icon */}
@@ -664,7 +666,7 @@ const Patient_Profile = () => {
                     <Button className="bg-gradient-to-r from-[#BBA3E450] to-[#EDA19750] text-black text-[16px] font-[600] py-[17px] px-4 flex  justify-between items-center w-full h-[50px] rounded-[8.62px]"
                       onClick={handleTakePhoto}
                     >
-                     Take Photo
+                      Take Photo
                       <Image
                         src="/images/arrow.png"
                         width={24}
@@ -833,12 +835,12 @@ const Patient_Profile = () => {
                         width={13}
                         height={13}
                         alt="info"
-                        className="ml-1 w-[13.6px] h-[13.6px]"
+                        className="ml-1 w-[13.6px] h-[13.6px] "
                         onClick={(e) => {
                           e.stopPropagation();
-                          setOpenTooltipIndex(
-                            openTooltipIndex === idx ? null : idx
-                          );
+                          if (window.matchMedia("(hover: none)").matches) {
+                            setOpenTooltipIndex(openTooltipIndex === idx ? null : idx);
+                          }
                         }}
                       />
                       {item.tooltip && (
@@ -916,8 +918,8 @@ const Patient_Profile = () => {
                       {drawerFor == "email" ? ("Enter OTP shared on your email") : ("Enter OTP shared on your mobile number")}
                     </span>
 
-                    <div className="mt-[32px]">
-                      <InputOTP maxLength={6} className="gap-2"
+                    <div className="mt-[32px] flex justify-center items-center">
+                      {/* <InputOTP maxLength={6} className="gap-2"
                         value={otp}          // 👈 controlled value from your state
                         onChange={(value) => setOtp(value)}>
                         <InputOTPGroup className="flex gap-3">
@@ -929,7 +931,32 @@ const Patient_Profile = () => {
                             />
                           ))}
                         </InputOTPGroup>
-                      </InputOTP>
+                      </InputOTP> */}
+                      <OTPInput
+                        type="text"
+                        inputType="number"
+                        value={otp}
+                        onChange={setOtp}
+                        numInputs={6}
+                        renderSeparator={<span className="w-4" />}
+                        renderInput={(props) => (
+                          <input
+                            {...props}
+                            type={"text"}
+                            className="border-[1.54px] border-[#776EA5] rounded-[9.23px] text-[16px] text-[#776EA5] text-center focus:outline-none focus:ring-2 focus:ring-[#776EA5] otp-input "
+                            onPaste={(e) => {
+                              e.preventDefault();
+                              const pasted = e.clipboardData.getData("Text").trim();
+                              if (pasted) {
+                                // Keep only numbers and trim to numInputs
+                                const clean = pasted.replace(/\D/g, "").slice(0, 6);
+                                setOtp(clean);
+                              }
+                            }}
+                          />
+                        )}
+                        containerStyle="flex justify-between gap-[2px] items-center w-[90%]"
+                      />
                     </div>
                   </div>
                 </DrawerDescription>
@@ -1096,8 +1123,8 @@ const Patient_Profile = () => {
                             Enter OTP
                           </span>
                         </div>
-                        <div className="mt-[12px]">
-                          <InputOTP maxLength={6} className="gap-2"
+                        <div className="mt-[12px] flex justify-center items-center">
+                          {/* <InputOTP maxLength={6} className="gap-2"
                             value={otp}          // 👈 controlled value from your state
                             onChange={(value) => setOtp(value)}>
                             <InputOTPGroup className="flex gap-3">
@@ -1109,7 +1136,32 @@ const Patient_Profile = () => {
                                 />
                               ))}
                             </InputOTPGroup>
-                          </InputOTP>
+                          </InputOTP> */}
+                          <OTPInput
+                        type="text"
+                        inputType="number"
+                        value={otp}
+                        onChange={setOtp}
+                        numInputs={6}
+                        renderSeparator={<span className="w-4" />}
+                        renderInput={(props) => (
+                          <input
+                            {...props}
+                            type={"text"}
+                            className="border-[1.54px] border-[#776EA5] rounded-[9.23px] text-[16px] text-[#776EA5] text-center focus:outline-none focus:ring-2 focus:ring-[#776EA5] otp-input "
+                            onPaste={(e) => {
+                              e.preventDefault();
+                              const pasted = e.clipboardData.getData("Text").trim();
+                              if (pasted) {
+                                // Keep only numbers and trim to numInputs
+                                const clean = pasted.replace(/\D/g, "").slice(0, 6);
+                                setOtp(clean);
+                              }
+                            }}
+                          />
+                        )}
+                        containerStyle="flex justify-between gap-[2px] items-center w-[90%]"
+                      />
                         </div>
                       </div>
 

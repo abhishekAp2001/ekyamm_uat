@@ -108,7 +108,7 @@ one symbol, and no spaces.`;
           patientDetails: {
             countryCode_primary: formData?.countryCode,
             primaryMobileNumber: formData?.mobileNumber,
-
+            email: formData?.email ? formData?.email : "",
             firstName: formData?.firstName,
             lastName: formData?.lastName,
             mobileVerified: true,
@@ -132,7 +132,7 @@ one symbol, and no spaces.`;
         return;
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("Error", error);
       showErrorToast(error?.response?.data?.error?.message)
     }
@@ -183,10 +183,10 @@ one symbol, and no spaces.`;
           );
         }
       } catch (err) {
-        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
+        if (err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         showErrorToast(
           err?.response?.data?.error?.message ||
-            "An error occurred while verifying"
+          "An error occurred while verifying"
         );
       } finally {
         setLoading(false);
@@ -195,42 +195,42 @@ one symbol, and no spaces.`;
     verifyChannelPartner(type);
   }, [type]);
 
-    return (
-        <>
-            <div className=" bg-gradient-to-b  from-[#DFDAFB] to-[#F9CCC5] h-full flex flex-col justify-between items-center px-[16px] max-w-[576px] mx-auto">
-         
-                {formLoader && (
-                    <div
-                        className="fixed inset-0 bg-[#000000b8] bg-opacity-20 flex items-center justify-center z-50 transition-opacity duration-300"
-                        aria-live="polite"
-                        aria-label="Loading"
-                    >
-                        <div className="bg-none p-6 rounded-lg shadow-lg flex flex-col items-center">
-                            <Image
-                                src="/loader.png"
-                                width={48}
-                                height={48}
-                                alt="Loading"
-                                className="animate-spin"
-                            />
-                            <p className="mt-2 text-lg font-semibold text-white">
-                                Validating...
-                            </p>
-                        </div>
-                    </div>
-                )}
-                <div className="flex flex-col justify-center items-center pt-6">
-                        <strong className="text-[20px] text-[#776EA5] font-semibold">
-                              {channelPartnerData?.clinicName || "Greetings Hospital"}
-                            </strong>
-                        <div className="flex justify-center items-center gap-[2px]">
-                          <div className="bg-[#776EA5] rounded-full w-[16.78px] h-[16.78px] flex justify-center items-center">
-                            <MapPin color="white" className="w-[12.15px] h-[12.15px]" /></div>
-                          <span className="text-sm text-[#776EA5] font-medium">
-                            {channelPartnerData?.area}
-                          </span>
-                        </div>
-                        </div>
+  return (
+    <>
+      <div className=" bg-gradient-to-b  from-[#DFDAFB] to-[#F9CCC5] h-full flex flex-col justify-between items-center px-[16px] max-w-[576px] mx-auto">
+
+        {formLoader && (
+          <div
+            className="fixed inset-0 bg-[#000000b8] bg-opacity-20 flex items-center justify-center z-50 transition-opacity duration-300"
+            aria-live="polite"
+            aria-label="Loading"
+          >
+            <div className="bg-none p-6 rounded-lg shadow-lg flex flex-col items-center">
+              <Image
+                src="/loader.png"
+                width={48}
+                height={48}
+                alt="Loading"
+                className="animate-spin"
+              />
+              <p className="mt-2 text-lg font-semibold text-white">
+                Validating...
+              </p>
+            </div>
+          </div>
+        )}
+        <div className="flex flex-col justify-center items-center pt-6">
+          <strong className="text-[20px] text-[#776EA5] font-semibold">
+            {channelPartnerData?.clinicName || "Greetings Hospital"}
+          </strong>
+          <div className="flex justify-center items-center gap-[2px]">
+            <div className="bg-[#776EA5] rounded-full w-[16.78px] h-[16.78px] flex justify-center items-center">
+              <MapPin color="white" className="w-[12.15px] h-[12.15px]" /></div>
+            <span className="text-sm text-[#776EA5] font-medium">
+              {channelPartnerData?.area}
+            </span>
+          </div>
+        </div>
         <div className="flex flex-col justify-center items-center w-full">
           <div className="border-2 bg-[#FFFFFF80] border-[#FFFFFF4D] rounded-4xl py-6 px-6  mx-4 text-center w-full">
             <strong className="text-[16px] text-black font-[600] text-center">
@@ -317,14 +317,13 @@ one symbol, and no spaces.`;
                     onChange={handleInputChange}
                     onBlur={handleInputBlur}
                     placeholder="Create password"
-                    className={`bg-white rounded-[7.26px] placeholder:text-[12px] placeholder:text-gray-400 pt-3 pb-3.5 px-4 h-[39px] mt-5 ${
-                      formErrors.password ? " border border-red-500" : ""
-                    }`}
+                    className={`bg-white rounded-[7.26px] placeholder:text-[12px] placeholder:text-gray-400 pt-3 pb-3.5 px-4 h-[39px] mt-5 ${formErrors.password ? " border border-red-500" : ""
+                      }`}
                     aria-invalid={!!formErrors.password}
                     aria-describedby={
                       formErrors.password ? "password-error" : undefined
                     }
-                  />
+                                      />
                   {showPassword ? (
                     <Eye
                       onClick={() => setShowPassword(!showPassword)}
@@ -354,15 +353,15 @@ one symbol, and no spaces.`;
                     onChange={handleInputChange}
                     onBlur={handleInputBlur}
                     placeholder="Re-enter password"
-                    className={`bg-white rounded-[7.26px] placeholder:text-[12px] placeholder:text-gray-400 pt-3 pb-3.5 px-4 h-[39px] mt-5 ${
-                      formErrors.confirmPassword ? " border border-red-500" : ""
-                    }`}
+                    className={`bg-white rounded-[7.26px] placeholder:text-[12px] placeholder:text-gray-400 pt-3 pb-3.5 px-4 h-[39px] mt-5 ${formErrors.confirmPassword ? " border border-red-500" : ""
+                      }`}
                     aria-invalid={!!formErrors.confirmPassword}
                     aria-describedby={
                       formErrors.confirmPassword
                         ? "confirm-password-error"
                         : undefined
                     }
+                    onPaste={(e) => e.preventDefault()} 
                   />
 
                   {showPassword ? (
@@ -391,7 +390,7 @@ one symbol, and no spaces.`;
                       !formData.password.trim() ||
                       !formData.confirmPassword.trim() ||
                       formData.password.trim() !==
-                        formData.confirmPassword.trim()
+                      formData.confirmPassword.trim()
                     }
                     className="bg-gradient-to-r  from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white py-[14.5px]   rounded-[8px] flex items-center justify-center w-full h-[45px] cursor-pointer"
                   >
@@ -442,7 +441,7 @@ one symbol, and no spaces.`;
             </div>
           </div>
         </div>
-          </div>
+      </div>
     </>
   );
 };

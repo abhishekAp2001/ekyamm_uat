@@ -7,6 +7,7 @@ import { Accordion } from "../../ui/accordion";
 import DoctorCard from "../DoctorCard";
 import SessionDrawer from "../SessionDrawer";
 import {
+  clearStorageAndCookies,
   doctors,
   // currentPatientId as getCurrentPatientId,
   patientSessionToken as getPatientSessionToken,
@@ -52,7 +53,6 @@ const Patient_Dashboard = () => {
   const practitioner = patient?.practitionerTagged
   const handleApplyFilter = (params) => {
     setLoading(true);
-    // Simulate API call or processing delay
     setFilterParams(params);
     setLoading(false);
   };
@@ -135,6 +135,10 @@ const Patient_Dashboard = () => {
 
     setFilterCount(count);
   }, [filterParams]);
+
+  useEffect(() => {
+    clearStorageAndCookies(["PatientInfo", "patientSessionData", "selectedCounsellor", "rememberMe"])
+  },[])
   return (
     <>
       <div className="flex flex-col min-h-screen bg-gradient-to-b space-y-4 from-[#DFDAFB] to-[#F9CCC5]  relative max-w-[576px] m-auto overflow-y-auto">

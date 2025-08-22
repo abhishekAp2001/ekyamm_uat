@@ -19,7 +19,7 @@ import { Eye, EyeOff, Loader2Icon, MapPin } from "lucide-react";
 import axios from "axios";
 import { whatsappUrl } from "@/lib/constants";
 import OTPInput from "react-otp-input";
- 
+
 const OTP_Send = ({ type }) => {
   const [selectedMethod, setSelectedMethod] = useState("");
   const [otp, setOtp] = useState("");
@@ -31,10 +31,10 @@ const OTP_Send = ({ type }) => {
   const [channelPartnerData, setChannelPartnerData] = useState(null);
   const router = useRouter();
   const customAxios = axiosInstance();
- 
+
   const sendOtp = async () => {
     if (isLoading) return;
- 
+
     setLoading(true);
     try {
       if (selectedMethod === "mobile") {
@@ -60,7 +60,7 @@ const OTP_Send = ({ type }) => {
       setLoading(false);
     }
   };
- 
+
   function redirectAfterOtpValidate(type) {
     // showSuccessToast("OTP verified successfully!");
     setTimeout(() => {
@@ -72,7 +72,7 @@ const OTP_Send = ({ type }) => {
       showErrorToast("Please enter a valid 6-digit OTP");
       return;
     }
- 
+
     setLoading(true);
     try {
       if (selectedMethod === "mobile") {
@@ -97,7 +97,7 @@ const OTP_Send = ({ type }) => {
       setLoading(false);
     }
   };
- 
+
   const changeOtpMethod = (method) => {
     setSelectedMethod(method);
     setOtpSendStatus(false);
@@ -105,38 +105,38 @@ const OTP_Send = ({ type }) => {
     setResendTimer(120);
     setIsResendDisabled(false);
   };
- 
+
   const sendEmailOtp = async () => {
     setLoading(true);
- 
+
     try {
       const response = await customAxios.post(`v2/cp/email/otpGenerate`, {
         email: channelPartnerData?.email,
         verificationToken: channelPartnerData?.verificationToken,
         type: "cpLoginOTP",
       });
- 
+
       if (response?.data?.success === true) {
-        showSuccessToast(response?.data?.data?.message ||`OTP sent to your verified email.`);
+        showSuccessToast(response?.data?.data?.message || `OTP sent to your verified email.`);
         return true;
       } else {
         showErrorToast(response?.data?.error?.message || "Otp Not Sent.");
       }
     } catch (err) {
-      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         err?.response?.data?.error?.message ||
-          "An error occurred while sending."
+        "An error occurred while sending."
       );
     } finally {
       setLoading(false);
     }
     return false;
   };
- 
+
   const sendMobileOtp = async () => {
     setLoading(true);
- 
+
     try {
       const apiUrl = "http://india.smscloudhub.com/generateOtp.jsp";
       const mobileNumber =
@@ -180,7 +180,7 @@ const OTP_Send = ({ type }) => {
         showErrorToast(`Failed to generate OTP`);
       }
     } catch (err) {
-      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         err?.response?.data?.error?.message || "An error occurred while generating OTP"
       );
@@ -189,13 +189,13 @@ const OTP_Send = ({ type }) => {
     }
     return false;
   };
- 
+
   const validateMobileOtp = async (otp) => {
     setLoading(true);
- 
+
     try {
       const apiUrl = "http://india.smscloudhub.com/validateOtpApi.jsp";
- 
+
       const mobileNumber =
         channelPartnerData.primaryMobileNumber?.trim() || null;
       let countryCode = "+91";
@@ -210,12 +210,12 @@ const OTP_Send = ({ type }) => {
           );
         }
       }
- 
+
       const params = {
         mobileno: `${countryCode}${mobileNumber}`,
         otp: otp,
       };
- 
+
       // const result = await axios.get(apiUrl, { params });
       const response = await customAxios.post(`v2/cp/mobile/otpValidate`, {
         mobile: mobileNumber,
@@ -231,7 +231,7 @@ const OTP_Send = ({ type }) => {
       }
       return false;
     } catch (err) {
-      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         err?.response?.data?.error?.message || "An error occurred while Verifying OTP"
       );
@@ -240,16 +240,16 @@ const OTP_Send = ({ type }) => {
     }
     return false;
   };
- 
+
   const validateEmailOtp = async (otp) => {
     setLoading(true);
- 
+
     try {
       const response = await customAxios.post(`v2/cp/email/otpValidate`, {
         email: channelPartnerData?.email,
         otp: otp,
       });
- 
+
       if (response?.data?.success === true) {
         showSuccessToast(response?.data?.data?.message || "OTP verified successfully!");
         return true;
@@ -257,10 +257,10 @@ const OTP_Send = ({ type }) => {
         showErrorToast(response?.data?.error?.message || "Invalid otp");
       }
     } catch (err) {
-      if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (err?.status == 500) return showErrorToast("Something Went Wrong !!!")
       showErrorToast(
         err?.response?.data?.error?.message ||
-          "An error occurred while verifying"
+        "An error occurred while verifying"
       );
     } finally {
       setLoading(false);
@@ -278,7 +278,7 @@ const OTP_Send = ({ type }) => {
     }
     return () => clearInterval(timer);
   }, [otpSendStatus, resendTimer]);
- 
+
   useEffect(() => {
     // const cookieData = getCookie("channelPartnerData");
     const cookieData = getStorage("channelPartnerData");
@@ -295,7 +295,7 @@ const OTP_Send = ({ type }) => {
     }
     // showSuccessToast(`OTP sent to your verified mobile number.`);
   }, [type]);
- 
+
   return (
     <>
       <div className=" bg-gradient-to-b  from-[#DFDAFB] to-[#F9CCC5] h-full flex flex-col px-3">
@@ -316,180 +316,186 @@ const OTP_Send = ({ type }) => {
                 {channelPartnerData?.area}
               </span>
             </div>
-            </div>
- 
+          </div>
 
-            <div className="border-2 bg-[#FFFFFF80] border-[#FFFFFF4D] rounded-4xl py-[17px] text-center w-full  px-5">
-              <strong className="text-[15px] text-black font-[600] text-center">
-                {selectedMethod === "mobile" || selectedMethod === "email"
-                    ? "Send OTP to"
-                    : "Send OTP to Verified ID"}
-               
-              </strong>
-              <div>
-                <div className="flex justify-between items-center mt-[15px] gap-3">
-                  <label className="w-[48%] h-[45px] cursor-pointer">
-                    <input
-                      type="radio"
-                      name="auth"
-                      value="email"
-                      checked={selectedMethod === "email"}
-                      onChange={() => changeOtpMethod("email")}
-                      className="hidden"
-                    />
-                    <div
-                      className={`border rounded-[8px] text-[15px] font-[600] flex items-center justify-center h-full py-[14.5px] transition-all duration-200 ${
-                        selectedMethod === "email"
-                          ? "bg-[#1DA563] text-white border-[#1DA563]"
-                          : "bg-transparent text-[#CC627B] border-[#CC627B]"
+
+          <div className="border-2 bg-[#FFFFFF80] border-[#FFFFFF4D] rounded-4xl py-[17px] text-center w-full  px-5">
+            <strong className="text-[15px] text-black font-[600] text-center">
+              {selectedMethod === "mobile" || selectedMethod === "email"
+                ? "Send OTP to"
+                : "Send OTP to Verified ID"}
+
+            </strong>
+            <div>
+              <div className="flex justify-between items-center mt-[15px] gap-3">
+                <label className="w-[48%] h-[45px] cursor-pointer">
+                  <input
+                    type="radio"
+                    name="auth"
+                    value="email"
+                    checked={selectedMethod === "email"}
+                    onChange={() => changeOtpMethod("email")}
+                    className="hidden"
+                  />
+                  <div
+                    className={`border rounded-[8px] text-[15px] font-[600] flex items-center justify-center h-full py-[14.5px] transition-all duration-200 ${selectedMethod === "email"
+                        ? "bg-[#1DA563] text-white border-[#1DA563]"
+                        : "bg-transparent text-[#CC627B] border-[#CC627B]"
                       }`}
-                    >
-                      Email
-                    </div>
-                  </label>
- 
-                  <label className="w-[48%] h-[45px] cursor-pointer">
-                    <input
-                      type="radio"
-                      name="auth"
-                      value="mobile"
-                      checked={selectedMethod === "mobile"}
-                      onChange={() => changeOtpMethod("mobile")}
-                      className="hidden"
-                    />
-                    <div
-                      className={`border rounded-[8px] text-[15px] font-[600] flex items-center justify-center h-full py-[14.5px] transition-all duration-200 ${
-                        selectedMethod === "mobile"
-                          ? "bg-[#1DA563] text-white border-[#1DA563]"
-                          : "bg-transparent text-[#CC627B] border-[#CC627B]"
+                  >
+                    Email
+                  </div>
+                </label>
+
+                <label className="w-[48%] h-[45px] cursor-pointer">
+                  <input
+                    type="radio"
+                    name="auth"
+                    value="mobile"
+                    checked={selectedMethod === "mobile"}
+                    onChange={() => changeOtpMethod("mobile")}
+                    className="hidden"
+                  />
+                  <div
+                    className={`border rounded-[8px] text-[15px] font-[600] flex items-center justify-center h-full py-[14.5px] transition-all duration-200 ${selectedMethod === "mobile"
+                        ? "bg-[#1DA563] text-white border-[#1DA563]"
+                        : "bg-transparent text-[#CC627B] border-[#CC627B]"
                       }`}
-                    >
-                      Mobile
-                    </div>
-                  </label>
-                </div>
-                {otpSendStatus ? (
-                  <>
-                    <div className="my-[15px]">
-                      <div className="text-[12px] text-gray-500 font-medium text-left mb-1 relative ">
+                  >
+                    Mobile
+                  </div>
+                </label>
+              </div>
+              {otpSendStatus ? (
+                <>
+                  <div className="my-[15px]">
+                    <div className="text-[12px] text-gray-500 font-medium text-left mb-1 relative ">
                       Enter OTP
                     </div>
-                      <div className="relative flex items-center mt-2">
-                        <OTPInput
-                          type="text"
-                          inputType="number"
-                          value={otp}
-                          onChange={setOtp}
-                          numInputs={6}
-                          renderSeparator={<span className="w-2" />}
-                          renderInput={(props) => (
-                            <input
-                              {...props}
-                              type={showOtp ? "text" : "password"}
-                              className="border-[1.54px] border-[#776EA5] rounded-[9.23px] text-[16px] text-[#776EA5] text-center focus:outline-none focus:ring-2 focus:ring-[#776EA5] otp-input "
-                            />
-                          )}
-                          containerStyle="flex justify-between gap-[2px] items-center w-[90%]"
-                        />
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="absolute right-0 top-1/2 transform -translate-y-1/2"
-                          onClick={() => setShowOtp(!showOtp)}
-                          aria-label={showOtp ? "Hide OTP" : "Show OTP"}
-                        >
-                          {showOtp ? (
-                            <Eye
-                              width={20}
-                              height={20}
-                              className="h-4 w-4 text-[#776EA5] cursor-pointer"
-                            />
-                          ) : (
-                            <EyeOff
-                              width={20}
-                              height={20}
-                              className="h-4 w-4 text-[#776EA5] cursor-pointer"
-                            />
-                          )}
-                        </Button>
-                      </div>
+                    <div className="relative flex items-center mt-2">
+                      <OTPInput
+                        type="text"
+                        inputType="number"
+                        value={otp}
+                        onChange={setOtp}
+                        numInputs={6}
+                        renderSeparator={<span className="w-2" />}
+                        renderInput={(props) => (
+                          <input
+                            {...props}
+                            type={showOtp ? "text" : "password"}
+                            className="border-[1.54px] border-[#776EA5] rounded-[9.23px] text-[16px] text-[#776EA5] text-center focus:outline-none focus:ring-2 focus:ring-[#776EA5] otp-input "
+                            onPaste={(e) => {
+                              e.preventDefault();
+                              const pasted = e.clipboardData.getData("Text").trim();
+                              if (pasted) {
+                                // Keep only numbers and trim to numInputs
+                                const clean = pasted.replace(/\D/g, "").slice(0, 6);
+                                setOtp(clean);
+                              }
+                            }}
+                          />
+                        )}
+                        containerStyle="flex justify-between gap-[2px] items-center w-[90%]"
+                      />
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-0 top-1/2 transform -translate-y-1/2"
+                        onClick={() => setShowOtp(!showOtp)}
+                        aria-label={showOtp ? "Hide OTP" : "Show OTP"}
+                      >
+                        {showOtp ? (
+                          <Eye
+                            width={20}
+                            height={20}
+                            className="h-4 w-4 text-[#776EA5] cursor-pointer"
+                          />
+                        ) : (
+                          <EyeOff
+                            width={20}
+                            height={20}
+                            className="h-4 w-4 text-[#776EA5] cursor-pointer"
+                          />
+                        )}
+                      </Button>
                     </div>
-                  </>
-                ) : (
-                  <></>
-                )}
-                <Button
-                  onClick={otpSendStatus ? verifyOtp : sendOtp}
-                  disabled={
-                    isLoading ||
-                    !selectedMethod ||
-                    (otpSendStatus && (!otp || otp.length !== 6))
-                  }
-                  className="cursor-pointer bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white border py-[14.5px] rounded-[8px] flex items-center justify-center w-full h-[45px] mt-[15px]"
-                >
-                  {isLoading ? (
-                    <Loader2Icon className="animate-spin" />
-                  ) : otpSendStatus ? (
-                    "Verify OTP"
-                  ) : (
-                    "Get OTP"
-                  )}
-                </Button>
-              </div>
- 
-              {otpSendStatus && (
-                <div className="text-xs text-gray-500 font-medium text-center mt-2">
-                  {resendTimer > 0 ? (
-                    `Resend OTP in ${formatTime(resendTimer)}`
-                  ) : (
-                    <span
-                      className="text-[#1DA563] cursor-pointer"
-                      onClick={isResendDisabled ? null : sendOtp}
-                    >
-                      Resend OTP
-                    </span>
-                  )}
-                </div>
+                  </div>
+                </>
+              ) : (
+                <></>
               )}
+              <Button
+                onClick={otpSendStatus ? verifyOtp : sendOtp}
+                disabled={
+                  isLoading ||
+                  !selectedMethod ||
+                  (otpSendStatus && (!otp || otp.length !== 6))
+                }
+                className="cursor-pointer bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[15px] font-[600] text-white border py-[14.5px] rounded-[8px] flex items-center justify-center w-full h-[45px] mt-[15px]"
+              >
+                {isLoading ? (
+                  <Loader2Icon className="animate-spin" />
+                ) : otpSendStatus ? (
+                  "Verify OTP"
+                ) : (
+                  "Get OTP"
+                )}
+              </Button>
             </div>
- 
-        {/* footer */}
-        <div className="flex flex-col justify-center items-center gap-[4.75px] pb-5 ">
-          <div className="flex gap-1 items-center">
-            <span className="text-[10px] text-gray-500 font-medium">
-              Copyright © {new Date().getFullYear()}
-            </span>
-            <Image
-              src="/images/ekyamm.png"
-              width={100}
-              height={49}
-              className="w-[106px] mix-blend-multiply"
-              alt="ekyamm"
-            />
+
+            {otpSendStatus && (
+              <div className="text-xs text-gray-500 font-medium text-center mt-2">
+                {resendTimer > 0 ? (
+                  `Resend OTP in ${formatTime(resendTimer)}`
+                ) : (
+                  <span
+                    className="text-[#1DA563] cursor-pointer"
+                    onClick={isResendDisabled ? null : sendOtp}
+                  >
+                    Resend OTP
+                  </span>
+                )}
+              </div>
+            )}
           </div>
-          <div className="flex gap-2 items-center">
-            <span className="text-[10px] text-gray-500 font-medium">
-              Any technical support
-            </span>
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+
+          {/* footer */}
+          <div className="flex flex-col justify-center items-center gap-[4.75px] pb-5 ">
+            <div className="flex gap-1 items-center">
+              <span className="text-[10px] text-gray-500 font-medium">
+                Copyright © {new Date().getFullYear()}
+              </span>
               <Image
-                src="/images/chat_icon.png"
-                width={54}
+                src="/images/ekyamm.png"
+                width={100}
                 height={49}
-                className="w-[54px]"
+                className="w-[106px] mix-blend-multiply"
                 alt="ekyamm"
               />
-            </a>
+            </div>
+            <div className="flex gap-2 items-center">
+              <span className="text-[10px] text-gray-500 font-medium">
+                Any technical support
+              </span>
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+                <Image
+                  src="/images/chat_icon.png"
+                  width={54}
+                  height={49}
+                  className="w-[54px]"
+                  alt="ekyamm"
+                />
+              </a>
+            </div>
           </div>
+
         </div>
-         
-        </div>
- 
+
       </div>
     </>
   );
 };
- 
+
 export default OTP_Send;
- 
- 
+

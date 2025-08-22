@@ -26,7 +26,7 @@ import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 import { isMobile } from "react-device-detect";
 import PP_Header from "../PP_Header/PP_Header";
 import { base64ToFile, getStorage, setStorage } from "@/lib/utils";
-import { X } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import { useRememberMe } from "@/app/context/RememberMeContext";
 polyfillCountryFlagEmojis();
 
@@ -332,7 +332,7 @@ const PP_Details = ({ type }) => {
             addressDetails: {
               ...prev.addressDetails,
               area: Name,
-              city: Block === "NA" ? District : Block,
+              city: District === "NA" ? Block : District,
               state: State,
             },
           }));
@@ -992,10 +992,10 @@ const PP_Details = ({ type }) => {
             Cancel
           </Button> */}
 
-          <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
+          {/* <Button className="border border-[#CC627B] bg-transparent text-[15px] font-[600] text-[#CC627B] py-[14.5px]  rounded-[8px] flex items-center justify-center w-[48%] h-[45px]"
             onClick={() => setShow(true)}>
             Cancel
-          </Button>
+          </Button> */}
           <Drawer className="pt-[9.97px] max-w-[576px] m-auto"
             open={show}
             onClose={handleClose}>
@@ -1029,14 +1029,19 @@ const PP_Details = ({ type }) => {
             </DrawerContent>
           </Drawer>
           <Button
-            className={`text-white text-[14px] font-[600] w-[48%] h-[45px] rounded-[8px] ${isFormValid()
+            className={`text-white text-[14px] font-[600] w-full h-[45px] rounded-[8px] ${isFormValid()
                 ? "bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0]"
                 : "bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-[#FFFFFF] cursor-not-allowed"
               }`}
             onClick={handleSave}
-            disabled={!isFormValid()}
+            disabled={!isFormValid() || isLoading}
           >
-            Save & Continue
+            {isLoading ? (
+              <Loader2 className="w-5 h-5 mr-3 animate-spin"
+                aria-hidden="true" />
+            ) : (
+              "Save & Continue"
+              )}
           </Button>
         </div>
       </div>
