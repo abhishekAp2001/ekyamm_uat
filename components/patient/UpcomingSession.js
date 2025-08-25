@@ -23,12 +23,16 @@ import Daily from "@daily-co/daily-js";
 import { useRememberMe } from "@/app/context/RememberMeContext";
 import { toZonedTime } from "date-fns-tz";
 import { format } from "date-fns";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 const UpcomingSession = ({
   showUpcomingButtons = true,
   upcomingsessions,
   pastSession,
 }) => {
-  const [hideTooltip, setHideTooltip] = useState(false);
   const { rememberMe } = useRememberMe();
   const [patientSessionToken, setPatientSessionToken] = useState(null);
   const [patient, setPatient] = useState(null);
@@ -53,24 +57,24 @@ const UpcomingSession = ({
     }
   }, []);
 
-function convertUTCtoIST(utcDateStr) {
-  const date = new Date(utcDateStr);
+  function convertUTCtoIST(utcDateStr) {
+    const date = new Date(utcDateStr);
 
-  // Convert UTC -> IST
-  const istDate = toZonedTime(date, "Asia/Kolkata");
+    // Convert UTC -> IST
+    const istDate = toZonedTime(date, "Asia/Kolkata");
 
-  // Extract day and month
-  const day = format(istDate, "d");            // e.g. 22
-  const month = format(istDate, "MMMM");       // e.g. August
+    // Extract day and month
+    const day = format(istDate, "d");            // e.g. 22
+    const month = format(istDate, "MMMM");       // e.g. August
 
-  // Extract time in hh:mm AM/PM format
-  const time = format(istDate, "h:mm a");      // e.g. 8:30 PM
+    // Extract time in hh:mm AM/PM format
+    const time = format(istDate, "h:mm a");      // e.g. 8:30 PM
 
-  return {
-    date: `${day} ${month}`,
-    time: time,
-  };
-}
+    return {
+      date: `${day} ${month}`,
+      time: time,
+    };
+  }
 
 
   function getTimeDifference(from, to) {
@@ -114,11 +118,11 @@ function convertUTCtoIST(utcDateStr) {
             "selectedCounsellor",
             response?.data?.data?.practitionerTagged[0],
             rememberMe,
-            2592000 
+            2592000
           );
         }
       } catch (err) {
-        if(err?.status == 500) return showErrorToast("Something Went Wrong !!!")
+        if (err?.status == 500) return showErrorToast("Something Went Wrong !!!")
         console.log("err", err);
         showErrorToast(
           err?.response?.data?.error?.message || "Error fetching patient data"
@@ -140,7 +144,7 @@ function convertUTCtoIST(utcDateStr) {
       "selectedCounsellor",
       therapist,
       rememberMe,
-      2592000 
+      2592000
     )
     if (patient.availableCredits === 0) {
       router.push("/patient/select-package");
@@ -192,7 +196,7 @@ function convertUTCtoIST(utcDateStr) {
             colors: {
               accent: "#bba3e4",
               accentText: "#ffffff",
-              baseText: "#776EA5", 
+              baseText: "#776EA5",
               background: "#ECD3E0",
             },
             fonts: {
@@ -204,7 +208,7 @@ function convertUTCtoIST(utcDateStr) {
               accent: "#776EA5",
               background: "#ECD3E0",
               accentText: "#ffffff",
-              baseText: "#776EA5", 
+              baseText: "#776EA5",
             },
             fonts: {
               default: '"Quicksand", sans-serif',
@@ -222,7 +226,7 @@ function convertUTCtoIST(utcDateStr) {
         });
       }
     } catch (error) {
-      if(error?.status == 500) return showErrorToast("Something Went Wrong !!!")
+      if (error?.status == 500) return showErrorToast("Something Went Wrong !!!")
       console.error("error", error);
       const errorMessage =
         error?.response?.data?.error?.message || "Something went wrong";
@@ -391,44 +395,38 @@ function convertUTCtoIST(utcDateStr) {
                     >
                       Start Call
                     </Button> */}
-                    <div
-                      className="relative group w-[48%]"
-                      onMouseEnter={() => setHideTooltip(false)} // Reset on every hover
-                      onMouseLeave={() => setHideTooltip(false)} // Optional safety
-                    >
-                      <Button
-                        disabled={
-                          !isWithinTwoMinutesBefore(session?.sessionTime?.from)
-                        }
-                        className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[14px] font-[600] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center w-full disabled:opacity-60 disabled:cursor-not-allowed"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleStartCall(session?._id, session?.videoRoomName);
-                        }}
-                      >
-                        Start Call
-                      </Button>
-                      {!isWithinTwoMinutesBefore(session?.sessionTime?.from) &&
-                        !hideTooltip && (
-                          <div className="absolute bottom-full left-9/12 md:left-1/2 -translate-x-1/2 z-10 flex flex-col items-center transition-opacity duration-200 group-hover:opacity-100 opacity-0 pointer-events-auto">
-                            <div className="bg-[#776EA5] text-white text-[14px] leading-[20px] px-[13px] py-[8px] rounded-[8px] w-[256px] text-center relative">
-                              Session will start on {convertUTCtoIST(session?.sessionTime?.from).date} at
-                              <br />
+                    <div className="relative w-[48%]">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            className={`bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[14px] font-[600] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center w-full 
+          ${!isWithinTwoMinutesBefore(session?.sessionTime?.from) ? "opacity-60 cursor-not-allowed" : ""}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (!isWithinTwoMinutesBefore(session?.sessionTime?.from)) {
+                                // Do nothing if not within 2 minutes
+                                return;
+                              }
+                              handleStartCall(session?._id, session?.videoRoomName);
+                            }}
+                          >
+                            Start Call
+                          </Button>
+                        </TooltipTrigger>
+
+                        <TooltipContent
+                          side="top"
+                          className="bg-[#776EA5] text-white text-[14px] leading-[20px] px-[13px] py-[8px] rounded-[8px] w-[256px] text-center"
+                        >
+                          {!isWithinTwoMinutesBefore(session?.sessionTime?.from) ? (
+                            <>
+                              Session will start on{" "}
+                              {convertUTCtoIST(session?.sessionTime?.from).date} at <br />
                               {convertUTCtoIST(session?.sessionTime?.from).time} as scheduled
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setHideTooltip(true);
-                                }}
-                                className="absolute right-[10px] top-[6px] text-white text-[16px] font-bold leading-none focus:outline-none cursor-pointer"
-                                aria-label="Close tooltip"
-                              >
-                                ×
-                              </button>
-                            </div>
-                            <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-l-transparent border-r-transparent border-t-[#776EA5]"></div>
-                          </div>
-                        )}
+                            </>
+                          ) : null}
+                        </TooltipContent>
+                      </Tooltip>
                     </div>
 
                     <div className="text-[#6D6A5D] text-xs font-medium">
@@ -553,43 +551,42 @@ function convertUTCtoIST(utcDateStr) {
                         Reschedule Session
                       </Button>
 
-                      <div
-                        className="relative group flex-1"
-                        onMouseEnter={() => setHideTooltip(false)}
-                        onMouseLeave={() => setHideTooltip(false)}
-                      >
-                        <Button
-                          disabled={!isWithinTwoMinutesBefore(session?.sessionTime?.from)}
-                          className="bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[14px] font-[600] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center w-full disabled:opacity-60 disabled:cursor-not-allowed"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleStartCall(session?._id, session?.videoRoomName);
-                          }}
-                        >
-                          Start Call
-                        </Button>
+                      <div className="relative group flex-1">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
 
-                        {!isWithinTwoMinutesBefore(session?.sessionTime?.from) && !hideTooltip && (
-                          <div className="absolute bottom-full md:left-1/2 -translate-x-1/2 z-10 flex flex-col items-center transition-opacity duration-200 group-hover:opacity-100 opacity-0 pointer-events-auto">
-                            <div className="bg-[#776EA5] text-white text-[14px] leading-[20px] px-[13px] py-[8px] rounded-[8px] w-[256px] text-center relative">
-                              Session will start on {convertUTCtoIST(session?.sessionTime?.from).date} at
-                              <br />
-                              {convertUTCtoIST(session?.sessionTime?.from).time} as scheduled
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setHideTooltip(true);
-                                }}
-                                className="absolute right-[10px] top-[6px] text-white text-[16px] font-bold leading-none focus:outline-none cursor-pointer"
-                                aria-label="Close tooltip"
-                              >
-                                ×
-                              </button>
-                            </div>
-                            <div className="w-0 h-0 border-l-[8px] border-r-[8px] border-t-[8px] border-l-transparent border-r-transparent border-t-[#776EA5]"></div>
-                          </div>
-                        )}
+                            <Button
+                              className={`bg-gradient-to-r from-[#BBA3E4] to-[#E7A1A0] text-white text-[14px] font-[600] py-[14.5px] h-8 rounded-[8px] flex items-center justify-center w-full 
+          ${!isWithinTwoMinutesBefore(session?.sessionTime?.from) ? "opacity-60 cursor-not-allowed" : ""}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (!isWithinTwoMinutesBefore(session?.sessionTime?.from)) {
+                                  // Do nothing if not within 2 minutes
+                                  return;
+                                }
+                                handleStartCall(session?._id, session?.videoRoomName);
+                              }}
+                            >
+                              Start Call
+                            </Button>
+                          </TooltipTrigger>
+
+                          <TooltipContent
+                            side="top"
+                            className="bg-[#776EA5] text-white text-[14px] leading-[20px] px-[13px] py-[8px] rounded-[8px] w-[256px] text-center"
+                          >
+                            {!isWithinTwoMinutesBefore(session?.sessionTime?.from) ? (
+                              <>
+                                Session will start on{" "}
+                                {convertUTCtoIST(session?.sessionTime?.from).date} at <br />
+                                {convertUTCtoIST(session?.sessionTime?.from).time} as scheduled
+                              </>
+                            ) : null}
+                          </TooltipContent>
+                        </Tooltip>
                       </div>
+
+
                     </div>
 
                   </div>
